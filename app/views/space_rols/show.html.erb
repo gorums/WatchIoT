@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @space_rol.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @space_rol.description %>
+</p>
+
+<%= link_to 'Edit', edit_space_rol_path(@space_rol) %> |
+<%= link_to 'Back', space_rols_path %>
