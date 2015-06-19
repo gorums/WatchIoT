@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :project_rol_user_perms
+  resources :space_rol_user_perms
   resources :space_rols
   resources :project_rols
   resources :projects

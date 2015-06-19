@@ -1,0 +1,25 @@
+<%= form_for(@space_rol_user_perm) do |f| %>
+  <% if @space_rol_user_perm.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@space_rol_user_perm.errors.count, "error") %> prohibited this space_rol_user_perm from being saved:</h2>
+
+      <ul>
+      <% @space_rol_user_perm.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :id_user %><br>
+    <%= f.number_field :id_user %>
+  </div>
+  <div class="field">
+    <%= f.label :id_space %><br>
+    <%= f.number_field :id_space %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

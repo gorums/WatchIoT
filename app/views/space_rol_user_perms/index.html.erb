@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Space Rol User Perms</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Id user</th>
+      <th>Id space</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @space_rol_user_perms.each do |space_rol_user_perm| %>
+      <tr>
+        <td><%= space_rol_user_perm.id_user %></td>
+        <td><%= space_rol_user_perm.id_space %></td>
+        <td><%= link_to 'Show', space_rol_user_perm %></td>
+        <td><%= link_to 'Edit', edit_space_rol_user_perm_path(space_rol_user_perm) %></td>
+        <td><%= link_to 'Destroy', space_rol_user_perm, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Space rol user perm', new_space_rol_user_perm_path %>

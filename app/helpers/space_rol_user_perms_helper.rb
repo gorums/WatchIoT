@@ -1,0 +1,2 @@
+module SpaceRolUserPermsHelper
+end

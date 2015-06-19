@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Project Rol User Perms</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Id user</th>
+      <th>Id project</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project_rol_user_perms.each do |project_rol_user_perm| %>
+      <tr>
+        <td><%= project_rol_user_perm.id_user %></td>
+        <td><%= project_rol_user_perm.id_project %></td>
+        <td><%= link_to 'Show', project_rol_user_perm %></td>
+        <td><%= link_to 'Edit', edit_project_rol_user_perm_path(project_rol_user_perm) %></td>
+        <td><%= link_to 'Destroy', project_rol_user_perm, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project rol user perm', new_project_rol_user_perm_path %>
