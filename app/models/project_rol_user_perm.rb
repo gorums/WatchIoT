@@ -1,5 +1,6 @@
 class ProjectRolUserPerm < ActiveRecord::Base
-  has_many :users
-  has_many :projects
-  has_many :project_rols
+  belongs_to :user
+  belongs_to :project
+  belongs_to :project_rol
+  belongs_to :project_perm
 end

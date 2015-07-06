@@ -1,5 +1,6 @@
 class SpaceRolUserPerm < ActiveRecord::Base
-  has_many :users
-  has_many :spaces
-  has_many :space_rols
+  belongs_to :user
+  belongs_to :space
+  belongs_to :space_rol
+  belongs_to :space_perm
 end
