@@ -10,4 +10,4 @@ SpaceRol.create(name: "admin", description: "Space admin rol" )
 ProjectRol.create(name: "admin", description: "Project admin rol" )
 
 SpacePerm.create(name: "create project", description: "Can create new projects")
-ProjectPerm.create(name: "edit project", descrition: "Can edit the projects")
+ProjectPerm.create(name: "edit project", description: "Can edit the projects")
