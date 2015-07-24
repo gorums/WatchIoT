@@ -13,6 +13,8 @@ gem 'coffee-rails', '~> 4.1.0'
 # Use bootstrap for css assets
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
+# Use awesome font icon
+gem 'font-awesome-sass', '~> 4.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 # Use jquery as the JavaScript library

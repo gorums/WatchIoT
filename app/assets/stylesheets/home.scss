@@ -31,14 +31,11 @@ footer {
   text-align: center;
   width: 100%;
   margin-top: 50px;
-  color: #c0c0c0;
 }
 footer > .inner-footer a {
-  color: #c0c0c0;
   text-decoration: none;
 }
 footer > .inner-footer a:hover {
-  color: #32145a;
   text-decoration: none;
 }
 .content a {
@@ -59,8 +56,8 @@ footer > .inner-footer a:hover {
 /* Index page styles */
 .btn-hero-core {
   padding: 15px 25px;
-  background-color: #32145a;
-  color: #d89ae4;
+  background-color: #2f4033;
+  color: #f8f090;
   display: inline-block;
   font-family: "Open Sans", sans-serif;
   font-size: 20px;
@@ -75,21 +72,31 @@ footer > .inner-footer a:hover {
   text-decoration: none;
 }
 .hero {
-  background-color: #689079;
+  background-color: #225079;
   width: inherit;
+  height: inherit;
   color: #fff;
 }
 .starter-template {
-  padding: 40px 15px;
+  padding: 60px 15px;
   text-align: center;
 }
-.dotnet {
+.title {
   color: #fff;
+}
+.login {
+  color: #fff;
+  padding: 15px;
+  margin: inherit;
+}
+.logo{
+  width: 65px;
 }
 #rest-vps {
   display: none;
 }
 .value-prop-heading {
+  font-weight: bold;
   margin-top: 0px;
 }
 .value-props {
