@@ -23,8 +23,22 @@
       <a class="navbar-brand" href="/"><span class="title">WatchIoT</span></a>
     </div>
 
-    <a href="/register" style="float:right;"><div class="login">Sing up</div></a>
-    <a href="login" style="float:right;"><div class="login">Login</div></a>
+    <% if current_user %>
+        <%= link_to log_out_path, style: "float:right;" do%>
+            <div class="login">Logout</div>
+        <%end%>
+        <div class="login" style="float:right;">
+           <%= current_user.email%>
+        </div>
+    <% else %>
+        <%= link_to sign_up_path, style: "float:right;" do %>
+            <div class="login">Sing up</div>
+        <%end%>
+        <%= link_to log_in_path, style: "float:right;" do%>
+            <div class="login">Login</div>
+        <%end%>
+    <% end %>
+
     <div id="navbar" class="collapse navbar-collapse">
 
       <ul class="nav navbar-nav">

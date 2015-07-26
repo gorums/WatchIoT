@@ -1,10 +1,17 @@
 Rails.application.routes.draw do
+
+  get "log_out" => "sessions#destroy", :as => "log_out"
+  get "log_in" => "sessions#new", :as => "log_in"
+  get "sign_up" => "users#new", :as => "sign_up"
+
   resources :home
   resources :space_rols
   resources :project_rols
   resources :projects
   resources :spaces
   resources :users
+
+  resources :sessions
 
   root 'home#index'
 
