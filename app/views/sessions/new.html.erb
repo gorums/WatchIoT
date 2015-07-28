@@ -1,16 +1,26 @@
-<h1>Log in</h1>
-
-<%= form_tag sessions_path do %>
-    <p>
-      <%= label_tag :email %><br />
-      <%= text_field_tag :email, params[:email] %>
-    </p>
-    <p>
-      <%= label_tag :passwd %><br />
-      <%= password_field_tag :passwd %>
-    </p>
-    <p class="button"><%= submit_tag "Log in" %></p>
+<% flash.each do |key, value| %>
+    <div class="flash <%= key %>"><%= value %></div>
 <% end %>
+
+<div class="auth-form-header">
+<h1>Login</h1>
+</div>
+<%= form_tag sessions_path do %>
+    <div class="auth-form">
+       <div class="input">
+          <%= label_tag :email %><br />
+          <%= text_field_tag :email, params[:email], class: "form-control" %>
+         <span><i class="fa fa-envelope-o"></i></span>
+        </div>
+        <div class="input">
+          <%= label_tag "Password" %><br />
+          <%= password_field_tag :passwd %>
+          <span><i class="fa fa-lock"></i></span>
+        </div>
+        <p ><%= submit_tag "Log in", class: "btn btn-default btn-lg active" %></p>
+    </div>
+<% end %>
+
 
 
 
