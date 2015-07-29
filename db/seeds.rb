@@ -6,12 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-
-password_salt = BCrypt::Engine.generate_salt
-password_hash = BCrypt::Engine.hash_secret("passwd", password_salt)
-
-User.create(email: "admin@watchiot.com", login: "admin", passwd: password_hash)
-
 SpaceRol.create(name: "admin", description: "Space admin rol" )
 ProjectRol.create(name: "admin", description: "Project admin rol" )
 
