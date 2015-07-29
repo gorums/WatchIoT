@@ -6,5 +6,6 @@ class CreateSpacePerms < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :space_perms, :name
   end
 end

@@ -6,5 +6,6 @@ class CreateProjectPerms < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :project_perms, :name
   end
 end
