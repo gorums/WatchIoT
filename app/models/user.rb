@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :passwd_confirmation
 
-  has_many :spaces
-  has_many :projects
+  has_many :spaces, dependent: :destroy
+  has_many :projects, dependent: :destroy
 
   validates_confirmation_of :passwd
   validates_presence_of :passwd, :on => :create
