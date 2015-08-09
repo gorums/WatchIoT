@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 
   validates_confirmation_of :passwd
   validates_presence_of :passwd, :on => :create
+  validates_presence_of :passwd_confirmation, :on => :create
   validates_presence_of :email, :on => :create
   validates_uniqueness_of :email
   validates :passwd, length: { minimum: 8 }

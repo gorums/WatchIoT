@@ -24,8 +24,8 @@
         <span><i class="fa fa-lock"></i></span>
       </div>
       <div class="input">
-        <%= label_tag "Password Confirmation" %><br />
-        <%= password_field_tag :passwd_confirmation %>
+        <%= f.label "Password Confirmation" %><br />
+        <%= f.password_field :passwd_confirmation %>
         <span><i class="fa fa-lock"></i></span>
       </div>
       <p><%= submit_tag "Create User", class: "btn btn-default btn-lg active" %></p>
