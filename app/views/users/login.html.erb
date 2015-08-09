@@ -13,10 +13,13 @@
          <span><i class="fa fa-envelope-o"></i></span>
         </div>
         <div class="input">
-          <%= label_tag "Password" %><br />
+          <%= label_tag 'Password' %><br />
           <%= password_field_tag :passwd %>
           <span><i class="fa fa-lock"></i></span>
         </div>
+          <div class="checkbox-inline">
+            <label class="checkbox"><%= check_box_tag :remember_me, 1, params[:remember_me] %>Remember me</label>
+          </div>
         <p ><%= submit_tag "Log in", class: "btn btn-default btn-lg active" %></p>
     </div>
 <% end %>

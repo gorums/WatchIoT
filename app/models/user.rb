@@ -14,13 +14,7 @@ class User < ActiveRecord::Base
   validates :email, format: { with: /\A[-a-z0-9_+\.]+@([-a-z0-9]+\.)+[a-z0-9]{2,4}\z/i }
 
   before_save :encrypt_password
-
-  def encrypt_password
-    if passwd.present?
-      self.passwd_salt = BCrypt::Engine.generate_salt
-      self.passwd = BCrypt::Engine.hash_secret(passwd, passwd_salt)
-    end
-  end
+  before_create { generate_token(:auth_token) }
 
   def self.authenticate(email, passwd)
     user = find_by_email(email)
@@ -31,4 +25,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def encrypt_password
+    if passwd.present?
+      self.passwd_salt = BCrypt::Engine.generate_salt
+      self.passwd = BCrypt::Engine.hash_secret(passwd, passwd_salt)
+    end
+  end
+
+  def generate_token(column)
+    begin
+      self[column] = SecureRandom.urlsafe_base64
+    end while User.exists?(column => self[column])
+  end
 end

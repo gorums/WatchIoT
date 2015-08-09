@@ -25,6 +25,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      #whether register fine, im going to login in the same time
+      cookies[:auth_token] = user.auth_token
       redirect_to root_url
     else
       render :register
@@ -35,11 +37,15 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  #POST /do_login
+  # POST /do_login
   def do_login
     user = User.authenticate(params[:email], params[:passwd])
     if user
-      session[:user_id] = user.id
+      if params[:remember_me]
+        cookies.permanent[:auth_token] = user.auth_token
+      else
+        cookies[:auth_token] = user.auth_token
+      end
       redirect_to root_url
     else
       flash.now.alert = "Invalid email or password"
@@ -47,7 +53,7 @@ class UsersController < ApplicationController
     end
   end
   def logout
-    session[:user_id] = nil
+    cookies.clear
     redirect_to root_url
   end
 
