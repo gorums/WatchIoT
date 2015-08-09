@@ -3,12 +3,14 @@ class UsersController < ApplicationController
 
   # GET /users
   # GET /users.json
+  # For ADMIN role
   def index
     @users = User.all
   end
 
   # GET /users/1
   # GET /users/1.json
+  # For ADMIN role
   def show
   end
 
@@ -33,8 +35,8 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  #POST
-  def dologin
+  #POST /do_login
+  def do_login
     user = User.authenticate(params[:email], params[:passwd])
     if user
       session[:user_id] = user.id

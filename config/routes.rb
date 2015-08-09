@@ -1,16 +1,17 @@
 Rails.application.routes.draw do
 
-  get "logout" => "users#logout", :as => "logout"
-  get "login" => "users#login", :as => "login"
-  post "login" => "users#dologin", :as => "dologin"
-  get "register" => "users#register", :as => "register"
+  get 'register' => 'users#register', :as => 'register'
+  get 'login' => 'users#login', :as => 'login'
+  post 'login' => 'users#do_login', :as => 'do_login'
+  get 'logout' => 'users#logout', :as => 'logout'
 
   resources :home
+  resources :users
+
   resources :space_rols
   resources :project_rols
   resources :projects
   resources :spaces
-  resources :users
 
   root 'home#index'
 
