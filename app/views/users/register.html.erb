@@ -1,0 +1,33 @@
+<% if @user.errors.any? %>
+    <div class="error_messages">
+      <ul>
+        <% for message in @user.errors.full_messages %>
+            <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
+
+<div class="auth-form-header">
+  <h1>Sign Up</h1>
+</div>
+<%= form_for @user do |f| %>
+    <div class="auth-form">
+      <div class="input">
+        <%= f.label :email %><br />
+        <%= f.text_field :email, class: "form-control" %>
+        <span><i class="fa fa-envelope-o"></i></span>
+      </div>
+      <div class="input">
+        <%= f.label "Password" %><br />
+        <%= f.password_field :passwd %>
+        <span><i class="fa fa-lock"></i></span>
+      </div>
+      <div class="input">
+        <%= label_tag "Password Confirmation" %><br />
+        <%= password_field_tag :passwd_confirmation %>
+        <span><i class="fa fa-lock"></i></span>
+      </div>
+      <p><%= submit_tag "Create User", class: "btn btn-default btn-lg active" %></p>
+    </div>
+<% end %>

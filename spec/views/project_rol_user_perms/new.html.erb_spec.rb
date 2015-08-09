@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "project_rol_user_perms/new" do
+describe "project_rol_user_perms/login" do
   before(:each) do
     assign(:project_rol_user_perm, stub_model(ProjectRolUserPerm,
       :id_user => 1,
@@ -8,7 +8,7 @@ describe "project_rol_user_perms/new" do
     ).as_new_record)
   end
 
-  it "renders new project_rol_user_perm form" do
+  it "renders login project_rol_user_perm form" do
     render
 
     # Run the generator again with the --webrat flag if you want to use webrat matchers

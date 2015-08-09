@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
 
-  get "log_out" => "sessions#destroy", :as => "log_out"
-  get "log_in" => "sessions#new", :as => "log_in"
-  get "sign_up" => "users#new", :as => "sign_up"
+  get "logout" => "users#logout", :as => "logout"
+  get "login" => "users#login", :as => "login"
+  post "login" => "users#dologin", :as => "dologin"
+  get "register" => "users#register", :as => "register"
 
   resources :home
   resources :space_rols
@@ -10,8 +11,6 @@ Rails.application.routes.draw do
   resources :projects
   resources :spaces
   resources :users
-
-  resources :sessions
 
   root 'home#index'
 

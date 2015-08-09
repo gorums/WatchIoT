@@ -46,9 +46,9 @@ describe ProjectRolUserPermsController do
     end
   end
 
-  describe "GET new" do
-    it "assigns a new project_rol_user_perm as @project_rol_user_perm" do
-      get :new, {}, valid_session
+  describe "GET login" do
+    it "assigns a login project_rol_user_perm as @project_rol_user_perm" do
+      get :login, {}, valid_session
       assigns(:project_rol_user_perm).should be_a_new(ProjectRolUserPerm)
     end
   end
@@ -63,7 +63,7 @@ describe ProjectRolUserPermsController do
 
   describe "POST create" do
     describe "with valid params" do
-      it "creates a new ProjectRolUserPerm" do
+      it "creates a login ProjectRolUserPerm" do
         expect {
           post :create, {:project_rol_user_perm => valid_attributes}, valid_session
         }.to change(ProjectRolUserPerm, :count).by(1)
@@ -89,11 +89,11 @@ describe ProjectRolUserPermsController do
         assigns(:project_rol_user_perm).should be_a_new(ProjectRolUserPerm)
       end
 
-      it "re-renders the 'new' template" do
+      it "re-renders the 'login' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         ProjectRolUserPerm.any_instance.stub(:save).and_return(false)
         post :create, {:project_rol_user_perm => { "id_user" => "invalid value" }}, valid_session
-        response.should render_template("new")
+        response.should render_template("login")
       end
     end
   end

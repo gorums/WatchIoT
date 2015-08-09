@@ -24,17 +24,17 @@
     </div>
 
     <% if current_user %>
-        <%= link_to log_out_path, style: "float:right;" do%>
+        <%= link_to logout_path, style: "float:right;" do%>
             <div class="login">Logout</div>
         <%end%>
         <div class="login" style="float:right;">
            <%= current_user.email%>
         </div>
     <% else %>
-        <%= link_to sign_up_path, style: "float:right;" do %>
+        <%= link_to register_path, style: "float:right;" do %>
             <div class="login">Sing up</div>
         <%end%>
-        <%= link_to log_in_path, style: "float:right;" do%>
+        <%= link_to login_path, style: "float:right;" do%>
             <div class="login">Login</div>
         <%end%>
     <% end %>

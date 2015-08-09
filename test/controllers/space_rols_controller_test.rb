@@ -11,8 +11,8 @@ class SpaceRolsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:space_rols)
   end
 
-  test "should get new" do
-    get :new
+  test "should get login" do
+    get :login
     assert_response :success
   end
 

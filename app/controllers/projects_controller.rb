@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
   def show
   end
 
-  # GET /projects/new
+  # GET /projects/login
   def new
     @project = Project.new
   end

@@ -12,7 +12,7 @@ class SpaceRolsController < ApplicationController
   def show
   end
 
-  # GET /space_rols/new
+  # GET /space_rols/login
   def new
     @space_rol = SpaceRol.new
   end

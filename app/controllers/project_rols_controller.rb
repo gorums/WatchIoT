@@ -12,7 +12,7 @@ class ProjectRolsController < ApplicationController
   def show
   end
 
-  # GET /project_rols/new
+  # GET /project_rols/login
   def new
     @project_rol = ProjectRol.new
   end

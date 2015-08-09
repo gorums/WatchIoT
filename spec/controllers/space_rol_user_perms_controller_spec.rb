@@ -46,9 +46,9 @@ describe SpaceRolUserPermsController do
     end
   end
 
-  describe "GET new" do
-    it "assigns a new space_rol_user_perm as @space_rol_user_perm" do
-      get :new, {}, valid_session
+  describe "GET login" do
+    it "assigns a login space_rol_user_perm as @space_rol_user_perm" do
+      get :login, {}, valid_session
       assigns(:space_rol_user_perm).should be_a_new(SpaceRolUserPerm)
     end
   end
@@ -63,7 +63,7 @@ describe SpaceRolUserPermsController do
 
   describe "POST create" do
     describe "with valid params" do
-      it "creates a new SpaceRolUserPerm" do
+      it "creates a login SpaceRolUserPerm" do
         expect {
           post :create, {:space_rol_user_perm => valid_attributes}, valid_session
         }.to change(SpaceRolUserPerm, :count).by(1)
@@ -89,11 +89,11 @@ describe SpaceRolUserPermsController do
         assigns(:space_rol_user_perm).should be_a_new(SpaceRolUserPerm)
       end
 
-      it "re-renders the 'new' template" do
+      it "re-renders the 'login' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         SpaceRolUserPerm.any_instance.stub(:save).and_return(false)
         post :create, {:space_rol_user_perm => { "id_user" => "invalid value" }}, valid_session
-        response.should render_template("new")
+        response.should render_template("login")
       end
     end
   end

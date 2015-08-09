@@ -7,8 +7,8 @@ describe SpaceRolUserPermsController do
       get("/space_rol_user_perms").should route_to("space_rol_user_perms#index")
     end
 
-    it "routes to #new" do
-      get("/space_rol_user_perms/new").should route_to("space_rol_user_perms#new")
+    it "routes to #login" do
+      get("/space_rol_user_perms/login").should route_to("space_rol_user_perms#login")
     end
 
     it "routes to #show" do

@@ -12,7 +12,7 @@ class SpacesController < ApplicationController
   def show
   end
 
-  # GET /spaces/new
+  # GET /spaces/login
   def new
     @space = Space.new
   end
