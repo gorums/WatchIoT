@@ -1,4 +1,4 @@
-WatchIoT [![Build Status](https://travis-ci.org/gorums/WatchIoT.svg)](https://travis-ci.org/gorums/WatchIoT) [![Code Climate](https://codeclimate.com/github/gorums/WatchIoT/badges/gpa.svg)](https://codeclimate.com/github/gorums/WatchIoT)
+WatchIoT [![Build Status](https://travis-ci.org/gorums/WatchIoT.svg)](https://travis-ci.org/gorums/WatchIoT) [![Code Climate](https://codeclimate.com/github/gorums/WatchIoT/badges/gpa.svg)](https://codeclimate.com/github/gorums/WatchIoT)[![Test Coverage](https://codeclimate.com/github/gorums/WatchIoT/badges/coverage.svg)](https://codeclimate.com/github/gorums/WatchIoT/coverage)
 ==
 
 
