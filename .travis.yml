@@ -1,3 +1,7 @@
+  before_script:
+    - cp config/database.yml.travis config/database.yml
+    - psql -c 'create database watchiot_test;' -U postgres
+
 deploy:
   provider: heroku
   api_key:
@@ -5,13 +9,7 @@ deploy:
   app: watchiot
   on:
     repo: gorums/WatchIoT
-  addons:
-    postgresql: "9.3"
   
-  before_script:
-    - cp config/database.yml.travis config/database.yml
-    - psql -c 'create database watchiot_test;' -U postgres
-    
   run:
       - "rake db:migrate"
       - "rake cleanup"
