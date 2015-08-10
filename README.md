@@ -1,12 +1,14 @@
 WatchIoT [![Build Status](https://travis-ci.org/gorums/WatchIoT.svg)](https://travis-ci.org/gorums/WatchIoT) [![Code Climate](https://codeclimate.com/github/gorums/WatchIoT/badges/gpa.svg)](https://codeclimate.com/github/gorums/WatchIoT)
 ==
 
+
+
 Multi-Platform
 --
 
 You can monitory different platforms, like your serves on linux, windows or your site in the cloud.
 
-Configurable<
+Configurable
 --
 
 All the system is configurable, you can configure different parameters for all are you needing.
