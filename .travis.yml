@@ -1,0 +1,10 @@
+deploy:
+  provider: heroku
+  api_key:
+    secure: PFTJ2/tmfUEO9GsiwXZ1IQDjkY1tMiU2vqp4B32vx4zapvEb3SCudNogXaXHSI5mZTGKAQTwlXzoF8wqoMf/Ju0MyNtKk6kwzvOfji3fWyDdgP8Ey5IzHlZ7gJ1p1QdZx/M2UoR3AtYrvEyzdCaoFVNvqclj0jTXjI4zBl8W28QzcvHV3qThJsAlOYFL6ouqT6CyI/eVswoczRWM06SSx4Dou4WrwIJmUqDnEB/J1ZsR8UDEZanv0DIQb6MsVil59FUbMScuOL3ZfIVQ8Y0JQtfiy+3WwXraLvMDqi/TWuNGrnXf0ZY2jZkFNwJ+aeHUC+RBYm6exmvqJdRqCE70AVaWi7DVzRIpJTAa9g9i49aK5OSRPqUfKzTIAyIfAzOw/+hCcJmJjCZxC8lePzq5NKZWTpX9qv+9bzxkoIMjl4oqYCqP8QbJT7IBpACMlBGtNsE+voqvdNd9WCrCuhtBbHtInP+oGRgXCiJ2VPC0WWIa6OdXZj6ayjjL5pQxAGiJRBwuY5spiSom+jQLZvMsjYT5mlRYS+1xE44dsQgl30ZfiPkiJRUdAdFZpCXRJBK3UmZ+619/s02SF+PKSNJDnoXv9jAvwgXwuBXZ1EXJlc/zYvD0D0Yx7aw4+6y1o6J9VTuN9caWI4QjTMwmSfgLf+rf5SiZUTAQicTT+GM2oZY=
+  app: watchiot
+  on:
+    repo: gorums/WatchIoT
+  run:
+      - "rake db:migrate"
+      - "rake cleanup"
