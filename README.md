@@ -39,7 +39,7 @@ TODO
 
 **11 August 2015**
 
-- Work over boostrap and css (to do responsive login and register. The menu login, logout and sing up use nav tag).
+- Work over boostrap and css (to do responsive login and register).
 
 - Work over the info of project (specify text about the project and them goal on home page and readme.md).
 

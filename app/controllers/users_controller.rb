@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
     if @user.save
       #whether register fine, im going to login in the same time
-      cookies[:auth_token] = user.auth_token
+      cookies[:auth_token] = @user.auth_token
       redirect_to root_url
     else
       render :register
