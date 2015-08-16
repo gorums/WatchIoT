@@ -21,12 +21,10 @@ nav {
   background-color: #333;
   color: #fff;
 }
-
 h1, h2, h3, h4, h5 {
   font-family: "Roboto Condensed", "Segoe UI", sans-serif;
   font-weight: bold;
 }
-
 footer {
   text-align: center;
   width: 100%;
@@ -49,7 +47,6 @@ footer > .inner-footer a:hover {
   text-decoration: none;
   transition: background .15s cubic-bezier(.33, .66, .66, 1);
 }
-
 /* End of main styles */
 
 /* Index page styles */
@@ -58,22 +55,18 @@ footer > .inner-footer a:hover {
   margin: inherit;
   font-family: "Open Sans",sans-serif;
 }
-
 .login:hover {
   color: #aaa;
 }
-
 .logo{
   width: 70px;
 }
-
 .hero {
   background-color: #225079;
   width: inherit;
   height: inherit;
   color: #fff;
 }
-
 .btn-hero-core {
   padding: 15px 25px;
   background-color: #2f4033;
@@ -87,12 +80,10 @@ footer > .inner-footer a:hover {
   -moz-box-shadow:    2px 2px 3px 0px #2C0D33;  /* Firefox 3.5 - 3.6 */
   box-shadow:         2px 2px 3px 0px #2C0D33;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
-
 .btn-hero-core:hover {
   color: #f8f090;
   text-decoration: none;
 }
-
 .starter-template {
   padding: 60px 15px;
   text-align: center;
