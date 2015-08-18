@@ -6,42 +6,38 @@ WatchIoT [![Build Status](https://travis-ci.org/gorums/WatchIoT.svg)](https://tr
 Multi-Platform
 --
 
-You can monitory different platforms, like your serves on linux, windows or your site in the cloud.
+You can monitor different platforms, like the resources of your server on linux, windows or any application in the cloud and the smart devices (Internet of Thing).
 
 Configurable
 --
 
-All the system is configurable, you can configure different parameters for all are you needing.
+The power of Watch IoT is whole configurable, you can configure what server or resource you will monitor, what parameters you will receive and when the system will throw an alert for you.
 
 Notification
 --
 
-You gain notification in real time about what is happened with your services or project and feel save and secure about your products in the cloud.
+The notifications via email and sms are in real time about what is happened with your services or resources. Feel secure, you have all under control and you can sleep relaxing we are going to stay alert for you.
 
 Bidirectional
 --
 
-Watch IoT can request your services or you services can request Watch IoT, that dependent your necessity.
+Watch IoT can request your services or you services can request Watch IoT, dependent your necessities. You can specify period of time when send the request you services or who you expect for the request.
 
 Scripting
 --
 
-You can create scripting to parse your values and take decision about when a who would be notify.
+You have two way of parser the request/response. Using configured params or can create scripting to parse your values. You can take decision using the scripts about who would be notified.
 
 Charting
 --
 
-You can create show charting with display how your service work.
+All history data can be shown using charting and you can see how your services have worked. The charting always is a great tool for understand health of our services and resources.
 
 
 TODO
 --
 
 **11 August 2015**
-
-- Work over boostrap and css (to do responsive login and register).
-
-- Work over the info of project (specify text about the project and them goal on home page and readme.md).
 
 - Work over the spec test (delete the folder test).
 
