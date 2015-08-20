@@ -31,7 +31,7 @@ You have two way of parser the request/response. Using configured params or can 
 Charting
 --
 
-All history data can be shown using charting and you can see how your services have worked. The charting always is a great tool for understand health of our services and resources.
+All history data can be shown using charting and you can see how your services have worked. The charting always is a great tool for understand health of your services and resources.
 
 
 TODO

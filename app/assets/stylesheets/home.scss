@@ -92,7 +92,36 @@ footer > .inner-footer a:hover {
   color: #fff;
 }
 
+.container-fluid {
+  padding-left: 0px !important;
+  padding-right: 0px !important;;
+}
 
+.content::after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.hero-gradient {
+  width: inherit;
+  height: inherit;
+}
+
+.content .with-gradient {
+  background: rgba(0, 0, 0, 0) linear-gradient(#ecf0f1, #fff 80px) repeat scroll 0 0;
+  padding: 20px 20px;
+}
+
+.content .with-gradient .first {
+  background: #fff none repeat scroll 0 0;
+}
+.wrapper {
+  box-sizing: border-box;
+  margin: 0 auto;
+}
 
 #rest-vps {
   display: none;
@@ -102,8 +131,8 @@ footer > .inner-footer a:hover {
   margin-top: 0px;
 }
 .value-props {
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .intro-image {
@@ -118,11 +147,13 @@ footer > .inner-footer a:hover {
 /* Getting started page styles */
 .getting-started-intro {
   text-align: center;
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 15%;
+  margin-left: 15%;
 }
 .getting-started-intro > h2, h4 {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .btn-gs {
   width: 150px;
