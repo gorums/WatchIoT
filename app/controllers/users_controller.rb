@@ -46,7 +46,7 @@ class UsersController < ApplicationController
       else
         cookies[:auth_token] = user.auth_token
       end
-      redirect_to root_url
+      redirect_to dashboard_url
     else
       flash.now.alert = "Invalid email or password"
       render :login

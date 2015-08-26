@@ -40,10 +40,13 @@
                 </span>
               </a>
               <ul class="dropdown-menu">
+                <li><%= link_to dashboard_path do%>
+                      Dashboard
+                  <%end%></li>
+                <li role="separator" class="divider"></li>
                 <li><%= link_to logout_path do%>
                       Logout
                   <%end%></li>
-                <li role="separator" class="divider"></li>
               </ul>
             </li>
         <% else %>

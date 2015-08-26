@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
 
+  get 'dashboard/index'
+
   get 'register' => 'users#register', :as => 'register'
   get 'login' => 'users#login', :as => 'login'
   post 'login' => 'users#do_login', :as => 'do_login'
   get 'logout' => 'users#logout', :as => 'logout'
+  get 'dashboard' => 'dashboard#index', :as => 'dashboard'
 
   resources :home
   resources :users

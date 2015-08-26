@@ -12,4 +12,8 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.find_by_auth_token( cookie) if cookie
   end
 
+  def is_auth?
+    current_user != nil
+  end
+
 end

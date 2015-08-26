@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WatchIoT Dashboard</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+<footer>
+  <div class="inner-footer">
+    <p><a href="mailto:info@watchiot.org">info@watchiot.org</a></p>
+    <p>
+      <a href="https://www.github.com/gorums/watchiot" target="_blank"><span class="fa fa-stack fa-lg">
+        <span class="fa fa-square-o fa-stack-2x"></span>
+        <span class="fa fa-github fa-stack-1x"></span>
+      </span></a>
+      <a href="https://twitter.com/watchiot" target="_blank">
+        <span class="fa fa-stack fa-lg">
+            <span class="fa fa-square-o fa-stack-2x"></span>
+            <span class="fa fa-twitter fa-stack-1x"></span>
+        </span>
+      </a>
+      <a href="https://www.facebook.com/watchiot" target="_blank"><span class="fa fa-stack fa-lg">
+        <span class="fa fa-square-o fa-stack-2x"></span>
+        <span class="fa fa-facebook fa-stack-1x"></span>
+      </span></a>
+    </p>
+
+    <p>© 2015 WatchIoT</p>
+  </div>
+</footer>
+</body>
+</html>
