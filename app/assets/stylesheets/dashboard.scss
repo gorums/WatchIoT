@@ -1,3 +1,32 @@
 // Place all the styles related to the Dashboard controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.dashboard-wrapper {
+  height: 100%;
+  width: 100%;
+  background-color: #225079;
+  margin: auto;
+  max-width: 1440px;
+}
+
+.app-wrapper {
+  height: 100%;
+  position: relative;
+  top: 0;
+}
+
+.sidebar {
+  background-attachment: fixed;
+  background-color: #225079;
+  bottom: 0;
+  color: #fff;
+  display: block;
+  font-weight: 200;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 250px;
+  z-index: 1;
+}

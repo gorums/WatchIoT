@@ -8,7 +8,17 @@
 </head>
 <body>
 
-<%= yield %>
+<div class="dashboard-wrapper">
+  <div class="app-wrapper ">
+    <div class="sidebar">
+
+    </div>
+    <div class="main-panel scrollable-container container-fluid snap-main-panel">
+      <%= yield %>
+    </div>
+  </div>
+</div>
+
 
 <footer>
   <div class="inner-footer">
