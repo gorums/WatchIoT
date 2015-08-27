@@ -1,47 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WatchIoT Dashboard</title>
+  <title>WatchIoT</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<div class="dashboard-wrapper">
-  <div class="app-wrapper ">
-    <div class="sidebar">
-
-    </div>
-    <div class="main-panel scrollable-container container-fluid snap-main-panel">
-      <%= yield %>
-    </div>
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+        <a href="#">
+          WatchIoT
+        </a>
+        <div class="ember-view navigator-toggle icon icon-navigator-toggle"></div>
+      </li>
+      <li>
+        <a href="#">Dashboard</a>
+      </li>
+      <li>
+        <a href="#">Shortcuts</a>
+      </li>
+      <li>
+        <a href="#">Overview</a>
+      </li>
+      <li>
+        <a href="#">Events</a>
+      </li>
+      <li>
+        <a href="#">About</a>
+      </li>
+      <li>
+        <a href="#">Services</a>
+      </li>
+      <li>
+        <a href="#">Contact</a>
+      </li>
+    </ul>
   </div>
+
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <%= yield %>
+
+  <!-- /#page-content-wrapper -->
+
 </div>
+<!-- /#wrapper -->
 
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
 
-<footer>
-  <div class="inner-footer">
-    <p><a href="mailto:info@watchiot.org">info@watchiot.org</a></p>
-    <p>
-      <a href="https://www.github.com/gorums/watchiot" target="_blank"><span class="fa fa-stack fa-lg">
-        <span class="fa fa-square-o fa-stack-2x"></span>
-        <span class="fa fa-github fa-stack-1x"></span>
-      </span></a>
-      <a href="https://twitter.com/watchiot" target="_blank">
-        <span class="fa fa-stack fa-lg">
-            <span class="fa fa-square-o fa-stack-2x"></span>
-            <span class="fa fa-twitter fa-stack-1x"></span>
-        </span>
-      </a>
-      <a href="https://www.facebook.com/watchiot" target="_blank"><span class="fa fa-stack fa-lg">
-        <span class="fa fa-square-o fa-stack-2x"></span>
-        <span class="fa fa-facebook fa-stack-1x"></span>
-      </span></a>
-    </p>
+    $(window).resize(function()
+    {
+        //hack toggled
+        $("#wrapper").toggleClass("toggled");
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
 
-    <p>© 2015 WatchIoT</p>
-  </div>
-</footer>
 </body>
+
 </html>

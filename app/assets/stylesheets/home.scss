@@ -9,7 +9,6 @@
 body {
   font-family: "Open Sans", "Segoe UI", sans-serif;
   font-size: 15px;
-  padding-top: 30px;
 }
 ul {
   list-style-image: url("../../images/core/list-bullet.png");
@@ -64,6 +63,7 @@ footer > .inner-footer a:hover {
   width: inherit;
   height: inherit;
   color: #fff;
+  padding-top: 30px;
 }
 .btn-hero-core {
   padding: 15px 25px;
