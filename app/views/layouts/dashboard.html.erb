@@ -22,26 +22,50 @@
         <a href="#">Dashboard</a>
       </li>
       <li>
-        <a href="#">Shortcuts</a>
+        <a href="#">My spaces</a>
       </li>
       <li>
-        <a href="#">Overview</a>
+        <a href="#">My proyect</a>
       </li>
       <li>
-        <a href="#">Events</a>
-      </li>
-      <li>
-        <a href="#">About</a>
-      </li>
-      <li>
-        <a href="#">Services</a>
-      </li>
-      <li>
-        <a href="#">Contact</a>
+        <a href="#">Setting</a>
       </li>
     </ul>
   </div>
 
+  <div id="navbar" class="collapse navbar-collapse head-dashboard">
+    <ul class="nav navbar-nav">
+      <li>
+        <div class="apps-search">
+          <i class="fa fa-search fa-2x fa-apps-search"></i>
+          <input type="text" class="form-control apps-search-input" placeholder="Search"/>
+        </div>
+      </li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle dropdown-user-a" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="dropdown-user"><span class="caret"></span><i class="fa fa-user fa-fw"></i>
+              <%= current_user.email%>
+
+            </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-left">
+          <li><%= link_to root_path do%>
+                Home
+            <%end%></li>
+          <li><%= link_to root_path do%>
+                Setting
+            <%end%></li>
+          <li role="separator" class="divider"></li>
+          <li><%= link_to logout_path do%>
+                Logout
+            <%end%></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
   <!-- /#sidebar-wrapper -->
 
   <!-- Page Content -->
