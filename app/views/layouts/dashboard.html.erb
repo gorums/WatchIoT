@@ -18,17 +18,21 @@
         </a>
         <div class="ember-view navigator-toggle icon icon-navigator-toggle"></div>
       </li>
-      <li>
-        <a href="#">Dashboard</a>
+      <li class="dashboard-menu">
+        <a href="#"><i class="fa fa-th"></i>
+          Dashboard</a>
       </li>
-      <li>
-        <a href="#">My spaces</a>
+      <li class="dashboard-menu">
+        <a href="#"><i class="fa fa-laptop"></i>
+          My spaces</a>
       </li>
-      <li>
-        <a href="#">My proyect</a>
+      <li class="dashboard-menu">
+        <a href="#"><i class="fa fa-bar-chart"></i>
+          Chart</a>
       </li>
-      <li>
-        <a href="#">Setting</a>
+      <li class="dashboard-menu">
+        <a href="#"><i class="fa fa-cogs"></i>
+          Setting</a>
       </li>
     </ul>
   </div>
@@ -53,9 +57,19 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-left">
           <li><%= link_to root_path do%>
+                <i class="fa fa-home"></i>
                 Home
             <%end%></li>
-          <li><%= link_to root_path do%>
+          <li><%= link_to dashboard_path do%>
+                <i class="fa fa-laptop"></i>
+                My spaces
+            <%end%></li>
+          <li><%= link_to dashboard_path do%>
+                <i class="fa fa-bar-chart"></i>
+                Chart
+            <%end%></li>
+          <li><%= link_to dashboard_path do%>
+                <i class="fa fa-cogs"></i>
                 Setting
             <%end%></li>
           <li role="separator" class="divider"></li>
@@ -69,8 +83,12 @@
   <!-- /#sidebar-wrapper -->
 
   <!-- Page Content -->
-  <%= yield %>
-
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <a href="#menu-toggle" class="toggle visible-sm visible-xs" id="menu-toggle"><i class="fa fa-bars fa-3x"></i></a>
+        <%= yield %>
+    </div>
+  </div>
   <!-- /#page-content-wrapper -->
 
 </div>
@@ -91,6 +109,27 @@
     });
 </script>
 
+<footer class="ember-view dashboard-footer visible-lg">
+  <div class="section-content">
+  <ul class="list-inline">
+    <li><a href="mailto:info@watchiot.org">info@watchiot.org</a></li>
+    <li>© 2015 WatchIoT</li>
+    <li><a href="https://www.github.com/gorums/watchiot" target="_blank"><span class="fa fa-stack fa-lg">
+        <span class="fa fa-square-o fa-stack-2x"></span>
+        <span class="fa fa-github fa-stack-1x"></span>
+      </span></a></li>
+    <li><a href="https://twitter.com/watchiot" target="_blank">
+        <span class="fa fa-stack fa-lg">
+            <span class="fa fa-square-o fa-stack-2x"></span>
+            <span class="fa fa-twitter fa-stack-1x"></span>
+        </span>
+    </a></li>
+    <li><a href="https://www.facebook.com/watchiot" target="_blank"><span class="fa fa-stack fa-lg">
+        <span class="fa fa-square-o fa-stack-2x"></span>
+        <span class="fa fa-facebook fa-stack-1x"></span>
+      </span></a></li>
+  </ul>
+</div>
+</footer>
 </body>
-
 </html>

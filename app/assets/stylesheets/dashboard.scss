@@ -47,6 +47,11 @@
 
 /* Sidebar Styles */
 
+.dashboard-menu{
+  padding-top: 20px;
+  font-family: benton-sans,"Helvetica Neue",helvetica,arial,sans-serif;
+  font-size: 15px;
+}
 .sidebar-nav {
   position: absolute;
   top: 0;
@@ -97,7 +102,7 @@
 .dropdown-user, .dropdown-user:hover{
   padding-right: 50px;
   color: #000;
-  font-family: "Open Sans",sans-serif;
+  font-family: benton-sans,"Helvetica Neue",helvetica,arial,sans-serif;
   font-weight: bold;
 }
 
@@ -113,6 +118,21 @@
 
 .apps-search-input{
   width: 300px !important;
+}
+
+.dashboard-footer {
+  border-top: 1px solid #e7e7ec;
+  clear: both;
+  font-size: 12px;
+  height: 60px;
+  padding-bottom: 8px;
+  padding-top: 16px;
+  position: relative;
+}
+
+.dashboard-footer .section-content, .main-content, .top-nav .section-content {
+  display: block;
+  padding: 0 30px;
 }
 
 .fa-apps-search{
@@ -138,6 +158,9 @@
   background: none;
 }
 
+.dashboard-page{
+  height: 650px;
+}
 @media(min-width:768px) {
   #wrapper {
     padding-left: 300px;
