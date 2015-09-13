@@ -1,20 +1,24 @@
 Rails.application.routes.draw do
 
-  get 'dashboard/index'
-
   get 'register' => 'users#register', :as => 'register'
   get 'login' => 'users#login', :as => 'login'
   post 'login' => 'users#do_login', :as => 'do_login'
   get 'logout' => 'users#logout', :as => 'logout'
   get 'dashboard' => 'dashboard#index', :as => 'dashboard'
+  get 'download' => 'download#index', :as => 'download'
+  get 'about' => 'about#index', :as => 'about'
+  get 'projects' => 'projects#index', :as => 'projects'
+  get 'spaces' => 'spaces#index', :as => 'spaces'
+  get 'chart' => 'chart#index', :as => 'chart'
+  get 'setting' => 'setting#index', :as => 'setting'
 
   resources :home
-  resources :users
-
-  resources :space_rols
-  resources :project_rols
   resources :projects
   resources :spaces
+  resources :chart
+  resources :download
+  resources :setting
+  resources :about
 
   root 'home#index'
 
