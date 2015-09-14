@@ -39,6 +39,22 @@ TODO
 
 **11 August 2015**
 
-- Work over the spec test (delete the folder test).
+> Work over the spec test (delete the folder test).
 
-- Work over documentation.
+> Work over documentation.
+
+**13 September 2015**
+
+> Integration with avatar
+
+> Login/register with github
+
+> Dashboard define page
+
+ * Spaces define page
+
+ * Setting define page
+
+ * Chart define page
+
+ * Project define page
