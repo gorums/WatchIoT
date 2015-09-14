@@ -1,7 +1,7 @@
 WatchIoT [![Build Status](https://travis-ci.org/gorums/WatchIoT.svg)](https://travis-ci.org/gorums/WatchIoT) [![Code Climate](https://codeclimate.com/github/gorums/WatchIoT/badges/gpa.svg)](https://codeclimate.com/github/gorums/WatchIoT) [![Test Coverage](https://codeclimate.com/github/gorums/WatchIoT/badges/coverage.svg)](https://codeclimate.com/github/gorums/WatchIoT/coverage) [![Inline docs](http://inch-ci.org/github/gorums/watchiot.svg?branch=master)](http://inch-ci.org/github/gorums/watchiot) [![endorse](https://api.coderwall.com/gorums/endorsecount.png)](https://coderwall.com/gorums)
 ==
 
-
+**A monitor services, resources and IoT**
 
 Multi-Platform
 --
@@ -33,28 +33,134 @@ Charting
 
 All history data can be shown using charting and you can see how your services have worked. The charting always is a great tool for understand health of your services and resources.
 
+Changelog
+--
+
+*1 september 2015*
+
+Dashboard work begin
+
+*15 august 2015*
+
+Finished the first part of the home page
+
+*1 june 2015*
+
+Create watchIoT project on github, first commit
 
 TODO
 --
 
-**11 August 2015**
-
-> Work over the spec test (delete the folder test).
-
-> Work over documentation.
-
 **13 September 2015**
+
+> Define Route
+
+ [ ] watchiot.org/user_name/space/project
 
 > Integration with avatar
 
+ [ ] see how do it on rails.
+
 > Login/register with github
 
-> Dashboard define page
+ [ ] add username field.
 
- * Spaces define page
+ [ ] see how do it on rails.
 
- * Setting define page
+> Dashboard page
 
- * Chart define page
+ [ ] This page contain a create space and last project notification.
 
- * Project define page
+> Spaces page
+
+ [ ] Create a space (name, description and categories).
+
+ [ ] Spaces list.
+
+ [ ] Projects by space.
+
+ [ ] Edit space.
+
+ [ ] Delete space if dont have projects.
+
+ [ ] Setting space.
+
+> Space page
+
+ [ ] Edit space (description and categories).
+
+ [ ] Delete space if dont have projects.
+
+ [ ] Setting space.
+
+ [ ] Projects by space.
+
+ [ ] Add new project (name, description and categories).
+
+ [ ] Edit project.
+
+ [ ] Setting project.
+
+> Setting space page
+
+ [ ] Public or private.
+
+ [ ] if public nobody have permission, such the owner.
+
+ [ ] if public user can subscriber to receive alert.
+
+ [ ] if private can to assign users.
+
+ [ ] Permission by team members.
+
+ [ ] Permission to edit space description and add category.
+
+ [ ] Permission to create project.
+
+ [ ] Permission to receive notification (email, sms).
+
+> Project page
+
+ [ ] Edit project
+
+ [ ] Delete project only by the owner
+
+ [ ] Setting project.
+
+ [ ] Define notification (email, sms, webhook)
+
+ [ ] Define the via to recollect info (request by us or waiting for request)
+
+ [ ] Define client url or ip
+
+ [ ] Define parameters
+
+ [ ] Define stages (default: normal{green}, warning{yellow}, fire{red})
+
+ [ ] Configure stages in correlation with parameters (simple condition, script)
+
+> Setting project page
+
+ [ ] Public or private (if space is private it can't be public).
+
+ [ ] Permission by team members.
+
+ [ ] Permission to edit project description and add category.
+
+ [ ] Permission to receive notification (email, sms).
+
+> Setting account page
+
+ [ ] Get token.
+
+ [ ] upgrade plan.
+
+ [ ] Add team members (send an email invite his with a temporal passwd).
+
+ [ ] Edit user info.
+
+ [ ] Delete account.
+
+> Chart page
+
+ [ ] Show chart project group by space using the parameters metric and stages.
