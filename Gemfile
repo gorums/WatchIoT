@@ -12,6 +12,11 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 # Use bootstrap for css assets
 gem 'bootstrap-sass', '~> 3.2.0'
+# Use bootstrap tag on rails
+gem 'bootstrap-tagsinput-rails'
+# Use boostrap form on rails
+gem 'bootstrap_form'
+
 gem 'autoprefixer-rails'
 # Use awesome font icon
 gem 'font-awesome-sass', '~> 4.3.0'
