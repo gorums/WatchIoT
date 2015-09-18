@@ -18,6 +18,10 @@ nav {
   font-size: 14px;
 }
 
+.clear-background{
+  background: none !important;
+}
+
 .navbar-nav > li > a.nav-active, .navbar-nav > li > a.nav-active:hover {
   background-color: #333;
   color: #fff;

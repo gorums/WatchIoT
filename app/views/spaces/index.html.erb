@@ -8,7 +8,7 @@
 
           <div class="form-group">
             <label class="col-lg-2">Space Name</label>
-            <div class="col-lg-6">
+            <div class="col-lg-10">
               <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Space Name">
             </div>
           </div>
@@ -46,20 +46,50 @@
               <div class="panel-heading" role="tab" id="headingOne">
                 <div class="row">
                     <h4 class="panel-title ">
-                      <a class="collapsed col-lg-10" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                      <a class="collapsed col-lg-10 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                         My Google Servers
                       </a>
                     </h4>
                     <div class="col-lg-2">
-                      <a href="#" class="list-action"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                      <a href="#" class="list-action"><i class="fa fa-trash fa-2x"></i></a>
-                      <a href="#" class="list-action"><i class="fa fa-cog fa-2x"></i></a>
+                      <a href="/spaces/show" class="list-action clear-background" title="Edit space"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                      <a href="#" class="list-action clear-background" title="Delete space"><i class="fa fa-trash fa-2x"></i></a>
+                      <a href="#" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
                     </div>
                 </div>
               </div>
               <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body">
-
+									<table class="table table-striped">
+										<colgroup>
+											<col class="col-xs-2">
+											<col class="col-xs-7">
+											<col class="col-xs-1">
+										</colgroup>
+										<thead>
+										<tr>
+											<th>Project Name</th>
+											<th>Project Description</th>
+											<th>Action</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<th scope="row">Mark</th>
+											<td>Otto</td>
+											<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+										</tr>
+										<tr>
+											<th scope="row">Jacob</th>
+											<td>Thornton</td>
+											<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+										</tr>
+										<tr>
+											<th scope="row">Larry</th>
+											<td>the Bird</td>
+											<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+										</tr>
+										</tbody>
+									</table>
                 </div>
               </div>
             </div>
@@ -67,20 +97,52 @@
               <div class="panel-heading" role="tab" id="headingTwo">
                 <div class="row">
                   <h4 class="panel-title ">
-                    <a class="collapsed col-lg-10" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <a class="collapsed col-lg-10 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                       My Services in AWS
                     </a>
                   </h4>
                   <div class="col-lg-2">
-                    <a href="#" class="list-action"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                    <a href="#" class="list-action"><i class="fa fa-trash fa-2x"></i></a>
-                    <a href="#" class="list-action"><i class="fa fa-cog fa-2x"></i></a>
+                    <a href="/spaces/show" class="list-action clear-background" title="Edit space"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <a href="#" class="list-action clear-background" title="Delete space"><i class="fa fa-trash fa-2x"></i></a>
+                    <a href="#" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
                   </div>
                 </div>
               </div>
               <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                 <div class="panel-body">
-
+									<div data-example-id="simple-table" class="bs-example">
+										<table class="table table-striped">
+											<colgroup>
+												<col class="col-xs-2">
+												<col class="col-xs-7">
+												<col class="col-xs-1">
+											</colgroup>
+											<thead>
+											<tr>
+												<th>Project Name</th>
+												<th>Project Description</th>
+												<th>Action</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<th scope="row"><a href="#">Mark</a></th>
+												<td>Otto</td>
+												<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+											</tr>
+											<tr>
+												<th scope="row">Jacob</th>
+												<td>Thornton</td>
+												<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+											</tr>
+											<tr>
+												<th scope="row">Larry</th>
+												<td>the Bird</td>
+												<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
                 </div>
               </div>
             </div>
@@ -88,20 +150,50 @@
               <div class="panel-heading" role="tab" id="headingThree">
                 <div class="row">
                   <h4 class="panel-title ">
-                    <a class="collapsed col-lg-10" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    <a class="collapsed col-lg-10 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                       My Home in the beach
                     </a>
                   </h4>
                   <div class="col-lg-2">
-                    <a href="#" class="list-action"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                    <a href="#" class="list-action"><i class="fa fa-trash fa-2x"></i></a>
-                    <a href="#" class="list-action"><i class="fa fa-cog fa-2x"></i></a>
+                    <a href="/spaces/show" class="list-action clear-background" title="Edit space"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <a href="#" class="list-action clear-background" title="Delete space"><i class="fa fa-trash fa-2x"></i></a>
+                    <a href="#" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
                   </div>
                 </div>
               </div>
               <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                 <div class="panel-body">
-
+									<table class="table table-striped">
+										<colgroup>
+											<col class="col-xs-2">
+											<col class="col-xs-7">
+											<col class="col-xs-1">
+										</colgroup>
+										<thead>
+										<tr>
+											<th>Project Name</th>
+											<th>Project Description</th>
+											<th>Action</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<th scope="row"><a href="#">Mark</a></th>
+											<td>Otto</td>
+											<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+										</tr>
+										<tr>
+											<th scope="row">Jacob</th>
+											<td>Thornton</td>
+											<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+										</tr>
+										<tr>
+											<th scope="row">Larry</th>
+											<td>the Bird</td>
+											<td><a href="#" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+										</tr>
+										</tbody>
+									</table>
                 </div>
               </div>
             </div>
