@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'spaces' => 'spaces#index', :as => 'spaces'
   get 'chart' => 'chart#index', :as => 'chart'
   get 'setting' => 'setting#index', :as => 'setting'
+  get 'spaces/setting' => 'spaces#setting', :as => 'spaces/setting'
 
   resources :home
   resources :projects

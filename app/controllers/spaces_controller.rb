@@ -8,4 +8,8 @@ class SpacesController < ApplicationController
   def show
 
   end
+
+  def setting
+
+  end
 end
