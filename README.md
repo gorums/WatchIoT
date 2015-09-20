@@ -59,7 +59,7 @@ TODO
 
 > Integration with avatar
 
- [ ] see how do it on rails.
+ [X] see how do it on rails.
 
 > Login/register with github
 
