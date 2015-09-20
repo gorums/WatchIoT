@@ -47,39 +47,9 @@
 									</div>
 
 									<div class="form-group col-lg-6">
-										<label>Location</label>
-										<div>
-											<input type="text" class="form-control" id="exampleInputEmail1" value="">
-										</div>
-									</div>
-
-									<div class="form-group col-lg-6">
-										<label>Phone</label>
-										<div>
-											<input type="text" class="form-control" id="exampleInputEmail1" value="">
-										</div>
-									</div>
-
-									<div class="form-group col-lg-12">
-										<label>Address</label>
-										<div>
-											<input type="text" class="form-control" id="exampleInputEmail1" value="">
-										</div>
-									</div>
-
-									<br />
-									<div class="form-group col-lg-12">
-										<small>If you want to receive notification with the latest news by email.</small>
-										<br />
-										<label>
-											<input type="checkbox"> Receive latest news by Email
-										</label>
-									</div>
-
-									<!--div class="form-group">
-										<label>Default SMS Country Code</label>
+											<label>Location</label>
 										<div class="controls">
-											<select name="page[sms_country_code]" id="page_sms_country_code" data-js-hook="default-sms-cc-select" class="form-control">
+											<select class="form-control">
 												<option value="af">Afghanistan (+93)</option>
 												<option value="al">Albania (+355)</option>
 												<option value="dz">Algeria (+213)</option>
@@ -271,12 +241,33 @@
 												<option value="vi">Virgin Islands, U.S. (+1340)</option>
 												<option value="ye">Yemen (+967)</option>
 												<option value="zm">Zambia (+260)</option>
-												<option value="zw">Zimbabwe (+263)</option></select>
-											<div class="help-block">
-												The default country code used for SMS subscribers.
-											</div>
+												<option value="zw">Zimbabwe (+263)</option>
+											</select>
 										</div>
-									</div-->
+									</div>
+
+									<div class="form-group col-lg-6">
+										<label>Phone</label>
+										<div>
+											<input type="text" class="form-control" id="exampleInputEmail1" value="">
+										</div>
+									</div>
+
+									<div class="form-group col-lg-12">
+										<label>Address</label>
+										<div>
+											<input type="text" class="form-control" id="exampleInputEmail1" value="">
+										</div>
+									</div>
+
+									<br />
+									<div class="form-group col-lg-12">
+										<small>If you want to receive notification with the latest news by email.</small>
+										<br />
+										<label>
+											<input type="checkbox"> Receive latest news by Email
+										</label>
+									</div>
 
 									<div class="form-group">
 										<div class="col-lg-9">
@@ -293,7 +284,7 @@
 						<div class="row">
 							<h4 class="panel-title ">
 								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-									<h4>Account Setting</h4>
+									<h4>Account Settings</h4>
 								</a>
 							</h4>
 						</div>
@@ -301,6 +292,131 @@
 					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 						<div class="panel-body">
 							<div data-example-id="simple-table" class="bs-example">
+
+								<div class="panel panel-default">
+									<div class="panel-heading"><b>Emails</b></div>
+									<div class="panel-body">
+										<small>The principal email receive all the notifications.</small>
+										<table class="table table-hover">
+											<colgroup>
+												<col class="col-xs-7">
+												<col class="col-xs-2">
+												<col class="col-xs-1">
+											</colgroup>
+											<thead>
+											<tr>
+												<th>Email</th>
+												<th>Principal</th>
+												<th></th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td>robertazo123@gmail.com</td>
+												<td><i class="fa fa-check"></i></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td>gorumlabmatcom@gmail.com</td>
+												<td></td>
+												<td>
+													<a href="#"><i class="fa fa-check-circle-o fa-2x"></i></a>
+													<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+
+										<form class="form-group">
+											<div class="form-group col-lg-6">
+												<label>New email</label>
+												<div>
+													<input type="email" class="form-control" placeholder="New email" >
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-lg-9">
+													<button type="button" class="btn btn-primary">Add email</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading"><b>Change password</b></div>
+									<div class="panel-body">
+										<form class="form-group">
+											<div class="form-group col-lg-6">
+												<label>Old password</label>
+												<div>
+													<input type="password" class="form-control" placeholder="Old password" >
+												</div>
+											</div>
+
+											<div class="col-lg-6 col-lg-offset-6">
+											</div>
+
+											<div class="form-group col-lg-6">
+												<label>New password</label>
+												<div>
+													<input type="password" class="form-control" placeholder="New password" >
+												</div>
+											</div>
+
+											<div class="form-group col-lg-6">
+												<label>Confirm password</label>
+												<div>
+													<input type="password" class="form-control" placeholder="Confirm password" >
+												</div>
+											</div>
+
+											<div class="form-group">
+												<div class="col-lg-9">
+													<button type="button" class="btn btn-primary">Save password</button>
+													<a href="#">I forget my password</a>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading"><b>Change username</b></div>
+									<div class="panel-body">
+
+										<small>This change can be painful and break your applications.</small>
+										<form class="form-group">
+											<div class="form-group col-lg-6">
+												<label>Username</label>
+												<div>
+													<input type="text" class="form-control" placeholder="Username" value="robertazo">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-lg-9">
+													<button type="button" class="btn btn-primary">Change</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+
+								<div class="panel panel-danger">
+									<div class="panel-heading"><b>Delete account</b></div>
+									<div class="panel-body">
+
+										<small>Are you sure?</small>
+										<form class="form-group">
+
+											<div class="form-group">
+												<div class="col-lg-9">
+													<button type="button" class="btn btn-danger">Delete</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
 
 							</div>
 						</div>
