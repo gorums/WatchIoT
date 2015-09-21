@@ -69,42 +69,44 @@ TODO
 
 > Dashboard page
 
- [ ] This page contain a create space and last project notification.
+ [X] This page contain a create space and last project notification.
 
 > Spaces page
 
- [ ] Create a space (name, description and categories).
+ [X] Create a space (name, description and categories).
 
- [ ] Spaces list.
+ [X] Spaces list.
 
- [ ] Projects by space.
+ [X] Projects by space.
 
- [ ] Edit space.
+ [X] Edit space.
 
- [ ] Delete space if dont have projects.
+ [X] Delete space if dont have projects.
 
- [ ] Setting space.
+ [X] Setting space.
 
 > Space page
 
- [ ] Edit space (description and categories).
+ [X] Edit space (description and categories).
 
- [ ] Delete space if dont have projects.
+ [X] Delete space if dont have projects.
 
- [ ] Setting space.
+ [X] Setting space.
 
- [ ] Projects by space.
+ [X] Projects by space.
 
- [ ] Add new project (name, description and categories).
+ [X] Add new project (name, description and categories).
 
- [ ] Edit project.
+ [X] Edit project.
 
- [ ] Setting project.
+ [X] Setting project.
 
 > Setting space page
 
  [ ] Public or private.
 
+ [ ] Change the name
+ 
  [ ] if public nobody have permission, such the owner.
 
  [ ] if public user can subscriber to receive alert.
@@ -151,16 +153,33 @@ TODO
 
 > Setting account page
 
- [ ] Get token.
+ [X] Get token.
 
- [ ] upgrade plan.
+ [X] upgrade plan.
 
- [ ] Add team members (send an email invite his with a temporal passwd).
+ [X] Add team members (send an email invite his with a temporal passwd).
 
- [ ] Edit user info.
+ [X] Edit user info.
 
- [ ] Delete account.
+ [X] Delete account.
 
 > Chart page
 
  [ ] Show chart project group by space using the parameters metric and stages.
+ 
+> Download page
+ 
+ [ ] Show different api to download
+ 
+> About page
+
+ [ ] abstract about our project
+
+> FaQ page
+
+ [ ] Complete differents question
+ 
+> Getting Staring page
+
+ [ ] Complete this session with picture
+ 
