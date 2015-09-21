@@ -280,20 +280,20 @@
 					</div>
 				</div>
 				<div class="panel panel-default">
-					<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-heading" role="tab" id="accountSetting">
 						<div class="row">
 							<h4 class="panel-title ">
-								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseAccountSetting" aria-expanded="false" aria-controls="collapseTwo">
 									<h4>Account Settings</h4>
 								</a>
 							</h4>
 						</div>
 					</div>
-					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+					<div id="collapseAccountSetting" class="panel-collapse collapse" role="tabpanel" aria-labelledby="accountSetting">
 						<div class="panel-body">
 							<div data-example-id="simple-table" class="bs-example">
 
-								<div class="panel panel-default">
+								<div class="panel panel-primary">
 									<div class="panel-heading"><b>Emails</b></div>
 									<div class="panel-body">
 										<small>The principal email receive all the notifications.</small>
@@ -343,7 +343,7 @@
 									</div>
 								</div>
 
-								<div class="panel panel-default">
+								<div class="panel panel-primary">
 									<div class="panel-heading"><b>Change password</b></div>
 									<div class="panel-body">
 										<form class="form-group">
@@ -381,7 +381,7 @@
 									</div>
 								</div>
 
-								<div class="panel panel-default">
+								<div class="panel panel-warning">
 									<div class="panel-heading"><b>Change username</b></div>
 									<div class="panel-body">
 
@@ -395,7 +395,7 @@
 											</div>
 											<div class="form-group">
 												<div class="col-lg-9">
-													<button type="button" class="btn btn-primary">Change</button>
+													<button type="button" class="btn btn-warning">Change</button>
 												</div>
 											</div>
 										</form>
@@ -423,70 +423,227 @@
 					</div>
 				</div>
 				<div class="panel panel-default">
-					<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-heading" role="tab" id="plans">
 						<div class="row">
 							<h4 class="panel-title ">
-								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsePlans" aria-expanded="false" aria-controls="collapseTwo">
 									<h4>Plans</h4>
 								</a>
 							</h4>
 						</div>
 					</div>
-					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+					<div id="collapsePlans" class="panel-collapse collapse" role="tabpanel" aria-labelledby="plans">
 						<div class="panel-body">
 							<div data-example-id="simple-table" class="bs-example">
-
+								<table class="table table-striped">
+									<colgroup>
+										<col class="col-xs-5">
+										<col class="col-xs-2">
+										<col class="col-xs-2">
+										<col class="col-xs-2">
+										<col class="col-xs-2">
+									</colgroup>
+									<thead>
+									<tr>
+										<th>Feature</th>
+										<th class="success">Free</th>
+										<th>Small</th>
+										<th>Medium</th>
+										<th>Large</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>Number of spaces</td>
+										<td class="success">3</td>
+										<td>5</td>
+										<td>10</td>
+										<td>30</td>
+									</tr>
+									<tr>
+										<td>Number of projects by space</td>
+										<td class="success">5</td>
+										<td>10</td>
+										<td>15</td>
+										<td>30</td>
+									</tr>
+									<tr>
+										<td>Private spaces and projects</td>
+										<td class="success"><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+									</tr>
+									<tr>
+										<td>Request per minutes</td>
+										<td class="success">1</td>
+										<td>15	</td>
+										<td>30</td>
+										<td>60</td>
+									</tr>
+									<tr>
+										<td>Notification by email</td>
+										<td class="success"><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+									</tr>
+									<tr>
+										<td>Notification by sms</td>
+										<td class="success"></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+									</tr>
+									<tr>
+										<td>Webhook support</td>
+										<td class="success"></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+										<td><i class="fa fa-check"></i></td>
+									</tr>
+									<tr>
+										<td>Team members</td>
+										<td class="success">1</td>
+										<td>5</td>
+										<td>10</td>
+										<td>unlimited</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td class="success">$0/mounth</td>
+										<td>$9/month</td>
+										<td>$19/month</td>
+										<td>$49/month</td>
+									</tr>
+									<tr>
+										<td>Plans</td>
+										<td class="success"><b>Your plan</b></td>
+										<td><button type="button" class="btn btn-primary">Upgrade</button></td>
+										<td><button type="button" class="btn btn-primary">Upgrade</button></td>
+										<td><button type="button" class="btn btn-primary">Upgrade</button></td>
+									</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="panel panel-default">
-					<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-heading" role="tab" id="team">
 						<div class="row">
 							<h4 class="panel-title ">
-								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTeam" aria-expanded="false" aria-controls="collapseTwo">
 									<h4>Team</h4>
 								</a>
 							</h4>
 						</div>
 					</div>
-					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+					<div id="collapseTeam" class="panel-collapse collapse" role="tabpanel" aria-labelledby="team">
 						<div class="panel-body">
 							<div data-example-id="simple-table" class="bs-example">
+								<div class="panel panel-primary">
+									<div class="panel-heading"><b>Add a new member</b></div>
+									<div class="panel-body">
 
+										<small>if the member does not exist on <b>WatchIoT</b> we will send an email to the new member and we will create an account with a default password.</small>
+										<form class="form-group">
+											<div class="form-group col-lg-6">
+												<label>Email</label>
+												<div>
+													<input type="text" class="form-control" placeholder="Email member">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<div class="col-lg-9">
+													<button type="button" class="btn btn-primary" disabled>Add</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+
+								<table class="table table-striped">
+									<colgroup>
+										<col class="col-xs-9">
+										<col class="col-xs-3">
+									</colgroup>
+									<thead>
+									<tr>
+										<th>Members</th>
+										<th></th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>
+											<img class="img-circle" src="https://secure.gravatar.com/avatar/fc69b473b2b8d3c7e23c632199fec2e0"
+														 alt="Fc69b473b2b8d3c7e23c632199fec2e0" width="20" height="20">
+											Gorums (<b>robertazo123@gmai.com</b>)
+										</td>
+										<td class="success">Current owner</td>
+									</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="panel panel-default">
-					<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-heading" role="tab" id="security">
 						<div class="row">
 							<h4 class="panel-title ">
-								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSecurity" aria-expanded="false" aria-controls="collapseTwo">
 									<h4>Security</h4>
 								</a>
 							</h4>
 						</div>
 					</div>
-					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+					<div id="collapseSecurity" class="panel-collapse collapse" role="tabpanel" aria-labelledby="security">
 						<div class="panel-body">
 							<div data-example-id="simple-table" class="bs-example">
-
+								<table class="table table-striped">
+									<colgroup>
+										<col class="col-xs-10">
+										<col class="col-xs-2">
+									</colgroup>
+									<thead>
+									<tr>
+										<th>History</th>
+										<th></th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>Create a new Space</td>
+										<td>2 day ago</td>
+									</tr>
+									<tr>
+										<td>Create a new Space</td>
+										<td>2 day ago</td>
+									</tr>
+									<tr>
+										<td>Create a new Project</td>
+										<td>2 day ago</td>
+									</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="panel panel-default">
-					<div class="panel-heading" role="tab" id="headingTwo">
+					<div class="panel-heading" role="tab" id="apiKey">
 						<div class="row">
 							<h4 class="panel-title ">
-								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseApiKey" aria-expanded="false" aria-controls="collapseTwo">
 									<h4>Api key</h4>
 								</a>
 							</h4>
 						</div>
 					</div>
-					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+					<div id="collapseApiKey" class="panel-collapse collapse" role="tabpanel" aria-labelledby="apiKey">
 						<div class="panel-body">
 							<div data-example-id="simple-table" class="bs-example">
 
