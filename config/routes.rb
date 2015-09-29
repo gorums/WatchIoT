@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'chart' => 'chart#index', :as => 'chart'
   get 'setting' => 'setting#index', :as => 'setting'
   get 'spaces/setting' => 'spaces#setting', :as => 'spaces/setting'
+  get 'projects/setting' => 'projects#setting', :as => 'projects/setting'
 
   resources :home
   resources :projects
