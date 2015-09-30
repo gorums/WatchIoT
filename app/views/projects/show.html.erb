@@ -35,7 +35,6 @@
 						<a href="/projects/delete/1" class="list-action clear-background" title="Delete space"><i class="fa fa-trash fa-2x"></i></a>
 						<a href="/projects/setting" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
 
-
 					</div>
 				</form>
 			</div>
@@ -43,108 +42,113 @@
 
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<form class="form-horizontal">
-				<h4>Notifications via</h4>
-					<br />
-					<div class="form-group">
-						<label class="col-lg-2">By Email</label>
-						<div class="col-lg-10">
-							<input type="checkbox">
+				<div>
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#notification" aria-controls="notification" role="tab" data-toggle="tab"><h4>Notifications</h4></a></li>
+						<li role="presentation"><a href="#parameters" aria-controls="parameters" role="tab" data-toggle="tab"><h4>Parameters</h4></a></li>
+						<li role="presentation"><a href="#stage" aria-controls="stage" role="tab" data-toggle="tab"><h4>Stages</h4></a></li>
+						<li role="presentation"><a href="#collection" aria-controls="collection" role="tab" data-toggle="tab"><h4>Collection data</h4></a></li>
+						<li role="presentation"><a href="#api" aria-controls="api" role="tab" data-toggle="tab"><h4>Apis</h4></a></li>
+					</ul>
+
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="notification">
+
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label class="col-lg-2">By Email</label>
+									<div class="col-lg-10">
+										<input type="checkbox">
+									</div>
+									<div class="col-lg-10">
+										<small>If you check this the notification will be send you by email.</small>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2">By Sms</label>
+									<div class="col-lg-10">
+										<input type="checkbox">
+									</div>
+									<div class="col-lg-10">
+										<small>If you check this the notification will be send you by sms</small>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2">By Webhook</label>
+									<div class="col-lg-10">
+										<input type="checkbox">
+									</div>
+									<div class="col-lg-10">
+										<small>If you check this the notification will be send you by webhook</small>
+									</div>
+								</div>
+							</form>
 						</div>
-						<div class="col-lg-10">
-							<small>If you check this the notification will be send you by email.</small>
+
+						<div role="tabpanel" class="tab-pane" id="parameters">
+							<form class="form-inline">
+								<div class="form-group">
+									<label for="exampleInputName2">Name</label>
+									<input type="text" class="form-control" id="exampleInputName2" placeholder="Name">
+								</div>
+								<div class="form-group">
+									<label for="exampleInputName2">Type</label>
+									<select class="form-control">
+										<option>Numeric</option>
+										<option>String</option>
+										<option>Boolean</option>
+									</select>
+								</div>
+
+								<button type="submit" class="btn btn-default">Add parameter</button>
+							</form>
 						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-2">By Sms</label>
-						<div class="col-lg-10">
-							<input type="checkbox">
+
+						<div role="tabpanel" class="tab-pane" id="stage">
+							<form class="form-inline">
+								<div class="form-group">
+									<label for="exampleInputName2">Name</label>
+									<input type="text" class="form-control" id="exampleInputName2" placeholder="Name">
+								</div>
+
+								<button type="submit" class="btn btn-default">Add stage</button>
+							</form>
 						</div>
-						<div class="col-lg-10">
-							<small>If you check this the notification will be send you by sms</small>
+
+						<div role="tabpanel" class="tab-pane" id="collection">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label class="col-lg-2">Send request</label>
+									<div class="col-lg-10">
+										<input type="checkbox">
+									</div>
+									<div class="col-lg-10">
+										<small>If you check this the notification will be send you by email.</small>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-2">Waiting for request</label>
+									<div class="col-lg-10">
+										<input type="checkbox">
+									</div>
+									<div class="col-lg-10">
+										<small>If you check this the notification will be send you by sms</small>
+									</div>
+								</div>
+							</form>
 						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-2">By Webhook</label>
-						<div class="col-lg-10">
-							<input type="checkbox">
+
+						<div role="tabpanel" class="tab-pane" id="api">
+							<code>
+								{
+								name1:"value1",
+								name2:"value2"
+								}</code>
 						</div>
-						<div class="col-lg-10">
-							<small>If you check this the notification will be send you by webhook</small>
-						</div>
-					</div>
-				</form>
+				</div>
 			</div>
 		</div>
-
-		<div class="panel panel-success">
-			<div class="panel-body">
-				<h1>Options</h1>
-				<form class="form-inline">
-					<br />
-					<h4>Parameters</h4>
-					<br />
-					<div class="form-group">
-						<label for="exampleInputName2">Name</label>
-						<input type="text" class="form-control" id="exampleInputName2" placeholder="Name">
-					</div>
-					<div class="form-group">
-						<label for="exampleInputName2">Type</label>
-						<select class="form-control">
-							<option>Numeric</option>
-							<option>String</option>
-							<option>Boolean</option>
-						</select>
-					</div>
-
-					<button type="submit" class="btn btn-default">Add parameter</button>
-				</form>
-				<br />
-				<form class="form-inline">
-					<br />
-					<h4>Stages</h4>
-					<br />
-					<div class="form-group">
-						<label for="exampleInputName2">Name</label>
-						<input type="text" class="form-control" id="exampleInputName2" placeholder="Name">
-					</div>
-
-					<button type="submit" class="btn btn-default">Add stage</button>
-				</form>
-
-				<br />
-				<form class="form-horizontal">
-					<h4>Collection data</h4>
-					<br />
-					<div class="form-group">
-						<label class="col-lg-2">Send request</label>
-						<div class="col-lg-10">
-							<input type="checkbox">
-						</div>
-						<div class="col-lg-10">
-							<small>If you check this the notification will be send you by email.</small>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-2">Waiting for request</label>
-						<div class="col-lg-10">
-							<input type="checkbox">
-						</div>
-						<div class="col-lg-10">
-							<small>If you check this the notification will be send you by sms</small>
-						</div>
-					</div>
-				</form>
-
-				<h4>API</h4>
-				<code>
-					{
-						name1:"value1",
-						name2:"value2"
-					}</code>
-			</div>
-		</div>
-
-
-  </div>
+	</div>
+	</div>
 </div>
