@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get 'logout' => 'users#logout', :as => 'logout'
   get 'dashboard' => 'dashboard#index', :as => 'dashboard'
   get 'download' => 'download#index', :as => 'download'
-  get 'about' => 'about#index', :as => 'about'
   get 'projects' => 'projects#index', :as => 'projects'
   get 'spaces' => 'spaces#index', :as => 'spaces'
   get 'chart' => 'chart#index', :as => 'chart'
@@ -20,7 +19,6 @@ Rails.application.routes.draw do
   resources :chart
   resources :download
   resources :setting
-  resources :about
 
   root 'home#index'
 
