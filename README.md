@@ -103,53 +103,53 @@ TODO
 
 > Setting space page
 
- [ ] Public or private.
+ [X] Public or private.
 
- [ ] Change the name
+ [X] Change the name
  
- [ ] if public nobody have permission, such the owner.
+ [X] if public nobody have permission, such the owner.
 
- [ ] if public user can subscriber to receive alert.
+ [X] if public user can subscriber to receive alert.
 
- [ ] if private can to assign users.
+ [X] if private can to assign users.
 
- [ ] Permission by team members.
+ [X] Permission by team members.
 
- [ ] Permission to edit space description and add category.
+ [X] Permission to edit space description and add category.
 
- [ ] Permission to create project.
+ [X] Permission to create project.
 
- [ ] Permission to receive notification (email, sms).
+ [X] Permission to receive notification (email, sms).
 
 > Project page
 
- [ ] Edit project
+ [X] Edit project
 
- [ ] Delete project only by the owner
+ [X] Delete project only by the owner
 
- [ ] Setting project.
+ [X] Setting project.
 
- [ ] Define notification (email, sms, webhook)
+ [X] Define notification (email, sms, webhook)
 
- [ ] Define the via to recollect info (request by us or waiting for request)
+ [X] Define the via to recollect info (request by us or waiting for request)
 
- [ ] Define client url or ip
+ [X] Define client url or ip
 
- [ ] Define parameters
+ [X] Define parameters
 
- [ ] Define stages (default: normal{green}, warning{yellow}, fire{red})
+ [X] Define stages (default: normal{green}, warning{yellow}, fire{red})
 
- [ ] Configure stages in correlation with parameters (simple condition, script)
+ [X] Configure stages in correlation with parameters (simple condition, script)
 
 > Setting project page
 
- [ ] Public or private (if space is private it can't be public).
+ [X] Public or private (if space is private it can't be public).
 
- [ ] Permission by team members.
+ [X] Permission by team members.
 
- [ ] Permission to edit project description and add category.
+ [X] Permission to edit project description and add category.
 
- [ ] Permission to receive notification (email, sms).
+ [X] Permission to receive notification (email, sms).
 
 > Setting account page
 
