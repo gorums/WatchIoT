@@ -36,6 +36,10 @@ All history data can be shown using charting and you can see how your services h
 Changelog
 --
 
+*4 octuber 2015*
+
+Struct site defined
+
 *1 september 2015*
 
 Dashboard work begin
@@ -50,6 +54,10 @@ Create watchIoT project on github, first commit
 
 TODO
 --
+
+**4 octuber 2015**
+
+ [ ] Define all the model
 
 **13 September 2015**
 
