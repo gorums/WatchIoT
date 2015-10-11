@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get 'spaces/setting' => 'spaces#setting', :as => 'spaces/setting'
   get 'projects/setting' => 'projects#setting', :as => 'projects/setting'
 
+  resources :users
   resources :home
   resources :projects
   resources :spaces
