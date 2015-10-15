@@ -1,6 +1,6 @@
-class CreateSecurity < ActiveRecord::Migration
+class CreateSecurities < ActiveRecord::Migration
   def change
-    create_table :security do |t|
+    create_table :securities do |t|
       t.string :name
       t.text :description
       t.string :ip
@@ -10,7 +10,7 @@ class CreateSecurity < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :security, :user_id
-    add_index :security, :user_action_id
+    add_index :securities, :user_id
+    add_index :securities, :user_action_id
   end
 end

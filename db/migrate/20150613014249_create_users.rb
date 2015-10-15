@@ -12,7 +12,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :passwd
       t.string :passwd_salt
       t.string :auth_token
-      t.integer :plan_id                                  #foreign key to table plan
+      t.references :plan                                  #foreign key for table plans
+      t.references :api_key                               #foreign key for table api_keys
 
       t.timestamps null: false
     end
@@ -20,5 +21,6 @@ class CreateUsers < ActiveRecord::Migration
     add_index :users, :username, unique: true
     add_index :users, :status
     add_index :users, :plan_id
+    add_index :users, :api_key_id
   end
 end

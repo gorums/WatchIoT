@@ -17,12 +17,10 @@ ActiveRecord::Schema.define(version: 20151014052607) do
   enable_extension "plpgsql"
 
   create_table "api_keys", force: :cascade do |t|
-    t.string  "api_key"
-    t.integer "user_id"
+    t.string "api_key"
   end
 
   add_index "api_keys", ["api_key"], name: "index_api_keys_on_api_key", unique: true, using: :btree
-  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id", using: :btree
 
   create_table "contact_us", force: :cascade do |t|
     t.string   "email"
@@ -173,7 +171,7 @@ ActiveRecord::Schema.define(version: 20151014052607) do
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
   add_index "projects", ["user_owner_id"], name: "index_projects_on_user_owner_id", using: :btree
 
-  create_table "security", force: :cascade do |t|
+  create_table "securities", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
     t.string   "ip"
@@ -183,8 +181,8 @@ ActiveRecord::Schema.define(version: 20151014052607) do
     t.datetime "updated_at",     null: false
   end
 
-  add_index "security", ["user_action_id"], name: "index_security_on_user_action_id", using: :btree
-  add_index "security", ["user_id"], name: "index_security_on_user_id", using: :btree
+  add_index "securities", ["user_action_id"], name: "index_securities_on_user_action_id", using: :btree
+  add_index "securities", ["user_id"], name: "index_securities_on_user_id", using: :btree
 
   create_table "spaces", force: :cascade do |t|
     t.string   "name"
@@ -285,10 +283,12 @@ ActiveRecord::Schema.define(version: 20151014052607) do
     t.string   "passwd_salt"
     t.string   "auth_token"
     t.integer  "plan_id"
+    t.integer  "api_key_id"
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
   end
 
+  add_index "users", ["api_key_id"], name: "index_users_on_api_key_id", using: :btree
   add_index "users", ["plan_id"], name: "index_users_on_plan_id", using: :btree
   add_index "users", ["status"], name: "index_users_on_status", using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
