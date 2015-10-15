@@ -111,6 +111,23 @@ ActiveRecord::Schema.define(version: 20151014052607) do
   add_index "project_parameters", ["space_id"], name: "index_project_parameters_on_space_id", using: :btree
   add_index "project_parameters", ["user_id"], name: "index_project_parameters_on_user_id", using: :btree
 
+  create_table "project_request_from_clients", force: :cascade do |t|
+    t.string  "ips"
+    t.integer "project_request_id"
+  end
+
+  add_index "project_request_from_clients", ["project_request_id"], name: "index_project_request_from_clients_on_project_request_id", using: :btree
+
+  create_table "project_request_to_servers", force: :cascade do |t|
+    t.string  "url"
+    t.string  "method"
+    t.string  "content_type"
+    t.string  "raw"
+    t.integer "project_request_id"
+  end
+
+  add_index "project_request_to_servers", ["project_request_id"], name: "index_project_request_to_servers_on_project_request_id", using: :btree
+
   create_table "project_requests", force: :cascade do |t|
     t.integer  "request_per_min"
     t.string   "way"
@@ -125,23 +142,6 @@ ActiveRecord::Schema.define(version: 20151014052607) do
   add_index "project_requests", ["project_id"], name: "index_project_requests_on_project_id", using: :btree
   add_index "project_requests", ["space_id"], name: "index_project_requests_on_space_id", using: :btree
   add_index "project_requests", ["user_id"], name: "index_project_requests_on_user_id", using: :btree
-
-  create_table "project_requests_from_clients", force: :cascade do |t|
-    t.string  "ips"
-    t.integer "project_request_id"
-  end
-
-  add_index "project_requests_from_clients", ["project_request_id"], name: "index_project_requests_from_clients_on_project_request_id", using: :btree
-
-  create_table "project_requests_to_servers", force: :cascade do |t|
-    t.string  "url"
-    t.string  "method"
-    t.string  "content_type"
-    t.string  "raw"
-    t.integer "project_request_id"
-  end
-
-  add_index "project_requests_to_servers", ["project_request_id"], name: "index_project_requests_to_servers_on_project_request_id", using: :btree
 
   create_table "project_webhooks", force: :cascade do |t|
     t.string   "url"
