@@ -38,7 +38,13 @@ class User < ActiveRecord::Base
   # This method try to authenticate the client
   #
   def self.authenticate(email, passwd)
-    user = find_by_email(email)
+    #find by email
+    userEmail = Email.find_by_email(email)
+
+    user = userEmail.user if userEmail && userEmail.user
+    #else find by username
+    user = User.find_by_username(email) if !user
+
     if user && user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
       user
     else
@@ -72,8 +78,12 @@ class User < ActiveRecord::Base
   #
   def generate_api_key
 
+    begin
+      api_key = SecureRandom.uuid
+    end while ApiKey.exists?(:api_key => api_key)
+
     api = ApiKey.new
-    api.api_key = SecureRandom.uuid
+    api.api_key = api_key
     api.save
   end
 
