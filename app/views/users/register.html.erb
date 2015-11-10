@@ -14,10 +14,15 @@
 <%= form_for @user do |f| %>
     <div class="auth-form">
       <div class="input">
-        <%= f.label :email %><br />
-        <%= f.text_field :email, class: "form-control" %>
-        <span><i class="fa fa-envelope-o"></i></span>
+        <%= f.label :username %><br />
+        <%= f.text_field :username, class: "form-control" %>
+        <span><i class="fa fa-user fa-fw"></i></span>
       </div>
+			<div class="input">
+				<%= label(:email, :email) %>
+				<%= email_field(:email, :email, class: "form-control") %>
+				<span><i class="fa fa-envelope-o"></i></span>
+			</div>
       <div class="input">
         <%= f.label "Password" %><br />
         <%= f.password_field :passwd %>

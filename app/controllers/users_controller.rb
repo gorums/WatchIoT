@@ -17,17 +17,22 @@ class UsersController < ApplicationController
   # GET /register
   def register
     @user = User.new
+    @email = Email.new
   end
 
   # POST /users
   # POST /users.json
   def create
     @user = User.new(user_params)
+    @email = Email.new(email_params)
 
     if @user.save
-      #whether register fine, im going to login in the same time
-      cookies[:auth_token] = @user.auth_token
-      redirect_to root_url
+      @email.user_id = @user.id;
+      if @email.save
+        #whether register fine, im going to login in the same time
+        cookies[:auth_token] = @user.auth_token
+        redirect_to root_url
+      end
     else
       render :register
     end
@@ -65,6 +70,10 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:passwd, :passwd_confirmation, :email)
+      params.require(:user).permit(:passwd, :passwd_confirmation, :username)
+    end
+
+    def email_params
+      params.require(:email).permit(:email)
     end
 end

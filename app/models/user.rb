@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_one :api_key
   has_one :plan
 
+  validates_uniqueness_of :username
   validates_presence_of :username, :on => :create
   validates_presence_of :passwd, :on => :create
   validates_presence_of :passwd_confirmation, :on => :create
