@@ -12,13 +12,13 @@ Rails.application.routes.draw do
   get 'setting' => 'setting#index', :as => 'setting'
   get 'spaces/setting' => 'spaces#setting', :as => 'spaces/setting'
   get 'projects/setting' => 'projects#setting', :as => 'projects/setting'
+  post 'home/contact' => 'home#contact', :as => 'home/contact'
 
   resources :users
   resources :home
   resources :projects
   resources :spaces
   resources :chart
-  resources :download
   resources :setting
 
   root 'home#index'
