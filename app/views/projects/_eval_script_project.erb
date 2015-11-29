@@ -1,0 +1,19 @@
+<div role="tabpanel" class="tab-pane" id="script">
+	<br /><br />
+	<form class="form">
+		<p>You can coding how process the values and send the notifications</p>
+		<br />
+		<code>
+			byDefault = Stage.Normal;
+
+			if(field1 == 24 || field2 >= 15)
+			notification(Stage.Warning);
+			elseif(field3)
+			notification(Stage.Panic, Notif.BY_EMAIL, "Description abaut what happened, fierd1 =" + field1 );
+		</code>
+		<br /><br /><br /><br />
+		<i class="fa fa-pencil-square-o fa-2x"></i>
+		<br /><br /><br />
+		<textarea rows="4"></textarea>
+	</form>
+</div>

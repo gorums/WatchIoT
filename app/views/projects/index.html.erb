@@ -6,100 +6,13 @@
 
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<form class="form-horizontal">
-
-					<div class="form-group">
-						<label class="col-lg-2">Project Name</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Project Name">
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-lg-2">Tags</label>
-						<div class="col-lg-6">
-							<input type="text" class="form-control tagsinput" data-role="tagsinput" >
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-lg-2">Description</label>
-						<div class="col-lg-10">
-							<textarea  class="form-control" rows="3"></textarea>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-lg-offset-2 col-lg-6">
-							<button type="button" class="btn btn-primary">Create Project</button>
-						</div>
-					</div>
-				</form>
+				<%= render "create_project" %>
 			</div>
 		</div>
 
 		<br />
-
 		<div>
-
-			<h3>List of Project</h3>
-
-			<div class="panel panel-success">
-				<div class="panel-body">
-					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-						<div class="panel panel-default">
-							<div class="panel-heading" role="tab" id="headingOne">
-								<div class="row">
-									<table class="table table-striped">
-										<colgroup>
-											<col class="col-xs-2">
-											<col class="col-xs-6">
-											<col class="col-xs-2">
-										</colgroup>
-										<thead>
-										<tr>
-											<th>Project Name</th>
-											<th>Project Description</th>
-											<th></th>
-										</tr>
-										</thead>
-										<tbody>
-										<tr>
-											<th scope="row">Mark</th>
-											<td>Otto</td>
-											<td>
-												<a href="/projects/1" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-												<a href="/projects/delete/1" class="list-action clear-background" title="Delete project"><i class="fa fa-trash fa-2x"></i></a>
-												<a href="/projects/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
-											</td>
-										</tr>
-										<tr>
-											<th scope="row">Jacob</th>
-											<td>Thornton</td>
-											<td>
-												<a href="/projects/1" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-												<a href="/projects/delete/1" class="list-action clear-background" title="Delete project"><i class="fa fa-trash fa-2x"></i></a>
-												<a href="/projects/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
-											</td>
-										</tr>
-										<tr>
-											<th scope="row">Larry</th>
-											<td>the Bird</td>
-											<td>
-												<a href="/projects/1" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-												<a href="/projects/delete/1" class="list-action clear-background" title="Delete project"><i class="fa fa-trash fa-2x"></i></a>
-												<a href="/projects/settings" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
-											</td>
-										</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
+			<%= render "list_projects"%>
   	</div>
 	</div>
 </div>

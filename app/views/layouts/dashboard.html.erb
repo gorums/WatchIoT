@@ -1,144 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>WatchIoT</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+	<head>
+		<title>WatchIoT</title>
+		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+		<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+		<%= csrf_meta_tags %>
+	</head>
+	<body>
 
-<div id="wrapper">
-  <!-- Sidebar -->
-  <div id="sidebar-wrapper">
-    <ul class="sidebar-nav">
-      <li class="sidebar-brand">
-        <%= link_to root_path do%>
-          WatchIoT
-        <%end%>
-        <div class="ember-view navigator-toggle icon icon-navigator-toggle"></div>
-      </li>
-      <li class="dashboard-menu">
-        <%= link_to dashboard_path do%>
-          <i class="fa fa-th"></i>
-          Dashboard
-        <%end%>
-      </li>
-      <li class="dashboard-menu">
-        <%= link_to spaces_path do%>
-          <i class="fa fa-laptop"></i>
-          Spaces
-        <%end%>
-      </li>
-      <li class="dashboard-menu">
-        <%= link_to chart_path do%>
-          <i class="fa fa-bar-chart"></i>
-          Chart
-        <%end%>
-      </li>
-      <li class="dashboard-menu">
-        <%= link_to setting_path do%>
-          <i class="fa fa-cogs"></i>
-          Setting
-        <%end%>
-      </li>
-    </ul>
-  </div>
+	<div id="wrapper">
+		<%= render "layouts/sidebar_dash" %>
+		<%= render "layouts/nav_dash" %>
 
-  <div id="navbar" class="collapse navbar-collapse head-dashboard">
-    <ul class="nav navbar-nav">
-      <li>
-        <div class="apps-search">
-          <i class="fa fa-search fa-2x fa-apps-search"></i>
-          <input type="text" class="form-control apps-search-input" placeholder="Search"/>
-        </div>
-      </li>
-    </ul>
+		<div id="page-content-wrapper">
+			<div class="container-fluid">
+				<a href="#menu-toggle" class="toggle visible-sm visible-xs" id="menu-toggle"><i class="fa fa-bars fa-3x"></i></a>
+					<%= yield %>
+			</div>
+		</div>
+	</div>
 
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle dropdown-user-a" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <span class="dropdown-user">
-              <img class="img-circle" src="https://secure.gravatar.com/avatar/fc69b473b2b8d3c7e23c632199fec2e0"
-									 alt="Fc69b473b2b8d3c7e23c632199fec2e0" width="20" height="20">
-              <%= current_user.username %>
-							<span class="caret"></span>
-            </span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-left">
-          <li><%= link_to root_path do%>
-                <i class="fa fa-home"></i>
-                Home
-            <%end%></li>
-          <li><%= link_to spaces_path do%>
-                <i class="fa fa-laptop"></i>
-                Spaces
-            <%end%></li>
-          <li><%= link_to chart_path do%>
-                <i class="fa fa-bar-chart"></i>
-                Chart
-            <%end%></li>
-          <li><%= link_to setting_path do%>
-                <i class="fa fa-cogs"></i>
-                Setting
-            <%end%></li>
-          <li role="separator" class="divider"></li>
-          <li><%= link_to logout_path do%>
-                Logout
-            <%end%></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <!-- /#sidebar-wrapper -->
+	<%= render "layouts/footer_dash" %>
 
-  <!-- Page Content -->
-  <div id="page-content-wrapper">
-    <div class="container-fluid">
-      <a href="#menu-toggle" class="toggle visible-sm visible-xs" id="menu-toggle"><i class="fa fa-bars fa-3x"></i></a>
-        <%= yield %>
-    </div>
-  </div>
-  <!-- /#page-content-wrapper -->
+	<script>
+			$("#menu-toggle").click(function(e) {
+					e.preventDefault();
+					$("#wrapper").toggleClass("toggled");
+			});
 
-</div>
-<!-- /#wrapper -->
+			$(window).resize(function()
+			{
+					$("#wrapper").toggleClass("toggled");
+					$("#wrapper").toggleClass("toggled");
+			});
+	</script>
 
-<!-- Menu Toggle Script -->
-<script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-
-    $(window).resize(function()
-    {
-        //hack toggled
-        $("#wrapper").toggleClass("toggled");
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
-
-<footer class="ember-view dashboard-footer visible-lg">
-  <div class="section-content">
-  <ul class="list-inline">
-    <li>© 2015 WatchIoT</li>
-    <li><a href="https://www.github.com/gorums/watchiot" target="_blank" class="clear-background"><span class="fa fa-stack fa-lg">
-        <span class="fa fa-square-o fa-stack-2x"></span>
-        <span class="fa fa-github fa-stack-1x"></span>
-      </span></a></li>
-    <li><a href="https://twitter.com/watchiot" target="_blank" class="clear-background">
-        <span class="fa fa-stack fa-lg">
-            <span class="fa fa-square-o fa-stack-2x"></span>
-            <span class="fa fa-twitter fa-stack-1x"></span>
-        </span>
-    </a></li>
-    <li><a href="https://www.facebook.com/watchiot" target="_blank" class="clear-background"><span class="fa fa-stack fa-lg">
-        <span class="fa fa-square-o fa-stack-2x"></span>
-        <span class="fa fa-facebook fa-stack-1x"></span>
-      </span></a></li>
-  </ul>
-</div>
-</footer>
-</body>
+	</body>
 </html>

@@ -1,0 +1,72 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="logo" style="float:left;"><a href="" ><img height="50px" src="../images/Logo_DotNet.png" /></a></div>
+
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/"><span class="title">WatchIoT</span></a>
+		</div>
+
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="/#getting-started">Getting started</a></li>
+				<li><a href="/#plans">Plans</a></li>
+				<li><a href="/#faq">Faq</a></li>
+				<li><a href="/#contactus">
+					Contact us
+				</a>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<% if current_user %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="login">
+									<img class="img-circle" src="https://secure.gravatar.com/avatar/fc69b473b2b8d3c7e23c632199fec2e0"
+											 alt="Fc69b473b2b8d3c7e23c632199fec2e0" width="20" height="20">
+									<%= current_user.username %>
+									<span class="caret"></span>
+                </span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><%= link_to dashboard_path do%>
+									<i class="fa fa-th"></i>
+									Dashboard
+								<%end%></li>
+							<li><%= link_to spaces_path do%>
+									<i class="fa fa-laptop"></i>
+									Spaces
+								<%end%></li>
+							<li><%= link_to chart_path do%>
+									<i class="fa fa-bar-chart"></i>
+									Chart
+								<%end%></li>
+							<li><%= link_to setting_path do%>
+									<i class="fa fa-cogs"></i>
+									Setting
+								<%end%></li>
+							<li role="separator" class="divider"></li>
+							<li><%= link_to logout_path do%>
+									Logout
+								<%end%></li>
+						</ul>
+					</li>
+				<% else %>
+					<li><%= link_to login_path do%>
+							<span class="login"><i class="fa fa-user fa-fw"></i>Login</span>
+						<%end%>
+					</li>
+					<li ><%= link_to register_path do %>
+							<span class="login"><i class="fa fa-pencil-square-o fa-fw"></i>Sing up</span>
+						<%end%>
+					</li>
+				<% end %>
+			</ul>
+		</div>
+	</div>
+</nav>

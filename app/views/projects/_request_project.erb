@@ -1,0 +1,110 @@
+<div role="tabpanel" class="tab-pane" id="request">
+	<br /><br />
+	<form class="form">
+		<p>Do you want to send the request or wait for them?</p>
+		<br />
+
+		<div class="panel  panel-success col-lg-6">
+			<div class="panel-heading">
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+						Send request
+					</label>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label for="requestPerMin">Request per minutes:</label>
+					<div>
+						<input type="number" value="1" min="1" max="1" class="form-control" id="requestPerMin" placeholder="Request per minutes" disabled  title="Upgrade the plan">
+					</div>
+				</div>
+				<label  for="url">Server url:</label>
+				<div class="form-group">
+					<div class="col-lg-3">
+						<select class="form-control">
+							<option>GET</option>
+							<option>POST</option>
+						</select>
+					</div>
+					<div class="col-lg-9">
+						<input type="text" class="form-control" id="url" placeholder="Url">
+					</div>
+				</div>
+				<br /><br />
+
+				<div class="form-group">
+					<label>Content type:</label>
+					<select class="form-control">
+						<option>text/html</option>
+						<option>text/plain</option>
+						<option>application/xml</option>
+						<option>application/json</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Raw post:</label>
+					<textarea class="form-control" rows="3"></textarea>
+				</div>
+
+				<div class="form-group">
+					<button type="button" class="btn btn-primary">Save</button>
+					<button type="button" class="btn btn-info">Test</button>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="panel  panel-success col-lg-6">
+			<div class="panel-heading">
+				<div class="radio">
+					<label>
+						<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+						Waiting for request
+					</label>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label for="requestPerMin">Waiting request per minutes:</label>
+					<div>
+						<input type="number" value="1" min="1" max="1" class="form-control" id="requestPerMin" placeholder="Request per minutes" disabled  title="Upgrade the plan">
+					</div>
+				</div>
+				<br />
+				<div class="form-group">
+					<label class="col-lg-2">Wherever Ip</label>
+					<div class="col-lg-10">
+						<input type="checkbox">
+					</div>
+					<div class="col-lg-10">
+						<small>If you check this our server catch requests for nobody ip.</small>
+					</div>
+				</div>
+				<br /><br /><br />
+				<div class="form-group">
+					<label  for="url">Client ip:</label>
+					<div class="col-lg-12">
+						<input type="text" class="form-control" id="url" placeholder="Client ip">
+					</div>
+				</div>
+				<br /><br />
+				<div class="form-group">
+					<label  for="url">Client ip:</label>
+					<div class="col-lg-12">
+						<input type="text" class="form-control" id="url" placeholder="Client ip">
+					</div>
+				</div>
+				<br /><br /><br />
+				<div class="form-group">
+					<button type="button" class="btn btn-primary">Save</button>
+					<button type="button" class="btn btn-info">Wait</button>
+				</div>
+
+			</div>
+		</div>
+
+	</form>
+</div>

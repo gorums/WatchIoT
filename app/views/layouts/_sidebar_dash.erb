@@ -1,0 +1,35 @@
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+	<ul class="sidebar-nav">
+		<li class="sidebar-brand">
+			<%= link_to root_path do%>
+				WatchIoT
+			<%end%>
+			<div class="ember-view navigator-toggle icon icon-navigator-toggle"></div>
+		</li>
+		<li class="dashboard-menu">
+			<%= link_to dashboard_path do%>
+				<i class="fa fa-th"></i>
+				Dashboard
+			<%end%>
+		</li>
+		<li class="dashboard-menu">
+			<%= link_to spaces_path do%>
+				<i class="fa fa-laptop"></i>
+				Spaces
+			<%end%>
+		</li>
+		<li class="dashboard-menu">
+			<%= link_to chart_path do%>
+				<i class="fa fa-bar-chart"></i>
+				Chart
+			<%end%>
+		</li>
+		<li class="dashboard-menu">
+			<%= link_to setting_path do%>
+				<i class="fa fa-cogs"></i>
+				Setting
+			<%end%>
+		</li>
+	</ul>
+</div>

@@ -4,45 +4,7 @@
 
     <div class="panel panel-success">
       <div class="panel-body">
-        <form class="form-horizontal">
-
-          <div class="form-group">
-            <label class="col-lg-2">Space Name</label>
-            <div class="col-lg-6">
-                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Space Name">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-lg-2">Tags</label>
-            <div class="col-lg-6">
-              <input type="text" class="form-control tagsinput" data-role="tagsinput" >
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-lg-2">Description</label>
-            <div class="col-lg-10">
-              <textarea  class="form-control" rows="3"></textarea>
-            </div>
-          </div>
-
-					<div class="form-group">
-						<label class="col-lg-2">Public space</label>
-						<div class="col-lg-10">
-							<input type="checkbox">
-						</div>
-						<div class="col-lg-10">
-							<small>If you check this like public all the people can subscribe in your notification by email.</small>
-						</div>
-					</div>
-
-          <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-6">
-            <button type="button" class="btn btn-primary">Create Space</button>
-            </div>
-          </div>
-        </form>
+				<%= render "spaces/create_space" %>
       </div>
     </div>
 
@@ -50,44 +12,7 @@
     <div>
       <div class="panel panel-success">
         <div class="panel-body">
-					<table class="table table-striped">
-						<colgroup>
-							<col class="col-xs-10">
-							<col class="col-xs-2">
-						</colgroup>
-						<thead>
-						<tr>
-							<th>History</th>
-							<th></th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr>
-							<td>Create a new Project <b> Test project 3</b></td>
-							<td>2 day ago</td>
-						</tr>
-						<tr>
-							<td>Create a new Project <b> Test project 2</b></td>
-							<td>2 day ago</td>
-						</tr>
-						<tr>
-							<td>Create a new Project <b> Test project 1</b></td>
-							<td>2 day ago</td>
-						</tr>
-						<tr>
-							<td>Create a new Space <b>My Google servers</b></td>
-							<td>2 day ago</td>
-						</tr>
-						<tr>
-							<td>Create a new Space <b>My Services in AWS</b> </td>
-							<td>2 day ago</td>
-						</tr>
-						<tr>
-							<td><a href="#">see all logs</a></td>
-							<td></td>
-						</tr>
-						</tbody>
-					</table>
+					<%= render "history" %>
         </div>
 
       </div>

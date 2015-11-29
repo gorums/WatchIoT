@@ -16,154 +16,16 @@
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane active" id="home">
 							<br />
-
-							<div class="panel panel-default">
-								<div class="panel-heading"><b>Configure</b></div>
-								<div class="panel-body">
-									<div class="form-group">
-										<label class="col-lg-2">Public project</label>
-										<div class="col-lg-10">
-											<input type="checkbox">
-										</div>
-										<div class="col-lg-10">
-											<small>If you check this like public all the people can subscribe in your notification by email.</small>
-										</div>
-									</div>
-									<br /><br />
-									<div class="form-group">
-										<label class="col-lg-2">Users can subscribe </label>
-										<div class="col-lg-10">
-											<input type="checkbox">
-										</div>
-										<div class="col-lg-10">
-											<small>If you space is public all the people can subscribe in your notification by email.</small>
-										</div>
-									</div>
-								</div>
-							</div>
+							<%= render "setting_config" %>
 							<br />
-
-							<div class="panel panel-default">
-								<div class="panel-heading"><b>Change name project</b></div>
-								<div class="panel-body">
-
-									<small>This change can be painful and break your applications.</small>
-									<form class="form-group">
-										<div class="form-group col-lg-6">
-											<label>Name project</label>
-											<div>
-												<input type="text" class="form-control" placeholder="Name project" value="My first project">
-											</div>
-										</div>
-										<div class="form-group">
-											<div class="col-lg-9">
-												<button type="button" class="btn btn-danger">Change</button>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>
-
-							<div class="panel panel-default">
-								<div class="panel-heading"><b>Export project</b></div>
-								<div class="panel-body">
-
-									<small>You can save the project.</small>
-									<form class="form-group">
-										<div class="form-group">
-											<div class="col-lg-9">
-												<button type="button" class="btn btn-success">Export</button>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>
-
+							<%= render "setting_change_name" %>
+							<%= render "setting_export" %>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="members">
 							<br />
-
-							<div class="panel panel-primary">
-								<div class="panel-heading"><b>Add a new member</b></div>
-								<div class="panel-body">
-
-									<small>if the member does not exist on <b>WatchIoT</b> we will send an email to the new member and we will create an account with a default password.</small>
-									<form class="form-group">
-										<div class="form-group col-lg-6">
-											<label>Email</label>
-											<div>
-												<input type="text" class="form-control" placeholder="Email member">
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="col-lg-9">
-												<button type="button" class="btn btn-primary" disabled>Add</button>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>
+							<%= render "setting_add_member" %>
 							<br />
-
-							<div class="panel panel-default">
-								<div class="panel-heading"><b>Members</b></div>
-								<div class="panel-body">
-									<div class="col-lg-10">
-											<img class="img-circle" src="https://secure.gravatar.com/avatar/fc69b473b2b8d3c7e23c632199fec2e0"
-													 alt="Fc69b473b2b8d3c7e23c632199fec2e0" width="20" height="20">
-											gorums (<b>robertazo123@gmail.com</b>)
-
-									</div>
-									<div class="col-lg-2 success">
-										<p class="text-success">Current owner</p>
-									</div>
-
-										<div class="col-lg-10">
-											<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-												<img class="img-circle" src="https://secure.gravatar.com/avatar/fc69b473b2b8d3c7e23c632199fec2e0"
-														 alt="Fc69b473b2b8d3c7e23c632199fec2e0" width="20" height="20">
-												ack (<b>gorumlabmatcom@gmail.com</b>)
-											</a>
-										</div>
-										<div class="col-lg-2">
-											<p class="text-info">Partner</p>
-										</div>
-
-									<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-										<div class="panel-body">
-											<div class="col-lg-10">
-												Change project
-											</div>
-											<div class="col-lg-2">
-												<input type="checkbox" />
-											</div>
-
-											<div class="col-lg-10">
-												Modify properties
-											</div>
-											<div class="col-lg-2">
-												<input type="checkbox" />
-											</div>
-
-											<div class="col-lg-10">
-												Modify evaluator
-											</div>
-											<div class="col-lg-2">
-												<input type="checkbox" />
-											</div>
-
-											<div class="col-lg-10">
-												Add new members
-											</div>
-											<div class="col-lg-2">
-												<input type="checkbox" />
-											</div>
-
-										</div>
-									</div>
-								</div>
-							</div>
+							<%= render "setting_perm_members" %>
 						</div>
 					</div>
 				</div>
