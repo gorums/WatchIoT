@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151014052607) do
+ActiveRecord::Schema.define(version: 20151130195954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,31 @@ ActiveRecord::Schema.define(version: 20151014052607) do
   end
 
   add_index "api_keys", ["api_key"], name: "index_api_keys_on_api_key", unique: true, using: :btree
+
+  create_table "chart_histories", force: :cascade do |t|
+    t.integer  "project_id"
+    t.integer  "space_id"
+    t.integer  "user_id"
+    t.string   "stage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "chart_histories", ["project_id"], name: "index_chart_histories_on_project_id", using: :btree
+  add_index "chart_histories", ["space_id"], name: "index_chart_histories_on_space_id", using: :btree
+  add_index "chart_histories", ["user_id"], name: "index_chart_histories_on_user_id", using: :btree
+
+  create_table "chart_history_params", force: :cascade do |t|
+    t.integer  "chart_history_id"
+    t.integer  "project_id"
+    t.string   "param"
+    t.string   "value"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "chart_history_params", ["chart_history_id"], name: "index_chart_history_params_on_chart_history_id", using: :btree
+  add_index "chart_history_params", ["project_id"], name: "index_chart_history_params_on_project_id", using: :btree
 
   create_table "contact_us", force: :cascade do |t|
     t.string   "email"
