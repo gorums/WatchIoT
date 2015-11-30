@@ -29,6 +29,12 @@
 						<% end %>
 					</tr>
 					<% end %>
+					<tr>
+						<td></td>
+						<% @plans.each do |plan| %>
+							<td class="success"><b>$<%= number_with_precision(plan.amount_per_month, precision: 0) %>/mounth</b></td>
+						<% end %>
+					</tr>
 					</tbody>
 				</table>
 			</div>
