@@ -15,83 +15,20 @@
 					<thead>
 					<tr class="active">
 						<th>Feature</th>
-						<th>Free</th>
-						<th>Small</th>
-						<th>Medium</th>
-						<th>Large</th>
+						<% @plans.each do |plan| %>
+						<th><%= plan.name %></th>
+						<% end %>
 					</tr>
 					</thead>
 					<tbody>
+					<% @features.each do |feature| %>
 					<tr>
-						<td class="text-left"><strong>Number of spaces</strong></td>
-						<td>3</td>
-						<td>5</td>
-						<td>10</td>
-						<td>30</td>
+						<td class="text-left"><strong><%= feature.name %></strong></td>
+						<% feature.plan_features.each do |plan_feature| %>
+						<td><% if plan_feature.value == 'true' %><i class="fa fa-check"></i><% else %><%= plan_feature.value %><% end %></td>
+						<% end %>
 					</tr>
-					<tr>
-						<td class="text-left"><strong>Number of projects by space</strong></td>
-						<td>5</td>
-						<td>10</td>
-						<td>15</td>
-						<td>30</td>
-					</tr>
-					<tr>
-						<td class="text-left"><strong>Private spaces and projects</strong></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td class="text-left"><strong>Request per minutes</strong></td>
-						<td>1</td>
-						<td>15	</td>
-						<td>30</td>
-						<td>60</td>
-					</tr>
-					<tr>
-						<td class="text-left"><strong>Notification by email</strong></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td class="text-left"><strong>Notification by sms</strong></td>
-						<td></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td class="text-left"><strong>Webhook support</strong></td>
-						<td></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td class="text-left"><strong>Subscribe users in public spaces/projects</strong></td>
-						<td>unlimited</td>
-						<td>unlimited</td>
-						<td>unlimited</td>
-						<td>unlimited</td>
-					</tr>
-					<tr>
-						<td class="text-left"><strong>Team members</strong></td>
-						<td>1</td>
-						<td>5</td>
-						<td>10</td>
-						<td>unlimited</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="success"><b>$0/mounth</b></td>
-						<td class="success"><b>$9/month</b></td>
-						<td class="success"><b>$19/month</b></td>
-						<td class="success"><b>$49/month</b></td>
-					</tr>
+					<% end %>
 					</tbody>
 				</table>
 			</div>
