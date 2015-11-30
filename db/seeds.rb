@@ -76,3 +76,24 @@ PlanFeature.create(plan_id: 1, feature_id: 9, value: '1')
 PlanFeature.create(plan_id: 2, feature_id: 9, value: '5')
 PlanFeature.create(plan_id: 3, feature_id: 9, value: '10')
 PlanFeature.create(plan_id: 4, feature_id: 9, value: 'unlimited')
+
+#faq static values
+
+Faq.create(
+    question: 'Watch IoT is an application on the cloud to provider a rich platform to monitor your application, services or internet of thing device.',
+    answer: 'We have a basic plan when you pay nothing to use our service and monitor your services or devices')
+Faq.create(
+    question: 'What type of services can i monitor and receive alert?',
+    answer: 'Of course.')
+Faq.create(
+    question: 'How do i configure my projects?',
+    answer: 'Of course.')
+Faq.create(
+    question: 'What is an space?',
+    answer: 'Of course.')
+Faq.create(
+    question: 'How much projects can i configure by spaces?',
+    answer: 'Of course.')
+Faq.create(
+    question: 'How much people can subscribe and receive notifications?',
+    answer: 'Of course.')

@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   before_create do
     generate_token(:auth_token)
     generate_api_key
+    assign_plan
   end
 
   before_save :encrypt_password
@@ -86,6 +87,14 @@ class User < ActiveRecord::Base
     api = ApiKey.new
     api.api_key = api_key
     api.save
+
+    self.api_key_id = api.id
   end
 
+  ##
+  # This method assign the free plan by default
+  #
+  def assign_plan
+    self.plan_id = 1
+  end
 end

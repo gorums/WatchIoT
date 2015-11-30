@@ -3,6 +3,8 @@ class HomeController < ApplicationController
   def index
     @plans = Plan.all
     @features = Feature.all
+    @faqs = Faq.all
+
   end
 
   def contact

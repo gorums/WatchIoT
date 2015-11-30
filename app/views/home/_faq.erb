@@ -4,96 +4,20 @@
 			<h1 class="col-lg-12">Frequently Asked Questions</h1>
 			<div class="faq-padding">
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					<% @faqs.each do |faq| %>
 					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingOne">
-							<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-								<h4 class="panel-title text-left">What is Watch IoT?</h4>
+						<div class="panel-heading" role="tab" id="heading<%= faq.id %>">
+							<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= faq.id %>" aria-expanded="false" aria-controls="collapse<%= faq.id %>">
+								<h4 class="panel-title text-left"><%= faq.question %></h4>
 							</a>
 						</div>
-						<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+						<div id="collapse<%= faq.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= faq.id %>">
 							<div class="panel-body">
-								Watch IoT is an application on the cloud to provider a rich platform to monitor your application, services or internet of thing device.
+								<%= faq.answer %>
 							</div>
 						</div>
 					</div>
-
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<h4 class="panel-title text-left">Can i use this service for $0 cost?</h4>
-							</a>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body">
-								We have a basic plan when you pay nothing to use our service and monitor your services or devices
-							</div>
-						</div>
-					</div>
-
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<h4 class="panel-title text-left">What type of services can i monitor and receive alert?</h4>
-							</a>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body">
-								Of course.
-							</div>
-						</div>
-					</div>
-
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<h4 class="panel-title text-left">How do i configure my projects?</h4>
-							</a>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body">
-								Of course.
-							</div>
-						</div>
-					</div>
-
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<h4 class="panel-title text-left">What is an space?</h4>
-							</a>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body">
-								Of course.
-							</div>
-						</div>
-					</div>
-
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<h4 class="panel-title text-left">How much projects can i configure by spaces?</h4>
-							</a>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body">
-								Of course.
-							</div>
-						</div>
-					</div>
-
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="headingTwo">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<h4 class="panel-title text-left">How much people can subscribe and receive notifications?</h4>
-							</a>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-							<div class="panel-body">
-								Of course.
-							</div>
-						</div>
-					</div>
+					<% end %>
 				</div>
 			</div>
 		</div><!-- /.row -->
