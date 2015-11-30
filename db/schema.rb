@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20151130195954) do
   end
 
   create_table "features", force: :cascade do |t|
-    t.string "name", limit: 20
+    t.string "name"
   end
 
   create_table "logs", force: :cascade do |t|
