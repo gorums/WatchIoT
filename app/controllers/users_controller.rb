@@ -28,6 +28,7 @@ class UsersController < ApplicationController
 
     if @user.save
       @email.user_id = @user.id;
+      @email.principal = true;
       if @email.save
         #whether register fine, im going to login in the same time
         cookies[:auth_token] = @user.auth_token

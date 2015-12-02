@@ -10,12 +10,15 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .
 //= require bootstrap-tagsinput
+//= require gravtastic
+
 
 (function ($, window){
     function CoreCode() {
@@ -51,5 +54,10 @@
     };
 
     new CoreCode();
+
+    $('.img-circle').each(function(index, element){
+        var email = $(element).data("email");
+        $(element).attr("src", Gravtastic(email, {default: 'identicon'}));
+    })
 
 })($, window, undefined);

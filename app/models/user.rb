@@ -54,6 +54,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  ##
+  # Get the principal email
+  #
+  def self.email(user_id)
+    email = Email.find_by user_id: user_id, principal: true;
+    email.email
+  end
+
   protected
 
   ##
