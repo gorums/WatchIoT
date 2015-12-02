@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :current_user_email
 
+  rescue_from ActionController::RoutingError, with: :render_404
+
   private
 
   ##
@@ -31,4 +33,11 @@ class ApplicationController < ActionController::Base
     current_user != nil
   end
 
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
+
+  def render_404
+    render file: "#{Rails.root}/public/404.html", layout: false, status: 404
+  end
 end

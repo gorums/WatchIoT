@@ -58,6 +58,7 @@ class UsersController < ApplicationController
       render :login
     end
   end
+
   def logout
     cookies.clear
     redirect_to root_url

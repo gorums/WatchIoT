@@ -23,6 +23,12 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
+  get '/:username', controller: 'dashboard', action:  'show'
+  get '/:username/setting', controller: 'setting', :action => 'show'
+
+  # at the end of you routes.rb
+  get '*a', to:  'errors#routing'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
