@@ -3,6 +3,7 @@
 	<head>
 		<title>Dashboard WatchIoT</title>
 		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+		<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 		<%= csrf_meta_tags %>
 	</head>
 	<body>
@@ -21,7 +22,7 @@
 
 	<%= render "layouts/footer_dash" %>
 
-	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
 	<script>
 			$("#menu-toggle").click(function(e) {
 					e.preventDefault();
@@ -33,6 +34,12 @@
 					$("#wrapper").toggleClass("toggled");
 					$("#wrapper").toggleClass("toggled");
 			});
+
+			$('.img-circle').each(function(index, element){
+				var email = $(element).data("email");
+				$(element).attr("src", Gravtastic(email, {default: 'identicon'}));
+			})
+
 	</script>
 
 	</body>

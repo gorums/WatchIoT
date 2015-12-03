@@ -22,15 +22,15 @@
 						<i class="fa fa-home"></i>
 						Home
 					<%end%></li>
-				<li><%= link_to spaces_path do%>
+				<li><%= link_to "/" + current_user.username + "/spaces" do%>
 						<i class="fa fa-laptop"></i>
 						Spaces
 					<%end%></li>
-				<li><%= link_to chart_path do%>
+				<li><%= link_to "/" + current_user.username + "/chart" do%>
 						<i class="fa fa-bar-chart"></i>
 						Chart
 					<%end%></li>
-				<li><%= link_to setting_path do%>
+				<li><%= link_to "/" + current_user.username + "/setting" do%>
 						<i class="fa fa-cogs"></i>
 						Setting
 					<%end%></li>

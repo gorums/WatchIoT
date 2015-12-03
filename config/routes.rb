@@ -4,27 +4,31 @@ Rails.application.routes.draw do
   get 'login' => 'users#login', :as => 'login'
   post 'login' => 'users#do_login', :as => 'do_login'
   get 'logout' => 'users#logout', :as => 'logout'
-  get 'dashboard' => 'dashboard#index', :as => 'dashboard'
   get 'download' => 'download#index', :as => 'download'
-  get 'projects' => 'projects#index', :as => 'projects'
-  get 'spaces' => 'spaces#index', :as => 'spaces'
-  get 'chart' => 'chart#index', :as => 'chart'
-  get 'setting' => 'setting#index', :as => 'setting'
-  get 'spaces/setting' => 'spaces#setting', :as => 'spaces/setting'
-  get 'projects/setting' => 'projects#setting', :as => 'projects/setting'
   post 'home/contact' => 'home#contact', :as => 'home/contact'
 
   resources :users
   resources :home
-  resources :projects
-  resources :spaces
-  resources :chart
-  resources :setting
-
-  root 'home#index'
 
   get '/:username', controller: 'dashboard', action:  'show'
+
+  #spaces route
+  get '/:username/spaces/setting/:spacename', controller: 'spaces', :action => 'setting'
+  get '/:username/spaces/:spacename', controller: 'spaces', :action => 'show'
+  get '/:username/spaces', controller: 'spaces', :action => 'index'
+
+  #projects route
+  get '/:username/projects/setting/:projectname', controller: 'projects', :action => 'setting'
+  get '/:username/projects/:projectname', controller: 'projects', :action => 'show'
+  get '/:username/projects', controller: 'projects', :action => 'index'
+
+  #chart route
+  get '/:username/chart', controller: 'chart', :action => 'show'
+
+  #setting route
   get '/:username/setting', controller: 'setting', :action => 'show'
+
+  root 'home#index'
 
   # at the end of you routes.rb
   get '*a', to:  'errors#routing'

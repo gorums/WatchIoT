@@ -55,9 +55,4 @@
 
     new CoreCode();
 
-    $('.img-circle').each(function(index, element){
-        var email = $(element).data("email");
-        $(element).attr("src", Gravtastic(email, {default: 'identicon'}));
-    })
-
 })($, window, undefined);
