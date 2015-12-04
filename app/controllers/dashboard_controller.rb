@@ -8,7 +8,7 @@ class DashboardController < ApplicationController
       render 'general/dashboard', layout: 'application'
     else
       @space = Space.new
-      @logs = Log.all
+      @logs = Log.where(user_id: owner_user.id).find_each
       render 'show'
     end
 

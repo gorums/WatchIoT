@@ -2,14 +2,15 @@ class SpacesController < ApplicationController
   layout 'dashboard'
 
   def index
-    user = User.find_by_username(params[:username])  or not_found
+    owner_user = User.find_by_username(params[:username])  or not_found
 
-    if !is_auth? || current_user.username != user.username
+    if !is_auth? || current_user.username != owner_user.username
       render 'general/spaces', layout: 'application'
       return
     end
 
     @space = Space.new
+    @spaces = Space.where(user_id: owner_user.id).find_each
   end
 
   def create
