@@ -13,17 +13,20 @@ Rails.application.routes.draw do
   get '/:username', controller: 'dashboard', action:  'show'
 
   #spaces route
-  post '/:username/spaces/create', controller: 'spaces', :action => 'create'
+  post '/:username/create', controller: 'spaces', :action => 'create'
   get '/:username/spaces', controller: 'spaces', :action => 'index'
-  patch '/:username/:spacename/edit', controller: 'spaces', :action => 'edit'
+  patch '/:username/:spacename', controller: 'spaces', :action => 'edit'
   get '/:username/:spacename/setting', controller: 'spaces', :action => 'setting'
   get '/:username/:spacename/delete', controller: 'spaces', :action => 'delete'
   get '/:username/:spacename', controller: 'spaces', :action => 'show'
 
   #projects route
-  get '/:username/projects/setting/:projectname', controller: 'projects', :action => 'setting'
-  get '/:username/projects/:projectname', controller: 'projects', :action => 'show'
-  get '/:username/projects', controller: 'projects', :action => 'index'
+  post '/:username/:spacename/create', controller: 'spaces', :action => 'create'
+  get '/:username/:spacename/projects', controller: 'projects', :action => 'index'
+  patch '/:username/:spacename/:projectname', controller: 'projects', :action => 'edit'
+  get '/:username/:spacename/:projectname/setting', controller: 'projects', :action => 'setting'
+  get '/:username/:spacename/:projectname/delete', controller:'projects', :action => 'delete'
+  get '/:username/:spacename/:projectname', controller: 'projects', :action => 'show'
 
   #chart route
   get '/:username/chart', controller: 'chart', :action => 'show'

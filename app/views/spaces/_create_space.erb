@@ -10,8 +10,8 @@
 	</div>
 <% end %>
 
-<%= form_for @space, url: '/' + current_user.username + '/spaces/create' do |f| %>
-	<div class="form-horizontal">
+<%= form_for @space, url: '/' + current_user.username + '/create' do |f| %>
+<div class="form-horizontal">
 	<%= div_for(@space, class: 'form-group') do %>
 		<label class="col-lg-2">Space Name</label>
 		<div class="col-lg-6">
@@ -40,6 +40,6 @@
 		<div class="col-lg-offset-2 col-lg-6">
 			<%= submit_tag 'Create Space', class: 'btn btn-primary' %>
 		</div>
-	<<% end %>
-	</div>
+	<% end %>
+</div>
 <% end %>

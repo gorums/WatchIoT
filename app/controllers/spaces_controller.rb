@@ -12,11 +12,11 @@ class SpacesController < ApplicationController
       return
     end
     @space = Space.new
-    @spaces = Space.where(user_id: owner_user.id).find_each
+    @spaces = Space.where(user_id: owner_user.id).limit(20).order(created_at: :desc)
   end
 
   ##
-  # Post /:username/spaces/create
+  # Post /:username/create
   #
   def create
     owner_user = User.find_by_username(params[:username])  or not_found
@@ -46,6 +46,8 @@ class SpacesController < ApplicationController
     if @space.update(space_edit_params)
       save_log 'Edit the space <b>' + @space.name + '</b>', 'Edit Space', owner_user.id
     end
+
+    @project = Project.new
     render 'show'
   end
 

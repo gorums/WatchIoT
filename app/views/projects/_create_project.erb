@@ -1,33 +1,42 @@
-<form class="form-horizontal">
+<% if @project.errors.any? %>
+	<div id="error_explanation">
+		<h2><%= pluralize(@project.errors.count, "error") %> prohibited this article from being saved:</h2>
 
-	<div class="form-group">
+		<ul>
+			<% @project.errors.full_messages.each do |msg| %>
+				<li><%= msg %></li>
+			<% end %>
+		</ul>
+	</div>
+<% end %>
+
+<%= form_for @project, url: '/' + current_user.username + '/' + @space.name + '/create' do |f| %>
+<div class="form-horizontal">
+
+	<%= div_for(@project, class: 'form-group') do %>
 		<label class="col-lg-2">Project Name</label>
 		<div class="col-lg-10">
-			<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Project Name">
+			<%= f.text_field :name, class: 'form-control' %>
 		</div>
-	</div>
+	<% end %>
 
-	<div class="form-group">
-		<label class="col-lg-2">Tags</label>
-		<div class="col-lg-6">
-			<input type="text" class="form-control tagsinput" data-role="tagsinput" >
-		</div>
-	</div>
-
-	<div class="form-group">
+	<%= div_for(@project, class: 'form-group') do %>
 		<label class="col-lg-2">Description</label>
 		<div class="col-lg-10">
-			<textarea  class="form-control" rows="3"></textarea>
+			<%= f.text_area :description, class: 'form-control' %>
 		</div>
-	</div>
+	<% end %>
 
-	<div class="form-group">
+	<%= div_for(@project, class: 'form-group') do %>
 		<div class="col-lg-offset-2 col-lg-6">
-			<button type="button" class="btn btn-primary">Create Project</button>
+			<%= submit_tag 'Create Project', class: 'btn btn-primary' %>
 
 		</div>
+
 		<div class="col-lg-offset-2 col-lg-6">
 			<input type="file" class="btn btn-default">Import Project</input>
 		</div>
-	</div>
-</form>
+
+	<% end %>
+</div>
+<% end %>
