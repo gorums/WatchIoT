@@ -21,7 +21,6 @@ class UsersController < ApplicationController
   end
 
   # POST /users
-  # POST /users.json
   def create
     @user = User.new(user_params)
     @email = Email.new(email_params)
@@ -52,9 +51,9 @@ class UsersController < ApplicationController
       else
         cookies[:auth_token] = user.auth_token
       end
-      redirect_to dashboard_url
+      redirect_to '/' + user.username
     else
-      flash.now.alert = "Invalid email or password"
+      flash.now.alert = 'Invalid email or password'
       render :login
     end
   end

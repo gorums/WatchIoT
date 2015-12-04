@@ -21,12 +21,17 @@ class User < ActiveRecord::Base
   has_one :plan
 
   validates_uniqueness_of :username
+  validates :username, format: { without: /\s+/,
+                                 message: 'No empty spaces admitted for the username.'} #dont space admitted
   validates_presence_of :username, :on => :create
   validates_presence_of :passwd, :on => :create
   validates_presence_of :passwd_confirmation, :on => :create
   validates_confirmation_of :passwd
 
   validates :passwd, length: { minimum: 8 }
+
+  validates :username, exclusion: { in: %w(register login logout download home contact),
+                                message: '%{value} is reserved.' }
 
   before_create do
     generate_token(:auth_token)
@@ -35,6 +40,7 @@ class User < ActiveRecord::Base
   end
 
   before_save :encrypt_password
+  before_save :downcase_fields
 
   ##
   # This method try to authenticate the client
@@ -104,5 +110,12 @@ class User < ActiveRecord::Base
   #
   def assign_plan
     self.plan_id = 1
+  end
+
+  ##
+  # Set username always lowercase
+  #
+  def downcase_fields
+    self.username.downcase!
   end
 end

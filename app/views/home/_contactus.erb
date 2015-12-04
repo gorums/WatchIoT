@@ -2,7 +2,7 @@
 	<div class="started-session">
 		<div class="row value-props" >
 			<h1 class="col-lg-12">Contact us</h1>
-			<%= form_for @contactus, url: {action: "contact", controller: "home"} do |f| %>
+			<%= form_for @contactus, url: '/contact' do |f| %>
 
 				<%= div_for(@contactus, class: "input") do %>
 					<%= f.label :title, 'Email' %>

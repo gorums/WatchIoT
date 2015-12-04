@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   post 'login' => 'users#do_login', :as => 'do_login'
   get 'logout' => 'users#logout', :as => 'logout'
   get 'download' => 'download#index', :as => 'download'
-  post 'home/contact' => 'home#contact', :as => 'home/contact'
+  post 'contact' => 'home#contact', :as => 'home/contact'
 
   resources :users
   resources :home
@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   #spaces route
   get '/:username/spaces/setting/:spacename', controller: 'spaces', :action => 'setting'
   get '/:username/spaces/:spacename', controller: 'spaces', :action => 'show'
+  post '/:username/spaces/create', controller: 'spaces', :action => 'create'
   get '/:username/spaces', controller: 'spaces', :action => 'index'
 
   #projects route

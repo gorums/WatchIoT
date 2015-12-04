@@ -1,32 +1,45 @@
-<form class="form-horizontal">
+<% if @space.errors.any? %>
+	<div id="error_explanation">
+		<h2><%= pluralize(@space.errors.count, "error") %> prohibited this article from being saved:</h2>
 
-	<div class="form-group">
+		<ul>
+			<% @space.errors.full_messages.each do |msg| %>
+				<li><%= msg %></li>
+			<% end %>
+		</ul>
+	</div>
+<% end %>
+
+<%= form_for @space, url: '/' + current_user.username + '/spaces/create' do |f| %>
+	<div class="form-horizontal">
+	<%= div_for(@space, class: 'form-group') do %>
 		<label class="col-lg-2">Space Name</label>
 		<div class="col-lg-6">
-			<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Space Name">
+			<%= f.text_field :name, class: 'form-control' %>
 		</div>
-	</div>
+	<% end %>
 
 	<div class="form-group">
 		<label class="col-lg-2">Description</label>
 		<div class="col-lg-10">
-			<textarea  class="form-control" rows="3"></textarea>
+			<%= f.text_area :description, class: 'form-control' %>
 		</div>
 	</div>
 
-	<div class="form-group">
+	<%= div_for(@space, class: 'form-group') do %>
 		<label class="col-lg-2">Public space</label>
 		<div class="col-lg-10">
-			<input type="checkbox">
+			<%= f.check_box :is_public %>
 		</div>
 		<div class="col-lg-10">
 			<small>If you check this like public all the people can subscribe in your notification by email.</small>
 		</div>
-	</div>
+	<% end %>
 
-	<div class="form-group">
+	<%= div_for(@space, class: 'form-group') do %>
 		<div class="col-lg-offset-2 col-lg-6">
-			<button type="button" class="btn btn-primary">Create Space</button>
+			<%= submit_tag 'Create Space', class: 'btn btn-primary' %>
 		</div>
+	<<% end %>
 	</div>
-</form>
+<% end %>

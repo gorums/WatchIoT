@@ -8,6 +8,8 @@ class DashboardController < ApplicationController
       render 'general/dashboard', layout: 'application'
       return
     end
+
+    @space = Space.new
   end
 
 end
