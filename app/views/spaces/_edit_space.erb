@@ -3,21 +3,21 @@
 	<div class="form-group">
 		<label class="col-lg-2">Space Name</label>
 		<div class="col-lg-10">
-			<input type="text" class="form-control" id="exampleInputEmail1" value="My Google Servers" readonly>
+			<input type="text" class="form-control" id="spaceName" value="<%= @space.name%>" readonly>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-lg-2">Description</label>
 		<div class="col-lg-10">
-			<textarea  class="form-control" rows="3"></textarea>
+			<textarea  class="form-control" rows="3"><%= @space.description%></textarea>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-lg-2">Public space</label>
 		<div class="col-lg-10">
-			<input type="checkbox">
+			<input type="checkbox" <%if @space.is_public %> checked <% end %>>
 		</div>
 		<div class="col-lg-10">
 			<small>If you check this like public all the people can subscribe in your notification by email.</small>
@@ -28,8 +28,7 @@
 		<div class="col-lg-offset-2 col-lg-9">
 			<button type="button" class="btn btn-primary">Save Space</button>
 		</div>
-		<a href="/spaces/delete/1" class="list-action clear-background" title="Delete space"><i class="fa fa-trash fa-2x"></i></a>
-		<a href="/spaces/setting" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
+		<a href="/<%=current_user.username %>/<%= @space.name %>/setting" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
 
 	</div>
 </form>

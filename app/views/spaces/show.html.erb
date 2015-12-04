@@ -1,10 +1,12 @@
+<% @title=current_user.username + '/' + @space.name %>
+
 <div class="row dashboard-page">
   <div class="">
 		<br />
 		<br />
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<%= render "edit_space" %>
+				<%= render "edit_space", object: @space %>
 			</div>
 		</div>
 
