@@ -21,14 +21,15 @@ class SpacesController < ApplicationController
     @space.user_owner_id = current_user.id
 
     if @space.save
-      redirect_to params[:username] + '/show/' + @space.name
+      redirect_to '/' + params[:username] + '/' + @space.name, status: 303
+    else
+      render :index
     end
-
-    render :index
   end
 
   def show
-
+    owner_user = User.find_by_username(params[:username])  or not_found
+    space = Space.find_by_name(params[:spacename])  or not_found
   end
 
   def setting

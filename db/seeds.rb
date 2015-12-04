@@ -97,3 +97,7 @@ Faq.create(
 Faq.create(
     question: 'How much people can subscribe and receive notifications?',
     answer: 'Of course.')
+
+#permission static values
+
+Permission.create(category: 'space', permission: 'create_space')

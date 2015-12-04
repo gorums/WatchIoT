@@ -3,11 +3,11 @@ class Space < ActiveRecord::Base
   has_many :projects
 
   validates_presence_of :name, :on => :create
-  validates_uniqueness_of :user_id, :name
+  #validates_uniqueness_of :user_id, :name
 
   validates :name, length: { maximum: 15 }
 
-  validates :name, exclusion: { in: %w(create edit delete setting),
+  validates :name, exclusion: { in: %w(create edit delete setting space),
                                      message: '%{value} is reserved.' }
   include ActiveModel::Validations
   validates_with SpaceCanCreateValidator

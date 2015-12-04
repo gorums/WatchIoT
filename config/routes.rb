@@ -13,10 +13,10 @@ Rails.application.routes.draw do
   get '/:username', controller: 'dashboard', action:  'show'
 
   #spaces route
-  get '/:username/spaces/setting/:spacename', controller: 'spaces', :action => 'setting'
-  get '/:username/spaces/:spacename', controller: 'spaces', :action => 'show'
   post '/:username/spaces/create', controller: 'spaces', :action => 'create'
   get '/:username/spaces', controller: 'spaces', :action => 'index'
+  get '/:username/:spacename', controller: 'spaces', :action => 'show'
+  get '/:username/:spacename/setting/', controller: 'spaces', :action => 'setting'
 
   #projects route
   get '/:username/projects/setting/:projectname', controller: 'projects', :action => 'setting'
