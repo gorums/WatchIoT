@@ -15,12 +15,12 @@
     <h3>Create a new project</h3>
     <div class="panel panel-success">
       <div class="panel-body">
-				<%= render "projects/create_project" %>
+				<%= render "projects/create_project", locals: {space: @space, project: @project} %>
       </div>
     </div>
     <br />
     <div>
-			<%= render "projects/list_projects" %>
+			<%= render "projects/list_projects", object: @space %>
 		</div>
 	</div>
 </div>

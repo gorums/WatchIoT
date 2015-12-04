@@ -15,9 +15,10 @@ Rails.application.routes.draw do
   #spaces route
   post '/:username/spaces/create', controller: 'spaces', :action => 'create'
   get '/:username/spaces', controller: 'spaces', :action => 'index'
-  get '/:username/:spacename', controller: 'spaces', :action => 'show'
+  patch '/:username/:spacename/edit', controller: 'spaces', :action => 'edit'
   get '/:username/:spacename/setting', controller: 'spaces', :action => 'setting'
   get '/:username/:spacename/delete', controller: 'spaces', :action => 'delete'
+  get '/:username/:spacename', controller: 'spaces', :action => 'show'
 
   #projects route
   get '/:username/projects/setting/:projectname', controller: 'projects', :action => 'setting'

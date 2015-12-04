@@ -35,6 +35,21 @@ class SpacesController < ApplicationController
   end
 
   ##
+  # Patch /:username/:spacename/edit
+  #
+  def edit
+    owner_user = User.find_by_username(params[:username])  or not_found
+    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first  or not_found
+
+    @space.can_subscribe = params[:is_public] #fix: subscribe table
+
+    if @space.update(space_edit_params)
+      save_log 'Edit the space <b>' + @space.name + '</b>', 'Edit Space', owner_user.id
+    end
+    render 'show'
+  end
+
+  ##
   # Get /:username/:spacename
   #
   def show
@@ -69,5 +84,12 @@ class SpacesController < ApplicationController
   #
   def space_params
     params.require(:space).permit(:name, :description, :is_public)
+  end
+
+  ##
+  # Never trust parameters from the scary internet, only allow the white list through.
+  #
+  def space_edit_params
+    params.require(:space).permit(:description, :is_public)
   end
 end

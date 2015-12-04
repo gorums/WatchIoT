@@ -100,4 +100,5 @@ Faq.create(
 
 #permission static values
 
-Permission.create(category: 'space', permission: 'create_space')
+Permission.create(category: 'space', permission: 'create_space')    #defined on team
+Permission.create(category: 'space', permission: 'edit_space')      #defined on teamSpace

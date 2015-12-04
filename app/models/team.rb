@@ -2,6 +2,9 @@ class Team < ActiveRecord::Base
   belongs_to :user
   belongs_to :permission
 
+  ##
+  # If that user has permission to execute the action
+  #
   def self.has_permission?(current_user, owner_user, permission)
     begin
       permission_id = Permission.find_by! permission: permission

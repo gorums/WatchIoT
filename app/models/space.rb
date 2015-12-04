@@ -2,7 +2,7 @@ class Space < ActiveRecord::Base
   belongs_to :user
   has_many :projects
 
-  validates_presence_of :name, :on => :create
+  validates_presence_of :name, on: :create
   validates_uniqueness_of :name, scope: [:user_id]
 
   validates :name, length: { maximum: 15 }
@@ -10,7 +10,8 @@ class Space < ActiveRecord::Base
   validates :name, exclusion: { in: %w(create edit delete setting space),
                                      message: '%{value} is reserved.' }
   include ActiveModel::Validations
-  validates_with SpaceCanCreateValidator
+  validates_with SpaceCanCreateValidator, on: :create
+  validates_with SpaceCanEditValidator, on: :update
 
   before_save :name_format
 

@@ -19,33 +19,16 @@
 							</tr>
 							</thead>
 							<tbody>
+							<% @space.projects.each do |project| %>
 							<tr>
-								<th scope="row">Mark</th>
-								<td>Otto</td>
+								<th scope="row"><%= project.name %></th>
+								<td><%= project.description %></td>
 								<td>
-									<a href="/projects/1" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-									<a href="/projects/delete/1" class="list-action clear-background" title="Delete project"><i class="fa fa-trash fa-2x"></i></a>
-									<a href="/projects/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
+									<a href="/<%= current_user.username %>/<%= space.name %>/<%= project.name %>" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+									<a href="/<%= current_user.username %>/<%= space.name %>/<%= project.name %>/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
 								</td>
 							</tr>
-							<tr>
-								<th scope="row">Jacob</th>
-								<td>Thornton</td>
-								<td>
-									<a href="/projects/1" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-									<a href="/projects/delete/1" class="list-action clear-background" title="Delete project"><i class="fa fa-trash fa-2x"></i></a>
-									<a href="/projects/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">Larry</th>
-								<td>the Bird</td>
-								<td>
-									<a href="/projects/1" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-									<a href="/projects/delete/1" class="list-action clear-background" title="Delete project"><i class="fa fa-trash fa-2x"></i></a>
-									<a href="/projects/settings" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
-								</td>
-							</tr>
+							<% end %>
 							</tbody>
 						</table>
 					</div>
