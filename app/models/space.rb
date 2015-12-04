@@ -3,7 +3,7 @@ class Space < ActiveRecord::Base
   has_many :projects
 
   validates_presence_of :name, :on => :create
-  #validates_uniqueness_of :user_id, :name
+  validates_uniqueness_of :name, scope: [:user_id]
 
   validates :name, length: { maximum: 15 }
 
@@ -17,8 +17,10 @@ class Space < ActiveRecord::Base
   private
   ##
   # Format name field, lowercase and '_' by space
+  # Admitted only alphanumeric characters
   #
   def name_format
+    self.name.gsub! /[^0-9a-z ]/i, '_'
     self.name.downcase.gsub! /\s+/, '_'
   end
 

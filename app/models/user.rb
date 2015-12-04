@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   end
 
   before_save :encrypt_password
-  before_save :downcase_fields
+  before_save :username_format
 
   ##
   # This method try to authenticate the client
@@ -114,8 +114,10 @@ class User < ActiveRecord::Base
 
   ##
   # Set username always lowercase
+  # self.name.gsub! /[^0-9a-z ]/i, '_'
   #
-  def downcase_fields
+  def username_format
+    self.name.gsub! /[^0-9a-z ]/i, '_'
     self.username.downcase!
   end
 end

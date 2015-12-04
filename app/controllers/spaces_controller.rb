@@ -21,6 +21,7 @@ class SpacesController < ApplicationController
     @space.user_owner_id = current_user.id
 
     if @space.save
+      save_log 'Create the space <b>' + @space.name + '</b>', 'Create Space', owner_user.id
       redirect_to '/' + params[:username] + '/' + @space.name, status: 303
     else
       render :index
@@ -30,6 +31,8 @@ class SpacesController < ApplicationController
   def show
     owner_user = User.find_by_username(params[:username])  or not_found
     space = Space.find_by_name(params[:spacename])  or not_found
+
+    @spaces = Space.where(user_id: owner_user.id).find_each
   end
 
   def setting

@@ -2,14 +2,17 @@ class DashboardController < ApplicationController
   layout 'dashboard'
 
   def show
-    user = User.find_by_username(params[:username])  or not_found
+    owner_user = User.find_by_username(params[:username])  or not_found
 
-    if !is_auth? || current_user.username != user.username
+    if !is_auth? || current_user.username != owner_user.username
       render 'general/dashboard', layout: 'application'
-      return
+    else
+      @space = Space.new
+      @logs = Log.all
+      render 'show'
     end
 
-    @space = Space.new
+
   end
 
 end

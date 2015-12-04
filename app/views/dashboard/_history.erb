@@ -1,35 +1,24 @@
 <table class="table table-striped">
 	<colgroup>
-		<col class="col-xs-10">
+		<col class="col-xs-6">
+		<col class="col-xs-2">
 		<col class="col-xs-2">
 	</colgroup>
 	<thead>
 	<tr>
 		<th>History</th>
-		<th></th>
+		<th>User</th>
+		<th>When</th>
 	</tr>
 	</thead>
 	<tbody>
+	<% @logs.each do |log| %>
 	<tr>
-		<td>Create a new Project <b> Test project 3</b></td>
-		<td>2 day ago</td>
+		<td><%= raw log.description%></td>
+		<td><strong><%= log.user.username%></strong></td>
+		<td><%= distance_of_time_in_words(Time.now, log.created_at) %></td>
 	</tr>
-	<tr>
-		<td>Create a new Project <b> Test project 2</b></td>
-		<td>2 day ago</td>
-	</tr>
-	<tr>
-		<td>Create a new Project <b> Test project 1</b></td>
-		<td>2 day ago</td>
-	</tr>
-	<tr>
-		<td>Create a new Space <b>My Google servers</b></td>
-		<td>2 day ago</td>
-	</tr>
-	<tr>
-		<td>Create a new Space <b>My Services in AWS</b> </td>
-		<td>2 day ago</td>
-	</tr>
+	<% end %>
 	<tr>
 		<td><a href="#">see all logs</a></td>
 		<td></td>
