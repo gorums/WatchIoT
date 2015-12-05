@@ -5,12 +5,13 @@
 			<div class="panel-body">
 				<h3>Gorums setting</h3>
 				<br />
-				<%= render "profile" %>
-				<%= render "account" %>
-				<%= render "plan" %>
-				<%= render "team" %>
-				<%= render "security" %>
-				<%= render "api_key" %>
+
+				<%= render "profile", locals: {user: @user, in: @in} %>
+				<%= render "account", locals: {user: @user, in: @in} %>
+				<%= render "plan", locals: {user: @user, in: @in} %>
+				<%= render "team", locals: {user: @user, in: @in} %>
+				<%= render "security", locals: {user: @user, in: @in} %>
+				<%= render "api_key", locals: {user: @user, in: @in} %>
 			</div>
 		</div>
   </div>

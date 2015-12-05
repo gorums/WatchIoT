@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default" id="profile">
 	<div class="panel-heading" role="tab" id="profile">
 		<div class="row">
 			<h4 class="panel-title ">
@@ -8,7 +8,7 @@
 			</h4>
 		</div>
 	</div>
-	<div id="collapseProfile" class="panel-collapse collapse" role="tabpanel" aria-labelledby="profile">
+	<div id="collapseProfile" class="panel-collapse collapse<%if @in == 'profile'%> in<%end%>" role="tabpanel" aria-labelledby="profile">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
 				<form class="form-group">

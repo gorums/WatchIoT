@@ -12,6 +12,12 @@ Rails.application.routes.draw do
 
   get '/:username', controller: 'dashboard', action:  'show'
 
+  #chart route
+  get '/:username/chart', controller: 'chart', :action => 'show'
+
+  #setting route
+  get '/:username/setting', controller: 'setting', :action => 'show'
+
   #spaces route
   post '/:username/create', controller: 'spaces', :action => 'create'
   get '/:username/spaces', controller: 'spaces', :action => 'index'
@@ -27,12 +33,6 @@ Rails.application.routes.draw do
   get '/:username/:spacename/:projectname/setting', controller: 'projects', :action => 'setting'
   get '/:username/:spacename/:projectname/delete', controller:'projects', :action => 'delete'
   get '/:username/:spacename/:projectname', controller: 'projects', :action => 'show'
-
-  #chart route
-  get '/:username/chart', controller: 'chart', :action => 'show'
-
-  #setting route
-  get '/:username/setting', controller: 'setting', :action => 'show'
 
   root 'home#index'
 
