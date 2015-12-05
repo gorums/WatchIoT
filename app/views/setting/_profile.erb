@@ -11,8 +11,9 @@
 	<div id="collapseProfile" class="panel-collapse collapse<%if @in == 'profile'%> in<%end%>" role="tabpanel" aria-labelledby="profile">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
-				<form class="form-group">
-					<div class="form-group col-lg-12">
+				<%= form_for current_user, url: '/' + current_user.username + '/setting/profile'  do |f| %>
+				<div class="form-group">
+					<%= div_for(current_user, class: 'form-group col-lg-12') do %>
 						<label>Picture</label>
 						<div class="img-container">
 							<img class="img-circle" data-email="<%= current_user_email %>">
@@ -22,22 +23,23 @@
 							<a target="_blank" href="http://gravatar.com">Gravatar</a>
 							please update your photo there.
 						</small>
-					</div>
+					<% end %>
 
-					<div class="form-group col-lg-6">
+					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>First Name</label>
 						<div>
 							<input type="text" class="form-control" id="exampleInputEmail1" value="">
 						</div>
-					</div>
-					<div class="form-group col-lg-6">
+					<% end %>
+
+					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>Last Name</label>
 						<div>
 							<input type="text" class="form-control" id="exampleInputEmail1" value="">
 						</div>
-					</div>
+					<% end %>
 
-					<div class="form-group col-lg-6">
+					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>Location</label>
 						<div class="controls">
 							<select class="form-control">
@@ -235,37 +237,36 @@
 								<option value="zw">Zimbabwe (+263)</option>
 							</select>
 						</div>
-					</div>
+					<% end %>
 
-					<div class="form-group col-lg-6">
+					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>Phone</label>
 						<div>
 							<input type="text" class="form-control" id="exampleInputEmail1" value="">
 						</div>
-					</div>
+					<%end%>
 
-					<div class="form-group col-lg-12">
+					<%= div_for(current_user, class: 'form-group col-lg-12') do %>
 						<label>Address</label>
 						<div>
 							<input type="text" class="form-control" id="exampleInputEmail1" value="">
 						</div>
-					</div>
+					<%end%>
 
 					<br />
-					<div class="form-group col-lg-12">
+					<%= div_for(current_user, class: 'form-group col-lg-12') do %>
 						<small>If you want to receive notification with the latest news by email.</small>
 						<br />
 						<label>
 							<input type="checkbox"> Receive latest news by Email
 						</label>
-					</div>
+					<%end%>
 
-					<div class="form-group">
-						<div class="col-lg-9">
+					<%= div_for(current_user, class: 'form-group col-lg-9') do %>
 							<button type="button" class="btn btn-primary">Save Profile</button>
-						</div>
-					</div>
-				</form>
+					<%end%>
+				</div>
+				<% end %>
 			</div>
 		</div>
 	</div>
