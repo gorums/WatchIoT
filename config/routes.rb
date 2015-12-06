@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   #setting route
   get '/:username/setting', controller: 'setting', :action => 'show'
+  patch '/:username/setting/profile', controller: 'setting', :action => 'profile'
 
   #spaces route
   post '/:username/create', controller: 'spaces', :action => 'create'

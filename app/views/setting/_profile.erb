@@ -28,21 +28,21 @@
 					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>First Name</label>
 						<div>
-							<input type="text" class="form-control" id="exampleInputEmail1" value="">
+							<%= f.text_field :first_name, class: 'form-control' %>
 						</div>
 					<% end %>
 
 					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>Last Name</label>
 						<div>
-							<input type="text" class="form-control" id="exampleInputEmail1" value="">
+							<%= f.text_field :last_name, class: 'form-control' %>
 						</div>
 					<% end %>
 
 					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>Location</label>
 						<div class="controls">
-							<select class="form-control">
+							<select class="form-control" name="user[country_code]">
 								<option value="af">Afghanistan (+93)</option>
 								<option value="al">Albania (+355)</option>
 								<option value="dz">Algeria (+213)</option>
@@ -242,14 +242,14 @@
 					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
 						<label>Phone</label>
 						<div>
-							<input type="text" class="form-control" id="exampleInputEmail1" value="">
+							<%= f.text_field :phone, class: 'form-control' %>
 						</div>
 					<%end%>
 
 					<%= div_for(current_user, class: 'form-group col-lg-12') do %>
 						<label>Address</label>
 						<div>
-							<input type="text" class="form-control" id="exampleInputEmail1" value="">
+							<%= f.text_field :address, class: 'form-control' %>
 						</div>
 					<%end%>
 
@@ -258,12 +258,12 @@
 						<small>If you want to receive notification with the latest news by email.</small>
 						<br />
 						<label>
-							<input type="checkbox"> Receive latest news by Email
+							<%= f.check_box :receive_notif_last_new %>Receive latest news by Email
 						</label>
 					<%end%>
 
 					<%= div_for(current_user, class: 'form-group col-lg-9') do %>
-							<button type="button" class="btn btn-primary">Save Profile</button>
+						<%= submit_tag 'Save Profile', class: 'btn btn-primary' %>
 					<%end%>
 				</div>
 				<% end %>
