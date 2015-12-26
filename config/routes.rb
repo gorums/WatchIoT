@@ -10,30 +10,41 @@ Rails.application.routes.draw do
   resources :users
   resources :home
 
-  get '/:username', controller: 'dashboard', action:  'show'
+  get '/:username',                                     controller: 'dashboard', action:  'show'
 
   #chart route
-  get '/:username/chart', controller: 'chart', :action => 'show'
+  get '/:username/chart',                               controller: 'chart', :action => 'show'
 
   #setting route
-  get '/:username/setting', controller: 'setting', :action => 'show'
-  patch '/:username/setting/profile', controller: 'setting', :action => 'profile'
+  get     '/:username/setting',                         controller: 'setting', :action => 'show'
+  patch   '/:username/setting/profile',                 controller: 'setting', :action => 'profile'
+  patch   '/:username/setting/account/email/add',       controller: 'setting', :action => 'account_email_add'
+  delete  '/:username/setting/account/email/delete',    controller: 'setting', :action => 'account_email_delete'
+  patch   '/:username/setting/account/email/principal', controller: 'setting', :action => 'account_email_principal'
+  patch   '/:username/setting/account/chpassword',      controller: 'setting', :action => 'account_ch_password'
+  patch   '/:username/setting/account/chusername',      controller: 'setting', :action => 'account_ch_username'
+  delete  '/:username/setting/account/delete',          controller: 'setting', :action => 'account_delete'
+  patch   '/:username/setting/plan/upgrade',            controller: 'setting', :action => 'plan_upgrade'
+  patch   '/:username/setting/team/add',                controller: 'setting', :action => 'team_add'
+  delete   '/:username/setting/team/delete',            controller: 'setting', :action => 'team_delete'
+  patch   '/:username/setting/team/permission',         controller: 'setting', :action => 'team_permission'
+  patch   '/:username/setting/key/generate',            controller: 'setting', :action => 'key_generate'
 
   #spaces route
-  post '/:username/create', controller: 'spaces', :action => 'create'
-  get '/:username/spaces', controller: 'spaces', :action => 'index'
-  patch '/:username/:spacename', controller: 'spaces', :action => 'edit'
-  get '/:username/:spacename/setting', controller: 'spaces', :action => 'setting'
-  get '/:username/:spacename/delete', controller: 'spaces', :action => 'delete'
-  get '/:username/:spacename', controller: 'spaces', :action => 'show'
+  post '/:username/create',                             controller: 'spaces', :action => 'create'
+  get '/:username/spaces',                              controller: 'spaces', :action => 'index'
+  patch '/:username/:spacename',                        controller: 'spaces', :action => 'edit'
+  get '/:username/:spacename/setting',                  controller: 'spaces', :action => 'setting'
+  get '/:username/:spacename/delete',                   controller: 'spaces', :action => 'delete'
+  get '/:username/:spacename',                          controller: 'spaces', :action => 'show'
 
   #projects route
-  post '/:username/:spacename/create', controller: 'spaces', :action => 'create'
-  get '/:username/:spacename/projects', controller: 'projects', :action => 'index'
-  patch '/:username/:spacename/:projectname', controller: 'projects', :action => 'edit'
-  get '/:username/:spacename/:projectname/setting', controller: 'projects', :action => 'setting'
-  get '/:username/:spacename/:projectname/delete', controller:'projects', :action => 'delete'
-  get '/:username/:spacename/:projectname', controller: 'projects', :action => 'show'
+  post '/:username/:spacename/create',                  controller: 'spaces', :action => 'create'
+  get '/:username/:spacename/projects',                 controller: 'projects', :action => 'index'
+  patch '/:username/:spacename/:projectname',           controller: 'projects', :action => 'edit'
+  get '/:username/:spacename/:projectname/setting',     controller: 'projects', :action => 'setting'
+  get '/:username/:spacename/:projectname/delete',      controller:'projects', :action => 'delete'
+  get '/:username/:spacename/:projectname',             controller: 'projects', :action => 'show'
 
   root 'home#index'
 

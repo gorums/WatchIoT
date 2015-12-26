@@ -30,6 +30,83 @@ class SettingController < ApplicationController
     redirect_to '/' + user.username + '/setting#collapseProfile'
   end
 
+  ##
+  # Patch  /:username/setting/account/email/add
+  #
+  def account_email_add
+    #TODO:
+  end
+
+  ##
+  # Delete  /:username/setting/account/email/delete
+  #
+  def account_email_delete
+    #TODO:
+  end
+
+  ##
+  # Patch  /:username/setting/account/email/principal
+  #
+  def account_email_principal
+    #TODO:
+  end
+
+  ##
+  # Patch  /:username/setting/account/chusername
+  #
+  def account_ch_username
+    #TODO:
+  end
+
+  ##
+  # Patch  /:username/setting/account/chpassword
+  #
+  def account_ch_password
+    #TODO:
+  end
+
+  ##
+  # Delete  /:username/setting/account/delete
+  #
+  def account_delete
+    #TODO:
+  end
+
+  ##
+  # Patch  /:username/setting/plan/upgrade
+  #
+  def plan_upgrade
+    #TODO:
+  end
+
+  ##
+  # Patch  /:username/setting/team/add
+  #
+  def team_add
+    #TODO:
+  end
+
+  ##
+  # Delete  /:username/setting/team/delete
+  #
+  def team_delete
+    #TODO:
+  end
+
+  ##
+  # Patch  /:username/setting/team/permission
+  #
+  def team_permission
+    #TODO:
+  end
+
+  ##
+  # Patch  /:username/setting/key/generate
+  #
+  def key_generate
+    #TODO:
+  end
+
   private
   # Never trust parameters from the scary internet, only allow the white list through.
   def profile_params
