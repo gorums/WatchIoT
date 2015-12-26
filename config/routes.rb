@@ -6,9 +6,7 @@ Rails.application.routes.draw do
   get 'logout' => 'users#logout', :as => 'logout'
   get 'download' => 'download#index', :as => 'download'
   post 'contact' => 'home#contact', :as => 'home/contact'
-
-  resources :users
-  resources :home
+  get 'home' => 'home#index', :as => 'home/index'
 
   get '/:username',                                     controller: 'dashboard', action:  'show'
 
