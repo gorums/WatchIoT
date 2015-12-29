@@ -2,23 +2,6 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
   ##
-  # GET /users
-  # GET /users.json
-  # For ADMIN role
-  #
-  def index
-    @users = User.all
-  end
-
-  ##
-  # GET /users/1
-  # GET /users/1.json
-  # For ADMIN role
-  #
-  def show
-  end
-
-  ##
   # GET /register
   #
   def register
@@ -27,9 +10,9 @@ class UsersController < ApplicationController
   end
 
   ##
-  # POST /users
+  # POST /do_register
   #
-  def create
+  def do_register
     @user = User.new(user_params)
     @email = Email.new(email_params)
 

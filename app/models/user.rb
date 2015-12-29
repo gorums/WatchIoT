@@ -37,8 +37,6 @@ class User < ActiveRecord::Base
     generate_token(:auth_token)
     generate_api_key
     assign_plan
-    default_status
-    default_receive_notif_last_new
   end
 
   before_save :encrypt_password
@@ -121,21 +119,6 @@ class User < ActiveRecord::Base
   def username_format
     self.username.gsub! /[^0-9a-z ]/i, '_'
     self.username.downcase!
-  end
-
-  ##
-  # Set the default status, if i need verify the email, set the value false
-  # by default
-  #
-  def default_status
-    self.status = true
-  end
-
-  ##
-  # Set in true the receive notification by new
-  #
-  def default_receive_notif_last_new
-    self.receive_notif_last_new = false
   end
 
 end

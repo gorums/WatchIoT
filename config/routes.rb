@@ -1,12 +1,15 @@
 Rails.application.routes.draw do
 
-  get     'register'  => 'users#register',  :as => 'register'
-  get     'login'     => 'users#login',     :as => 'login'
-  post    'login'     => 'users#do_login',  :as => 'do_login'
-  get     'logout'    => 'users#logout',    :as => 'logout'
-  get     'download'  => 'download#index',  :as => 'download'
-  post    'contact'   => 'home#contact',    :as => 'home/contact'
-  get     'home'      => 'home#index',      :as => 'home/index'
+  post    'register'  => 'users#do_register', :as => 'do_register'
+  get     'register'  => 'users#register',    :as => 'register'
+  post    'login'     => 'users#do_login',    :as => 'do_login'
+  get     'login'     => 'users#login',       :as => 'login'
+  get     'logout'    => 'users#logout',      :as => 'logout'
+
+  get     'download'  => 'download#index',    :as => 'download'
+
+  post    'contact'   => 'home#contact',      :as => 'contact'
+  get     'home'      => 'home#index',        :as => 'index'
 
   get     '/:username',                                 controller: 'dashboard', action:  'show'
 
@@ -16,7 +19,7 @@ Rails.application.routes.draw do
   #setting route
   get     '/:username/setting',                         controller: 'setting', :action => 'show'
   patch   '/:username/setting/profile',                 controller: 'setting', :action => 'profile'
-  post   '/:username/setting/account/email/add',       controller: 'setting', :action => 'account_email_add'
+  post   '/:username/setting/account/email/add',        controller: 'setting', :action => 'account_email_add'
   delete  '/:username/setting/account/email/delete',    controller: 'setting', :action => 'account_email_delete'
   patch   '/:username/setting/account/email/principal', controller: 'setting', :action => 'account_email_principal'
   patch   '/:username/setting/account/chpassword',      controller: 'setting', :action => 'account_ch_password'

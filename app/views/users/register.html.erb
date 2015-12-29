@@ -11,7 +11,7 @@
 <div class="auth-form-header">
   <h1>Sign Up</h1>
 </div>
-<%= form_for @user do |f| %>
+<%= form_for @user, url: '/register'  do |f| %>
     <div class="auth-form">
       <div class="input">
         <%= f.label :username %><br />
