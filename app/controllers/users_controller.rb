@@ -1,26 +1,34 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
+  ##
   # GET /users
   # GET /users.json
   # For ADMIN role
+  #
   def index
     @users = User.all
   end
 
+  ##
   # GET /users/1
   # GET /users/1.json
   # For ADMIN role
+  #
   def show
   end
 
+  ##
   # GET /register
+  #
   def register
     @user = User.new
     @email = Email.new
   end
 
+  ##
   # POST /users
+  #
   def create
     @user = User.new(user_params)
     @email = Email.new(email_params)
@@ -38,11 +46,16 @@ class UsersController < ApplicationController
     end
   end
 
+  ##
+  # Get /login
+  #
   def login
     @user = User.new
   end
 
+  ##
   # POST /do_login
+  #
   def do_login
     user = User.authenticate(params[:email], params[:passwd])
     if user
@@ -58,6 +71,9 @@ class UsersController < ApplicationController
     end
   end
 
+  ##
+  # Get /logout
+  #
   def logout
     cookies.clear
     redirect_to root_url
@@ -74,6 +90,7 @@ class UsersController < ApplicationController
       params.require(:user).permit(:passwd, :passwd_confirmation, :username)
     end
 
+    # Never trust parameters from the scary internet, only allow the white list through.
     def email_params
       params.require(:email).permit(:email)
     end

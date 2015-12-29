@@ -30,35 +30,34 @@
 							</tr>
 							</thead>
 							<tbody>
+							<% @emails.each do |email| %>
 							<tr>
-								<td>robertazo123@gmail.com</td>
-								<td><i class="fa fa-check"></i></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>gorumlabmatcom@gmail.com</td>
-								<td></td>
+								<td><%= email.email%></td>
+								<td><%if email.principal? %><i class="fa fa-check"></i><%end%></td>
 								<td>
+									<%unless email.principal? %>
 									<a href="#"><i class="fa fa-check-circle-o fa-2x"></i></a>
 									<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+									<%end%>
 								</td>
 							</tr>
+							<% end%>
 							</tbody>
 						</table>
 
-						<form class="form-group">
-							<div class="form-group col-lg-6">
+						<%= form_for @email, url: '/' + current_user.username + '/setting/account/email/add'  do |f| %>
+						<div class="form-group">
+							<%= div_for(@email, class: 'form-group col-lg-6') do %>
 								<label>New email</label>
 								<div>
-									<input type="email" class="form-control" placeholder="New email" >
+									<%= f.email_field :email, class: 'form-control', placeholder: 'New Email' %>
 								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-lg-9">
-									<button type="button" class="btn btn-primary">Add email</button>
-								</div>
-							</div>
-						</form>
+							<%end%>
+							<%= div_for(@email, class: 'form-group col-lg-9') do %>
+								<%= submit_tag 'Add email', class: 'btn btn-primary' %>
+							<%end%>
+						</div>
+						<%end%>
 					</div>
 				</div>
 

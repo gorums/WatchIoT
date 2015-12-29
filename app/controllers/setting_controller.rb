@@ -12,6 +12,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
+    ##setting emails data
+    @emails = Email.where(user_id: user.id).order(principal: :desc)
+    @email = Email.new
+    ##end setting emails data
+
     @in = ''
   end
 
@@ -23,7 +28,7 @@ class SettingController < ApplicationController
     user = User.find_by_username(params[:username])  or not_found
 
     if user.update(profile_params)
-      save_log 'Edit the profile setting', 'Edit Profile', user.id
+      save_log 'Edit the profile setting', 'Edit Profile', current_user.id
     end
 
     @in = 'profile'
@@ -31,10 +36,20 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch  /:username/setting/account/email/add
+  # Post  /:username/setting/account/email/add
   #
   def account_email_add
-    #TODO:
+    redirect_to :root if !is_auth?
+    email = Email.new(email_params)
+    email.user_id = current_user.id
+    email.principal = false
+
+    if email.save
+      save_log 'Add new email', 'Edit Account', current_user.id
+    end
+
+    @in = 'account'
+    redirect_to '/' + current_user.username + '/setting#collapseAccount'
   end
 
   ##
@@ -114,4 +129,8 @@ class SettingController < ApplicationController
                                  :address, :phone, :receive_notif_last_new)
   end
 
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def email_params
+    params.require(:email).permit(:email)
+  end
 end

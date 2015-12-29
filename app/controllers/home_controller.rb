@@ -1,5 +1,8 @@
 class HomeController < ApplicationController
 
+  ##
+  # Get /
+  #
   def index
     @plans = Plan.all
     @features = Feature.all
@@ -7,12 +10,15 @@ class HomeController < ApplicationController
     @contactus = ContactUs.new
   end
 
+  ##
+  # POST /contactus
+  #
   def contact
     @contactus = ContactUs.new(contact_params)
     @contactus.save
 
-    flash[:success] = "Thank you for contact us!"
-    redirect_to root_url + "#contactus"
+    flash[:success] = 'Thank you for contact us!'
+    redirect_to root_url + '#contactus'
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

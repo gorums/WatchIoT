@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   #setting route
   get     '/:username/setting',                         controller: 'setting', :action => 'show'
   patch   '/:username/setting/profile',                 controller: 'setting', :action => 'profile'
-  patch   '/:username/setting/account/email/add',       controller: 'setting', :action => 'account_email_add'
+  post   '/:username/setting/account/email/add',       controller: 'setting', :action => 'account_email_add'
   delete  '/:username/setting/account/email/delete',    controller: 'setting', :action => 'account_email_delete'
   patch   '/:username/setting/account/email/principal', controller: 'setting', :action => 'account_email_principal'
   patch   '/:username/setting/account/chpassword',      controller: 'setting', :action => 'account_ch_password'
