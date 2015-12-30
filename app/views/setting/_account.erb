@@ -36,8 +36,14 @@
 								<td><%if email.principal? %><i class="fa fa-check"></i><%end%></td>
 								<td>
 									<%unless email.principal? %>
-									<a href="#"><i class="fa fa-check-circle-o fa-2x"></i></a>
-									<a href="#"><i class="fa fa-trash fa-2x"></i></a>
+										<%= link_to '/' + current_user.username + '/setting/account/email/principal/' + email.id.to_s,
+																class: 'clear-background' do %>
+											<i class="fa fa-check-circle-o fa-2x"></i>
+										<%end%>
+										<%= link_to '/' + current_user.username + '/setting/account/email/delete/' + email.id.to_s,
+																method: :delete, class: 'clear-background' do %>
+											<i class="fa fa-trash fa-2x"></i>
+										<%end%>
 									<%end%>
 								</td>
 							</tr>

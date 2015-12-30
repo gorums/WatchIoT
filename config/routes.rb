@@ -11,25 +11,25 @@ Rails.application.routes.draw do
   post    'contact'   => 'home#contact',      :as => 'contact'
   get     'home'      => 'home#index',        :as => 'index'
 
-  get     '/:username',                                 controller: 'dashboard', action:  'show'
+  get     '/:username',                                     controller: 'dashboard', action:  'show'
 
   #chart route
-  get '/:username/chart',                               controller: 'chart', :action => 'show'
+  get '/:username/chart',                                   controller: 'chart', :action => 'show'
 
   #setting route
-  get     '/:username/setting',                         controller: 'setting', :action => 'show'
-  patch   '/:username/setting/profile',                 controller: 'setting', :action => 'profile'
-  post   '/:username/setting/account/email/add',        controller: 'setting', :action => 'account_email_add'
-  delete  '/:username/setting/account/email/delete',    controller: 'setting', :action => 'account_email_delete'
-  patch   '/:username/setting/account/email/principal', controller: 'setting', :action => 'account_email_principal'
-  patch   '/:username/setting/account/chpassword',      controller: 'setting', :action => 'account_ch_password'
-  patch   '/:username/setting/account/chusername',      controller: 'setting', :action => 'account_ch_username'
-  delete  '/:username/setting/account/delete',          controller: 'setting', :action => 'account_delete'
-  patch   '/:username/setting/plan/upgrade',            controller: 'setting', :action => 'plan_upgrade'
-  patch   '/:username/setting/team/add',                controller: 'setting', :action => 'team_add'
-  delete  '/:username/setting/team/delete',             controller: 'setting', :action => 'team_delete'
-  patch   '/:username/setting/team/permission',         controller: 'setting', :action => 'team_permission'
-  patch   '/:username/setting/key/generate',            controller: 'setting', :action => 'key_generate'
+  get     '/:username/setting',                             controller: 'setting', :action => 'show'
+  patch   '/:username/setting/profile',                     controller: 'setting', :action => 'profile'
+  post   '/:username/setting/account/email/add',            controller: 'setting', :action => 'account_email_add'
+  delete  '/:username/setting/account/email/delete/:id',    controller: 'setting', :action => 'account_email_delete'
+  get   '/:username/setting/account/email/principal/:id', controller: 'setting', :action => 'account_email_principal'
+  patch   '/:username/setting/account/chpassword',          controller: 'setting', :action => 'account_ch_password'
+  patch   '/:username/setting/account/chusername',          controller: 'setting', :action => 'account_ch_username'
+  delete  '/:username/setting/account/delete',              controller: 'setting', :action => 'account_delete'
+  patch   '/:username/setting/plan/upgrade',                controller: 'setting', :action => 'plan_upgrade'
+  patch   '/:username/setting/team/add',                    controller: 'setting', :action => 'team_add'
+  delete  '/:username/setting/team/delete',                 controller: 'setting', :action => 'team_delete'
+  patch   '/:username/setting/team/permission',             controller: 'setting', :action => 'team_permission'
+  patch   '/:username/setting/key/generate',                controller: 'setting', :action => 'key_generate'
 
   #spaces route
   post    '/:username/create',                          controller: 'spaces', :action => 'create'
