@@ -1,5 +1,7 @@
+##
+# Home controller
+#
 class HomeController < ApplicationController
-
   ##
   # Get /
   #
@@ -20,6 +22,8 @@ class HomeController < ApplicationController
     flash[:success] = 'Thank you for contact us!'
     redirect_to root_url + '#contactus'
   end
+
+  private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def contact_params

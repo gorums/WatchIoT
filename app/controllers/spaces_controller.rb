@@ -1,3 +1,6 @@
+##
+# Space controller
+#
 class SpacesController < ApplicationController
   layout 'dashboard'
 

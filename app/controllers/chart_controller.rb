@@ -1,6 +1,12 @@
+##
+# Chart controller
+#
 class ChartController < ApplicationController
   layout 'dashboard'
 
+  ##
+  # Get /:username/chart
+  #
   def show
     user = User.find_by_username(params[:username])  or not_found
 

@@ -1,6 +1,7 @@
+##
+# User controller
+#
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show]
-
   ##
   # GET /register
   #
@@ -17,10 +18,10 @@ class UsersController < ApplicationController
     @email = Email.new(email_params)
 
     if @user.save
-      @email.user_id = @user.id;
-      @email.principal = true;
+      @email.user_id = @user.id
+      @email.principal = true
       if @email.save
-        #whether register fine, im going to login in the same time
+        # whether register fine, im going to login in the same time
         cookies[:auth_token] = @user.auth_token
         redirect_to root_url
       end
@@ -63,6 +64,7 @@ class UsersController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])

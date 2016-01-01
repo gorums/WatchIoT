@@ -1,6 +1,12 @@
+##
+# Dashboard controller
+#
 class DashboardController < ApplicationController
   layout 'dashboard'
 
+  ##
+  # Get /:username
+  #
   def show
     owner_user = User.find_by_username(params[:username])  or not_found
 
@@ -11,8 +17,5 @@ class DashboardController < ApplicationController
       @logs = Log.where(user_id: owner_user.id).limit(20).order(created_at: :desc)
       render 'show'
     end
-
-
   end
-
 end

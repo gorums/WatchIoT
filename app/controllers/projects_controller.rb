@@ -1,6 +1,12 @@
+##
+# Project controller
+#
 class ProjectsController < ApplicationController
   layout 'dashboard'
 
+  ##
+  # Get /:username/:space/:project
+  #
   def index
     user = User.find_by_username(params[:username])  or not_found
 
@@ -10,12 +16,15 @@ class ProjectsController < ApplicationController
     end
   end
 
+  ##
+  # Get /:username/:space/:project
+  #
   def show
-
   end
 
+  ##
+  # Get /:username/:space/:project/setting
+  #
   def setting
-
   end
-
 end

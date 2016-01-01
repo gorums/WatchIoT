@@ -1,3 +1,6 @@
+##
+# Setting controller
+#
 class SettingController < ApplicationController
   layout 'dashboard'
 
@@ -12,16 +15,16 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    ##setting emails data
+    # setting emails data
     @emails = Email.where(user_id: user.id).order(principal: :desc)
     @email = Email.new
-    ##end setting emails data
+    # end setting emails data
 
     @in = ''
   end
 
   ##
-  # Patch  /:username/setting/profile
+  # Patch /:username/setting/profile
   #
   def profile
     redirect_to :root if !is_auth?
@@ -40,7 +43,7 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Post  /:username/setting/account/email/add
+  # Post /:username/setting/account/email/add
   #
   def account_email_add
     redirect_to :root if !is_auth?
@@ -63,7 +66,7 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Delete  /:username/setting/account/email/delete/:id
+  # Delete /:username/setting/account/email/delete/:id
   #
   def account_email_delete
     redirect_to :root if !is_auth?
@@ -83,7 +86,7 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Get  /:username/setting/account/email/principal/:id
+  # Get /:username/setting/account/email/principal/:id
   #
   def account_email_principal
     redirect_to :root if !is_auth?
@@ -113,7 +116,7 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch  /:username/setting/account/chusername
+  # Patch /:username/setting/account/chusername
   #
   def account_ch_username
     redirect_to :root if !is_auth?
@@ -123,11 +126,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   ##
-  # Patch  /:username/setting/account/chpassword
+  # Patch /:username/setting/account/chpassword
   #
   def account_ch_password
     redirect_to :root if !is_auth?
@@ -137,11 +140,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   ##
-  # Delete  /:username/setting/account/delete
+  # Delete /:username/setting/account/delete
   #
   def account_delete
     redirect_to :root if !is_auth?
@@ -151,11 +154,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   ##
-  # Patch  /:username/setting/plan/upgrade
+  # Patch /:username/setting/plan/upgrade
   #
   def plan_upgrade
     redirect_to :root if !is_auth?
@@ -165,11 +168,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   ##
-  # Patch  /:username/setting/team/add
+  # Patch /:username/setting/team/add
   #
   def team_add
     redirect_to :root if !is_auth?
@@ -179,11 +182,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   ##
-  # Delete  /:username/setting/team/delete
+  # Delete /:username/setting/team/delete
   #
   def team_delete
     redirect_to :root if !is_auth?
@@ -193,11 +196,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   ##
-  # Patch  /:username/setting/team/permission
+  # Patch /:username/setting/team/permission
   #
   def team_permission
     redirect_to :root if !is_auth?
@@ -207,11 +210,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   ##
-  # Patch  /:username/setting/key/generate
+  # Patch /:username/setting/key/generate
   #
   def key_generate
     redirect_to :root if !is_auth?
@@ -221,10 +224,11 @@ class SettingController < ApplicationController
       redirect_to :root
     end
 
-    #TODO:
+    # TODO:
   end
 
   private
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def profile_params
     params.require(:user).permit(:first_name, :last_name, :country_code,
