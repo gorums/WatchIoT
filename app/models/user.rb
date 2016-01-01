@@ -1,5 +1,7 @@
+##
+# User model
+#
 class User < ActiveRecord::Base
-
   attr_accessor :passwd_confirmation
 
   has_many :emails
@@ -22,16 +24,16 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :username
   validates :username, format: { without: /\s+/,
-                                 message: 'No empty spaces admitted for the username.'} #dont space admitted
-  validates_presence_of :username, :on => :create
-  validates_presence_of :passwd, :on => :create
-  validates_presence_of :passwd_confirmation, :on => :create
+                                 message: 'No empty spaces admitted for the username.'} # dont space admitted
+  validates_presence_of :username, on: :create
+  validates_presence_of :passwd, on: :create
+  validates_presence_of :passwd_confirmation, on: :create
   validates_confirmation_of :passwd
 
   validates :passwd, length: { minimum: 8 }
 
   validates :username, exclusion: { in: %w(register login logout download home contact),
-                                message: '%{value} is reserved.' }
+                                    message: '%{value} is reserved.' }
 
   before_create do
     generate_token(:auth_token)
@@ -46,17 +48,15 @@ class User < ActiveRecord::Base
   # This method try to authenticate the client
   #
   def self.authenticate(email, passwd)
-    #find by email
-    userEmail = Email.find_by_email(email)
+    # find by email
+    user_email = Email.find_by_email(email)
 
-    user = userEmail.user if userEmail && userEmail.user
-    #else find by username
-    user = User.find_by_username(email) if !user
+    user = user_email.user if user_email && user_email.user
+    # else find by username
+    user = User.find_by_username(email) unless user
 
     if user && user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
-      user
-    else
-      nil
+      return user
     end
   end
 
@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   # Get the principal email
   #
   def self.email(user_id)
-    email = Email.find_by user_id: user_id, principal: true;
+    email = Email.find_by user_id: user_id, principal: true
     email.email
   end
 
@@ -93,7 +93,6 @@ class User < ActiveRecord::Base
   # This method generate an api key for the client
   #
   def generate_api_key
-
     begin
       api_key = SecureRandom.uuid
     end while ApiKey.exists?(:api_key => api_key)
@@ -117,8 +116,8 @@ class User < ActiveRecord::Base
   # self.name.gsub! /[^0-9a-z ]/i, '_'
   #
   def username_format
-    self.username.gsub! /[^0-9a-z ]/i, '_'
-    self.username.downcase!
+    username.gsub! /[^0-9a-z ]/i, '_'
+    username.downcase!
   end
 
 end

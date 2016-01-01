@@ -1,3 +1,6 @@
+##
+# Space model
+#
 class Space < ActiveRecord::Base
   belongs_to :user
   has_many :projects
@@ -8,7 +11,7 @@ class Space < ActiveRecord::Base
   validates :name, length: { maximum: 15 }
 
   validates :name, exclusion: { in: %w(create edit delete setting space),
-                                     message: '%{value} is reserved.' }
+                                message: '%{value} is reserved.' }
   include ActiveModel::Validations
   validates_with SpaceCanCreateValidator, on: :create
   validates_with SpaceCanEditValidator, on: :update
@@ -16,13 +19,14 @@ class Space < ActiveRecord::Base
   before_save :name_format
 
   private
+
   ##
   # Format name field, lowercase and '_' by space
   # Admitted only alphanumeric characters
   #
   def name_format
-    self.name.gsub! /[^0-9a-z ]/i, '_'
-    self.name.downcase.gsub! /\s+/, '_'
+    name.gsub! /[^0-9a-z ]/i, '_'
+    name.downcase.gsub! /\s+/, '_'
   end
 
 end
