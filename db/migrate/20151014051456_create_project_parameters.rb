@@ -1,8 +1,11 @@
+##
+# Project parameters model
+#
 class CreateProjectParameters < ActiveRecord::Migration
   def change
     create_table :project_parameters do |t|
       t.string :name
-      t.string :type_param     #type can be string, integer, decimal, boolean
+      t.string :type_param # type can be string, integer, decimal, boolean
       t.references :user
       t.references :space
       t.references :project

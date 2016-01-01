@@ -1,8 +1,11 @@
+##
+# Team model
+#
 class CreateTeams < ActiveRecord::Migration
   def change
     create_table :teams do |t|
       t.references :user
-      t.integer :user_team_id   #identify a member of this team
+      t.integer :user_team_id # Identify a member of this team
       t.references :permission
 
       t.timestamps null: false

@@ -1,3 +1,6 @@
+##
+# Stage space model
+#
 class CreateStageSpaces < ActiveRecord::Migration
   def change
     create_table :stage_spaces do |t|

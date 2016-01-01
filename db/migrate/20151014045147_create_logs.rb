@@ -1,3 +1,6 @@
+##
+# Log model
+#
 class CreateLogs < ActiveRecord::Migration
   def change
     create_table :logs do |t|

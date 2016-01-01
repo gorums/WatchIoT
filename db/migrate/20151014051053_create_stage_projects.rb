@@ -1,3 +1,6 @@
+##
+# Stage project model
+#
 class CreateStageProjects < ActiveRecord::Migration
   def change
     create_table :stage_projects do |t|

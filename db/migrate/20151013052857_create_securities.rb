@@ -1,3 +1,6 @@
+##
+# Security model
+#
 class CreateSecurities < ActiveRecord::Migration
   def change
     create_table :securities do |t|

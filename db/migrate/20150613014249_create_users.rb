@@ -1,3 +1,6 @@
+##
+# User model
+#
 class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
@@ -12,8 +15,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :passwd
       t.string :passwd_salt
       t.string :auth_token
-      t.references :plan                                  #foreign key for table plans
-      t.references :api_key                               #foreign key for table api_keys
+      t.references :plan # foreign key for table plans
+      t.references :api_key # foreign key for table api_keys
 
       t.timestamps null: false
     end

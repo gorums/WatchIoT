@@ -1,3 +1,6 @@
+##
+# Chart history param model
+#
 class CreateChartHistoryParams < ActiveRecord::Migration
   def change
     create_table :chart_history_params do |t|

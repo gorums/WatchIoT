@@ -1,10 +1,13 @@
-class CreateChartHistory < ActiveRecord::Migration
+##
+# Chart history model
+#
+class CreateChartHistories < ActiveRecord::Migration
   def change
     create_table :chart_histories do |t|
       t.references :project
       t.references :space
       t.references :user
-      t.string :stage #the stage processor for each request
+      t.string :stage # The stage processor for each request
 
       t.timestamps null: false
     end

@@ -1,3 +1,6 @@
+##
+# Space model
+#
 class CreateSpaces < ActiveRecord::Migration
   def change
     create_table :spaces do |t|

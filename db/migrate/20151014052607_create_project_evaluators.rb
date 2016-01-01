@@ -1,3 +1,6 @@
+##
+# Project evaluator model
+#
 class CreateProjectEvaluators < ActiveRecord::Migration
   def change
     create_table :project_evaluators do |t|

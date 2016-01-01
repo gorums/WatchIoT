@@ -1,3 +1,6 @@
+##
+# Team project model
+#
 class CreateTeamProjects < ActiveRecord::Migration
   def change
     create_table :team_projects do |t|

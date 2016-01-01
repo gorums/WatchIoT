@@ -1,3 +1,6 @@
+##
+# ContactUs model
+#
 class CreateContactUs < ActiveRecord::Migration
   def change
     create_table :contact_us do |t|

@@ -1,3 +1,6 @@
+##
+# Plan feature model
+#
 class CreatePlanFeatures < ActiveRecord::Migration
   def change
     create_table :plan_features do |t|

@@ -1,3 +1,6 @@
+##
+# Team space model
+#
 class CreateTeamSpaces < ActiveRecord::Migration
   def change
     create_table :team_spaces do |t|
