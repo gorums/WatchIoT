@@ -28,5 +28,4 @@ class Space < ActiveRecord::Base
     name.gsub! /[^0-9a-z ]/i, '_'
     name.downcase.gsub! /\s+/, '_'
   end
-
 end

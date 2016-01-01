@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :username
   validates :username, format: { without: /\s+/,
-                                 message: 'No empty spaces admitted for the username.'} # dont space admitted
+                                 message: 'No empty spaces admitted for the username.' } # dont space admitted
   validates_presence_of :username, on: :create
   validates_presence_of :passwd, on: :create
   validates_presence_of :passwd_confirmation, on: :create
@@ -119,5 +119,4 @@ class User < ActiveRecord::Base
     username.gsub! /[^0-9a-z ]/i, '_'
     username.downcase!
   end
-
 end

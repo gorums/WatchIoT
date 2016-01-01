@@ -3,7 +3,6 @@
 # have permission to create_space
 #
 class SpaceCanCreateValidator < ActiveModel::Validator
-
   ##
   # Validate
   #
@@ -13,5 +12,4 @@ class SpaceCanCreateValidator < ActiveModel::Validator
       record.errors[:base] << 'You cant create a space'
     end
   end
-
 end
