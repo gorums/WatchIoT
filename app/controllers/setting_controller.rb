@@ -8,11 +8,12 @@ class SettingController < ApplicationController
   # Get /:username/setting
   #
   def show
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username])  or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # setting emails data
@@ -27,16 +28,16 @@ class SettingController < ApplicationController
   # Patch /:username/setting/profile
   #
   def profile
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
-    if user.update(profile_params)
-      save_log 'Edit the profile setting', 'Edit Profile', current_user.id
-    end
+    save_log 'Edit the profile setting',
+             'Edit Profile', current_user.id if user.update(profile_params)
 
     @in = 'profile'
     redirect_to '/' + user.username + '/setting#collapseProfile'
@@ -46,20 +47,20 @@ class SettingController < ApplicationController
   # Post /:username/setting/account/email/add
   #
   def account_email_add
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username])  or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     email = Email.new(email_params)
     email.user_id = current_user.id
     email.principal = false
 
-    if email.save
-      save_log 'Add new email', 'Edit Account', current_user.id
-    end
+    save_log 'Add new email',
+             'Edit Account', current_user.id if email.save
 
     @in = 'account'
     redirect_to '/' + current_user.username + '/setting#collapseAccount'
@@ -69,11 +70,12 @@ class SettingController < ApplicationController
   # Delete /:username/setting/account/email/delete/:id
   #
   def account_email_delete
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     email_id = params[:id]
@@ -89,21 +91,23 @@ class SettingController < ApplicationController
   # Get /:username/setting/account/email/principal/:id
   #
   def account_email_principal
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     email_id = params[:id]
     email = Email.where(id: email_id).where(user_id: user.id).take
 
-    if email != nil && !email.principal?
-      ## find principal an check like unprincipal
-      email_principal = Email.where(principal: true).where(user_id: user.id).take
-      if email_principal != nil
-        email_principal.principal= false
+    if !email.nil? && !email.principal?
+      # find principal an check like unprincipal
+      email_principal = Email.where(principal: true)
+                            .where(user_id: user.id).take
+      if !email_principal.nil?
+        email_principal.principal = false
         email_principal.save
       end
 
@@ -119,11 +123,12 @@ class SettingController < ApplicationController
   # Patch /:username/setting/account/chusername
   #
   def account_ch_username
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:
@@ -133,11 +138,12 @@ class SettingController < ApplicationController
   # Patch /:username/setting/account/chpassword
   #
   def account_ch_password
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:
@@ -147,11 +153,12 @@ class SettingController < ApplicationController
   # Delete /:username/setting/account/delete
   #
   def account_delete
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:
@@ -161,11 +168,12 @@ class SettingController < ApplicationController
   # Patch /:username/setting/plan/upgrade
   #
   def plan_upgrade
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:
@@ -175,11 +183,12 @@ class SettingController < ApplicationController
   # Patch /:username/setting/team/add
   #
   def team_add
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:
@@ -189,11 +198,12 @@ class SettingController < ApplicationController
   # Delete /:username/setting/team/delete
   #
   def team_delete
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:
@@ -203,11 +213,12 @@ class SettingController < ApplicationController
   # Patch /:username/setting/team/permission
   #
   def team_permission
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:
@@ -217,11 +228,12 @@ class SettingController < ApplicationController
   # Patch /:username/setting/key/generate
   #
   def key_generate
-    redirect_to :root if !is_auth?
-    user = User.find_by_username(params[:username]) or not_found
+    redirect_to :root unless auth?
+    user = User.find_by_username(params[:username]) || not_found
 
-    if current_user.username != user.username
+    unless current_user.username == user.username
       redirect_to :root
+      return
     end
 
     # TODO:

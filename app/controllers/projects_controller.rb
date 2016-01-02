@@ -8,9 +8,9 @@ class ProjectsController < ApplicationController
   # Get /:username/:space/:project
   #
   def index
-    user = User.find_by_username(params[:username])  or not_found
+    user = User.find_by_username(params[:username]) || not_found
 
-    if !is_auth? || current_user.username != user.username
+    unless auth? && current_user.username == user.username
       render 'general/projects', layout: 'application'
       return
     end

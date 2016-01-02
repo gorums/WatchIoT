@@ -25,14 +25,14 @@ class ApplicationController < ActionController::Base
   # This method return the client principal email
   #
   def current_user_email
-    email = User.email(current_user.id) if current_user != nil
+    email = User.email(current_user.id) unless current_user == nil
     email
   end
 
   ##
   # If exist user authenticate
   #
-  def is_auth?
+  def auth?
     current_user != nil
   end
 

@@ -8,21 +8,23 @@ class SpacesController < ApplicationController
   # Get /:username/spaces
   #
   def index
-    owner_user = User.find_by_username(params[:username])  or not_found
+    owner_user = User.find_by_username(params[:username]) || not_found
 
-    if !is_auth? || current_user.username != owner_user.username
+    unless auth? && current_user.username == owner_user.username
       render 'general/spaces', layout: 'application'
       return
     end
+
     @space = Space.new
-    @spaces = Space.where(user_id: owner_user.id).limit(20).order(created_at: :desc)
+    @spaces = Space.where(user_id: owner_user.id).limit(20)
+                  .order(created_at: :desc)
   end
 
   ##
   # Post /:username/create
   #
   def create
-    owner_user = User.find_by_username(params[:username])  or not_found
+    owner_user = User.find_by_username(params[:username]) || not_found
 
     @space = Space.new(space_params)
     @space.can_subscribe = @space.is_public
@@ -30,7 +32,8 @@ class SpacesController < ApplicationController
     @space.user_owner_id = current_user.id
 
     if @space.save
-      save_log 'Create the space <b>' + @space.name + '</b>', 'Create Space', owner_user.id
+      save_log 'Create the space <b>' + @space.name + '</b>',
+               'Create Space', owner_user.id
       redirect_to '/' + params[:username] + '/' + @space.name, status: 303
     else
       render :index
@@ -41,13 +44,14 @@ class SpacesController < ApplicationController
   # Patch /:username/:spacename/edit
   #
   def edit
-    owner_user = User.find_by_username(params[:username])  or not_found
-    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first  or not_found
+    owner_user = User.find_by_username(params[:username]) || not_found
+    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first || not_found
 
-    @space.can_subscribe = params[:is_public] #fix: subscribe table
+    @space.can_subscribe = params[:is_public] # fix: subscribe table
 
     if @space.update(space_edit_params)
-      save_log 'Edit the space <b>' + @space.name + '</b>', 'Edit Space', owner_user.id
+      save_log 'Edit the space <b>' + @space.name + '</b>',
+               'Edit Space', owner_user.id
     end
 
     @project = Project.new
@@ -58,10 +62,10 @@ class SpacesController < ApplicationController
   # Get /:username/:spacename
   #
   def show
-    owner_user = User.find_by_username(params[:username])  or not_found
-    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first  or not_found
+    owner_user = User.find_by_username(params[:username]) || not_found
+    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first || not_found
 
-    if !is_auth? || current_user.username != owner_user.username
+    unless auth? && current_user.username == owner_user.username
       render 'general/spaces', layout: 'application'
       return
     end
@@ -73,10 +77,10 @@ class SpacesController < ApplicationController
   # Get /:username/:spacename/setting
   #
   def setting
-    owner_user = User.find_by_username(params[:username])  or not_found
-    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first  or not_found
+    owner_user = User.find_by_username(params[:username]) || not_found
+    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first || not_found
 
-    if !is_auth? || current_user.username != owner_user.username
+    unless auth? && current_user.username == owner_user.username
       redirect_to '/'
       return
     end

@@ -1,56 +1,53 @@
 Rails.application.routes.draw do
+  post 'register' => 'users#do_register', as: 'do_register'
+  get 'register' => 'users#register', as: 'register'
+  post 'login' => 'users#do_login', as: 'do_login'
+  get 'login' => 'users#login', as: 'login'
+  get 'logout' => 'users#logout', as: 'logout'
+  get 'download' => 'download#index', as: 'download'
+  post 'contact' => 'home#contact', as: 'contact'
+  get 'home' => 'home#index', as: 'index'
 
-  post    'register'  => 'users#do_register', :as => 'do_register'
-  get     'register'  => 'users#register',    :as => 'register'
-  post    'login'     => 'users#do_login',    :as => 'do_login'
-  get     'login'     => 'users#login',       :as => 'login'
-  get     'logout'    => 'users#logout',      :as => 'logout'
+  get '/:username', controller: 'dashboard', action: 'show'
 
-  get     'download'  => 'download#index',    :as => 'download'
+  # chart route
+  get '/:username/chart', controller: 'chart', action: 'show'
 
-  post    'contact'   => 'home#contact',      :as => 'contact'
-  get     'home'      => 'home#index',        :as => 'index'
+  # setting route
+  get '/:username/setting', controller: 'setting', action: 'show'
+  patch '/:username/setting/profile', controller: 'setting', action: 'profile'
+  post '/:username/setting/account/email/add', controller: 'setting', action: 'account_email_add'
+  delete '/:username/setting/account/email/delete/:id', controller: 'setting', action: 'account_email_delete'
+  get '/:username/setting/account/email/principal/:id', controller: 'setting', action: 'account_email_principal'
+  patch '/:username/setting/account/chpassword', controller: 'setting', action: 'account_ch_password'
+  patch '/:username/setting/account/chusername', controller: 'setting', action: 'account_ch_username'
+  delete '/:username/setting/account/delete', controller: 'setting', action: 'account_delete'
+  patch '/:username/setting/plan/upgrade', controller: 'setting', action: 'plan_upgrade'
+  patch '/:username/setting/team/add', controller: 'setting', action: 'team_add'
+  delete '/:username/setting/team/delete', controller: 'setting', action: 'team_delete'
+  patch '/:username/setting/team/permission', controller: 'setting', action: 'team_permission'
+  patch '/:username/setting/key/generate', controller: 'setting', action: 'key_generate'
 
-  get     '/:username',                                     controller: 'dashboard', action:  'show'
+  # spaces route
+  post '/:username/create', controller: 'spaces', action: 'create'
+  get '/:username/spaces', controller: 'spaces', action: 'index'
+  patch '/:username/:spacename', controller: 'spaces', action: 'edit'
+  get '/:username/:spacename/setting', controller: 'spaces', action: 'setting'
+  get '/:username/:spacename/delete', controller: 'spaces', action: 'delete'
+  get '/:username/:spacename', controller: 'spaces', action: 'show'
 
-  #chart route
-  get '/:username/chart',                                   controller: 'chart', :action => 'show'
+  # projects route
+  post '/:username/:spacename/create', controller: 'spaces', action: 'create'
+  get '/:username/:spacename/projects', controller: 'projects', action: 'index'
+  patch '/:username/:spacename/:projectname', controller: 'projects', action: 'edit'
+  get '/:username/:spacename/:projectname/setting', controller: 'projects', action: 'setting'
+  get '/:username/:spacename/:projectname/delete', controller:'projects', action: 'delete'
+  get '/:username/:spacename/:projectname', controller: 'projects', action: 'show'
 
-  #setting route
-  get     '/:username/setting',                             controller: 'setting', :action => 'show'
-  patch   '/:username/setting/profile',                     controller: 'setting', :action => 'profile'
-  post   '/:username/setting/account/email/add',            controller: 'setting', :action => 'account_email_add'
-  delete  '/:username/setting/account/email/delete/:id',    controller: 'setting', :action => 'account_email_delete'
-  get   '/:username/setting/account/email/principal/:id', controller: 'setting', :action => 'account_email_principal'
-  patch   '/:username/setting/account/chpassword',          controller: 'setting', :action => 'account_ch_password'
-  patch   '/:username/setting/account/chusername',          controller: 'setting', :action => 'account_ch_username'
-  delete  '/:username/setting/account/delete',              controller: 'setting', :action => 'account_delete'
-  patch   '/:username/setting/plan/upgrade',                controller: 'setting', :action => 'plan_upgrade'
-  patch   '/:username/setting/team/add',                    controller: 'setting', :action => 'team_add'
-  delete  '/:username/setting/team/delete',                 controller: 'setting', :action => 'team_delete'
-  patch   '/:username/setting/team/permission',             controller: 'setting', :action => 'team_permission'
-  patch   '/:username/setting/key/generate',                controller: 'setting', :action => 'key_generate'
-
-  #spaces route
-  post    '/:username/create',                          controller: 'spaces', :action => 'create'
-  get     '/:username/spaces',                          controller: 'spaces', :action => 'index'
-  patch   '/:username/:spacename',                      controller: 'spaces', :action => 'edit'
-  get     '/:username/:spacename/setting',              controller: 'spaces', :action => 'setting'
-  get     '/:username/:spacename/delete',               controller: 'spaces', :action => 'delete'
-  get     '/:username/:spacename',                      controller: 'spaces', :action => 'show'
-
-  #projects route
-  post    '/:username/:spacename/create',               controller: 'spaces', :action => 'create'
-  get     '/:username/:spacename/projects',             controller: 'projects', :action => 'index'
-  patch   '/:username/:spacename/:projectname',         controller: 'projects', :action => 'edit'
-  get     '/:username/:spacename/:projectname/setting', controller: 'projects', :action => 'setting'
-  get     '/:username/:spacename/:projectname/delete',  controller:'projects', :action => 'delete'
-  get     '/:username/:spacename/:projectname',         controller: 'projects', :action => 'show'
-
-  root    'home#index'
+  root 'home#index'
 
   # at the end of you routes.rb
-  get     '*a', to:  'errors#routing'
+  get '*a', to: 'errors#routing'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
