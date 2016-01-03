@@ -15,19 +15,18 @@ class UsersController < ApplicationController
   #
   def do_register
     @user = User.new(user_params)
-    @email = Email.new(email_params)
 
-    if @user.save
-      @email.user_id = @user.id
-      @email.principal = true
-      if @email.save
-        # whether register fine, im going to login in the same time
-        cookies[:auth_token] = @user.auth_token
-        redirect_to root_url
+    User.transaction do
+      begin
+        save_user_and_mail @user, Email.new(email_params)
+      rescue
+        raise ActiveRecord::Rollback, 'Can register the account!'
       end
-    else
-      render :register
     end
+
+    # whether register fine, im going to login in the same time
+    cookies[:auth_token] = @user.auth_token
+    redirect_to root_url
   end
 
   ##
@@ -42,17 +41,10 @@ class UsersController < ApplicationController
   #
   def do_login
     user = User.authenticate(params[:email], params[:passwd])
-    if user
-      if params[:remember_me]
-        cookies.permanent[:auth_token] = user.auth_token
-      else
-        cookies[:auth_token] = user.auth_token
-      end
-      redirect_to '/' + user.username
-    else
-      flash.now.alert = 'Invalid email or password'
-      render :login
-    end
+    return user_cannot_login if user.nil?
+
+    user_cookies user
+    redirect_to '/' + user.username
   end
 
   ##
@@ -65,18 +57,43 @@ class UsersController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_user
-    @user = User.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
+  ##
+  # User params
+  #
   def user_params
     params.require(:user).permit(:passwd, :passwd_confirmation, :username)
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  ##
+  # Email params
+  #
   def email_params
     params.require(:email).permit(:email)
+  end
+
+  ##
+  # User can login routine
+  #
+  def user_cannot_login
+    flash.now.alert = 'Invalid email or password'
+    render :login
+  end
+
+  ##
+  # Cookies routine
+  #
+  def user_cookies(user)
+    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
+    cookies[:auth_token] = user.auth_token unless params[:remember_me]
+  end
+
+  ##
+  # Save user and email routine
+  #
+  def save_user_and_mail(user, email)
+    user.save!
+    email.user_id = user.id
+    email.principal = true
+    email.save!
   end
 end
