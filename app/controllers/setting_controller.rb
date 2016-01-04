@@ -8,13 +8,8 @@ class SettingController < ApplicationController
   # Get /:username/setting
   #
   def show
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # setting emails data
     @emails = Email.where(user_id: user.id).order(principal: :desc)
@@ -28,13 +23,8 @@ class SettingController < ApplicationController
   # Patch /:username/setting/profile
   #
   def profile
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     save_log 'Edit the profile setting',
              'Edit Profile', current_user.id if user.update(profile_params)
@@ -47,13 +37,8 @@ class SettingController < ApplicationController
   # Post /:username/setting/account/email/add
   #
   def account_email_add
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     email = Email.new(email_params)
     email.user_id = current_user.id
@@ -70,13 +55,8 @@ class SettingController < ApplicationController
   # Delete /:username/setting/account/email/delete/:id
   #
   def account_email_delete
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     email_id = params[:id]
     email = Email.where(id: email_id).where(user_id: user.id).take
@@ -91,13 +71,8 @@ class SettingController < ApplicationController
   # Get /:username/setting/account/email/principal/:id
   #
   def account_email_principal
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     email_id = params[:id]
     email = Email.where(id: email_id).where(user_id: user.id).take
@@ -123,8 +98,8 @@ class SettingController < ApplicationController
   # Patch /:username/setting/account/chusername
   #
   def account_ch_username
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
+    user = find_owner
+    return if user.nil?
 
     unless current_user.username == user.username
       redirect_to :root
@@ -138,13 +113,8 @@ class SettingController < ApplicationController
   # Patch /:username/setting/account/chpassword
   #
   def account_ch_password
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # TODO:
   end
@@ -153,13 +123,8 @@ class SettingController < ApplicationController
   # Delete /:username/setting/account/delete
   #
   def account_delete
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # TODO:
   end
@@ -168,13 +133,8 @@ class SettingController < ApplicationController
   # Patch /:username/setting/plan/upgrade
   #
   def plan_upgrade
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # TODO:
   end
@@ -183,13 +143,8 @@ class SettingController < ApplicationController
   # Patch /:username/setting/team/add
   #
   def team_add
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # TODO:
   end
@@ -198,13 +153,8 @@ class SettingController < ApplicationController
   # Delete /:username/setting/team/delete
   #
   def team_delete
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # TODO:
   end
@@ -213,13 +163,8 @@ class SettingController < ApplicationController
   # Patch /:username/setting/team/permission
   #
   def team_permission
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # TODO:
   end
@@ -228,27 +173,37 @@ class SettingController < ApplicationController
   # Patch /:username/setting/key/generate
   #
   def key_generate
-    redirect_to :root unless auth?
-    user = User.find_by_username(params[:username]) || not_found
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     # TODO:
   end
 
   private
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  ##
+  # Profile params
+  #
   def profile_params
     params.require(:user).permit(:first_name, :last_name, :country_code,
                                  :address, :phone, :receive_notif_last_new)
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  ##
+  # Email params
+  #
   def email_params
     params.require(:email).permit(:email)
+  end
+
+  ##
+  # if the request was doing for the user login
+  #
+  def find_owner
+    user = User.find_by_username(params[:username]) || not_found
+    return user if auth? && current_user.username == user.username
+
+    redirect_to :root
+    nil
   end
 end
