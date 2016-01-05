@@ -3,6 +3,7 @@
 #
 class User < ActiveRecord::Base
   attr_accessor :passwd_confirmation
+  attr_accessor :passwd_new
 
   has_many :emails
   has_many :spaces
@@ -66,6 +67,22 @@ class User < ActiveRecord::Base
   def self.email(user_id)
     email = Email.find_by user_id: user_id, principal: true
     email.email
+  end
+
+  ##
+  # Change the password
+  #
+  def self.change_passwd(user, params)
+    if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+      raise SecurityError 'Bad password!' # FIXED
+    end
+
+    if params[:passwd_new] != params[:passwd_confirmation]
+      raise SecurityError 'Bad confirmation!'  # FIXED
+    end
+
+    user.passwd = BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt)
+    user.save
   end
 
   protected

@@ -16,6 +16,8 @@ class SettingController < ApplicationController
     @email = Email.new
     # end setting emails data
 
+    @user = User.new
+
     @in = ''
   end
 
@@ -95,28 +97,34 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch /:username/setting/account/chusername
-  #
-  def account_ch_username
-    user = find_owner
-    return if user.nil?
-
-    unless current_user.username == user.username
-      redirect_to :root
-      return
-    end
-
-    # TODO:
-  end
-
-  ##
   # Patch /:username/setting/account/chpassword
   #
   def account_ch_password
     user = find_owner
     return if user.nil?
 
-    # TODO:
+    User.change_passwd user, passwd_params
+
+    save_log 'Change password', 'Edit Account', current_user.id
+
+    @in = 'account'
+    redirect_to '/' + current_user.username + '/setting#collapseAccount'
+  end
+
+
+  ##
+  # Patch /:username/setting/account/chusername
+  #
+  def account_ch_username
+    user = find_owner
+    return if user.nil?
+
+    User.change_passwd user, passwd_params
+
+    save_log 'Change password', 'Edit Account', current_user.id
+
+    @in = 'account'
+    redirect_to '/' + current_user.username + '/setting#collapseAccount'
   end
 
   ##
@@ -194,6 +202,13 @@ class SettingController < ApplicationController
   #
   def email_params
     params.require(:email).permit(:email)
+  end
+
+  ##
+  # Passwd change params
+  #
+  def passwd_params
+    params.require(:user).permit(:passwd, :passwd_new, :passwd_confirmation)
   end
 
   ##

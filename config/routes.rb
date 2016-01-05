@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   post '/:username/setting/account/email/add', controller: 'setting', action: 'account_email_add'
   delete '/:username/setting/account/email/delete/:id', controller: 'setting', action: 'account_email_delete'
   get '/:username/setting/account/email/principal/:id', controller: 'setting', action: 'account_email_principal'
-  patch '/:username/setting/account/chpassword', controller: 'setting', action: 'account_ch_password'
+  post '/:username/setting/account/chpassword', controller: 'setting', action: 'account_ch_password'
   patch '/:username/setting/account/chusername', controller: 'setting', action: 'account_ch_username'
   delete '/:username/setting/account/delete', controller: 'setting', action: 'account_delete'
   patch '/:username/setting/plan/upgrade', controller: 'setting', action: 'plan_upgrade'
