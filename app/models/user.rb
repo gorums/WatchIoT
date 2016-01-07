@@ -56,9 +56,8 @@ class User < ActiveRecord::Base
     # else find by username
     user = User.find_by_username(email) unless user
 
-    if user && user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
-      return user
-    end
+    return user if user && user.status? &&
+        user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
   end
 
   ##
@@ -82,6 +81,14 @@ class User < ActiveRecord::Base
     end
 
     user.passwd = BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt)
+    user.save
+  end
+
+  ##
+  # Change the user status to disable
+  #
+  def self.disable(user)
+    user.status = false
     user.save
   end
 

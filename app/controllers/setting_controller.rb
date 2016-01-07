@@ -16,7 +16,7 @@ class SettingController < ApplicationController
     @email = Email.new
     # end setting emails data
 
-    @user = User.new
+    @user = user
 
     @in = ''
   end
@@ -119,12 +119,11 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    User.change_passwd user, passwd_params
-
-    save_log 'Change password', 'Edit Account', current_user.id
+    save_log 'Change username',
+             'Edit Account', current_user.id if user.update(username_params)
 
     @in = 'account'
-    redirect_to '/' + current_user.username + '/setting#collapseAccount'
+    redirect_to '/' + user.username + '/setting#collapseAccount'
   end
 
   ##
@@ -133,8 +132,11 @@ class SettingController < ApplicationController
   def account_delete
     user = find_owner
     return if user.nil?
+    # disable user
+    User.disable user
 
-    # TODO:
+    cookies.clear
+    redirect_to root_url
   end
 
   ##
@@ -211,6 +213,12 @@ class SettingController < ApplicationController
     params.require(:user).permit(:passwd, :passwd_new, :passwd_confirmation)
   end
 
+  ##
+  # Passwd change params
+  #
+  def username_params
+    params.require(:user).permit(:username)
+  end
   ##
   # if the request was doing for the user login
   #
