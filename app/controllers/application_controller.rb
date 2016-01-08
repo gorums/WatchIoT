@@ -30,6 +30,14 @@ class ApplicationController < ActionController::Base
   end
 
   ##
+  # This method return the client api key
+  #
+  def current_api_key
+    api_key = User.email(current_user.api_key_id) unless current_user == nil
+    api_key
+  end
+
+  ##
   # If exist user authenticate
   #
   def auth?

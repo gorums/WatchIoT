@@ -69,6 +69,14 @@ class User < ActiveRecord::Base
   end
 
   ##
+  # Get the api key
+  #
+  def self.api_key(api_key_id)
+    api_key = ApiKey.find_by id: api_key_id
+    api_key.api_key
+  end
+
+  ##
   # Change the password
   #
   def self.change_passwd(user, params)

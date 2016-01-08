@@ -12,15 +12,18 @@
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
 
-				<b>My API Key</b><br /><br />
-				487cbbf1-b0de-4e2a-b27c-7aa53870eb09<br /><br />
+				<b>My API Key</b>
+				<br /><br />
+				<% current_api_key %>
+				<br /><br />
 
-				<div class="form-group">
-					<div class="">
-						<button type="button" class="btn btn-primary" >Generate new</button>
+				<%= form_for @user, url: '/' + current_user.username + '/setting/key/generate' do |f| %>
+					<div class="form-group">
+						<%= div_for(@user, class: 'form-group') do %>
+							<%= submit_tag 'Generate new', class: 'btn btn-primary' %>
+						<%end%>
 					</div>
-				</div>
-
+				<% end %>
 			</div>
 		</div>
 	</div>

@@ -186,7 +186,16 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    # TODO:
+    begin
+      api_key_uuid = SecureRandom.uuid
+    end while ApiKey.exists?(:api_key => api_key_uuid)
+
+    api_key = ApiKey.find_by_id user.api_key_id;
+    api_key.api_key = api_key_uuid
+    api_key.save
+
+    @in = 'api'
+    redirect_to '/' + user.username + '/setting#collapseApiKey'
   end
 
   private
