@@ -8,10 +8,19 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :current_user_email
+  helper_method :current_api_key
 
   rescue_from ActionController::RoutingError, with: :render_404
 
   private
+
+  ##
+  # This method return the client api key
+  #
+  def current_api_key
+    api_key = ApiKey.find_by(id: current_user.api_key_id) unless current_user == nil
+    api_key.api_key
+  end
 
   ##
   # This method return the user authenticate or nil
@@ -26,15 +35,7 @@ class ApplicationController < ActionController::Base
   #
   def current_user_email
     email = User.email(current_user.id) unless current_user == nil
-    email
-  end
-
-  ##
-  # This method return the client api key
-  #
-  def current_api_key
-    api_key = User.email(current_user.api_key_id) unless current_user == nil
-    api_key
+    email.email
   end
 
   ##

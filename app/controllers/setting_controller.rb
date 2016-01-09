@@ -192,7 +192,8 @@ class SettingController < ApplicationController
 
     api_key = ApiKey.find_by_id user.api_key_id;
     api_key.api_key = api_key_uuid
-    api_key.save
+    save_log 'Change api key',
+             'Edit Account', current_user.id if api_key.save
 
     @in = 'api'
     redirect_to '/' + user.username + '/setting#collapseApiKey'

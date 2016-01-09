@@ -14,7 +14,7 @@
 
 				<b>My API Key</b>
 				<br /><br />
-				<% current_api_key %>
+				<%= current_api_key %>
 				<br /><br />
 
 				<%= form_for @user, url: '/' + current_user.username + '/setting/key/generate' do |f| %>
