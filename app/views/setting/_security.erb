@@ -13,21 +13,25 @@
 			<div data-example-id="simple-table" class="bs-example">
 				<table class="table table-striped">
 					<colgroup>
-						<col class="col-xs-10">
+						<col class="col-xs-3">
+						<col class="col-xs-7">
 						<col class="col-xs-2">
 					</colgroup>
 					<thead>
 					<tr>
 						<th>Sessions</th>
+						<th>Description</th>
 						<th>Ip</th>
 					</tr>
 					</thead>
 					<tbody>
+					<% @securities.each do |security| %>
 					<tr>
-						<td>Quito, Firefox, Ubuntu 15.04</td>
-						<td>192.168.1.1</td>
+						<td><%= security.name %></td>
+						<td><%= security.description %></td>
+						<td><%= security.ip %></td>
 					</tr>
-
+					<%end%>
 					</tbody>
 				</table>
 			</div>

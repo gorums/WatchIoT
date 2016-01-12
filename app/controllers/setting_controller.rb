@@ -18,6 +18,10 @@ class SettingController < ApplicationController
 
     @user = user
 
+    @plans = Plan.all
+    @features = Feature.all
+    @securities = Security.where(user_id: user.id)
+
     @in = ''
   end
 
@@ -140,13 +144,22 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch /:username/setting/plan/upgrade
+  # get /:username/setting/plan/upgrade/:id
   #
   def plan_upgrade
     user = find_owner
     return if user.nil?
 
-    # TODO:
+    plan = Plan.find_by_id params[:id] || not_found
+    user.plan_id = plan.id
+
+    save_log 'Update plan',
+             'Edit plans', current_user.id if user.save
+
+    # TODO: go to the pay page
+
+    @in = 'plan'
+    redirect_to '/' + user.username + '/setting#collapsePlan'
   end
 
   ##
@@ -229,6 +242,14 @@ class SettingController < ApplicationController
   def username_params
     params.require(:user).permit(:username)
   end
+
+  ##
+  # Plans change params
+  #
+  def plans_params
+    params.require(:user).permit(:plan_id)
+  end
+
   ##
   # if the request was doing for the user login
   #

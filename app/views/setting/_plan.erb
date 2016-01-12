@@ -11,7 +11,7 @@
 	<div id="collapsePlans" class="panel-collapse collapse<%if @in == 'plan'%> in<%end%>" role="tabpanel" aria-labelledby="plans">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
-				<table class="table table-striped">
+				<table class="table table-bordered">
 					<colgroup>
 						<col class="col-xs-5">
 						<col class="col-xs-2">
@@ -20,91 +20,39 @@
 						<col class="col-xs-2">
 					</colgroup>
 					<thead>
-					<tr>
+					<tr class="active">
 						<th>Feature</th>
-						<th class="success">Free</th>
-						<th>Small</th>
-						<th>Medium</th>
-						<th>Large</th>
+						<% @plans.each do |plan| %>
+							<th><%= plan.name %></th>
+						<% end %>
 					</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<td>Number of spaces</td>
-						<td class="success">3</td>
-						<td>5</td>
-						<td>10</td>
-						<td>30</td>
-					</tr>
-					<tr>
-						<td>Number of projects by space</td>
-						<td class="success">5</td>
-						<td>10</td>
-						<td>15</td>
-						<td>30</td>
-					</tr>
-					<tr>
-						<td>Private spaces/projects</td>
-						<td class="success"><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td>Request per minutes</td>
-						<td class="success">1</td>
-						<td>15	</td>
-						<td>30</td>
-						<td>60</td>
-					</tr>
-					<tr>
-						<td>Notification by email</td>
-						<td class="success"><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td>Notification by sms</td>
-						<td class="success"></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td>Webhook support</td>
-						<td class="success"></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-						<td><i class="fa fa-check"></i></td>
-					</tr>
-					<tr>
-						<td>Subscribe users in public spaces/projects</td>
-						<td class="success">unlimited</td>
-						<td>unlimited</td>
-						<td>unlimited</td>
-						<td>unlimited</td>
-					</tr>
-					<tr>
-						<td>Team members</td>
-						<td class="success">1</td>
-						<td>5</td>
-						<td>10</td>
-						<td>unlimited</td>
-					</tr>
+					<% @features.each do |feature| %>
+						<tr>
+							<td class="text-left"><strong><%= feature.name %></strong></td>
+							<% feature.plan_features.each do |plan_feature| %>
+								<td><% if plan_feature.value == 'true' %><i class="fa fa-check"></i><% else %><%= plan_feature.value %><% end %></td>
+							<% end %>
+						</tr>
+					<% end %>
 					<tr>
 						<td></td>
-						<td class="success">$0/mounth</td>
-						<td>$9/month</td>
-						<td>$19/month</td>
-						<td>$49/month</td>
+						<% @plans.each do |plan| %>
+							<td class="success"><b>$<%= number_with_precision(plan.amount_per_month, precision: 0) %>/mounth</b></td>
+						<% end %>
 					</tr>
 					<tr>
-						<td>Plans</td>
-						<td class="success"><b>Your plan</b></td>
-						<td><button type="button" class="btn btn-primary">Upgrade</button></td>
-						<td><button type="button" class="btn btn-primary">Upgrade</button></td>
-						<td><button type="button" class="btn btn-primary">Upgrade</button></td>
+						<td><strong>Plans</strong></td>
+						<% @plans.each do |plan| %>
+							<td <%if plan.id == current_user.plan_id %>class="success"<%end%>>
+								<%if plan.id == current_user.plan_id %>
+									<b>Your plan</b>
+								<%else%>
+									<%=link_to("Upgrade", '/' + current_user.username + '/setting/plan/upgrade/' + plan.id.to_s, class: "btn btn-primary")%>
+								<%end%>
+							</td>
+						<% end %>
 					</tr>
 					</tbody>
 				</table>
