@@ -97,6 +97,12 @@ Faq.create(
     question: 'How much people can subscribe and receive notifications?',
     answer: 'Of course.')
 
-# Permission static values
-Permission.create(category: 'space', permission: 'create_space') # Defined on team
-Permission.create(category: 'space', permission: 'edit_space') # Defined on teamSpace
+# Permission static values (TODO: review this feature)
+# Permission.create(category: 'global', permission: 'create_space') # Can create spaces
+# Permission.create(category: 'global', permission: 'edit_space') # Can edit any space
+# Permission.create(category: 'global', permission: 'delete_space') # Can delete any space
+# Permission.create(category: 'global', permission: 'setting_space') # Can setting any space
+
+# Permission.create(category: 'space', permission: 'edit_space') # Can edit a space
+# Permission.create(category: 'space', permission: 'delete_space') # Can delete a space
+# Permission.create(category: 'space', permission: 'setting_space') # Can setting a space

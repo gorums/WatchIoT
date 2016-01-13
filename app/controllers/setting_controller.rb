@@ -183,16 +183,6 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch /:username/setting/team/permission
-  #
-  def team_permission
-    user = find_owner
-    return if user.nil?
-
-    # TODO:
-  end
-
-  ##
   # Patch /:username/setting/key/generate
   #
   def key_generate
