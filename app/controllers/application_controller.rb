@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :current_user_email
   helper_method :current_api_key
+  helper_method :user_email
+  helper_method :user_name
 
   rescue_from ActionController::RoutingError, with: :render_404
 
@@ -34,8 +36,24 @@ class ApplicationController < ActionController::Base
   # This method return the client principal email
   #
   def current_user_email
-    email = User.email(current_user.id) unless current_user == nil
+    email = User.email(current_user.id) unless current_user.nil?
     email.email
+  end
+
+  ##
+  # This method return the principal email
+  #
+  def user_email(user_id)
+    email = User.email(user_id) unless user_id.nil?
+    email.email
+  end
+
+  ##
+  # This method return the principal email
+  #
+  def user_name(user_id)
+    user = User.find(user_id) unless user_id.nil?
+    user.username
   end
 
   ##

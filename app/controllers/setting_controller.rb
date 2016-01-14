@@ -21,6 +21,7 @@ class SettingController < ApplicationController
     @plans = Plan.all
     @features = Feature.all
 
+    @teams = Team.where(user_id: user.id)
     @in = ''
   end
 
@@ -162,13 +163,35 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch /:username/setting/team/add
+  # Post /:username/setting/team/add
   #
   def team_add
     user = find_owner
     return if user.nil?
 
-    # TODO:
+    email = Email.where(member_params).take
+    user_member = User.find_by id: email.user_id unless email.nil?
+
+    if email.nil?
+      email = Email.new(member_params)
+    end
+
+    if user_member.nil?
+      user_member = User.new
+      user_member.username = email.email
+      user_member.passwd = 'asdqwe123'
+      user_member.passwd_confirmation = 'asdqwe123'
+      User.save_user_and_mail(user_member, email)
+    end
+
+    team = Team.new
+    team.user_id = user.id
+    team.user_team_id = user_member.id
+    save_log 'Adding a new member',
+             'Update team', current_user.id if team.save
+
+    @in = 'team'
+    redirect_to '/' + user.username + '/setting#collapseTeam'
   end
 
   ##
@@ -178,7 +201,13 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    # TODO:
+    user_member = User.find params[:id]
+
+    team = Team.where(user_id: user.id).where(user_team_id: user_member.id).take unless user_member.nil?
+    Team.destroy(team.id) unless team.nil?
+
+    @in = 'team'
+    redirect_to '/' + user.username + '/setting#collapseTeam'
   end
 
   ##
@@ -237,6 +266,13 @@ class SettingController < ApplicationController
   #
   def plans_params
     params.require(:user).permit(:plan_id)
+  end
+
+  ##
+  # Member team params
+  #
+  def member_params
+    params.require(:email).permit(:email)
   end
 
   ##

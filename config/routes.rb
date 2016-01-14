@@ -23,9 +23,8 @@ Rails.application.routes.draw do
   patch '/:username/setting/account/chusername', controller: 'setting', action: 'account_ch_username'
   delete '/:username/setting/account/delete', controller: 'setting', action: 'account_delete'
   get '/:username/setting/plan/upgrade/:id', controller: 'setting', action: 'plan_upgrade'
-  patch '/:username/setting/team/add', controller: 'setting', action: 'team_add'
-  delete '/:username/setting/team/delete', controller: 'setting', action: 'team_delete'
-  patch '/:username/setting/team/permission', controller: 'setting', action: 'team_permission'
+  post '/:username/setting/team/add', controller: 'setting', action: 'team_add'
+  delete '/:username/setting/team/delete/:id', controller: 'setting', action: 'team_delete'
   patch '/:username/setting/key/generate', controller: 'setting', action: 'key_generate'
 
   # spaces route

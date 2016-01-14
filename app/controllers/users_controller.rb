@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
     User.transaction do
       begin
-        save_user_and_mail @user, Email.new(email_params)
+        User.save_user_and_mail @user, Email.new(email_params)
       rescue
         raise ActiveRecord::Rollback, 'Can register the account!'
       end
@@ -87,13 +87,4 @@ class UsersController < ApplicationController
     cookies[:auth_token] = user.auth_token unless params[:remember_me]
   end
 
-  ##
-  # Save user and email routine
-  #
-  def save_user_and_mail(user, email)
-    user.save!
-    email.user_id = user.id
-    email.principal = true
-    email.save!
-  end
 end

@@ -100,6 +100,16 @@ class User < ActiveRecord::Base
     user.save
   end
 
+  ##
+  # Save user and email routine
+  #
+  def self.save_user_and_mail(user, email)
+    user.save!
+    email.user_id = user.id
+    email.principal = true
+    email.save!
+  end
+
   protected
 
   ##

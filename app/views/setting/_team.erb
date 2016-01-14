@@ -16,20 +16,21 @@
 					<div class="panel-body">
 
 						<small>if the member does not exist on <b>WatchIoT</b> we will send an email to the new member and we will create an account with a default password.</small>
-						<form class="form-group">
-							<div class="form-group col-lg-6">
+						<%= form_for @email, url: '/' + current_user.username + '/setting/team/add' do |f| %>
+						<div class="form-group">
+								<%= div_for(@email, class: 'form-group col-lg-6') do %>
 								<label>Email</label>
 								<div>
-									<input type="text" class="form-control" placeholder="Email member">
+									<%= f.email_field :email, class: 'form-control', placeholder: 'Email member' %>
 								</div>
-							</div>
+							<% end%>
 
-							<div class="form-group">
-								<div class="col-lg-9">
-									<button type="button" class="btn btn-primary" disabled>Add</button>
-								</div>
-							</div>
-						</form>
+							<%= div_for(@email, class: 'form-group col-lg-9') do %>
+								<%= submit_tag 'Add email', class: 'btn btn-primary' %>
+							<%end%>
+
+						</div>
+						<%end%>
 					</div>
 				</div>
 
@@ -47,12 +48,25 @@
 					<tbody>
 					<tr>
 						<td>
-							<img class="img-circle" src="https://secure.gravatar.com/avatar/fc69b473b2b8d3c7e23c632199fec2e0"
-									 alt="Fc69b473b2b8d3c7e23c632199fec2e0" width="20" height="20">
-							Gorums (<b>robertazo123@gmai.com</b>)
+							<img class="img-circle" data-email="<%= current_user_email %>" width="23" height="23">
+							<%= current_user.username %> (<b><%= current_user_email %></b>)
 						</td>
 						<td class="success">Current owner</td>
 					</tr>
+					<% @teams.each do |team| %>
+						<tr>
+							<td>
+								<img class="img-circle" data-email="<%= user_email(team.user_team_id) %>" width="23" height="23">
+								<%= user_name(team.user_team_id) %> (<b><%= user_email(team.user_team_id) %></b>)
+							</td>
+							<td>
+								<%= link_to '/' + current_user.username + '/setting/team/delete/' + team.user_team_id.to_s,
+														method: :delete , class: 'list-action clear-background' do%>
+									<i class="fa fa-trash fa-2x"></i>
+								<%end%>
+							</td>
+						</tr>
+					<%end%>
 					</tbody>
 				</table>
 			</div>
