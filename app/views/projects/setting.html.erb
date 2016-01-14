@@ -5,29 +5,13 @@
 		<div class="panel panel-success">
 			<div class="panel-body">
 
-				<div>
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><h4>Setting</h4></a></li>
-						<li role="presentation"><a href="#members" aria-controls="members" role="tab" data-toggle="tab"><h4>Members</h4></a></li>
-					</ul>
-
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane active" id="home">
-							<br />
 							<%= render "setting_config" %>
-							<br />
-							<%= render "setting_change_name" %>
+							<%= render "setting_name" %>
 							<%= render "setting_export" %>
 						</div>
-						<div role="tabpanel" class="tab-pane" id="members">
-							<br />
-							<%= render "setting_add_member" %>
-							<br />
-							<%= render "setting_perm_members" %>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
