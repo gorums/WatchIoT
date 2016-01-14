@@ -20,7 +20,6 @@ class SettingController < ApplicationController
 
     @plans = Plan.all
     @features = Feature.all
-    @securities = Security.where(user_id: user.id)
 
     @in = ''
   end
