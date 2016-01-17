@@ -8,32 +8,40 @@ class SpacesController < ApplicationController
   # Get /:username/spaces
   #
   def index
-    owner_user = User.find_by_username(params[:username]) || not_found
-
-    unless auth? && current_user.username == owner_user.username
-      render 'general/spaces', layout: 'application'
-      return
-    end
+    user = find_owner
+    return if user.nil?
 
     @space = Space.new
-    @spaces = Space.where(user_id: owner_user.id).limit(20)
+    @spaces = Space.where(user_id: user.id).limit(20)
                   .order(created_at: :desc)
+  end
+
+  ##
+  # Get /:username/:spacename
+  #
+  def show
+    user = find_owner
+    return if user.nil?
+    @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    @project = Project.new
   end
 
   ##
   # Post /:username/create
   #
   def create
-    owner_user = User.find_by_username(params[:username]) || not_found
+    user = find_owner
+    return if user.nil?
 
     @space = Space.new(space_params)
     @space.can_subscribe = @space.is_public
-    @space.user_id = owner_user.id
+    @space.user_id = user.id
     @space.user_owner_id = current_user.id
 
     if @space.save
       save_log 'Create the space <b>' + @space.name + '</b>',
-               'Create Space', owner_user.id
+               'Create Space', user.id
+
       redirect_to '/' + params[:username] + '/' + @space.name, status: 303
     else
       render :index
@@ -44,14 +52,15 @@ class SpacesController < ApplicationController
   # Patch /:username/:spacename/edit
   #
   def edit
-    owner_user = User.find_by_username(params[:username]) || not_found
-    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first || not_found
+    user = find_owner
+    return if user.nil?
+    @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
 
     @space.can_subscribe = params[:is_public] # fix: subscribe table
 
     if @space.update(space_edit_params)
       save_log 'Edit the space <b>' + @space.name + '</b>',
-               'Edit Space', owner_user.id
+               'Edit Space', user.id
     end
 
     @project = Project.new
@@ -59,31 +68,12 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # Get /:username/:spacename
-  #
-  def show
-    owner_user = User.find_by_username(params[:username]) || not_found
-    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first || not_found
-
-    unless auth? && current_user.username == owner_user.username
-      render 'general/spaces', layout: 'application'
-      return
-    end
-
-    @project = Project.new
-  end
-
-  ##
   # Get /:username/:spacename/setting
   #
   def setting
-    owner_user = User.find_by_username(params[:username]) || not_found
-    @space = Space.where(user_id: owner_user.id, name: params[:spacename]).first || not_found
-
-    unless auth? && current_user.username == owner_user.username
-      redirect_to '/'
-      return
-    end
+    user = find_owner
+    return if user.nil?
+    @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
   end
 
   private
@@ -100,5 +90,17 @@ class SpacesController < ApplicationController
   #
   def space_edit_params
     params.require(:space).permit(:description, :is_public)
+  end
+
+  ##
+  # if the request was doing for the user login or an user team
+  #
+  def find_owner
+    user = User.find_by_username(params[:username]) || not_found
+    return user if auth? && current_user.username == user.username
+    return user if Team.where(user_id: current_user.id).where(user_id_team: user.id).any?
+
+    render 'general/spaces', layout: 'application'
+    nil
   end
 end
