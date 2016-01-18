@@ -8,4 +8,31 @@ class Email < ActiveRecord::Base
   validates_uniqueness_of :email, scope: [:user_id]
   validates :email,
             format: { with: /\A[-a-z0-9_+\.]+@([-a-z0-9]+\.)+[a-z0-9]{2,4}\z/i }
+
+  ##
+  # Set this email id like principal
+  #
+  def self.principal(user_id, email_id)
+    email = Email.where(id: email_id).where(user_id: user_id).take
+    return if email.nil? || email.principal?
+
+    # find principal an check like unprincipal
+    Email.unprincipal(user.id)
+
+    email.principal = true
+    email.save
+  end
+
+  ##
+  # Find the principal email for this user and set it like not principal
+  #
+  def self.unprincipal(user_id)
+    email_principal = Email.where(principal: true)
+                          .where(user_id: user_id).take
+
+    unless email_principal.nil?
+      email_principal.principal = false
+      email_principal.save
+    end
+  end
 end

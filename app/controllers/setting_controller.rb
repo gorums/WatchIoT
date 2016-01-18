@@ -64,10 +64,8 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    email_id = params[:id]
-    email = Email.where(id: email_id).where(user_id: user.id).take
-
-    email.destroy unless email == nil || email.principal?
+    email = Email.where(id: params[:id]).where(user_id: user.id).take
+    email.destroy unless email.nil? || email.principal?
 
     @in = 'account'
     redirect_to '/' + current_user.username + '/setting#collapseAccount'
@@ -80,21 +78,8 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    email_id = params[:id]
-    email = Email.where(id: email_id).where(user_id: user.id).take
-
-    if !email.nil? && !email.principal?
-      # find principal an check like unprincipal
-      email_principal = Email.where(principal: true)
-                            .where(user_id: user.id).take
-      if !email_principal.nil?
-        email_principal.principal = false
-        email_principal.save
-      end
-
-      email.principal = true
-      email.save
-    end
+    Email.principal(user.id, params[:id])
+    save_log 'Set email like pincipal', 'Principal Email', current_user.id
 
     @in = 'account'
     redirect_to '/' + current_user.username + '/setting#collapseAccount'

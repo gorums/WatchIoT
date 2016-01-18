@@ -5,6 +5,9 @@
 			<div class="panel panel-default">
 				<div class="panel-heading" role="tab" id="headingOne">
 					<div class="row">
+						<% unless @space.projects.any?%>
+							<p class="text-center">Dont project exist below this space.</p>
+						<%else%>
 						<table class="table table-striped">
 							<colgroup>
 								<col class="col-xs-2">
@@ -31,6 +34,7 @@
 							<% end %>
 							</tbody>
 						</table>
+						<%end%>
 					</div>
 				</div>
 			</div>

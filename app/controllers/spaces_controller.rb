@@ -12,8 +12,7 @@ class SpacesController < ApplicationController
     return if user.nil?
 
     @space = Space.new
-    @spaces = Space.where(user_id: user.id).limit(20)
-                  .order(created_at: :desc)
+    @spaces = Space.where(user_id: user.id).order(created_at: :desc)
   end
 
   ##
@@ -22,6 +21,7 @@ class SpacesController < ApplicationController
   def show
     user = find_owner
     return if user.nil?
+
     @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
     @project = Project.new
   end
@@ -38,14 +38,10 @@ class SpacesController < ApplicationController
     @space.user_id = user.id
     @space.user_owner_id = current_user.id
 
-    if @space.save
-      save_log 'Create the space <b>' + @space.name + '</b>',
-               'Create Space', user.id
+    save_log 'Create the space <b>' + @space.name + '</b>',
+               'Create Space', user.id if @space.save
 
-      redirect_to '/' + params[:username] + '/' + @space.name, status: 303
-    else
-      render :index
-    end
+    redirect_to '/' + params[:username] + '/' + @space.name
   end
 
   ##
@@ -57,11 +53,8 @@ class SpacesController < ApplicationController
     @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
 
     @space.can_subscribe = params[:is_public] # fix: subscribe table
-
-    if @space.update(space_edit_params)
-      save_log 'Edit the space <b>' + @space.name + '</b>',
-               'Edit Space', user.id
-    end
+    save_log 'Edit the space <b>' + @space.name + '</b>',
+               'Edit Space', user.id if @space.update(space_edit_params)
 
     @project = Project.new
     render 'show'
@@ -98,7 +91,7 @@ class SpacesController < ApplicationController
   def find_owner
     user = User.find_by_username(params[:username]) || not_found
     return user if auth? && current_user.username == user.username
-    return user if Team.where(user_id: current_user.id).where(user_id_team: user.id).any?
+    return user if Team.where(user_id: user.id).where(user_id_team: current_user.id).any?
 
     render 'general/spaces', layout: 'application'
     nil

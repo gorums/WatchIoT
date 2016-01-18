@@ -10,7 +10,7 @@ class Space < ActiveRecord::Base
 
   validates :name, length: { maximum: 15 }
 
-  validates :name, exclusion: { in: %w(create edit delete setting space),
+  validates :name, exclusion: { in: %w(create edit delete setting spaces chart),
                                 message: '%{value} is reserved.' }
   include ActiveModel::Validations
   validates_with SpaceCanCreateValidator, on: :create

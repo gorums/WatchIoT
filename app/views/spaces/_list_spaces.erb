@@ -2,6 +2,9 @@
 <div class="panel panel-success">
 	<div class="panel-body">
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+			<% unless @spaces.any?%>
+				<p class="text-center">Dont space create.</p>
+			<%else%>
 			<% @spaces.each do |space|%>
 			<div class="panel panel-default">
 				<div class="panel-heading" role="tab" id="heading<%= space.id %>">
@@ -19,6 +22,9 @@
 				</div>
 				<div id="collapse<%= space.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= space.id %>">
 					<div class="panel-body">
+						<% unless space.projects.any?%>
+							<p class="text-center">Dont project exist below this space.</p>
+						<%else%>
 						<table class="table table-striped">
 							<colgroup>
 								<col class="col-xs-2">
@@ -42,9 +48,11 @@
 							<% end %>
 							</tbody>
 						</table>
+						<%end%>
 					</div>
 				</div>
 			</div>
+			<% end %>
 			<% end %>
 		</div>
 	</div>
