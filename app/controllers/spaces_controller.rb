@@ -67,6 +67,7 @@ class SpacesController < ApplicationController
     user = find_owner
     return if user.nil?
     @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    @teams = Team.where(user_id: user.id)
   end
 
   private

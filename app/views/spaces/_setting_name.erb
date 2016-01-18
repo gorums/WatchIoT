@@ -3,18 +3,22 @@
 	<div class="panel-body">
 
 		<small>This change can be painful and break your applications.</small>
-		<form class="form-group">
-			<div class="form-group col-lg-6">
-				<label>Name space</label>
-				<div>
-					<input type="text" class="form-control" placeholder="Username" value="My Google Servers">
-				</div>
-			</div>
+
+		<%= form_for @space, url: '/' + current_user.username + '/' + @space.name + '/setting/chname'  do |f| %>
 			<div class="form-group">
-				<div class="col-lg-9">
-					<button type="button" class="btn btn-danger">Change</button>
-				</div>
+
+				<%= div_for(@space, class: 'form-group col-lg-6') do %>
+					<label>Name</label>
+					<div>
+						<%= f.text_field :name, class: 'form-control', placeholder: 'Username', value: @space.name %>
+					</div>
+				<%end%>
+
+				<%= div_for(@space, class: 'form-group col-lg-9') do %>
+					<%= submit_tag 'Change', class: 'btn btn-warning' %>
+				<%end%>
+
 			</div>
-		</form>
+		<%end%>
 	</div>
 </div>

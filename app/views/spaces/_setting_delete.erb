@@ -1,0 +1,16 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><b>Delete name space</b></div>
+	<div class="panel-body">
+
+		<small>Do you need delete all the projects or transfer they to other account.</small>
+		<%= form_for @space, url: '/' + current_user.username + '/' + @space.name + '/setting/delete', method: :delete  do |f| %>
+			<div class="form-group">
+
+				<%= div_for(@space, class: 'form-group col-lg-9') do %>
+					<%= submit_tag 'Delete', class: 'btn btn-danger' %>
+				<%end%>
+
+			</div>
+		<%end%>
+	</div>
+</div>
