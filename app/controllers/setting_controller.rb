@@ -121,6 +121,7 @@ class SettingController < ApplicationController
   def account_delete
     user = find_owner
     return if user.nil?
+
     # disable user
     User.disable user
 

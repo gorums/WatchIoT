@@ -4,7 +4,7 @@
 
 		<small>You can transfer this space to a team account.</small>
 
-		<%= form_for @space, url: '/' + current_user.username + '/' + @space.name + '/setting/transfer'  do |f| %>
+		<%= form_for @space, url: '/' + current_user.username + '/' + @space.name + '/setting/transfer' do |f| %>
 			<div class="form-group">
 
 				<%= div_for(@space, class: 'form-group col-lg-6') do %>

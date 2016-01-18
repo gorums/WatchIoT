@@ -66,8 +66,58 @@ class SpacesController < ApplicationController
   def setting
     user = find_owner
     return if user.nil?
+
     @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
     @teams = Team.where(user_id: user.id)
+  end
+
+  ##
+  # Patch /:username/:spacename/setting/chname
+  #
+  def chname
+    user = find_owner
+    return if user.nil?
+
+    space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    old_name = space.name
+    save_log 'Change name space ' + old_name + ' by ' + space.name,
+             'Setting Space', current_user.id if space.update(space_params)
+
+    redirect_to '/' + user.username + '/' + space.name + '/setting'
+  end
+
+  ##
+  # Patch /:username/:spacename/setting/transfer
+  #
+  def transfer
+    user = find_owner
+    return if user.nil?
+
+    space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    user_id_team = params[:team_id]
+    return unless Team.where(user_id: user.id).where(user_team_id: user_id_team).any?
+
+    save_log 'Change the owner of space ' + space.name + ' to ' + user_email(user_id_team),
+             'Setting Space', current_user.id if space.update!(user_id: user_id_team)
+
+    redirect_to '/' + user.username + '/spaces'
+  end
+
+  ##
+  # Delete /:username/:spacename/setting/delete
+  #
+  def delete
+    user = find_owner
+    return if user.nil?
+
+    # TODO: verify if exist project for tis space
+
+    space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    space.destroy!
+    save_log 'Delete name space',
+             'Setting Space', current_user.id if space.destroyed?
+
+    redirect_to '/' + user.username + '/spaces'
   end
 
   private
@@ -92,7 +142,7 @@ class SpacesController < ApplicationController
   def find_owner
     user = User.find_by_username(params[:username]) || not_found
     return user if auth? && current_user.username == user.username
-    return user if Team.where(user_id: user.id).where(user_id_team: current_user.id).any?
+    return user if Team.where(user_id: user.id).where(user_team_id: current_user.id).any?
 
     render 'general/spaces', layout: 'application'
     nil

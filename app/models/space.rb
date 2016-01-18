@@ -12,9 +12,9 @@ class Space < ActiveRecord::Base
 
   validates :name, exclusion: { in: %w(create edit delete setting spaces chart),
                                 message: '%{value} is reserved.' }
-  include ActiveModel::Validations
-  validates_with SpaceCanCreateValidator, on: :create
-  validates_with SpaceCanEditValidator, on: :update
+  # include ActiveModel::Validations
+  # validates_with SpaceCanCreateValidator, on: :create
+  # validates_with SpaceCanEditValidator, on: :update
 
   before_save :name_format
 
