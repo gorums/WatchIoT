@@ -18,9 +18,6 @@ class SettingController < ApplicationController
 
     @user = user
 
-    @plans = Plan.all
-    @features = Feature.all
-
     @teams = Team.where(user_id: user.id)
     @in = ''
   end
@@ -130,25 +127,6 @@ class SettingController < ApplicationController
   end
 
   ##
-  # get /:username/setting/plan/upgrade/:id
-  #
-  def plan_upgrade
-    user = find_owner
-    return if user.nil?
-
-    plan = Plan.find_by_id params[:id] || not_found
-    user.plan_id = plan.id
-
-    save_log 'Update plan',
-             'Edit plans', current_user.id if user.save
-
-    # TODO: go to the pay page
-
-    @in = 'plan'
-    redirect_to '/' + user.username + '/setting#collapsePlan'
-  end
-
-  ##
   # Post /:username/setting/team/add
   #
   def team_add
@@ -245,13 +223,6 @@ class SettingController < ApplicationController
   #
   def username_params
     params.require(:user).permit(:username)
-  end
-
-  ##
-  # Plans change params
-  #
-  def plans_params
-    params.require(:user).permit(:plan_id)
   end
 
   ##

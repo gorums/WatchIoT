@@ -26,17 +26,6 @@
 		</div>
 	<% end %>
 
-
-	<%= div_for(@space, class: 'form-group') do %>
-		<label class="col-lg-2">Public space</label>
-		<div class="col-lg-10">
-			<%= f.check_box :is_public %>
-		</div>
-		<div class="col-lg-10">
-			<small>If you check this like public all the people can subscribe in your notification by email.</small>
-		</div>
-	<% end %>
-
 	<%= div_for(@space, class: 'form-group') do %>
 		<div class="col-lg-offset-2 col-lg-9">
 			<%= submit_tag 'Save Space', class: 'btn btn-primary' %>

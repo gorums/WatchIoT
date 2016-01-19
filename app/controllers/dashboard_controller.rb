@@ -8,15 +8,16 @@ class DashboardController < ApplicationController
   # Get /:username
   #
   def show
-    owner_user = User.find_by_username(params[:username]) || not_found
+    user = User.find_by_username(params[:username]) || not_found
+    is_me = auth? && current_user.username == user.username
+    iam_in_team  = auth? && Team.where(user_id: user.id).where(user_team_id: current_user.id).any?
 
-    if !auth? || current_user.username != owner_user.username
-      render 'general/dashboard', layout: 'application'
-    else
+    if is_me || iam_in_team
       @space = Space.new
-      @logs = Log.where(user_id: owner_user.id).limit(20)
+      @logs = Log.where(user_id: user.id).limit(20)
                   .order(created_at: :desc)
-      render 'show'
+    else
+      redirect_to :root
     end
   end
 end

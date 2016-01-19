@@ -6,8 +6,6 @@ class HomeController < ApplicationController
   # Get /
   #
   def index
-    @plans = Plan.all
-    @features = Feature.all
     @faqs = Faq.all
     @contactus = ContactUs.new
   end

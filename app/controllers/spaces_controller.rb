@@ -34,7 +34,6 @@ class SpacesController < ApplicationController
     return if user.nil?
 
     @space = Space.new(space_params)
-    @space.can_subscribe = @space.is_public
     @space.user_id = user.id
     @space.user_owner_id = current_user.id
 
@@ -52,7 +51,6 @@ class SpacesController < ApplicationController
     return if user.nil?
     @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
 
-    @space.can_subscribe = params[:is_public] # fix: subscribe table
     save_log 'Edit the space <b>' + @space.name + '</b>',
                'Edit Space', user.id if @space.update(space_edit_params)
 
@@ -144,7 +142,7 @@ class SpacesController < ApplicationController
     return user if auth? && current_user.username == user.username
     return user if Team.where(user_id: user.id).where(user_team_id: current_user.id).any?
 
-    render 'general/spaces', layout: 'application'
+    redirect_to :root
     nil
   end
 end
