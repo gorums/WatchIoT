@@ -8,9 +8,12 @@
     </div>
 <% end %>
 
+
+
 <div class="auth-form-header">
   <h1>Sign Up</h1>
 </div>
+
 <%= form_for @user, url: '/register'  do |f| %>
     <div class="auth-form">
       <div class="input">
@@ -33,6 +36,8 @@
         <%= f.password_field :passwd_confirmation %>
         <span><i class="fa fa-lock"></i></span>
       </div>
-      <p><%= submit_tag "Create User", class: "btn btn-default btn-lg active" %></p>
+      <p><%= submit_tag "Create User", class: "btn btn-default btn-lg active", disabled: true %></p>
     </div>
 <% end %>
+
+<p class="text-center text-danger">(We are under construction)</p>
