@@ -38,7 +38,7 @@ class ProjectsController < ApplicationController
     return user if auth? && current_user.username == user.username
     return user if Team.where(user_id: current_user.id).where(user_id_team: user.id).any?
 
-    render 'general/projects', layout: 'application'
+    redirect_to :root
     nil
   end
 end
