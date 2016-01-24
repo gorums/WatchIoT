@@ -36,13 +36,6 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<td>
-							<img class="img-circle" data-email="<%= current_user_email %>" width="23" height="23">
-							<%= current_user.username %> (<b><%= current_user_email %></b>)
-						</td>
-						<td class="success">Current owner</td>
-					</tr>
 					<% @teams.each do |team| %>
 						<tr>
 							<td>
@@ -54,6 +47,32 @@
 														method: :delete , class: 'list-action clear-background' do%>
 									<i class="fa fa-trash fa-2x"></i>
 								<%end%>
+							</td>
+						</tr>
+					<%end%>
+					</tbody>
+				</table>
+
+				<table class="table table-striped">
+					<colgroup>
+						<col class="col-xs-9">
+						<col class="col-xs-3">
+					</colgroup>
+					<thead>
+					<tr>
+						<th>I belong</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					<% @teams_belong.each do |team| %>
+						<tr>
+							<td>
+								<img class="img-circle" data-email="<%= user_email(team.user_id) %>" width="23" height="23">
+								<%= user_name(team.user_id) %> (<b><%= user_email(team.user_id) %></b>)
+							</td>
+							<td>
+								<%=link_to  'Go', '/' + user_name(team.user_id)%>
 							</td>
 						</tr>
 					<%end%>

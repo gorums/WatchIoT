@@ -19,6 +19,7 @@ class SettingController < ApplicationController
     @user = user
 
     @teams = Team.where(user_id: user.id)
+    @teams_belong = Team.where(user_team_id: user.id)
     @in = valid_tab? ? params[:val] : ''
   end
 
