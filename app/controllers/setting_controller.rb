@@ -19,7 +19,7 @@ class SettingController < ApplicationController
     @user = user
 
     @teams = Team.where(user_id: user.id)
-    @in = ''
+    @in = valid_tab? ? params[:val] : ''
   end
 
   ##
@@ -32,8 +32,7 @@ class SettingController < ApplicationController
     save_log 'Edit the profile setting',
              'Edit Profile', current_user.id if user.update(profile_params)
 
-    @in = 'profile'
-    redirect_to '/' + user.username + '/setting#collapseProfile'
+    redirect_to '/' + user.username + '/setting'
   end
 
   ##
@@ -50,8 +49,7 @@ class SettingController < ApplicationController
     save_log 'Add new email',
              'Edit Account', current_user.id if email.save
 
-    @in = 'account'
-    redirect_to '/' + current_user.username + '/setting#collapseAccount'
+    redirect_to '/' + current_user.username + '/setting/account'
   end
 
   ##
@@ -64,8 +62,7 @@ class SettingController < ApplicationController
     email = Email.where(id: params[:id]).where(user_id: user.id).take
     email.destroy unless email.nil? || email.principal?
 
-    @in = 'account'
-    redirect_to '/' + current_user.username + '/setting#collapseAccount'
+    redirect_to '/' + current_user.username + '/setting/account'
   end
 
   ##
@@ -78,8 +75,7 @@ class SettingController < ApplicationController
     Email.principal(user.id, params[:id])
     save_log 'Set email like pincipal', 'Principal Email', current_user.id
 
-    @in = 'account'
-    redirect_to '/' + current_user.username + '/setting#collapseAccount'
+    redirect_to '/' + current_user.username + '/setting/account'
   end
 
   ##
@@ -93,8 +89,7 @@ class SettingController < ApplicationController
 
     save_log 'Change password', 'Edit Account', current_user.id
 
-    @in = 'account'
-    redirect_to '/' + current_user.username + '/setting#collapseAccount'
+    redirect_to '/' + current_user.username + '/setting/account'
   end
 
 
@@ -108,8 +103,7 @@ class SettingController < ApplicationController
     save_log 'Change username',
              'Edit Account', current_user.id if user.update(username_params)
 
-    @in = 'account'
-    redirect_to '/' + user.username + '/setting#collapseAccount'
+    redirect_to '/' + user.username + '/setting/account'
   end
 
   ##
@@ -154,8 +148,7 @@ class SettingController < ApplicationController
     save_log 'Adding a new member',
              'Update team', current_user.id if team.save
 
-    @in = 'team'
-    redirect_to '/' + user.username + '/setting#collapseTeam'
+    redirect_to '/' + user.username + '/setting/team'
   end
 
   ##
@@ -170,8 +163,7 @@ class SettingController < ApplicationController
     team = Team.where(user_id: user.id).where(user_team_id: user_member.id).take unless user_member.nil?
     Team.destroy(team.id) unless team.nil?
 
-    @in = 'team'
-    redirect_to '/' + user.username + '/setting#collapseTeam'
+    redirect_to '/' + user.username + '/setting/team'
   end
 
   ##
@@ -190,8 +182,7 @@ class SettingController < ApplicationController
     save_log 'Change api key',
              'Edit Account', current_user.id if api_key.save
 
-    @in = 'api'
-    redirect_to '/' + user.username + '/setting#collapseApiKey'
+    redirect_to '/' + user.username + '/setting/api'
   end
 
   private
@@ -241,5 +232,12 @@ class SettingController < ApplicationController
 
     redirect_to :root
     nil
+  end
+
+  ##
+  # Validate tabs when redirect is throw
+  #
+  def valid_tab?
+    %w(account team api).any? { |word|  params[:val] == word }
   end
 end

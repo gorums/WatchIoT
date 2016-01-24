@@ -1,14 +1,4 @@
-<div class="panel panel-default" id="profile">
-	<div class="panel-heading" role="tab" id="profile">
-		<div class="row">
-			<h4 class="panel-title ">
-				<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseProfile" aria-expanded="false" aria-controls="collapseProfile">
-					<h4>Profile</h4>
-				</a>
-			</h4>
-		</div>
-	</div>
-	<div id="collapseProfile" class="panel-collapse collapse<%if @in == 'profile'%> in<%end%>" role="tabpanel" aria-labelledby="profile">
+<div role="tabpanel" class="tab-pane<%if @in == ''%> active<%end%>" id="profile">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
 				<%= form_for current_user, url: '/' + current_user.username + '/setting/profile'  do |f| %>
@@ -269,5 +259,4 @@
 				<% end %>
 			</div>
 		</div>
-	</div>
 </div>

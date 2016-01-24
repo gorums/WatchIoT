@@ -1,17 +1,6 @@
-<div class="panel panel-default">
-	<div class="panel-heading" role="tab" id="accountSetting">
-		<div class="row">
-			<h4 class="panel-title ">
-				<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseAccountSetting" aria-expanded="false" aria-controls="collapseTwo">
-					<h4>Account Settings</h4>
-				</a>
-			</h4>
-		</div>
-	</div>
-	<div id="collapseAccountSetting" class="panel-collapse collapse<%if @in == 'account'%> in<%end%>" role="tabpanel" aria-labelledby="accountSetting">
+<div role="tabpanel" class="tab-pane<%if @in == 'account'%> active<%end%>" id="account">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
-
 				<div class="panel panel-default">
 					<div class="panel-heading"><b>Emails</b></div>
 					<div class="panel-body">
@@ -144,8 +133,6 @@
 						<%end%>
 					</div>
 				</div>
-
 			</div>
 		</div>
-	</div>
 </div>

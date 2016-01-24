@@ -1,14 +1,4 @@
-<div class="panel panel-default">
-	<div class="panel-heading" role="tab" id="team">
-		<div class="row">
-			<h4 class="panel-title ">
-				<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTeam" aria-expanded="false" aria-controls="collapseTwo">
-					<h4>Team</h4>
-				</a>
-			</h4>
-		</div>
-	</div>
-	<div id="collapseTeam" class="panel-collapse collapse<%if @in == 'team'%> in<%end%>" role="tabpanel" aria-labelledby="team">
+<div role="tabpanel" class="tab-pane<%if @in == 'team'%> active<%end%>" id="team">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
 				<div class="panel panel-primary">
@@ -71,5 +61,4 @@
 				</table>
 			</div>
 		</div>
-	</div>
 </div>

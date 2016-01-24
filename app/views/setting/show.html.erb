@@ -6,11 +6,22 @@
 				<h3>Gorums setting</h3>
 				<br />
 
-				<%= render 'profile', locals: {in: @in} %>
-				<%= render 'account', locals: {in: @in} %>
-				<%= render 'team', locals: {in: @in} %>
-				<%= render 'api_key', locals: {in: @in} %>
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation"<%if @in == ''%> class="active"<%end%>><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+					<li role="presentation"<%if @in == 'account'%> class="active"<%end%>><a href="#account" aria-controls="account" role="tab" data-toggle="tab">Account</a></li>
+					<li role="presentation"<%if @in == 'team'%> class="active"<%end%>><a href="#team" aria-controls="team" role="tab" data-toggle="tab">Team</a></li>
+					<li role="presentation"<%if @in == 'api'%> class="active"<%end%>><a href="#api" aria-controls="api" role="tab" data-toggle="tab">Api key</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<%= render 'profile', locals: {in: @in} %>
+					<%= render 'account', locals: {in: @in} %>
+					<%= render 'team', locals: {in: @in} %>
+					<%= render 'api_key', locals: {in: @in} %>
+				</div>
 			</div>
 		</div>
   </div>
 </div>
+
+

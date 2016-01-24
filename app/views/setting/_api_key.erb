@@ -1,14 +1,4 @@
-<div class="panel panel-default">
-	<div class="panel-heading" role="tab" id="apiKey">
-		<div class="row">
-			<h4 class="panel-title ">
-				<a class="collapsed col-lg-12 clear-background" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseApiKey" aria-expanded="false" aria-controls="collapseTwo">
-					<h4>Api key</h4>
-				</a>
-			</h4>
-		</div>
-	</div>
-	<div id="collapseApiKey" class="panel-collapse collapse<%if @in == 'api'%> in<%end%>" role="tabpanel" aria-labelledby="apiKey">
+<div role="tabpanel" class="tab-pane<%if @in == 'api'%> active<%end%>" id="api">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
 
@@ -26,5 +16,4 @@
 				<% end %>
 			</div>
 		</div>
-	</div>
 </div>

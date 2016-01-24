@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   get '/:username/chart', controller: 'chart', action: 'show'
 
   # setting route
-  get '/:username/setting', controller: 'setting', action: 'show'
+  get '/:username/setting(//:val)', controller: 'setting', action: 'show'
   patch '/:username/setting/profile', controller: 'setting', action: 'profile'
   post '/:username/setting/account/email/add', controller: 'setting', action: 'account_email_add'
   delete '/:username/setting/account/email/delete/:id', controller: 'setting', action: 'account_email_delete'

@@ -19,6 +19,7 @@ class UsersController < ApplicationController
     User.transaction do
       begin
         User.save_user_and_mail @user, Email.new(email_params)
+        redirect_to '/' + @user.username
       rescue
         raise ActiveRecord::Rollback, 'Can register the account!'
       end
