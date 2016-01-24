@@ -7,14 +7,16 @@
 						<small>The principal email receive all the notifications.</small>
 						<table class="table table-hover">
 							<colgroup>
-								<col class="col-xs-7">
+								<col class="col-xs-6">
 								<col class="col-xs-2">
-								<col class="col-xs-1">
+								<col class="col-xs-2">
+								<col class="col-xs-2">
 							</colgroup>
 							<thead>
 							<tr>
 								<th>Email</th>
 								<th>Principal</th>
+								<th>Verify</th>
 								<th></th>
 							</tr>
 							</thead>
@@ -23,15 +25,20 @@
 							<tr>
 								<td><%= email.email%></td>
 								<td><%if email.principal? %><i class="fa fa-check"></i><%end%></td>
+								<td><%if email.checked? %><i class="fa fa-check"></i><%end%></td>
 								<td>
 									<%unless email.principal? %>
-										<%= link_to '/' + current_user.username + '/setting/account/email/principal/' + email.id.to_s,
-																class: 'clear-background' do %>
-											<i class="fa fa-check-circle-o fa-2x"></i>
+										<%if email.checked?%>
+											<%= link_to '/' + current_user.username + '/setting/account/email/principal/' + email.id.to_s,
+																	class: 'clear-background' do %>
+												<i class="fa fa-check-circle-o fa-2x" title="Check like principal"></i>
+											<%end%>
+										<%else%>
+											<i class="fa fa-check-circle-o fa-2x" title="Do you need verify the email first"></i>
 										<%end%>
 										<%= link_to '/' + current_user.username + '/setting/account/email/delete/' + email.id.to_s,
 																method: :delete, class: 'clear-background' do %>
-											<i class="fa fa-trash fa-2x"></i>
+											<i class="fa fa-trash fa-2x" title="Delete the email"></i>
 										<%end%>
 									<%end%>
 								</td>

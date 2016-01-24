@@ -14,7 +14,7 @@ class Email < ActiveRecord::Base
   #
   def self.principal(user_id, email_id)
     email = Email.where(id: email_id).where(user_id: user_id).take
-    return if email.nil? || email.principal?
+    return if email.nil? || email.principal? || !email.checked?
 
     # find principal an check like unprincipal
     Email.unprincipal(user.id)
