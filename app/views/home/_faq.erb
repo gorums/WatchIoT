@@ -1,25 +1,52 @@
 <div class="with-gradient" id="faq">
 	<div class="started-session">
 		<div class="row value-props">
-			<h1 class="col-lg-12">Frequently Asked Questions</h1>
-			<div class="faq-padding">
-				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-					<% @faqs.each do |faq| %>
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" id="heading<%= faq.id %>">
-							<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= faq.id %>" aria-expanded="false" aria-controls="collapse<%= faq.id %>">
-								<h4 class="panel-title text-left"><%= faq.question %></h4>
-							</a>
-						</div>
-						<div id="collapse<%= faq.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= faq.id %>">
-							<div class="panel-body">
-								<%= faq.answer %>
-							</div>
-						</div>
-					</div>
-					<% end %>
+			<h1>WatchIoT FAQ</h1>
+			<div id="faq-format">
+				<ul class="col-lg-6 text-left">
+					<li>
+						<h3><%= @faqs[0].question%></h3>
+						<p><%= raw @faqs[0].answer%></p>
+					</li>
+
+					<li>
+						<h3><%= @faqs[1].question%></h3>
+						<p><%= raw @faqs[1].answer%></p>
+					</li>
+
+					<li>
+						<h3><%= @faqs[2].question%></h3>
+						<p><%= raw @faqs[2].answer%></p>
+					</li>
+
+					<li>
+						<h3><%= @faqs[3].question%></h3>
+						<p><%= raw @faqs[3].answer%></p>
+					</li>
+				</ul>
+
+				<ul class="col-lg-6 text-left">
+					<li>
+						<h3><%= @faqs[4].question%></h3>
+						<p><%= raw @faqs[4].answer%></p>
+					</li>
+
+					<li>
+						<h3><%= @faqs[5].question%></h3>
+						<p><%= raw @faqs[5].answer%></p>
+					</li>
+
+					<li>
+						<h3><%= @faqs[6].question%></h3>
+						<p><%= raw @faqs[6].answer%></p>
+					</li>
+
+					<li>
+						<h3><%= @faqs[7].question%></h3>
+						<p><%= raw @faqs[7].answer%></p>
+					</li>
+				</ul>
 				</div>
 			</div>
-		</div><!-- /.row -->
-	</div>
+		</div>
 </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130195954) do
+ActiveRecord::Schema.define(version: 20160123185543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,13 @@ ActiveRecord::Schema.define(version: 20151130195954) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "descrips", force: :cascade do |t|
+    t.string "description"
+    t.string "icon"
+    t.string "lang",        default: "en"
+    t.string "title"
+  end
+
   create_table "emails", force: :cascade do |t|
     t.string   "email"
     t.boolean  "principal",  default: false
@@ -67,9 +74,9 @@ ActiveRecord::Schema.define(version: 20151130195954) do
   add_index "emails", ["user_id"], name: "index_emails_on_user_id", using: :btree
 
   create_table "faqs", force: :cascade do |t|
-    t.string  "question"
-    t.string  "answer"
-    t.integer "order"
+    t.string "question"
+    t.string "answer"
+    t.string "lang",     default: "en"
   end
 
   create_table "features", force: :cascade do |t|
@@ -78,7 +85,7 @@ ActiveRecord::Schema.define(version: 20151130195954) do
 
   create_table "logs", force: :cascade do |t|
     t.text     "description"
-    t.string   "action",         limit: 15
+    t.string   "action",         limit: 20
     t.integer  "user_id"
     t.integer  "user_action_id"
     t.datetime "created_at",                null: false
@@ -296,7 +303,7 @@ ActiveRecord::Schema.define(version: 20151130195954) do
   add_index "teams", ["user_team_id"], name: "index_teams_on_user_team_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",               limit: 15
+    t.string   "username",               limit: 45
     t.string   "first_name",             limit: 15
     t.string   "last_name",              limit: 15
     t.string   "address"

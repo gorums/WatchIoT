@@ -6,7 +6,8 @@ class HomeController < ApplicationController
   # Get /
   #
   def index
-    @faqs = Faq.all
+    @faqs = Faq.where(lang: 'en').all
+    @descrips = Descrip.where(lang: 'en').all
     @contactus = ContactUs.new
   end
 

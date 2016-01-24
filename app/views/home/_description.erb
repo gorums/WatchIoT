@@ -1,38 +1,40 @@
 <div class="with-gradient">
 	<div class="started-session">
 		<div class="row value-props">
+
 			<div class="col-lg-4 text-center animated fadeInLeft">
-				<%= icon('cubes', '', class: 'fa-3x') %>
-				<h2 class="value-prop-heading">Multiplatform</h2>
-				<p>You can monitor different platforms, like the resources of your server on linux, windows or any application in the cloud and the smart devices (Internet of Thing).</p>
+				<%= icon(@descrips[0].icon , '', class: 'fa-3x') %>
+				<h2 class="value-prop-heading"><%= @descrips[0].title%></h2>
+				<p><%= raw @descrips[0].description%></p>
 			</div><!-- /.col-lg-4 -->
 			<div class="col-lg-4 text-center  animated fadeIn">
-				<%= icon('cog', '', class: 'fa-3x') %>
-				<h2 class="value-prop-heading">Configurable</h2>
-				<p>The power of Watch IoT is whole configurable, you can configure what server or resource you will monitor, what parameters you will receive and when the system will throw an alert for you.</p>
+				<%= icon(@descrips[1].icon, '', class: 'fa-3x') %>
+				<h2 class="value-prop-heading"><%= @descrips[1].title%></h2>
+				<p><%= raw @descrips[1].description%></p>
 			</div><!-- /.col-lg-4 -->
 			<div class="col-lg-4 text-center animated fadeInRight">
-				<%= icon('envelope', '', class: 'fa-3x') %>
-				<h2 class="value-prop-heading">Notification</h2>
-				<p>The notifications via email and sms are in real time about what is happened with your services or resources. Feel secure, you have all under control and you can sleep relaxing we are going to stay alert for you.</p>
+				<%= icon(@descrips[2].icon, '', class: 'fa-3x') %>
+				<h2 class="value-prop-heading"><%= @descrips[2].title%></h2>
+				<p><%= raw @descrips[2].description%></p>
 			</div><!-- /.col-lg-4 -->
 		</div><!-- /.row -->
 		<div class="row value-props">
 			<div class="col-lg-4 text-center animated fadeInRight">
-				<%= icon('arrows-h', '', class: 'fa-3x') %>
-				<h2 class="value-prop-heading">Bidirectional</h2>
-				<p>Watch IoT can request your services or you services can request Watch IoT, dependent your necessities. You can specify period of time when send the request you services or who you expect for the request.</p>
+				<%= icon(@descrips[3].icon, '', class: 'fa-3x') %>
+				<h2 class="value-prop-heading"><%= @descrips[3].title%></h2>
+				<p><%= raw @descrips[3].description%></p>
 			</div><!-- /.col-lg-4 -->
 			<div class="col-lg-4 text-center animated fadeInRight">
-				<%= icon('code', '', class: 'fa-3x') %>
-				<h2 class="value-prop-heading">Scripting</h2>
-				<p>You have two way of parser the request/response. Using configured params or can create scripting to parse your values. You can take decision using the scripts about who would be notified.</p>
+				<%= icon(@descrips[4].icon, '', class: 'fa-3x') %>
+				<h2 class="value-prop-heading"><%= @descrips[4].title%></h2>
+				<p><%= raw @descrips[4].description%></p>
 			</div><!-- /.col-lg-4 -->
 			<div class="col-lg-4 text-center animated fadeInRight">
-				<%= icon('area-chart', '', class: 'fa-3x') %>
-				<h2 class="value-prop-heading">Charting</h2>
-				<p>All history data can be shown using charting and you can see how your services have worked. The charting always is a great tool for understand health of your services and resources.</p>
+				<%= icon(@descrips[5].icon, '', class: 'fa-3x') %>
+				<h2 class="value-prop-heading"><%= @descrips[5].title%></h2>
+				<p><%= raw @descrips[5].description%></p>
 			</div><!-- /.col-lg-4 -->
+
 		</div><!-- /.row -->
 	</div>
 </div>

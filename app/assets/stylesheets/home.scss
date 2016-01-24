@@ -149,6 +149,19 @@ footer > .inner-footer a:hover {
   margin-bottom: 30px;
 }
 
+ul {
+  list-style-type: none;
+}
+#faq-format {
+  margin-top: 10px;
+  padding: 0 80px;
+  text-align: left;
+  width: 100%;
+}
+
+#faq-format ul:nth-child(2n+1) {
+  padding-right: 50px;
+}
 .intro-image {
   text-align: center;
 }
