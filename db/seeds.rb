@@ -153,14 +153,14 @@ Descrip.create(
 
 Descrip.create(
     title: 'Configurable',
-    description: 'El poder de <strong>WatchIoT</strong> radica en que todo es configurable e incre&iacute;blemente simple. Usted configura que servidor, terminal, recurso o servicio desea monitorear, de que par&aacute;metros debe recibir y procesar adem&aacute;s de a qu&iacute;en debe notificar.',
+    description: 'El poder de <strong>WatchIoT</strong> radica en que todo es configurable e incre&iacute;blemente simple. Usted configura que servidor, terminal, recurso o servicio desea monitorear.',
     icon: 'cog',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Configurable',
-    description: 'The power of <strong>WatchIoT</strong> is that everything is configurable and incredibly simple. You configure that server, terminal, resource or service you want to monitor, you must receive and process parameters besides whom to notify if the case warrants.',
+    description: 'The power of <strong>WatchIoT</strong> is that everything is configurable and incredibly simple. You configure that server, terminal, resource or service you want to monitor.',
     icon: 'cog',
     lang: 'en'
 )
@@ -181,14 +181,14 @@ Descrip.create(
 
 Descrip.create(
     title: 'Bidireccional',
-    description: '<strong>WatchIoT</strong> puede realizar las peticiones <strong>HTTP</strong> a sus servicios o sus servicios pueden enviarnos peticiones <strong>HTTP</strong> a nosotros, en dependencia de sus necesidades. Usted puede especificar los intervalos de tiempo cuando realizar o espera recibir las peticiones <strong>HTTP</strong>.',
+    description: '<strong>WatchIoT</strong> puede realizar las peticiones <strong>HTTP</strong> a sus servicios o sus servicios pueden enviarnos peticiones <strong>HTTP</strong> a nosotros, en dependencia de sus necesidades.',
     icon: 'arrows-h',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Bidirectional',
-    description: '<strong>WatchIoT</strong> can make <strong>HTTP</strong> requests their services or their services may send <strong>HTTP</strong> requests to us, depending on your needs. You can specify the intervals of time when making or expects to receive <strong>HTTP</strong> requests.',
+    description: '<strong>WatchIoT</strong> can make <strong>HTTP</strong> requests their services or their services may send <strong>HTTP</strong> requests to us, depending on your needs.',
     icon: 'arrows-h',
     lang: 'en'
 )
