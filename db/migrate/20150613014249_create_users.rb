@@ -5,8 +5,8 @@ class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
       t.string :username, limit: 45
-      t.string :first_name, limit: 15
-      t.string :last_name, limit: 15
+      t.string :first_name, limit: 25
+      t.string :last_name, limit: 35
       t.string :address
       t.string :country_code, limit: 3
       t.string :phone, limit: 15

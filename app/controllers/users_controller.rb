@@ -38,6 +38,18 @@ class UsersController < ApplicationController
   end
 
   ##
+  # Get /do_login_omniauth
+  # Login with omniauth
+  #
+  def do_login_omniauth
+    auth = request.env['omniauth.auth']
+    user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
+
+    cookies[:auth_token] = user.auth_token
+    redirect_to '/' + user.username
+  end
+
+  ##
   # POST /do_login
   #
   def do_login

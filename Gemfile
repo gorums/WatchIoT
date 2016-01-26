@@ -17,6 +17,12 @@ gem 'bootstrap-tagsinput-rails'
 # Use boostrap form on rails
 gem 'bootstrap_form'
 
+# Use to set environment variables
+gem 'figaro'
+
+# Github register
+gem 'omniauth-github'
+
 gem 'autoprefixer-rails'
 # Use awesome font icon
 gem 'font-awesome-sass', '~> 4.3.0'

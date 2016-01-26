@@ -49,6 +49,7 @@ class User < ActiveRecord::Base
   # This method try to authenticate the client
   #
   def self.authenticate(email, passwd)
+    return if passwd.empty?
     # find by email
     user_email = Email.find_by_email(email)
 
@@ -58,6 +59,26 @@ class User < ActiveRecord::Base
 
     return user if user && user.status? &&
         user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
+  end
+
+  ##
+  # Register with omniauth
+  #
+  def self.create_with_omniauth(auth)
+    user = User.new
+    user.provider = auth['provider']
+    user.uid = auth['uid']
+    user.first_name = first_name(auth['info']['name'])
+    user.last_name = last_name(auth['info']['name'])
+    user.username = auth['info']['nickname']
+    passwd = generate_passwd
+    user.passwd = passwd
+    user.passwd_confirmation = passwd
+
+    email = Email.new
+    email.email = auth['info']['email']
+    save_user_and_mail user, email
+    user
   end
 
   ##
@@ -160,5 +181,31 @@ class User < ActiveRecord::Base
   def username_format
     username.gsub! /[^0-9a-z ]/i, '_'
     username.downcase!
+  end
+
+  private
+
+  ##
+  # Generate a randow password
+  #
+  def self.generate_passwd
+    # TODO: DOIT
+    '12345678901'
+  end
+
+  ##
+  # Split first name
+  #
+  def self.first_name(name)
+    # TODO: DOIT
+    'Alejandro'
+  end
+
+  ##
+  # Split last name
+  #
+  def self.last_name(name)
+    # TODO: DOIT
+    'Ferrandiz'
   end
 end

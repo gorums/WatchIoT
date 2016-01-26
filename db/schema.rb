@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160124084424) do
+ActiveRecord::Schema.define(version: 20160126044436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,8 +305,8 @@ ActiveRecord::Schema.define(version: 20160124084424) do
 
   create_table "users", force: :cascade do |t|
     t.string   "username",               limit: 45
-    t.string   "first_name",             limit: 15
-    t.string   "last_name",              limit: 15
+    t.string   "first_name",             limit: 25
+    t.string   "last_name",              limit: 25
     t.string   "address"
     t.string   "country_code",           limit: 3
     t.string   "phone",                  limit: 15
@@ -319,6 +319,8 @@ ActiveRecord::Schema.define(version: 20160124084424) do
     t.integer  "api_key_id"
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["api_key_id"], name: "index_users_on_api_key_id", using: :btree
