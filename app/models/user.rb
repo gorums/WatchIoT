@@ -189,23 +189,23 @@ class User < ActiveRecord::Base
   # Generate a randow password
   #
   def self.generate_passwd
-    # TODO: DOIT
-    '12345678901'
+    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
+    password = ''
+    10.times { password << chars[rand(chars.size)] }
+    password
   end
 
   ##
   # Split first name
   #
   def self.first_name(name)
-    # TODO: DOIT
-    'Alejandro'
+    name.split(' ').first
   end
 
   ##
   # Split last name
   #
   def self.last_name(name)
-    # TODO: DOIT
-    'Ferrandiz'
+    name.split(' ', 2).last
   end
 end
