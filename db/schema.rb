@@ -306,7 +306,7 @@ ActiveRecord::Schema.define(version: 20160126044436) do
   create_table "users", force: :cascade do |t|
     t.string   "username",               limit: 45
     t.string   "first_name",             limit: 25
-    t.string   "last_name",              limit: 25
+    t.string   "last_name",              limit: 35
     t.string   "address"
     t.string   "country_code",           limit: 3
     t.string   "phone",                  limit: 15

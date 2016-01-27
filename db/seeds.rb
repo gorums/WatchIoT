@@ -58,22 +58,22 @@ PlanFeature.create(plan_id: 4, feature_id: 6, value: 'unlimited')
 # Faq static values
 Faq.create(
     question: 'Que nos trae WatchIoT',
-    answer: '<strong>WatchIot</strong> es un servicio de monitoreo, que nos permite tener conocimiento en tiempo real si nuestros servicios presentan alg&uacute;n  comportamiento an&oacute;malo  o no deseado.',
+    answer: '<mark>WatchIot</mark> es un servicio de monitoreo, que nos permite tener conocimiento en tiempo real si nuestros servicios presentan alg&uacute;n  comportamiento an&oacute;malo  o no deseado.',
     lang: 'es')
 
 Faq.create(
     question: 'Which brings us WatchIoT?',
-    answer: '<strong>WatchIot</strong> is a monitoring service that allows us to know in real time if our services they have some anomalous behavior or unwanted.',
+    answer: '<mark>WatchIot</mark> is a monitoring service that allows us to know in real time if our services they have some anomalous behavior or unwanted.',
     lang: 'en')
 
 Faq.create(
     question: 'Es WatchIoT gratis?',
-    answer: '<strong>WatchIot</strong> es absolutamente gratis.',
+    answer: '<mark>WatchIot</mark> es absolutamente gratis.',
     lang: 'es')
 
 Faq.create(
     question: 'Is WatchIoT free',
-    answer: '<strong>WatchIot</strong> is absolutely free.',
+    answer: '<mark>WatchIot</mark> is absolutely free.',
     lang: 'en')
 
 Faq.create(
@@ -128,81 +128,81 @@ Faq.create(
 
 Faq.create(
     question: 'Que tipo de notificaciones recibo?',
-    answer: 'Usted recibir&aacute; notificaciones en tiempo real v&iacute;a email, adem&aacute;s de poder configurar <strong>WebHooks</strong> como forma de notificaci&oacute;n.',
+    answer: 'Usted recibir&aacute; notificaciones en tiempo real v&iacute;a email, adem&aacute;s de poder configurar <mark>WebHooks</mark> como forma de notificaci&oacute;n.',
     lang: 'es')
 
 Faq.create(
     question: 'What kind of reports I get?',
-    answer: 'You will receive notifications in real time via email, plus you can set <strong>WebHooks</strong> as a form of notification.',
+    answer: 'You will receive notifications in real time via email, plus you can set <mark>WebHooks</mark> as a form of notification.',
     lang: 'en')
 
 # Project descriptions static values
 Descrip.create(
     title: 'Multiplataforma',
-    description: 'Usted puede monitorear diferentes plataformas, como <strong>Linux, Mac o Windows</strong> e incluso puede monitorear sus servicios en la nube, adem&aacute;s de dispositivos IoT (Internet de las cosas).',
+    description: 'Usted puede monitorear diferentes plataformas, como <mark>Linux, Mac o Windows</mark> e incluso puede monitorear sus servicios en la nube, adem&aacute;s de dispositivos IoT (Internet de las cosas).',
     icon: 'cubes',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Multiplatform',
-    description: 'You can monitor various platforms, including <strong>Linux, Mac or Windows</strong> and can even monitor your cloud services, in addition to IoT devices (Internet of Things).',
+    description: 'You can monitor various platforms, including <mark>Linux, Mac or Windows</mark> and can even monitor your cloud services, in addition to IoT devices (Internet of Things).',
     icon: 'cubes',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Configurable',
-    description: 'El poder de <strong>WatchIoT</strong> radica en que todo es configurable e incre&iacute;blemente simple. Usted configura que servidor, terminal, recurso o servicio desea monitorear.',
+    description: 'El poder de <mark>WatchIoT</mark> radica en que todo es configurable e incre&iacute;blemente simple. Usted configura que servidor, terminal, recurso o servicio desea monitorear.',
     icon: 'cog',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Configurable',
-    description: 'The power of <strong>WatchIoT</strong> is that everything is configurable and incredibly simple. You configure that server, terminal, resource or service you want to monitor.',
+    description: 'The power of <mark>WatchIoT</mark> is that everything is configurable and incredibly simple. You configure that server, terminal, resource or service you want to monitor.',
     icon: 'cog',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Notificacion',
-    description: 'Las notificaciones son v&iacute;a email y <strong>WebHooks</strong> en tiempo real. Quedese tranquilo, usted tiene todo bajo control ya puede dormir relajado, nosotros vamos a estar alerta por usted.',
+    description: 'Las notificaciones son v&iacute;a email y <mark>WebHooks</mark> en tiempo real. Quedese tranquilo, usted tiene todo bajo control ya puede dormir relajado, nosotros vamos a estar alerta por usted.',
     icon: 'envelope',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Notification',
-    description: 'Notifications are <strong>WebHooks</strong> via email and in real time. Feel safe, you have everything under control and can sleep relaxed we will be alert for you.',
+    description: 'Notifications are <mark>WebHooks</mark> via email and in real time. Feel safe, you have everything under control and can sleep relaxed we will be alert for you.',
     icon: 'envelope',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Bidireccional',
-    description: '<strong>WatchIoT</strong> puede realizar las peticiones <strong>HTTP</strong> a sus servicios o sus servicios pueden enviarnos peticiones <strong>HTTP</strong> a nosotros, en dependencia de sus necesidades.',
+    description: '<mark>WatchIoT</mark> puede realizar las peticiones <mark>HTTP</mark> a sus servicios o sus servicios pueden enviarnos peticiones <mark>HTTP</mark> a nosotros, en dependencia de sus necesidades.',
     icon: 'arrows-h',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Bidirectional',
-    description: '<strong>WatchIoT</strong> can make <strong>HTTP</strong> requests their services or their services may send <strong>HTTP</strong> requests to us, depending on your needs.',
+    description: '<mark>WatchIoT</mark> can make <mark>HTTP</mark> requests their services or their services may send <mark>HTTP</mark> requests to us, depending on your needs.',
     icon: 'arrows-h',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Scripting',
-    description: 'Usted tiene dos formas de procesar los datos recopilados de sus servicios y tomar decisiones de notificar o no. Configur&aacute;ndolo por formulario o utilizando un lenguaje propio de scripting, enfocado en condicionales.',
+    description: 'Usted tiene dos formas de procesar los datos recopilados de sus servicios y tomar decisiones de notificar o no. Configur&aacute;ndolo por formulario o utilizando un lenguaje de scripting.',
     icon: 'code',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Scripting',
-    description: 'You have two ways of processing the data collected by its services and decide whether or not to notify. Form or setting it by using a proprietary scripting language focused on conditional.',
+    description: 'You have two ways of processing the data collected by its services and decide whether or not to notify. Form or setting it by using a scripting language.',
     icon: 'code',
     lang: 'en'
 )
