@@ -85,4 +85,16 @@ class ApplicationController < ActionController::Base
                   user_id: owner_user_id, user_action_id: current_user.id
     log.save
   end
+
+  ##
+  # if the request was doing for the user login or an user team
+  #
+  def find_owner
+    user = User.find_by_username(params[:username]) || not_found
+    return user if auth? && current_user.username == user.username
+    return user if Team.where(user_id: current_user.id).where(user_id_team: user.id).any?
+
+    redirect_to :root
+    nil
+  end
 end

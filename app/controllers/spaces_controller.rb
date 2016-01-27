@@ -22,7 +22,7 @@ class SpacesController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    @space = find_space user
     @project = Project.new
   end
 
@@ -49,7 +49,7 @@ class SpacesController < ApplicationController
   def edit
     user = find_owner
     return if user.nil?
-    @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    @space = find_space user
 
     save_log 'Edit the space <b>' + @space.name + '</b>',
                'Edit Space', user.id if @space.update(space_edit_params)
@@ -65,7 +65,7 @@ class SpacesController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    @space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    @space = find_space user
     @teams = Team.where(user_id: user.id)
   end
 
@@ -76,8 +76,9 @@ class SpacesController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    space = find_space user
     old_name = space.name
+
     save_log 'Change name space ' + old_name + ' by ' + space.name,
              'Setting Space', current_user.id if space.update(space_params)
 
@@ -90,10 +91,10 @@ class SpacesController < ApplicationController
   def transfer
     user = find_owner
     return if user.nil?
+    return unless my_team? user
 
-    space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    space = find_space user
     user_id_team = params[:team_id]
-    return unless Team.where(user_id: user.id).where(user_team_id: user_id_team).any?
 
     save_log 'Change the owner of space ' + space.name + ' to ' + user_email(user_id_team),
              'Setting Space', current_user.id if space.update!(user_id: user_id_team)
@@ -110,8 +111,9 @@ class SpacesController < ApplicationController
 
     # TODO: verify if exist project for tis space
 
-    space = Space.where(user_id: user.id, name: params[:spacename]).first || not_found
+    space = find_space user
     space.destroy!
+    
     save_log 'Delete name space',
              'Setting Space', current_user.id if space.destroyed?
 
@@ -135,14 +137,16 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # if the request was doing for the user login or an user team
+  # If is one of my team users
   #
-  def find_owner
-    user = User.find_by_username(params[:username]) || not_found
-    return user if auth? && current_user.username == user.username
-    return user if Team.where(user_id: user.id).where(user_team_id: current_user.id).any?
+  def my_team?(user)
+    Team.where(user_id: user.id).where(user_team_id: params[:team_id]).any?
+  end
 
-    redirect_to :root
-    nil
+  ##
+  # Get space to transfer
+  #
+  def find_space(user)
+    Space.where(user_id: user.id).where(name: params[:spacename]).first || not_found
   end
 end
