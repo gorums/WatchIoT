@@ -19,15 +19,15 @@ class UsersController < ApplicationController
     User.transaction do
       begin
         User.save_user_and_mail @user, Email.new(email_params)
-        redirect_to '/' + @user.username
+        Notifier.send_signup_email(@user, email_params[:email]).deliver_later
       rescue
         raise ActiveRecord::Rollback, 'Can register the account!'
       end
     end
 
     # whether register fine, im going to login in the same time
-    cookies[:auth_token] = @user.auth_token
-    redirect_to root_url
+    # cookies[:auth_token] = @user.auth_token
+    render 'register'
   end
 
   ##

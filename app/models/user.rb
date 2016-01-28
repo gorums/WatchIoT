@@ -51,14 +51,14 @@ class User < ActiveRecord::Base
   def self.authenticate(email, passwd)
     return if passwd.empty?
     # find by email
-    user_email = Email.find_by_email(email)
+    user_email = Email.where(email: email).where(principal: true).take
 
-    user = user_email.user if user_email && user_email.user
+    user = user_email.user unless user_email.nil?
     # else find by username
-    user = User.find_by_username(email) unless user
+    user = User.find_by_username(email) unless user_email.nil?
+    return unless user.nil?
 
-    return user if user && user.status? &&
-        user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
+    user if user.status? && user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
   end
 
   ##
@@ -77,7 +77,7 @@ class User < ActiveRecord::Base
 
     email = Email.new
     email.email = auth['info']['email']
-    save_user_and_mail user, email
+    save_user_and_mail user, email, true
     user
   end
 
@@ -124,10 +124,13 @@ class User < ActiveRecord::Base
   ##
   # Save user and email routine
   #
-  def self.save_user_and_mail(user, email)
+  def self.save_user_and_mail(user, email, checked = false)
+    user.status = checked
     user.save!
+
+    email.checked = checked
+    email.principal = checked
     email.user_id = user.id
-    email.principal = true
     email.save!
   end
 
