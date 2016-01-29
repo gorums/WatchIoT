@@ -14,9 +14,9 @@ class UsersController < ApplicationController
   # Get /verify
   #
   def verify
-    verifyClient = VerifyClient.find_by_token params[:id] || not_found
-    email = Email.email_to_activate verifyClient.user_id, verifyClient.data || not_found
-    user = User.find_by_id verifyClient.user_id || not_found
+    verifyClient = VerifyClient.find_by_token(params[:id]) || not_found
+    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
+    user = User.where(id: verifyClient.user_id).take || not_found
 
     User.active_account user, email, verifyClient
 

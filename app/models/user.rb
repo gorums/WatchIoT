@@ -2,8 +2,7 @@
 # User model
 #
 class User < ActiveRecord::Base
-  attr_accessor :passwd_confirmation
-  attr_accessor :passwd_new
+  attr_accessor :passwd_confirmation, :passwd_new
 
   has_many :emails
   has_many :spaces
@@ -42,7 +41,6 @@ class User < ActiveRecord::Base
     assign_plan
   end
 
-  before_save :encrypt_password
   before_save :username_format
 
   ##
@@ -71,9 +69,7 @@ class User < ActiveRecord::Base
     user.first_name = first_name(auth['info']['name'])
     user.last_name = last_name(auth['info']['name'])
     user.username = auth['info']['nickname']
-    passwd = generate_passwd
-    user.passwd = passwd
-    user.passwd_confirmation = passwd
+    user.passwd = generate_passwd
 
     email = Email.new
     email.email = auth['info']['email']
@@ -110,6 +106,7 @@ class User < ActiveRecord::Base
     end
 
     user.passwd = BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt)
+    user.passwd_confirmation = user.passwd
     user.save
   end
 
@@ -118,13 +115,16 @@ class User < ActiveRecord::Base
   #
   def self.disable(user)
     user.status = false
-    user.save
+    user.save!
   end
 
   ##
   # Save user and email routine
   #
   def self.save_user_and_mail(user, email, checked = false)
+    user.passwd_salt = BCrypt::Engine.generate_salt
+    user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
+    user.passwd_confirmation = user.passwd
     user.status = checked
     user.save!
 
@@ -145,7 +145,7 @@ class User < ActiveRecord::Base
     user.status = true
     user.save!
 
-    verifyClient.destroy
+    # verifyClient.destroy
   end
 
   protected
@@ -157,16 +157,6 @@ class User < ActiveRecord::Base
     begin
       self[column] = SecureRandom.urlsafe_base64
     end while User.exists?(column => self[column])
-  end
-
-  ##
-  # This method encrypt the password using a generate salt
-  #
-  def encrypt_password
-    if passwd.present?
-      self.passwd_salt = BCrypt::Engine.generate_salt
-      self.passwd = BCrypt::Engine.hash_secret(passwd, passwd_salt)
-    end
   end
 
   ##
