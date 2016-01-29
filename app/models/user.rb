@@ -78,6 +78,37 @@ class User < ActiveRecord::Base
   end
 
   ##
+  # Find member to add the team
+  #
+  def self.find_member(email_member)
+    emails = Email.where(email: email_member).all
+
+    return create_new_member(email_member) if email.nil?
+    # if we find only one account
+    return User.find_by(id: emails[0].user_id) if emails.length == 1
+
+    # if we find more of one account, return the principal
+    email = Email.where(email: email_member).where(principal: true).take
+    return User.find_by(id: email.user_id) unless email.nil?
+  end
+
+  ##
+  # Create a new acount member
+  #
+  def self.create_new_member(email_member)
+    email = Email.new(email: email_member)
+
+    user_member = User.new
+    user_member.username = email_member
+    user_member.passwd = User.generate_passwd
+    user_member.passwd_confirmation = user_member.passwd
+    User.save_user_and_mail(user_member, email)
+
+    # TODO: send email to the new account
+    user_member
+  end
+
+  ##
   # Get the principal email
   #
   def self.email(user_id)
@@ -97,17 +128,12 @@ class User < ActiveRecord::Base
   # Change the password
   #
   def self.change_passwd(user, params)
-    if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
-      raise SecurityError 'Bad password!' # FIXED
-    end
-
-    if params[:passwd_new] != params[:passwd_confirmation]
-      raise SecurityError 'Bad confirmation!'  # FIXED
-    end
+    return if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+    return if params[:passwd_new] != params[:passwd_confirmation]
 
     user.passwd = BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt)
     user.passwd_confirmation = user.passwd
-    user.save
+    user.save?
   end
 
   ##
@@ -190,8 +216,6 @@ class User < ActiveRecord::Base
     username.downcase!
   end
 
-  private
-
   ##
   # Generate a randow password
   #
@@ -201,6 +225,9 @@ class User < ActiveRecord::Base
     10.times { password << chars[rand(chars.size)] }
     password
   end
+
+  private
+
 
   ##
   # Split first name

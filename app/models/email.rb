@@ -20,7 +20,7 @@ class Email < ActiveRecord::Base
     Email.unprincipal(user.id)
 
     email.principal = true
-    email.save
+    email.save?
   end
 
   ##

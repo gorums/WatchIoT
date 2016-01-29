@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   #
   def user_email(user_id)
     email = User.email(user_id) unless user_id.nil?
-    email.email
+    email.email unless email.nil?
   end
 
   ##

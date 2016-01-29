@@ -31,7 +31,7 @@ class SettingController < ApplicationController
     return if user.nil?
 
     save_log 'Edit the profile setting',
-             'Edit Profile', current_user.id if user.update(profile_params)
+             'Setting', current_user.id if user.update(profile_params)
 
     redirect_to '/' + user.username + '/setting'
   end
@@ -47,8 +47,8 @@ class SettingController < ApplicationController
     email.user_id = current_user.id
     email.principal = false
 
-    save_log 'Add new email',
-             'Edit Account', current_user.id if email.save
+    save_log 'Add new email <b>' + email.email + '</b>',
+             'Setting', current_user.id if email.save
 
     redirect_to '/' + current_user.username + '/setting/account'
   end
@@ -61,7 +61,10 @@ class SettingController < ApplicationController
     return if user.nil?
 
     email = Email.where(id: params[:id]).where(user_id: user.id).take
-    email.destroy unless email.nil? || email.principal?
+    return email.nil? || email.principal?
+
+    save_log 'Delete email <b>' + email.email + '</b>',
+             'Setting', current_user.id if email.destroy
 
     redirect_to '/' + current_user.username + '/setting/account'
   end
@@ -73,8 +76,8 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    Email.principal(user.id, params[:id])
-    save_log 'Set email like pincipal', 'Principal Email', current_user.id
+    save_log 'Set email like pincipal',
+             'Setting', current_user.id if Email.principal(user.id, params[:id])
 
     redirect_to '/' + current_user.username + '/setting/account'
   end
@@ -86,9 +89,8 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    User.change_passwd user, passwd_params
-
-    save_log 'Change password', 'Edit Account', current_user.id
+    save_log 'Change password', 'Setting',
+             current_user.id if User.change_passwd(user, passwd_params)
 
     redirect_to '/' + current_user.username + '/setting/account'
   end
@@ -101,8 +103,9 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    save_log 'Change username',
-             'Edit Account', current_user.id if user.update(username_params)
+    old_username = user.username
+    save_log 'Change username <b>' + old_username + '</b> by ' + params[:username],
+             'Setting', current_user.id if user.update(username_params)
 
     redirect_to '/' + user.username + '/setting/account'
   end
@@ -128,26 +131,15 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    email = Email.where(member_params).take
-    user_member = User.find_by id: email.user_id unless email.nil?
+    user_member = User.find_member(params[:email])
+    return if user_member.nil?
 
-    if email.nil?
-      email = Email.new(member_params)
-    end
+    # if exist throw exception
+    Team.where(user_id: user.id, user_team_id: user_member.id).exists?
 
-    if user_member.nil?
-      user_member = User.new
-      user_member.username = email.email
-      user_member.passwd = 'asdqwe123'
-      user_member.passwd_confirmation = 'asdqwe123'
-      User.save_user_and_mail(user_member, email)
-    end
-
-    team = Team.new
-    team.user_id = user.id
-    team.user_team_id = user_member.id
-    save_log 'Adding a new member',
-             'Update team', current_user.id if team.save
+    team = Team.new(user_id: user.id, user_team_id: user_member.id) if team.nil?
+    save_log 'Adding a new member <b>' + email.email + '</b>',
+             'Setting', current_user.id if team.save
 
     redirect_to '/' + user.username + '/setting/team'
   end
@@ -159,10 +151,11 @@ class SettingController < ApplicationController
     user = find_owner
     return if user.nil?
 
-    user_member = User.find params[:id]
+    team = Team.where(user_id: user.id)
+               .where(user_team_id: params[:id]).take || not_found
 
-    team = Team.where(user_id: user.id).where(user_team_id: user_member.id).take unless user_member.nil?
-    Team.destroy(team.id) unless team.nil?
+    save_log 'Delete a member <b>' + user_email(params[:id]) + '</b>',
+               'Setting', current_user.id if team.destroy
 
     redirect_to '/' + user.username + '/setting/team'
   end
@@ -178,10 +171,11 @@ class SettingController < ApplicationController
       api_key_uuid = SecureRandom.uuid
     end while ApiKey.exists?(:api_key => api_key_uuid)
 
-    api_key = ApiKey.find_by_id user.api_key_id;
+    api_key = ApiKey.find_by_id user.api_key_id
     api_key.api_key = api_key_uuid
+
     save_log 'Change api key',
-             'Edit Account', current_user.id if api_key.save
+             'Setting', current_user.id if api_key.save
 
     redirect_to '/' + user.username + '/setting/api'
   end

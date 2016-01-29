@@ -38,7 +38,7 @@ class SpacesController < ApplicationController
     @space.user_owner_id = current_user.id
 
     save_log 'Create the space <b>' + @space.name + '</b>',
-               'Create Space', user.id if @space.save
+               'Space', user.id if @space.save
 
     redirect_to '/' + params[:username] + '/' + @space.name
   end
@@ -52,7 +52,7 @@ class SpacesController < ApplicationController
     @space = find_space user
 
     save_log 'Edit the space <b>' + @space.name + '</b>',
-               'Edit Space', user.id if @space.update(space_edit_params)
+               'Space', user.id if @space.update(space_edit_params)
 
     @project = Project.new
     render 'show'
@@ -80,7 +80,7 @@ class SpacesController < ApplicationController
     old_name = space.name
 
     save_log 'Change name space ' + old_name + ' by ' + space.name,
-             'Setting Space', current_user.id if space.update(space_params)
+             'Space Setting', current_user.id if space.update(space_params)
 
     redirect_to '/' + user.username + '/' + space.name + '/setting'
   end
@@ -97,7 +97,7 @@ class SpacesController < ApplicationController
     user_id_team = params[:team_id]
 
     save_log 'Change the owner of space ' + space.name + ' to ' + user_email(user_id_team),
-             'Setting Space', current_user.id if space.update!(user_id: user_id_team)
+             'Space Setting', current_user.id if space.update!(user_id: user_id_team)
 
     redirect_to '/' + user.username + '/spaces'
   end
@@ -114,8 +114,8 @@ class SpacesController < ApplicationController
     space = find_space user
     space.destroy!
     
-    save_log 'Delete name space',
-             'Setting Space', current_user.id if space.destroyed?
+    save_log 'Delete name space <b>' + params[:spacename] + '</b>',
+             'Space Setting', current_user.id if space.destroyed?
 
     redirect_to '/' + user.username + '/spaces'
   end

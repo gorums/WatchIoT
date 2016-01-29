@@ -33,6 +33,7 @@ class UsersController < ApplicationController
 
     User.transaction do
       begin
+        #TODO: verificate passwd confirmation
         User.save_user_and_mail @user, Email.new(email: @email)
         token = VerifyClient.register @user.id, @email
         Notifier.send_signup_email(@user, @email, token).deliver_later
