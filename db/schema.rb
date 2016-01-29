@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126044436) do
+ActiveRecord::Schema.define(version: 20160129014352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -327,5 +327,14 @@ ActiveRecord::Schema.define(version: 20160126044436) do
   add_index "users", ["plan_id"], name: "index_users_on_plan_id", using: :btree
   add_index "users", ["status"], name: "index_users_on_status", using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+
+  create_table "verify_clients", force: :cascade do |t|
+    t.string  "token"
+    t.string  "data"
+    t.integer "user_id"
+  end
+
+  add_index "verify_clients", ["token"], name: "index_verify_clients_on_token", using: :btree
+  add_index "verify_clients", ["user_id"], name: "index_verify_clients_on_user_id", using: :btree
 
 end

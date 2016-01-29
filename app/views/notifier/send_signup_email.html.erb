@@ -4,13 +4,15 @@
 	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
 </head>
 <body>
-<h1>Thanks for signing up, <%= @user.username %>!</h1>
 
-<a href="<%= url_for(controller: 'users',
-						action: 'register',
-						only_path: false)  %>">Confirmation!</a>
+<h1>Hi <%= @user.username %>, thanks for signing up!</h1>
 
-<p>Thanks for joining and have a great day! Now sign in and do
-	awesome things!</p>
+Welcome to WatchIoT!<br/><br/>
+
+Click here to activate your WatchIoT account <%= url_for(controller: 'users',	 action: 'verify', id: @token, only_path: false)  %><br/><br/>
+
+Regards<br/><br/>
+
+WatchIoT Support
 </body>
 </html>

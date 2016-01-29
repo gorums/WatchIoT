@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   has_many :project_requests
   has_many :project_webhooks
   has_many :project_evaluators
-
+  has_many :verify_clients
   has_one :api_key
   has_one :plan
 
@@ -55,8 +55,8 @@ class User < ActiveRecord::Base
 
     user = user_email.user unless user_email.nil?
     # else find by username
-    user = User.find_by_username(email) unless user_email.nil?
-    return unless user.nil?
+    user = User.find_by_username(email) if user_email.nil?
+    return if user.nil?
 
     user if user.status? && user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
   end
@@ -132,6 +132,20 @@ class User < ActiveRecord::Base
     email.principal = checked
     email.user_id = user.id
     email.save!
+  end
+
+  ##
+  # Active the account after register and validate the email
+  #
+  def self.active_account(user, email, verifyClient)
+    email.checked = true
+    email.principal = true
+    email.save!
+
+    user.status = true
+    user.save!
+
+    verifyClient.destroy
   end
 
   protected

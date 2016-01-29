@@ -30,9 +30,21 @@ class Email < ActiveRecord::Base
     email_principal = Email.where(principal: true)
                           .where(user_id: user_id).take
 
-    unless email_principal.nil?
-      email_principal.principal = false
-      email_principal.save
-    end
+    return if email_principal.nil?
+    email_principal.principal = false
+    email_principal.save!
+  end
+
+  ##
+  # Define if the email can checked like principal
+  # TODO: throw exception if it can checked like principal becouse it is checked
+  # by other user
+  #
+  def self.email_to_activate(user_id, email)
+    emailObj = Email.find_by_email email
+    return nil if emailObj.nil?
+    return nil if emailObj.user_id != user_id && emailObj.principal?
+
+    Email.where(email: email).where(user_id: user_id).take
   end
 end

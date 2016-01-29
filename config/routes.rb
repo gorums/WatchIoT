@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   post 'register' => 'users#do_register', as: 'do_register'
   get 'register' => 'users#register', as: 'register'
+  get '/verify/:id', controller: 'users', action: 'verify'
   post 'login' => 'users#do_login', as: 'do_login'
   get '/auth/:provider/callback' => 'users#do_login_omniauth' , as: 'do_login_omniauth'
   get 'login' => 'users#login', as: 'login'

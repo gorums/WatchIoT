@@ -11,23 +11,37 @@ class UsersController < ApplicationController
   end
 
   ##
+  # Get /verify
+  #
+  def verify
+    verifyClient = VerifyClient.find_by_token params[:id] || not_found
+    email = Email.email_to_activate verifyClient.user_id, verifyClient.data || not_found
+    user = User.find_by_id verifyClient.user_id || not_found
+
+    User.active_account user, email, verifyClient
+
+    cookies[:auth_token] = user.auth_token
+    redirect_to '/' + user.username
+  end
+
+  ##
   # POST /do_register
   #
   def do_register
     @user = User.new(user_params)
+    @email = email_params[:email]
 
     User.transaction do
       begin
-        User.save_user_and_mail @user, Email.new(email_params)
-        Notifier.send_signup_email(@user, email_params[:email]).deliver_later
+        User.save_user_and_mail @user, Email.new(email: @email)
+        token = VerifyClient.register @user.id, @email
+        Notifier.send_signup_email(@user, @email, token).deliver_later
       rescue
         raise ActiveRecord::Rollback, 'Can register the account!'
       end
     end
 
-    # whether register fine, im going to login in the same time
-    # cookies[:auth_token] = @user.auth_token
-    render 'register'
+    render 'need_verify'
   end
 
   ##
