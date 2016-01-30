@@ -21,4 +21,18 @@ class Notifier < ApplicationMailer
     mail( :to => email,
           :subject => 'Transferred space for you!!')
   end
+
+  # send a new team member
+  def send_new_team_email(user, email)
+    @user = user
+    mail( :to => email,
+          :subject => 'Your belong a new team!!')
+  end
+
+  # send a new team member
+  def send_create_user_email(token, email)
+    @token = token
+    mail( :to => email,
+          :subject => 'Your belong a new team!!')
+  end
 end

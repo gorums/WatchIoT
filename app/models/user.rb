@@ -104,7 +104,8 @@ class User < ActiveRecord::Base
     user_member.passwd_confirmation = user_member.passwd
     User.save_user_and_mail(user_member, email)
 
-    # TODO: send email to the new account
+    token = VerifyClient.create_token(user_member.id, email_member, 'new_client')
+    Notifier.send_create_user_email(token, email_member)
     user_member
   end
 

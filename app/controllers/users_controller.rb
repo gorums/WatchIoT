@@ -14,7 +14,9 @@ class UsersController < ApplicationController
   # Get /verify
   #
   def verify
-    verifyClient = VerifyClient.find_by_token(params[:id]) || not_found
+    verifyClient = VerifyClient.where(token: params[:id])
+                       .where(concept: 'register').take || not_found
+
     email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
     user = User.where(id: verifyClient.user_id).take || not_found
 
@@ -36,7 +38,7 @@ class UsersController < ApplicationController
       begin
         #TODO: verificate passwd confirmation
         User.save_user_and_mail @user, Email.new(email: @email)
-        token = VerifyClient.register @user.id, @email
+        token = VerifyClient.create_token(@user.id, @email, 'register')
         Notifier.send_signup_email(@user, @email, token).deliver_later
       rescue
         raise ActiveRecord::Rollback, 'Can register the account!'

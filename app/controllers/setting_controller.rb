@@ -121,16 +121,19 @@ class SettingController < ApplicationController
   #
   def team_add
     user = find_owner
-
     user_member = User.find_member(params[:email])
     return if user_member.nil?
 
     # if exist throw exception
     Team.where(user_id: user.id, user_team_id: user_member.id).exists?
 
-    team = Team.new(user_id: user.id, user_team_id: user_member.id) if team.nil?
-    save_log 'Adding a new member <b>' + email.email + '</b>',
-             'Setting', current_user.id if team.save
+    team = Team.new(user_id: user.id, user_team_id: user_member.id)
+    if team.save
+
+      Notifier.send_new_team_email(user, params[:email]).deliver_later
+      save_log 'Adding a new member <b>' + params[:email] + '</b>',
+               'Setting', current_user.id
+    end
 
     redirect_to '/' + user.username + '/setting/team'
   end

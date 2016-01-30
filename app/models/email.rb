@@ -19,8 +19,7 @@ class Email < ActiveRecord::Base
     # find principal an check like unprincipal
     Email.unprincipal(user.id)
 
-    email.principal = true
-    email.save?
+    email.update(principal: true)
   end
 
   ##
@@ -31,8 +30,7 @@ class Email < ActiveRecord::Base
                           .where(user_id: user_id).take
 
     return if email_principal.nil?
-    email_principal.principal = false
-    email_principal.save!
+    email_principal.update(principal: false)
   end
 
   ##
