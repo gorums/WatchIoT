@@ -145,6 +145,6 @@ class SpacesController < ApplicationController
   #
   def notif_transfer_member(user, space)
     member_email = user_email(params[:team_id])
-    Notifier.send_transfer_space(user, space, member_email).deliver_later unless member_email.nil?
+    Notifier.send_transfer_space_email(user, space, member_email).deliver_later unless member_email.nil?
   end
 end

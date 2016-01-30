@@ -18,7 +18,8 @@ class UsersController < ApplicationController
     email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
     user = User.where(id: verifyClient.user_id).take || not_found
 
-    User.active_account user, email, verifyClient
+    Notifier.send_signup_verify_email(user, email).deliver_later if
+        User.active_account(user, email, verifyClient)
 
     cookies[:auth_token] = user.auth_token
     redirect_to '/' + user.username

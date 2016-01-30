@@ -164,14 +164,9 @@ class User < ActiveRecord::Base
   # Active the account after register and validate the email
   #
   def self.active_account(user, email, verifyClient)
-    email.checked = true
-    email.principal = true
-    email.save!
-
-    user.status = true
-    user.save!
-
-    # verifyClient.destroy
+    email.save(checked: true, principal: true)
+    user.save(status: true)
+    verifyClient.destroy
   end
 
   protected
