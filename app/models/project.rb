@@ -5,6 +5,9 @@ class Project < ActiveRecord::Base
   belongs_to :user
   belongs_to :space
 
+  validates_presence_of :name, on: :create
+  validates_uniqueness_of :name, scope: [:space_id, :user_id]
+
   validates :name, exclusion: { in: %w(create setting projects),
                                 message: '%{value} is reserved.' }
 
