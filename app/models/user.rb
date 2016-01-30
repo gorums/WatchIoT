@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
 
   validates :passwd, length: { minimum: 8 }
 
-  validates :username, exclusion: { in: %w(register login logout download home contact),
+  validates :username, exclusion: { in: %w(home auth register verify login logout doc price download contact),
                                     message: '%{value} is reserved.' }
 
   before_create do
@@ -227,7 +227,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
 
   ##
   # Split first name

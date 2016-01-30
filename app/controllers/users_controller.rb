@@ -56,7 +56,7 @@ class UsersController < ApplicationController
   # Get /do_login_omniauth
   # Login with omniauth
   #
-  def do_login_omniauth
+  def do_omniauth
     auth = request.env['omniauth.auth']
     user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
 
@@ -71,7 +71,8 @@ class UsersController < ApplicationController
     user = User.authenticate(params[:email], params[:passwd])
     return user_cannot_login if user.nil?
 
-    user_cookies user
+    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
+    cookies[:auth_token] = user.auth_token unless params[:remember_me]
     redirect_to '/' + user.username
   end
 
@@ -105,14 +106,6 @@ class UsersController < ApplicationController
   def user_cannot_login
     flash.now.alert = 'Invalid email or password'
     render :login
-  end
-
-  ##
-  # Cookies routine
-  #
-  def user_cookies(user)
-    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
-    cookies[:auth_token] = user.auth_token unless params[:remember_me]
   end
 
 end

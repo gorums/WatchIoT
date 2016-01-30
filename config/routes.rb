@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
+
+  get '/auth/:provider/callback' => 'users#do_omniauth' , as: 'do_omniauth'
   post 'register' => 'users#do_register', as: 'do_register'
   get 'register' => 'users#register', as: 'register'
   get '/verify/:id', controller: 'users', action: 'verify'
   post 'login' => 'users#do_login', as: 'do_login'
-  get '/auth/:provider/callback' => 'users#do_login_omniauth' , as: 'do_login_omniauth'
   get 'login' => 'users#login', as: 'login'
   get 'logout' => 'users#logout', as: 'logout'
   get 'download' => 'download#index', as: 'download'
