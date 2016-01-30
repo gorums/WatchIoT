@@ -94,7 +94,6 @@ class ApplicationController < ActionController::Base
     return user if auth? && current_user.username == user.username
     return user if Team.where(user_id: current_user.id).where(user_id_team: user.id).any?
 
-    redirect_to :root
-    nil
+    not_found
   end
 end

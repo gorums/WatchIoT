@@ -9,7 +9,6 @@ class SpacesController < ApplicationController
   #
   def index
     user = find_owner
-    return if user.nil?
 
     @space = Space.new
     @spaces = Space.where(user_id: user.id).order(created_at: :desc)
@@ -20,7 +19,6 @@ class SpacesController < ApplicationController
   #
   def show
     user = find_owner
-    return if user.nil?
 
     @space = find_space user
     @project = Project.new
@@ -31,7 +29,6 @@ class SpacesController < ApplicationController
   #
   def create
     user = find_owner
-    return if user.nil?
 
     @space = Space.new(space_params)
     @space.user_id = user.id
@@ -48,7 +45,7 @@ class SpacesController < ApplicationController
   #
   def edit
     user = find_owner
-    return if user.nil?
+
     @space = find_space user
 
     save_log 'Edit the space <b>' + @space.name + '</b>',
@@ -63,18 +60,16 @@ class SpacesController < ApplicationController
   #
   def setting
     user = find_owner
-    return if user.nil?
 
     @space = find_space user
     @teams = Team.where(user_id: user.id)
   end
 
   ##
-  # Patch /:username/:spacename/setting/chname
+  # Patch /:username/:spacename/setting/change
   #
-  def chname
+  def change
     user = find_owner
-    return if user.nil?
 
     space = find_space user
     old_name = space.name
@@ -90,11 +85,12 @@ class SpacesController < ApplicationController
   #
   def transfer
     user = find_owner
-    return if user.nil?
-    return unless my_team? user
+    # if my team member
+    not_found unless my_team? user
 
     space = find_space user
-    user_id_team = params[:team_id]
+    Space.transfer(space, params[:team_id])
+    notifier_member(user, space)
 
     save_log 'Change the owner of space ' + space.name + ' to ' + user_email(user_id_team),
              'Space Setting', current_user.id if space.update!(user_id: user_id_team)
@@ -107,8 +103,6 @@ class SpacesController < ApplicationController
   #
   def delete
     user = find_owner
-    return if user.nil?
-
     # TODO: verify if exist project for tis space
 
     space = find_space user
@@ -148,5 +142,13 @@ class SpacesController < ApplicationController
   #
   def find_space(user)
     Space.where(user_id: user.id).where(name: params[:spacename]).first || not_found
+  end
+
+  ##
+  # Notifier member for transfer space with projects
+  #
+  def notifier_member(user, space)
+    member_email = user_email(params[:team_id])
+    # Notifier.send_signup_email(user, space, member_email).deliver_later unless member_email.nil?
   end
 end

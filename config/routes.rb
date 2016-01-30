@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get '/:username/spaces', controller: 'spaces', action: 'index'
   patch '/:username/:spacename', controller: 'spaces', action: 'edit'
   get '/:username/:spacename/setting', controller: 'spaces', action: 'setting'
-  patch '/:username/:spacename/setting/chname', controller: 'spaces', action: 'chname'
+  patch '/:username/:spacename/setting/change', controller: 'spaces', action: 'change'
   delete '/:username/:spacename/setting/delete', controller: 'spaces', action: 'delete'
   patch '/:username/:spacename/setting/transfer', controller: 'spaces', action: 'transfer'
   get '/:username/:spacename', controller: 'spaces', action: 'show'

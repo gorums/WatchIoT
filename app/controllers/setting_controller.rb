@@ -9,7 +9,6 @@ class SettingController < ApplicationController
   #
   def show
     user = find_owner
-    return if user.nil?
 
     # setting emails data
     @emails = Email.where(user_id: user.id).order(principal: :desc)
@@ -28,7 +27,6 @@ class SettingController < ApplicationController
   #
   def profile
     user = find_owner
-    return if user.nil?
 
     save_log 'Edit the profile setting',
              'Setting', current_user.id if user.update(profile_params)
@@ -41,7 +39,6 @@ class SettingController < ApplicationController
   #
   def account_email_add
     user = find_owner
-    return if user.nil?
 
     email = Email.new(email_params)
     email.user_id = current_user.id
@@ -58,7 +55,6 @@ class SettingController < ApplicationController
   #
   def account_email_delete
     user = find_owner
-    return if user.nil?
 
     email = Email.where(id: params[:id]).where(user_id: user.id).take
     return email.nil? || email.principal?
@@ -74,7 +70,6 @@ class SettingController < ApplicationController
   #
   def account_email_principal
     user = find_owner
-    return if user.nil?
 
     save_log 'Set email like pincipal',
              'Setting', current_user.id if Email.principal(user.id, params[:id])
@@ -87,7 +82,6 @@ class SettingController < ApplicationController
   #
   def account_ch_password
     user = find_owner
-    return if user.nil?
 
     save_log 'Change password', 'Setting',
              current_user.id if User.change_passwd(user, passwd_params)
@@ -101,7 +95,6 @@ class SettingController < ApplicationController
   #
   def account_ch_username
     user = find_owner
-    return if user.nil?
 
     old_username = user.username
     save_log 'Change username <b>' + old_username + '</b> by ' + params[:username],
@@ -115,7 +108,6 @@ class SettingController < ApplicationController
   #
   def account_delete
     user = find_owner
-    return if user.nil?
 
     # disable user
     User.disable user
@@ -129,7 +121,6 @@ class SettingController < ApplicationController
   #
   def team_add
     user = find_owner
-    return if user.nil?
 
     user_member = User.find_member(params[:email])
     return if user_member.nil?
@@ -149,7 +140,6 @@ class SettingController < ApplicationController
   #
   def team_delete
     user = find_owner
-    return if user.nil?
 
     team = Team.where(user_id: user.id)
                .where(user_team_id: params[:id]).take || not_found
@@ -165,7 +155,6 @@ class SettingController < ApplicationController
   #
   def key_generate
     user = find_owner
-    return if user.nil?
 
     begin
       api_key_uuid = SecureRandom.uuid
@@ -223,10 +212,7 @@ class SettingController < ApplicationController
   #
   def find_owner
     user = User.find_by_username(params[:username]) || not_found
-    return user if auth? && current_user.username == user.username
-
-    redirect_to :root
-    nil
+    return user if auth? && current_user.username == user.username || not_found
   end
 
   ##

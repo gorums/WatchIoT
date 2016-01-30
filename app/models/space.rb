@@ -18,6 +18,16 @@ class Space < ActiveRecord::Base
 
   before_save :name_format
 
+  ##
+  # Transfer space and projects to this team member
+  #
+  def self.transfer(space, user_member_id)
+    space.update(user_id: user_member_id)
+    Project.where(space_id: space.id).each do |p|
+      p.update_attribute(:user_id, user_member_id)
+    end
+  end
+
   private
 
   ##
