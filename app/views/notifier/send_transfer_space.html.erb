@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+
+<h1>Hi <%= user_name(@space.user_id) %>, the space <%= @space.name %> was transferred for you!</h1>
+
+by <strong><%= @user.username %>(<%= user_email(@user.id) %>)</strong><br/><br/>
+
+WatchIoT Support
+</body>
+</html>

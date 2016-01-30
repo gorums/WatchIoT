@@ -30,10 +30,7 @@ class SpacesController < ApplicationController
   def create
     user = find_owner
 
-    @space = Space.new(space_params)
-    @space.user_id = user.id
-    @space.user_owner_id = current_user.id
-
+    @space = Space.new(space_params, user_id: user.id, user_owner_id: current_user.id)
     save_log 'Create the space <b>' + @space.name + '</b>',
                'Space', user.id if @space.save
 
@@ -47,7 +44,6 @@ class SpacesController < ApplicationController
     user = find_owner
 
     @space = find_space user
-
     save_log 'Edit the space <b>' + @space.name + '</b>',
                'Space', user.id if @space.update(space_edit_params)
 
@@ -67,13 +63,13 @@ class SpacesController < ApplicationController
 
   ##
   # Patch /:username/:spacename/setting/change
+  # Change space name
   #
   def change
     user = find_owner
 
     space = find_space user
     old_name = space.name
-
     save_log 'Change name space ' + old_name + ' by ' + space.name,
              'Space Setting', current_user.id if space.update(space_params)
 
@@ -85,12 +81,12 @@ class SpacesController < ApplicationController
   #
   def transfer
     user = find_owner
-    # if my team member
-    not_found unless my_team? user
+    # TODO: if he is not my team member, throw exception
+    not_found unless my_team?(user, params[:team_id])
 
     space = find_space user
     Space.transfer(space, params[:team_id])
-    notifier_member(user, space)
+    notif_transfer_member(user, space)
 
     save_log 'Change the owner of space ' + space.name + ' to ' + user_email(user_id_team),
              'Space Setting', current_user.id if space.update!(user_id: user_id_team)
@@ -103,9 +99,9 @@ class SpacesController < ApplicationController
   #
   def delete
     user = find_owner
-    # TODO: verify if exist project for tis space
-
     space = find_space user
+    # throw exception
+    return if Project.where(space_id: space.id).any?
     space.destroy!
     
     save_log 'Delete name space <b>' + params[:spacename] + '</b>',
@@ -133,8 +129,8 @@ class SpacesController < ApplicationController
   ##
   # If is one of my team users
   #
-  def my_team?(user)
-    Team.where(user_id: user.id).where(user_team_id: params[:team_id]).any?
+  def my_team?(user, user_team_id)
+    Team.where(user_id: user.id).where(user_team_id: user_team_id).any?
   end
 
   ##
@@ -147,8 +143,8 @@ class SpacesController < ApplicationController
   ##
   # Notifier member for transfer space with projects
   #
-  def notifier_member(user, space)
+  def notif_transfer_member(user, space)
     member_email = user_email(params[:team_id])
-    # Notifier.send_signup_email(user, space, member_email).deliver_later unless member_email.nil?
+    Notifier.send_transfer_space(user, space, member_email).deliver_later unless member_email.nil?
   end
 end
