@@ -129,7 +129,6 @@ class SettingController < ApplicationController
 
     team = Team.new(user_id: user.id, user_team_id: user_member.id)
     if team.save
-
       Notifier.send_new_team_email(user, params[:email]).deliver_later
       save_log 'Adding a new member <b>' + params[:email] + '</b>',
                'Setting', current_user.id

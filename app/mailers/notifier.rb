@@ -11,7 +11,7 @@ class Notifier < ApplicationMailer
   def send_signup_verify_email(user, email)
     @user = user
     mail( :to => email,
-          :subject => 'Transferred space for you!!')
+          :subject => 'Welcome to WatchIoT!!')
   end
 
   # send a transfer space email to the user
@@ -33,6 +33,6 @@ class Notifier < ApplicationMailer
   def send_create_user_email(token, email)
     @token = token
     mail( :to => email,
-          :subject => 'Your belong a new team!!')
+          :subject => 'Your have been invited to WatchIoT!!')
   end
 end

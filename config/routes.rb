@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   post 'register' => 'users#do_register', as: 'do_register'
   get 'register' => 'users#register', as: 'register'
   get '/verify/:id', controller: 'users', action: 'verify'
+  get '/invited/:id', controller: 'users', action: 'invited'
+  patch '/do_invited/:id', controller: 'users', action: 'do_invited'
   post 'login' => 'users#do_login', as: 'do_login'
   get 'login' => 'users#login', as: 'login'
   get 'logout' => 'users#logout', as: 'logout'

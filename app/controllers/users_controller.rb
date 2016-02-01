@@ -28,6 +28,31 @@ class UsersController < ApplicationController
   end
 
   ##
+  # Get /invited
+  #
+  def invited
+    verifyClient = VerifyClient.where(token: params[:id])
+                       .where(concept: 'invited').take || not_found
+    @user = User.where(id: verifyClient.user_id).take || not_found
+    @token = params[:id]
+  end
+
+  ##
+  # Patch /do_invited
+  #
+  def do_invited
+    verifyClient = VerifyClient.where(token: params[:id])
+                       .where(concept: 'invited').take || not_found
+    user = User.where(id: verifyClient.user_id).take || not_found
+
+    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
+    Notifier.send_signup_verify_email(user, email).deliver_later if
+        User.active_account(user, email, verifyClient)
+
+    cookies[:auth_token] = user.auth_token
+    redirect_to '/' + user.username
+  end
+  ##
   # POST /do_register
   #
   def do_register

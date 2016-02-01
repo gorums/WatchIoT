@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+
+<h1>Hi </h1>
+
+You have been invited to join a new team on Watchiot.
+
+Login here <a href="<%= url_for(controller: 'users', action: 'login', only_path: false)  %>"></a><br/><br/>
+
+and then you have access to <a href="<%= url_for(controller: 'dashboard', action: 'show', username: @user.username, only_path: false)  %>"></a>
+
+like a new member of the team
+
+WatchIoT Support
+</body>
+</html>

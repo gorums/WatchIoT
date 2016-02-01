@@ -6,8 +6,11 @@
 <body>
 
 <h1>Hi </h1>
-<%= token %>
-Regards<br/><br/>
+
+You have been invited to join Watchiot.
+
+Click here to activate your WatchIoT account <a href="<%= url_for(controller: 'users',	 action: 'invited', id: @token, only_path: false)  %>"></a><br/><br/>
+
 
 WatchIoT Support
 </body>

@@ -1,0 +1,36 @@
+<% flash.each do |key, value| %>
+    <div class="flash <%= key %>"><%= value %></div>
+<% end %>
+
+<div class="auth-form-header">
+<h1>Active the account</h1>
+</div>
+<%= form_for @user, url: '/do_invited/' + @token  do |f| %>
+	<div class="auth-form">
+		<div class="input">
+			<%= f.label :username %><br />
+			<%= f.text_field :username, class: "form-control" %>
+			<span><i class="fa fa-user fa-fw"></i></span>
+		</div>
+		<div class="input">
+			<%= f.label "Password" %><br />
+			<%= f.password_field :passwd %>
+			<span><i class="fa fa-lock"></i></span>
+		</div>
+		<div class="input">
+			<%= f.label "Password Confirmation" %><br />
+			<%= f.password_field :passwd_confirmation %>
+			<span><i class="fa fa-lock"></i></span>
+		</div>
+		<p><%= submit_tag "Active", class: "btn btn-default btn-lg active" %></p>
+
+	</div>
+<% end %>
+
+
+
+
+
+
+
+
