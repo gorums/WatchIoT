@@ -11,21 +11,30 @@ class UsersController < ApplicationController
   end
 
   ##
-  # Post /forget
+  # GET /forget
   #
   def forget
-    @email = params[:email]
-    user = Email.forget(@email) || not_found
-    token = VerifyClient.create_token(user.id, @email, 'reset')
-    Notifier.create_send_forget_pssswd_email(user, token, @email)
+    @user = current_user || User.new
+  end
+
+  ##
+  # Post /forget_notf
+  #
+  def forget_notif
+    username = params[:username]
+    user = User.find_by_username(username) || not_found
+    email = user_email(user.id)
+    # TODO: throw exception
+    return if email.nil?
+    token = VerifyClient.create_token(user.id, email, 'reset')
+    Notifier.create_send_forget_pssswd_email(user, token, email)
   end
 
   ##
   # Get /reset
   #
   def reset
-    verifyClient = VerifyClient.where(token: params[:id])
-                       .where(concept: 'reset').take || not_found
+    verifyClient = find_token(type = 'reset')
     @user = User.where(id: verifyClient.user_id).take || not_found
     @token = params[:id]
   end
@@ -34,8 +43,7 @@ class UsersController < ApplicationController
   # Patch /do_reset
   #
   def do_reset
-    verifyClient = VerifyClient.where(token: params[:id])
-                       .where(concept: 'reset').take || not_found
+    verifyClient = find_token(type = 'reset')
     user = User.where(id: verifyClient.user_id).take || not_found
 
     User.change_passwd(user, params, false)
@@ -46,8 +54,7 @@ class UsersController < ApplicationController
   # Get /verify
   #
   def verify
-    verifyClient = VerifyClient.where(token: params[:id])
-                       .where(concept: 'register').take || not_found
+    verifyClient = find_token(type = 'verify')
 
     email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
     user = User.where(id: verifyClient.user_id).take || not_found
@@ -63,8 +70,7 @@ class UsersController < ApplicationController
   # Get /invited
   #
   def invited
-    verifyClient = VerifyClient.where(token: params[:id])
-                       .where(concept: 'invited').take || not_found
+    verifyClient = find_token(type = 'invited')
     @user = User.where(id: verifyClient.user_id).take || not_found
     @token = params[:id]
   end
@@ -73,11 +79,11 @@ class UsersController < ApplicationController
   # Patch /do_invited
   #
   def do_invited
-    verifyClient = VerifyClient.where(token: params[:id])
-                       .where(concept: 'invited').take || not_found
-    user = User.where(id: verifyClient.user_id).take || not_found
+    verifyClient = find_token(type = 'invited')
 
     email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
+    user = User.where(id: verifyClient.user_id).take || not_found
+
     Notifier.send_signup_verify_email(user, email).deliver_later if
         User.active_account(user, email, verifyClient)
 
@@ -102,7 +108,7 @@ class UsersController < ApplicationController
       end
     end
 
-    render 'need_verify'
+    render 'need_verify_notif'
   end
 
   ##
@@ -168,4 +174,11 @@ class UsersController < ApplicationController
     render :login
   end
 
+  ##
+  # Get a token
+  #
+  def find_token(type)
+    VerifyClient.where(token: params[:token])
+        .where(concept: type).take || not_found
+  end
 end

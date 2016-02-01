@@ -19,8 +19,11 @@
         </div>
         <div class="checkbox-inline">
             <label class="checkbox"><%= check_box_tag :remember_me, 1, params[:remember_me] %>Remember me</label>
+						<a href="/forget">I forget my password</a>
         </div>
+
         <p><%= submit_tag "Log in", class: "btn btn-default btn-lg active" %></p>
+
 				<br />
 				<p><%= link_to  'auth/github', class: "btn btn-primary btn-lg active" do%>
 					<i class="fa fa-github-square fa-1x"></i> Log in with Github

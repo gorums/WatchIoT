@@ -1,7 +1,22 @@
 <div class="container register-height">
 	<div class="jumbotron">
-		<h2>Forget the password!</h2>
-		<p>An email has been sent to <mark><%= @email %></mark>. Please click to the restore
-			link to reset your password.</p>
+		<h2>Resent the password!</h2>
+		<p>We send the email to the principal email.
+			For security purposes, we can only resend to the principal email account this account.
+			Under certain circumstances,
+			we can resend the principal email to a alternate email account, but you would need to contact support.
+		</p>
+
+		<%= form_for @user, url: '/forget_notif'  do |f| %>
+			<div class="auth-form">
+				<div class="input">
+					<%= f.label :username %><br />
+					<%= f.text_field :username, class: "form-control" %>
+					<span><i class="fa fa-user fa-fw"></i></span>
+				</div>
+				<p><%= submit_tag "Send", class: "btn btn-default btn-lg active" %></p>
+
+			</div>
+		<% end %>
 	</div>
 </div>
