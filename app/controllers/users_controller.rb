@@ -11,6 +11,16 @@ class UsersController < ApplicationController
   end
 
   ##
+  # Post /forget
+  #
+  def forget
+    @email = params[:email]
+    user = Email.forget(@email) || not_found
+    token = VerifyClient.create_token(user.id, @email, 'reset')
+    Notifier.create_send_forget_pssswd_email(user, token, @email)
+  end
+
+  ##
   # Get /reset
   #
   def reset

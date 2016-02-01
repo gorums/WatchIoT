@@ -23,6 +23,14 @@ class Email < ActiveRecord::Base
   end
 
   ##
+  # I forget my password process
+  #
+  def self.forget(email)
+    email = Email.where(email: email).where(principal: true).take
+    return email.user unless email.nil?
+  end
+
+  ##
   # Find the principal email for this user and set it like not principal
   #
   def self.unprincipal(user_id)
