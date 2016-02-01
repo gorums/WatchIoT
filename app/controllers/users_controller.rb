@@ -11,6 +11,28 @@ class UsersController < ApplicationController
   end
 
   ##
+  # Get /reset
+  #
+  def reset
+    verifyClient = VerifyClient.where(token: params[:id])
+                       .where(concept: 'reset').take || not_found
+    @user = User.where(id: verifyClient.user_id).take || not_found
+    @token = params[:id]
+  end
+
+  ##
+  # Patch /do_reset
+  #
+  def do_reset
+    verifyClient = VerifyClient.where(token: params[:id])
+                       .where(concept: 'reset').take || not_found
+    user = User.where(id: verifyClient.user_id).take || not_found
+
+    User.change_passwd(user, params, false)
+    redirect_to '/login'
+  end
+
+  ##
   # Get /verify
   #
   def verify

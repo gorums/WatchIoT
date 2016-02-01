@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+
+Hello <%= @user.username %>,
+
+<p>A password reset request was received for your account. Please ignore it if you did not initiate this request.</p></br>
+
+Click here to begin the password reset process: <a href="<%= url_for(controller: 'users',	 action: 'reset', id: @token, only_path: false)  %>"></a></br>
+
+<br/><br/>
+Thanks,
+<br/>
+
+WatchIoT Support
+</body>
+</html>

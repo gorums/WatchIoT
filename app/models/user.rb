@@ -128,8 +128,8 @@ class User < ActiveRecord::Base
   ##
   # Change the password
   #
-  def self.change_passwd(user, params)
-    return if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+  def self.change_passwd(user, params, validate = true)
+    return if validate && user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
     return if params[:passwd_new] != params[:passwd_confirmation]
 
     user.passwd = BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt)

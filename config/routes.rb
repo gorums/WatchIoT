@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback' => 'users#do_omniauth' , as: 'do_omniauth'
   post 'register' => 'users#do_register', as: 'do_register'
   get 'register' => 'users#register', as: 'register'
+  get '/reset/:id', controller: 'users', action: 'reset'
   get '/verify/:id', controller: 'users', action: 'verify'
   get '/invited/:id', controller: 'users', action: 'invited'
   patch '/do_invited/:id', controller: 'users', action: 'do_invited'

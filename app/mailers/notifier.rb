@@ -35,4 +35,12 @@ class Notifier < ApplicationMailer
     mail( :to => email,
           :subject => 'Your have been invited to WatchIoT!!')
   end
+
+  # send a new team member
+  def send_forget_pssswd_email(user, token, email)
+    @user = user
+    @token = token
+    mail( :to => email,
+          :subject => 'WatchIoT password reset!!')
+  end
 end

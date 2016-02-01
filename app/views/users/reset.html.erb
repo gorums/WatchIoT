@@ -1,0 +1,31 @@
+<% flash.each do |key, value| %>
+    <div class="flash <%= key %>"><%= value %></div>
+<% end %>
+
+<div class="auth-form-header">
+<h1>Reset the password</h1>
+</div>
+<%= form_for @user, url: '/do_reset/' + @token  do |f| %>
+	<div class="auth-form">
+		<div class="input">
+			<%= f.label "Password" %><br />
+			<%= f.password_field :new_passwd %>
+			<span><i class="fa fa-lock"></i></span>
+		</div>
+		<div class="input">
+			<%= f.label "Password Confirmation" %><br />
+			<%= f.password_field :passwd_confirmation %>
+			<span><i class="fa fa-lock"></i></span>
+		</div>
+		<p><%= submit_tag "Reset", class: "btn btn-default btn-lg active" %></p>
+
+	</div>
+<% end %>
+
+
+
+
+
+
+
+
