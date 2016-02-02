@@ -5,11 +5,11 @@
 <div class="auth-form-header">
 <h1>Reset the password</h1>
 </div>
-<%= form_for @user, url: '/do_reset/' + @token  do |f| %>
+<%= form_for @user, url: '/reset/' + @token  do |f| %>
 	<div class="auth-form">
 		<div class="input">
 			<%= f.label "Password" %><br />
-			<%= f.password_field :new_passwd %>
+			<%= f.password_field :passwd_new %>
 			<span><i class="fa fa-lock"></i></span>
 		</div>
 		<div class="input">

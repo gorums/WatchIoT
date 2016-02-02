@@ -11,7 +11,7 @@ You have been invited to join a new team on Watchiot.
 
 Login here <a href="<%= url_for(controller: 'users', action: 'login', only_path: false)  %>"></a><br/><br/>
 
-and then you have access to <a href="<%= url_for(controller: 'dashboard', action: 'show', username: @user.username, only_path: false)  %>"></a>
+and then you have access to <%= url_for(controller: 'dashboard', action: 'show', username: @user.username, only_path: false)  %>
 
 like a new member of the team
 

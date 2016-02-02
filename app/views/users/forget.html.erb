@@ -7,7 +7,7 @@
 			we can resend the principal email to a alternate email account, but you would need to contact support.
 		</p>
 
-		<%= form_for @user, url: '/forget_notif'  do |f| %>
+		<%= form_for @user, url: '/forget', method: 'post' do |f| %>
 			<div class="auth-form">
 				<div class="input">
 					<%= f.label :username %><br />

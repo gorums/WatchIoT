@@ -21,13 +21,13 @@ class UsersController < ApplicationController
   # Post /forget_notf
   #
   def forget_notif
-    username = params[:username]
+    username = user_forget_params[:username]
     user = User.find_by_username(username) || not_found
     email = user_email(user.id)
     # TODO: throw exception
     return if email.nil?
     token = VerifyClient.create_token(user.id, email, 'reset')
-    Notifier.create_send_forget_pssswd_email(user, token, email)
+    Notifier.send_forget_passwd_email(user, token, email).deliver_later
   end
 
   ##
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
   def reset
     verifyClient = find_token(type = 'reset')
     @user = User.where(id: verifyClient.user_id).take || not_found
-    @token = params[:id]
+    @token = params[:token]
   end
 
   ##
@@ -46,7 +46,8 @@ class UsersController < ApplicationController
     verifyClient = find_token(type = 'reset')
     user = User.where(id: verifyClient.user_id).take || not_found
 
-    User.change_passwd(user, params, false)
+    verifyClient.destroy! if User.change_passwd(user, params[:user], false)
+
     redirect_to '/login'
   end
 
@@ -90,6 +91,7 @@ class UsersController < ApplicationController
     cookies[:auth_token] = user.auth_token
     redirect_to '/' + user.username
   end
+
   ##
   # POST /do_register
   #
@@ -159,6 +161,12 @@ class UsersController < ApplicationController
     params.require(:user).permit(:passwd, :passwd_confirmation, :username)
   end
 
+  ##
+  # User foget params
+  #
+  def user_forget_params
+    params.require(:user).permit(:username)
+  end
   ##
   # Email params
   #

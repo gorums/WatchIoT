@@ -132,9 +132,8 @@ class User < ActiveRecord::Base
     return if validate && user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
     return if params[:passwd_new] != params[:passwd_confirmation]
 
-    user.passwd = BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt)
-    user.passwd_confirmation = user.passwd
-    user.save?
+    user.update(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
+    true
   end
 
   ##

@@ -8,7 +8,8 @@ class VerifyClient < ActiveRecord::Base
   # Register customer verification
   #
   def self.create_token(user_id, email, concept)
-    verifyClient = VerifyClient.new
+    verifyClient = VerifyClient.where(user_id: user_id).where(concept: concept).take
+    verifyClient = VerifyClient.new if verifyClient.nil?
     verifyClient.data = email
     verifyClient.user_id = user_id
     verifyClient.concept = concept
