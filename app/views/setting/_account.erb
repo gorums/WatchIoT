@@ -28,14 +28,19 @@
 								<td><%if email.checked? %><i class="fa fa-check"></i><%end%></td>
 								<td>
 									<%unless email.principal? %>
+
 										<%if email.checked?%>
 											<%= link_to '/' + current_user.username + '/setting/account/email/principal/' + email.id.to_s,
 																	class: 'clear-background' do %>
 												<i class="fa fa-check-circle-o fa-2x" title="Check like principal"></i>
 											<%end%>
 										<%else%>
-											<i class="fa fa-check-circle-o fa-2x" title="Do you need verify the email first"></i>
+											<%= link_to '/' + current_user.username + '/setting/account/email/verify/' + email.id.to_s,
+																	class: 'clear-background' do %>
+												<i class="fa fa-check-circle fa-2x" title="Verify email"></i>
+											<%end%>
 										<%end%>
+
 										<%= link_to '/' + current_user.username + '/setting/account/email/delete/' + email.id.to_s,
 																method: :delete, class: 'clear-background' do %>
 											<i class="fa fa-trash fa-2x" title="Delete the email"></i>
@@ -66,7 +71,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading"><b>Change password</b></div>
 					<div class="panel-body">
-						<%= form_for @user, url: '/' + current_user.username + '/setting/account/chpassword'  do |f| %>
+						<%= form_for @user, url: '/' + current_user.username + '/setting/account/password'  do |f| %>
 						<div class="form-group">
 							<%= div_for(@email, class: 'form-group col-lg-6') do %>
 								<label>Old password</label>
@@ -105,7 +110,7 @@
 					<div class="panel-heading"><b>Change username</b></div>
 					<div class="panel-body">
 						<small>This change can be painful and break your applications.</small>
-						<%= form_for @user, url: '/' + current_user.username + '/setting/account/chusername'  do |f| %>
+						<%= form_for @user, url: '/' + current_user.username + '/setting/account/username'  do |f| %>
 						<div class="form-group">
 
 							<%= div_for(@user, class: 'form-group col-lg-6') do %>

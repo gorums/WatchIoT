@@ -68,6 +68,18 @@ class UsersController < ApplicationController
   end
 
   ##
+  # Get /verify_email
+  #
+  def verify_email
+    verifyClient = find_token(type = 'verify_email')
+
+    @email = Email.email_to_check(verifyClient.user_id, verifyClient.data) || not_found
+    @user = User.where(id: verifyClient.user_id).take || not_found
+
+    verifyClient.destroy if @email.update(checked: true)
+  end
+
+  ##
   # Get /invited
   #
   def invited

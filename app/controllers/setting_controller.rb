@@ -78,6 +78,21 @@ class SettingController < ApplicationController
   end
 
   ##
+  # Get /:username/setting/account/email/verify/:id
+  #
+  def account_email_verify
+    user = find_owner
+    email = Email.where(id: params[:id]).where(user_id: user.id).take
+    # throw exception
+    return if email.nil? || email.principal? || email.checked?
+
+    token = VerifyClient.create_token(user.id, email.email, 'verify_email')
+    Notifier.send_verify_email(user, token, email.email).deliver_later
+
+    redirect_to '/' + current_user.username + '/setting/account'
+  end
+
+  ##
   # Patch /:username/setting/account/chpassword
   #
   def account_ch_password

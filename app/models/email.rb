@@ -43,7 +43,7 @@ class Email < ActiveRecord::Base
 
   ##
   # Define if the email can checked like principal
-  # TODO: throw exception if it can checked like principal becouse it is checked
+  # TODO: throw exception if it can checked like principal because it is checked
   # by other user
   #
   def self.email_to_activate(user_id, email)
@@ -51,6 +51,13 @@ class Email < ActiveRecord::Base
     return nil if emailObj.nil?
     return nil if emailObj.user_id != user_id && emailObj.principal?
 
+    Email.where(email: email).where(user_id: user_id).take
+  end
+
+  ##
+  # by other user
+  #
+  def self.email_to_check(user_id, email)
     Email.where(email: email).where(user_id: user_id).take
   end
 end
