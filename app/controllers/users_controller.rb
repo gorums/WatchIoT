@@ -54,13 +54,13 @@ class UsersController < ApplicationController
   # Get /verify
   #
   def verify
-    verifyClient = find_token(type = 'verify')
+    verifyClient = find_token(type = 'register')
 
     email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
     user = User.where(id: verifyClient.user_id).take || not_found
 
-    Notifier.send_signup_verify_email(user, email).deliver_later if
-        User.active_account(user, email, verifyClient)
+    User.active_account(user, email, verifyClient)
+    Notifier.send_signup_verify_email(user, email.email).deliver_later
 
     cookies[:auth_token] = user.auth_token
     redirect_to '/' + user.username
