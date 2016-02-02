@@ -71,8 +71,9 @@ class SettingController < ApplicationController
   def account_email_principal
     user = find_owner
 
-    save_log 'Set email like pincipal',
-             'Setting', current_user.id if Email.principal(user.id, params[:id])
+    email = Email.where(id: params[:id]).where(user_id: user.id).take || not_found
+    save_log 'Set email ' + email +'like pincipal',
+             'Setting', current_user.id if Email.principal(email)
 
     redirect_to '/' + current_user.username + '/setting/account'
   end
