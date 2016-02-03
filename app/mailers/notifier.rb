@@ -23,8 +23,9 @@ class Notifier < ApplicationMailer
   end
 
   # send a new team member
-  def send_new_team_email(user, email)
+  def send_new_team_email(user, user_member, email)
     @user = user
+    @user_member = user_member
     mail( :to => email,
           :subject => 'Your belong a new team!!')
   end

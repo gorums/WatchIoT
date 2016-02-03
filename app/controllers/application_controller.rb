@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
   def find_owner
     user = User.find_by_username(params[:username]) || not_found
     return user if auth? && current_user.username == user.username
-    return user if Team.where(user_id: current_user.id).where(user_id_team: user.id).any?
+    return user if Team.where(user_id: user.id).where(user_team_id: current_user.id).any?
 
     not_found
   end

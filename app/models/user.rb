@@ -80,16 +80,25 @@ class User < ActiveRecord::Base
   ##
   # Find member to add the team
   #
-  def self.find_member(email_member)
+  def self.find_member(user_id, email_member)
     emails = Email.where(email: email_member).all
 
-    return create_new_member(email_member) if email.nil?
+    return create_new_member(email_member) if emails.nil? || emails.empty?
     # if we find only one account
-    return User.find_by(id: emails[0].user_id) if emails.length == 1
+    if emails.length == 1
+      # if is my email
+      return if user_id == emails.first.user_id
+      return User.find(emails.first.user_id)
+    end
 
     # if we find more of one account, return the principal
     email = Email.where(email: email_member).where(principal: true).take
-    return User.find_by(id: email.user_id) unless email.nil?
+    unless email.nil?
+      # if is my email
+      return if user_id == email.user_id
+      return User.find_by(id: email.user_id)
+    end
+
   end
 
   ##
@@ -105,7 +114,7 @@ class User < ActiveRecord::Base
     User.save_user_and_mail(user_member, email)
 
     token = VerifyClient.create_token(user_member.id, email_member, 'invited')
-    Notifier.send_create_user_email(token, email_member)
+    Notifier.send_create_user_email(token, email_member).deliver_later
     user_member
   end
 

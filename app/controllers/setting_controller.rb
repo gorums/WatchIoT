@@ -72,7 +72,7 @@ class SettingController < ApplicationController
     user = find_owner
 
     email = Email.where(id: params[:id]).where(user_id: user.id).take || not_found
-    save_log 'Set email ' + email +'like pincipal',
+    save_log 'Set email ' + email +'like principal',
              'Setting', current_user.id if Email.principal(email)
 
     redirect_to '/' + current_user.username + '/setting/account'
@@ -137,16 +137,16 @@ class SettingController < ApplicationController
   #
   def team_add
     user = find_owner
-    user_member = User.find_member(params[:email])
+    user_member = User.find_member(user.id, email_params[:email])
     return if user_member.nil?
 
     # if exist throw exception
-    Team.where(user_id: user.id, user_team_id: user_member.id).exists?
+    return if Team.where(user_id: user.id).where(user_team_id: user_member.id).exists?
 
     team = Team.new(user_id: user.id, user_team_id: user_member.id)
     if team.save
-      Notifier.send_new_team_email(user, params[:email]).deliver_later
-      save_log 'Adding a new member <b>' + params[:email] + '</b>',
+      Notifier.send_new_team_email(user, user_member, email_params[:email]).deliver_later
+      save_log 'Adding a new member <b>' + email_params[:email] + '</b>',
                'Setting', current_user.id
     end
 

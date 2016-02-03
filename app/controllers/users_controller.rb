@@ -85,7 +85,7 @@ class UsersController < ApplicationController
   def invited
     verifyClient = find_token(type = 'invited')
     @user = User.where(id: verifyClient.user_id).take || not_found
-    @token = params[:id]
+    @token = params[:token]
   end
 
   ##
@@ -97,8 +97,12 @@ class UsersController < ApplicationController
     email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
     user = User.where(id: verifyClient.user_id).take || not_found
 
-    Notifier.send_signup_verify_email(user, email).deliver_later if
-        User.active_account(user, email, verifyClient)
+    user.username = user_params[:username]
+    user.passwd = user_params[:passwd]
+    user.passwd_confirmation = user_params[:passwd_confirmation]
+
+    Notifier.send_signup_verify_email(user, email.email).deliver_later if
+        User.save_user_and_mail(user, email, true)
 
     cookies[:auth_token] = user.auth_token
     redirect_to '/' + user.username

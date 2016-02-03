@@ -30,7 +30,9 @@ class SpacesController < ApplicationController
   def create
     user = find_owner
 
-    @space = Space.new(space_params, user_id: user.id, user_owner_id: current_user.id)
+    @space = Space.new(space_params)
+    @space.user_id = user.id
+    @space.user_owner_id = current_user.id
     save_log 'Create the space <b>' + @space.name + '</b>',
                'Space', user.id if @space.save
 
@@ -88,8 +90,8 @@ class SpacesController < ApplicationController
     Space.transfer(space, params[:team_id])
     notif_transfer_member(user, space)
 
-    save_log 'Change the owner of space ' + space.name + ' to ' + user_email(user_id_team),
-             'Space Setting', current_user.id if space.update!(user_id: user_id_team)
+    save_log 'Change the owner of space ' + space.name + ' to ' + user_email(params[:team_id]),
+             'Space Setting', current_user.id
 
     redirect_to '/' + user.username + '/spaces'
   end
