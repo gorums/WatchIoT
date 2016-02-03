@@ -35,7 +35,7 @@ class Space < ActiveRecord::Base
   # Admitted only alphanumeric characters
   #
   def name_format
-    name.gsub! /[^0-9a-z ]/i, '_'
+    name.gsub! /[^0-9a-z\- ]/i, '_'
     name.downcase.gsub! /\s+/, '_'
   end
 end

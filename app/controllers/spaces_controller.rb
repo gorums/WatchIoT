@@ -102,11 +102,13 @@ class SpacesController < ApplicationController
   def delete
     user = find_owner
     space = find_space user
+    return if space.name != space_name_params[:name]
     # throw exception
     return if Project.where(space_id: space.id).any?
+
     space.destroy!
     
-    save_log 'Delete name space <b>' + params[:spacename] + '</b>',
+    save_log 'Delete name space <b>' + space_name_params[:name] + '</b>',
              'Space Setting', current_user.id if space.destroyed?
 
     redirect_to '/' + user.username + '/spaces'
@@ -119,6 +121,13 @@ class SpacesController < ApplicationController
   #
   def space_params
     params.require(:space).permit(:name, :description, :is_public)
+  end
+
+  ##
+  # Never trust parameters from the scary internet, only allow the white list through.
+  #
+  def space_name_params
+    params.require(:space).permit(:name)
   end
 
   ##

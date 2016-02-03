@@ -216,7 +216,7 @@ class User < ActiveRecord::Base
   # self.name.gsub! /[^0-9a-z ]/i, '_'
   #
   def username_format
-    username.gsub! /[^0-9a-z ]/i, '_'
+    username.gsub! /[^0-9a-z\- ]/i, '_'
     username.downcase!
   end
 
