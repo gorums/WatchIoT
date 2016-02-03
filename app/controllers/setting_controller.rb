@@ -124,6 +124,9 @@ class SettingController < ApplicationController
   #
   def account_delete
     user = find_owner
+    return if user.username != username_params[:username]
+    # you have to transfer or your spaces or delete their
+    return if Space.where(user_id: user.id).any?
 
     # disable user
     User.disable user
