@@ -6,9 +6,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user
-  helper_method :current_user_email
-  helper_method :current_api_key
+  helper_method :login_user
+  helper_method :login_user_email
+  helper_method :login_api_key
+  helper_method :param_user
   helper_method :user_email
   helper_method :user_name
 
@@ -19,24 +20,27 @@ class ApplicationController < ActionController::Base
   ##
   # This method return the client api key
   #
-  def current_api_key
-    api_key = ApiKey.find_by(id: current_user.api_key_id) unless current_user == nil
+  def login_api_key
+    api_key = ApiKey.find_by(id: login_user.api_key_id) unless login_user == nil
     api_key.api_key
   end
 
   ##
   # This method return the user authenticate or nil
   #
-  def current_user
+  def login_user
     cookie = cookies[:auth_token]
     @current_user ||= User.find_by_auth_token( cookie) if cookie
   end
 
+  def param_user
+    params[:username]
+  end
   ##
   # This method return the client principal email
   #
-  def current_user_email
-    email = User.email(current_user.id) unless current_user.nil?
+  def login_user_email
+    email = User.email(login_user.id) unless login_user.nil?
     email.email
   end
 
@@ -60,7 +64,7 @@ class ApplicationController < ActionController::Base
   # If exist user authenticate
   #
   def auth?
-    current_user != nil
+    login_user != nil
   end
 
   ##
@@ -82,7 +86,7 @@ class ApplicationController < ActionController::Base
   #
   def save_log(description, action, owner_user_id)
     log = Log.new description: description, action: action,
-                  user_id: owner_user_id, user_action_id: current_user.id
+                  user_id: owner_user_id, user_action_id: login_user.id
     log.save
   end
 
@@ -91,8 +95,8 @@ class ApplicationController < ActionController::Base
   #
   def find_owner
     user = User.find_by_username(params[:username]) || not_found
-    return user if auth? && current_user.username == user.username
-    return user if Team.where(user_id: user.id).where(user_team_id: current_user.id).any?
+    return user if auth? && login_user.username == user.username
+    return user if Team.where(user_id: user.id).where(user_team_id: login_user.id).any?
 
     not_found
   end

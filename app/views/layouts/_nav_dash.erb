@@ -5,31 +5,38 @@
 			<a href="#" class="dropdown-toggle dropdown-user-a" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <span class="dropdown-user">
 							<span class="caret"></span>
-             	<img class="img-circle" data-email="<%= current_user_email %>" width="23" height="23">
-							<%= current_user.username %> (<%= current_user_email %>)
+             	<img class="img-circle" data-email="<%= login_user_email %>" width="23" height="23">
+							<%= login_user.username %> (<%= login_user_email %>)
             </span>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-left">
 				<li><%= link_to root_path do%>
 						<i class="fa fa-home"></i>
 						Home
-					<%end%></li>
-				<li><%= link_to "/" + current_user.username + "/spaces" do%>
+					<%end%>
+				</li>
+				<li><%= link_to "/" + param_user + "/spaces" do%>
 						<i class="fa fa-laptop"></i>
 						Spaces
-					<%end%></li>
-				<li><%= link_to "/" + current_user.username + "/chart" do%>
+					<%end%>
+				</li>
+				<li><%= link_to "/" + param_user + "/chart" do%>
 						<i class="fa fa-bar-chart"></i>
 						Chart
-					<%end%></li>
-				<li><%= link_to "/" + current_user.username + "/setting" do%>
+					<%end%>
+				</li>
+				<%if login_user.username == param_user %>
+				<li><%= link_to "/" + param_user + "/setting" do%>
 						<i class="fa fa-cogs"></i>
 						Setting
-					<%end%></li>
+					<%end%>
+				</li>
+				<%end%>
 				<li role="separator" class="divider"></li>
 				<li><%= link_to logout_path do%>
 						Logout
-					<%end%></li>
+					<%end%>
+				</li>
 			</ul>
 		</li>
 	</ul>

@@ -1,12 +1,12 @@
 <div role="tabpanel" class="tab-pane<%if @in == ''%> active<%end%>" id="profile">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
-				<%= form_for current_user, url: '/' + current_user.username + '/setting/profile'  do |f| %>
+				<%= form_for login_user, url: '/' + login_user.username + '/setting/profile'  do |f| %>
 				<div class="form-group">
-					<%= div_for(current_user, class: 'form-group col-lg-12') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-12') do %>
 						<label>Picture</label>
 						<div class="img-container">
-							<img class="img-circle" data-email="<%= current_user_email %>">
+							<img class="img-circle" data-email="<%= login_user_email %>">
 						</div>
 						<small>
 							We are using
@@ -15,21 +15,21 @@
 						</small>
 					<% end %>
 
-					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-6') do %>
 						<label>First Name</label>
 						<div>
 							<%= f.text_field :first_name, class: 'form-control' %>
 						</div>
 					<% end %>
 
-					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-6') do %>
 						<label>Last Name</label>
 						<div>
 							<%= f.text_field :last_name, class: 'form-control' %>
 						</div>
 					<% end %>
 
-					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-6') do %>
 						<label>Location</label>
 						<div class="controls">
 							<select class="form-control" name="user[country_code]">
@@ -229,14 +229,14 @@
 						</div>
 					<% end %>
 
-					<%= div_for(current_user, class: 'form-group col-lg-6') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-6') do %>
 						<label>Phone</label>
 						<div>
 							<%= f.text_field :phone, class: 'form-control' %>
 						</div>
 					<%end%>
 
-					<%= div_for(current_user, class: 'form-group col-lg-12') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-12') do %>
 						<label>Address</label>
 						<div>
 							<%= f.text_field :address, class: 'form-control' %>
@@ -244,7 +244,7 @@
 					<%end%>
 
 					<br />
-					<%= div_for(current_user, class: 'form-group col-lg-12') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-12') do %>
 						<small>If you want to receive notification with the latest news by email.</small>
 						<br />
 						<label>
@@ -252,7 +252,7 @@
 						</label>
 					<%end%>
 
-					<%= div_for(current_user, class: 'form-group col-lg-9') do %>
+					<%= div_for(login_user, class: 'form-group col-lg-9') do %>
 						<%= submit_tag 'Save Profile', class: 'btn btn-primary' %>
 					<%end%>
 				</div>

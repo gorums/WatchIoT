@@ -8,28 +8,30 @@
 			<div class="ember-view navigator-toggle icon icon-navigator-toggle"></div>
 		</li>
 		<li class="dashboard-menu">
-			<%= link_to "/" + current_user.username do%>
+			<%= link_to "/" + param_user do%>
 				<i class="fa fa-th"></i>
 				Dashboard
 			<%end%>
 		</li>
 		<li class="dashboard-menu">
-			<%= link_to "/" + current_user.username + "/spaces" do%>
+			<%= link_to "/" + param_user + "/spaces" do%>
 				<i class="fa fa-laptop"></i>
 				Spaces
 			<%end%>
 		</li>
 		<li class="dashboard-menu">
-			<%= link_to "/" + current_user.username + "/chart" do%>
+			<%= link_to "/" + param_user + "/chart" do%>
 				<i class="fa fa-bar-chart"></i>
 				Chart
 			<%end%>
 		</li>
+		<%if login_user.username == param_user%>
 		<li class="dashboard-menu">
-			<%= link_to "/" + current_user.username + "/setting" do%>
+			<%= link_to "/" + login_user.username + "/setting" do%>
 				<i class="fa fa-cogs"></i>
 				Setting
 			<%end%>
 		</li>
+		<%end%>
 	</ul>
 </div>

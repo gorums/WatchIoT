@@ -29,7 +29,7 @@ class SettingController < ApplicationController
     user = find_owner
 
     save_log 'Edit the profile setting',
-             'Setting', current_user.id if user.update(profile_params)
+             'Setting', user.id if user.update(profile_params)
 
     redirect_to '/' + user.username + '/setting'
   end
@@ -41,13 +41,13 @@ class SettingController < ApplicationController
     user = find_owner
 
     email = Email.new(email_params)
-    email.user_id = current_user.id
+    email.user_id = user.id
     email.principal = false
 
     save_log 'Add new email <b>' + email.email + '</b>',
-             'Setting', current_user.id if email.save
+             'Setting', user.id if email.save
 
-    redirect_to '/' + current_user.username + '/setting/account'
+    redirect_to '/' + login_user.username + '/setting/account'
   end
 
   ##
@@ -60,9 +60,9 @@ class SettingController < ApplicationController
     return email.nil? || email.principal?
 
     save_log 'Delete email <b>' + email.email + '</b>',
-             'Setting', current_user.id if email.destroy
+             'Setting', user.id if email.destroy
 
-    redirect_to '/' + current_user.username + '/setting/account'
+    redirect_to '/' + user.username + '/setting/account'
   end
 
   ##
@@ -73,9 +73,9 @@ class SettingController < ApplicationController
 
     email = Email.where(id: params[:id]).where(user_id: user.id).take || not_found
     save_log 'Set email ' + email +'like principal',
-             'Setting', current_user.id if Email.principal(email)
+             'Setting', user.id if Email.principal(email)
 
-    redirect_to '/' + current_user.username + '/setting/account'
+    redirect_to '/' + user.username + '/setting/account'
   end
 
   ##
@@ -83,6 +83,7 @@ class SettingController < ApplicationController
   #
   def account_email_verify
     user = find_owner
+
     email = Email.where(id: params[:id]).where(user_id: user.id).take
     # throw exception
     return if email.nil? || email.principal? || email.checked?
@@ -90,7 +91,7 @@ class SettingController < ApplicationController
     token = VerifyClient.create_token(user.id, email.email, 'verify_email')
     Notifier.send_verify_email(user, token, email.email).deliver_later
 
-    redirect_to '/' + current_user.username + '/setting/account'
+    redirect_to '/' + user.username + '/setting/account'
   end
 
   ##
@@ -100,9 +101,9 @@ class SettingController < ApplicationController
     user = find_owner
 
     save_log 'Change password', 'Setting',
-             current_user.id if User.change_passwd(user, passwd_params)
+             user.id if User.change_passwd(user, passwd_params)
 
-    redirect_to '/' + current_user.username + '/setting/account'
+    redirect_to '/' + user.username + '/setting/account'
   end
 
 
@@ -114,7 +115,7 @@ class SettingController < ApplicationController
 
     old_username = user.username
     save_log 'Change username <b>' + old_username + '</b> by ' + params[:username],
-             'Setting', current_user.id if user.update(username_params)
+             'Setting', user.id if user.update(username_params)
 
     redirect_to '/' + user.username + '/setting/account'
   end
@@ -124,6 +125,7 @@ class SettingController < ApplicationController
   #
   def account_delete
     user = find_owner
+
     return if user.username != username_params[:username]
     # you have to transfer or your spaces or delete their
     return if Space.where(user_id: user.id).any?
@@ -140,6 +142,7 @@ class SettingController < ApplicationController
   #
   def team_add
     user = find_owner
+
     user_member = User.find_member(user.id, email_params[:email])
     return if user_member.nil?
 
@@ -150,7 +153,7 @@ class SettingController < ApplicationController
     if team.save
       Notifier.send_new_team_email(user, user_member, email_params[:email]).deliver_later
       save_log 'Adding a new member <b>' + email_params[:email] + '</b>',
-               'Setting', current_user.id
+               'Setting', user.id
     end
 
     redirect_to '/' + user.username + '/setting/team'
@@ -166,7 +169,7 @@ class SettingController < ApplicationController
                .where(user_team_id: params[:id]).take || not_found
 
     save_log 'Delete a member <b>' + user_email(params[:id]) + '</b>',
-               'Setting', current_user.id if team.destroy
+               'Setting', user.id if team.destroy
 
     redirect_to '/' + user.username + '/setting/team'
   end
@@ -185,7 +188,7 @@ class SettingController < ApplicationController
     api_key.api_key = api_key_uuid
 
     save_log 'Change api key',
-             'Setting', current_user.id if api_key.save
+             'Setting', user.id if api_key.save
 
     redirect_to '/' + user.username + '/setting/api'
   end
@@ -233,7 +236,7 @@ class SettingController < ApplicationController
   #
   def find_owner
     user = User.find_by_username(params[:username]) || not_found
-    return user if auth? && current_user.username == user.username || not_found
+    user if auth? && login_user.username == user.username || not_found
   end
 
   ##

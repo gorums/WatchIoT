@@ -32,7 +32,7 @@ class SpacesController < ApplicationController
 
     @space = Space.new(space_params)
     @space.user_id = user.id
-    @space.user_owner_id = current_user.id
+    @space.user_owner_id = login_user.id
     save_log 'Create the space <b>' + @space.name + '</b>',
                'Space', user.id if @space.save
 
@@ -73,7 +73,7 @@ class SpacesController < ApplicationController
     space = find_space user
     old_name = space.name
     save_log 'Change name space ' + old_name + ' by ' + space.name,
-             'Space Setting', current_user.id if space.update(space_params)
+             'Space Setting', user.id if space.update(space_params)
 
     redirect_to '/' + user.username + '/' + space.name + '/setting'
   end
@@ -88,10 +88,10 @@ class SpacesController < ApplicationController
 
     space = find_space user
     Space.transfer(space, params[:team_id])
-    notif_transfer_member(user, space)
+    send_notif_transfer_member(user, space)
 
     save_log 'Change the owner of space ' + space.name + ' to ' + user_email(params[:team_id]),
-             'Space Setting', current_user.id
+             'Space Setting', user.id
 
     redirect_to '/' + user.username + '/spaces'
   end
@@ -101,15 +101,16 @@ class SpacesController < ApplicationController
   #
   def delete
     user = find_owner
+
     space = find_space user
-    return if space.name != space_name_params[:name]
+    not_found if space.name != space_name_params[:name]
     # throw exception
-    return if Project.where(space_id: space.id).any?
+    not_found if Project.where(space_id: space.id).any?
 
     space.destroy!
     
     save_log 'Delete name space <b>' + space_name_params[:name] + '</b>',
-             'Space Setting', current_user.id if space.destroyed?
+             'Space Setting', user.id if space.destroyed?
 
     redirect_to '/' + user.username + '/spaces'
   end
@@ -154,7 +155,7 @@ class SpacesController < ApplicationController
   ##
   # Notifier member for transfer space with projects
   #
-  def notif_transfer_member(user, space)
+  def send_notif_transfer_member(user, space)
     member_email = user_email(params[:team_id])
     Notifier.send_transfer_space_email(user, space, member_email).deliver_later unless member_email.nil?
   end

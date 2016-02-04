@@ -10,7 +10,7 @@
 	</div>
 <% end %>
 
-<%= form_for @space, url: '/' + current_user.username + '/create' do |f| %>
+<%= form_for @space, url: '/' + param_user + '/create' do |f| %>
 <div class="form-horizontal">
 	<%= div_for(@space, class: 'form-group') do %>
 		<label class="col-lg-2">Space Name</label>

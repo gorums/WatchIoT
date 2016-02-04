@@ -15,8 +15,8 @@
 							</a>
 						</h4>
 						<div class="col-lg-2">
-							<a href="/<%= current_user.username %>/<%= space.name %>" class="list-action clear-background" title="Edit space"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-							<a href="/<%= current_user.username %>/<%= space.name %>/setting" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
+							<a href="/<%= param_user %>/<%= space.name %>" class="list-action clear-background" title="Edit space"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+							<a href="/<%= param_user %>/<%= space.name %>/setting" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
 						</div>
 					</div>
 				</div>
@@ -43,7 +43,7 @@
 							<tr>
 								<th scope="row"><%= project.name%></th>
 								<td><%= project.description%></td>
-								<td><a href="/<%= current_user.username %>/<%= space.name %>/<%= project.name %>" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+								<td><a href="/<%= param_user %>/<%= space.name %>/<%= project.name %>" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
 							</tr>
 							<% end %>
 							</tbody>

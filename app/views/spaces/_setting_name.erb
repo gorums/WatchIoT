@@ -4,7 +4,7 @@
 
 		<small>This change can be painful and break your applications.</small>
 
-		<%= form_for @space, url: '/' + current_user.username + '/' + @space.name + '/setting/chname'  do |f| %>
+		<%= form_for @space, url: '/' + param_user + '/' + @space.name + '/setting/change'  do |f| %>
 			<div class="form-group">
 
 				<%= div_for(@space, class: 'form-group col-lg-6') do %>

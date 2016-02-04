@@ -30,18 +30,18 @@
 									<%unless email.principal? %>
 
 										<%if email.checked?%>
-											<%= link_to '/' + current_user.username + '/setting/account/email/principal/' + email.id.to_s,
+											<%= link_to '/' + login_user.username + '/setting/account/email/principal/' + email.id.to_s,
 																	class: 'clear-background' do %>
 												<i class="fa fa-check-circle-o fa-2x" title="Check like principal"></i>
 											<%end%>
 										<%else%>
-											<%= link_to '/' + current_user.username + '/setting/account/email/verify/' + email.id.to_s,
+											<%= link_to '/' + login_user.username + '/setting/account/email/verify/' + email.id.to_s,
 																	class: 'clear-background' do %>
 												<i class="fa fa-check-circle fa-2x" title="Verify email"></i>
 											<%end%>
 										<%end%>
 
-										<%= link_to '/' + current_user.username + '/setting/account/email/delete/' + email.id.to_s,
+										<%= link_to '/' + login_user.username + '/setting/account/email/delete/' + email.id.to_s,
 																method: :delete, class: 'clear-background' do %>
 											<i class="fa fa-trash fa-2x" title="Delete the email"></i>
 										<%end%>
@@ -52,7 +52,7 @@
 							</tbody>
 						</table>
 
-						<%= form_for @email, url: '/' + current_user.username + '/setting/account/email/add'  do |f| %>
+						<%= form_for @email, url: '/' + login_user.username + '/setting/account/email/add'  do |f| %>
 						<div class="form-group">
 							<%= div_for(@email, class: 'form-group col-lg-6') do %>
 								<label>New email</label>
@@ -71,7 +71,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading"><b>Change password</b></div>
 					<div class="panel-body">
-						<%= form_for @user, url: '/' + current_user.username + '/setting/account/password'  do |f| %>
+						<%= form_for @user, url: '/' + login_user.username + '/setting/account/password'  do |f| %>
 						<div class="form-group">
 							<%= div_for(@email, class: 'form-group col-lg-6') do %>
 								<label>Old password</label>
@@ -110,13 +110,13 @@
 					<div class="panel-heading"><b>Change username</b></div>
 					<div class="panel-body">
 						<small>This change can be painful and break your applications.</small>
-						<%= form_for @user, url: '/' + current_user.username + '/setting/account/username'  do |f| %>
+						<%= form_for @user, url: '/' + login_user.username + '/setting/account/username'  do |f| %>
 						<div class="form-group">
 
 							<%= div_for(@user, class: 'form-group col-lg-6') do %>
 								<label>Username</label>
 								<div>
-									<%= f.text_field :username, class: 'form-control', placeholder: 'Username', value: current_user.username %>
+									<%= f.text_field :username, class: 'form-control', placeholder: 'Username', value: login_user.username %>
 								</div>
 							<%end%>
 
@@ -134,7 +134,7 @@
 					<div class="panel-body">
 
 						<small>Do you need delete all the spaces or transfer they to other account.</small>
-						<%= form_for @user, url: '/' + current_user.username + '/setting/account/delete', method: :delete  do |f| %>
+						<%= form_for @user, url: '/' + login_user.username + '/setting/account/delete', method: :delete  do |f| %>
 							<div class="form-group">
 
 								<%= div_for(@user, class: 'form-group col-lg-9') do %>

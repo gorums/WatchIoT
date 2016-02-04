@@ -10,7 +10,7 @@
 	</div>
 <% end %>
 
-<%= form_for @space, url: '/' + current_user.username + '/' + @space.name  do |f| %>
+<%= form_for @space, url: '/' + param_user + '/' + @space.name  do |f| %>
 <div class="form-horizontal">
 	<%= div_for(@space, class: 'form-group') do %>
 		<label class="col-lg-2">Space Name</label>
@@ -31,7 +31,9 @@
 			<%= submit_tag 'Save Space', class: 'btn btn-primary' %>
 		</div>
 
-		<a href="/<%=current_user.username %>/<%= @space.name %>/setting" class="list-action clear-background" title="Setting space"><i class="fa fa-cog fa-2x"></i></a>
+		<a href="/<%= param_user %>/<%= @space.name %>/setting" class="list-action clear-background" title="Setting space">
+			<i class="fa fa-cog fa-2x"></i>
+		</a>
 
 	<% end %>
 </div>

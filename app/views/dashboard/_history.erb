@@ -15,7 +15,7 @@
 	<% @logs.each do |log| %>
 	<tr>
 		<td><%= raw log.description%></td>
-		<td><strong><%= log.user.username%></strong></td>
+		<td><strong><%= user_name(log.user_action_id) %></strong></td>
 		<td><%= distance_of_time_in_words(Time.now, log.created_at) %></td>
 	</tr>
 	<% end %>
