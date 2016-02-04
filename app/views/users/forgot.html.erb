@@ -2,12 +2,12 @@
 	<div class="jumbotron">
 		<h2>Resent the password!</h2>
 		<p>We send the email to the principal email.
-			For security purposes, we can only resend to the principal email account this account.
+			For security purposes, we can only resend to the principal email account for this account.
 			Under certain circumstances,
-			we can resend the principal email to a alternate email account, but you would need to contact support.
+			we can resend the email to a alternate email account, but you would need to contact support.
 		</p>
 
-		<%= form_for @user, url: '/forget', method: 'post' do |f| %>
+		<%= form_for @user, url: '/forgot', method: 'post' do |f| %>
 			<div class="auth-form">
 				<div class="input">
 					<%= f.label :username %><br />

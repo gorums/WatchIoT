@@ -11,16 +11,16 @@ class UsersController < ApplicationController
   end
 
   ##
-  # GET /forget
+  # GET /forgot
   #
-  def forget
+  def forgot
     @user = login_user || User.new
   end
 
   ##
-  # Post /forget_notf
+  # Post /forgot_notf
   #
-  def forget_notif
+  def forgot_notif
     username = user_forget_params[:username]
     user = User.find_by_username(username) || not_found
     email = user_email(user.id)
@@ -52,9 +52,9 @@ class UsersController < ApplicationController
   end
 
   ##
-  # Get /verify
+  # Get /active
   #
-  def verify
+  def active
     verifyClient = find_token(type = 'register')
 
     email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
