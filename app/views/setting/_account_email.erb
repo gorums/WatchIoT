@@ -49,7 +49,7 @@
 			</tbody>
 		</table>
 
-		<%= form_for @email, url: '/' + login_user.username + '/setting/account/email/add'  do |f| %>
+		<%= form_for @email, url: '/' + login_user.username + '/setting/account/add/email'  do |f| %>
 			<div class="form-group">
 				<%= div_for(@email, class: 'form-group col-lg-6') do %>
 					<label>New email</label>

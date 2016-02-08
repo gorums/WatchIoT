@@ -26,8 +26,8 @@ Rails.application.routes.draw do
   # setting route
   get '/:username/setting(//:val)', controller: 'setting', action: 'show'
   patch '/:username/setting/profile', controller: 'setting', action: 'profile'
-  post '/:username/setting/account/email/add', controller: 'setting', action: 'account_email_add'
-  delete '/:username/setting/account/email/delete/:id', controller: 'setting', action: 'account_email_delete'
+  post '/:username/setting/account/add/email', controller: 'setting', action: 'account_add_email'
+  delete '/:username/setting/account/remove/email/:id', controller: 'setting', action: 'account_remove_email'
   get '/:username/setting/account/email/principal/:id', controller: 'setting', action: 'account_email_principal'
   get '/:username/setting/account/email/verify/:id', controller: 'setting', action: 'account_email_verify'
   patch '/:username/setting/account/password', controller: 'setting', action: 'account_ch_password'

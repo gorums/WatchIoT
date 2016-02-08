@@ -85,9 +85,8 @@ class ApplicationController < ActionController::Base
   # Save logs by actions
   #
   def save_log(description, action, owner_user_id)
-    log = Log.new description: description, action: action,
-                  user_id: owner_user_id, user_action_id: login_user.id
-    log.save
+    Log.save_log description: description, action: action,
+                  user_id: owner_user_id, user_action_id: login_user.ids
   end
 
   ##

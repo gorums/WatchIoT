@@ -4,11 +4,20 @@
 class Email < ActiveRecord::Base
   belongs_to :user
 
-  validates_presence_of :email, on: :create
   validates_uniqueness_of :email, scope: [:user_id]
-  validates :email,
-            format: { with: /\A[-a-z0-9_+\.]+@([-a-z0-9]+\.)+[a-z0-9]{2,4}\z/i }
+  validates :email, email: true , presence: true
 
+  scope :my_emails, -> user_id { where(user_id: user_id).order(principal: :desc) }
+  scope :my_email, -> user_id { where(user_id: user_id).order(principal: :desc) }
+  ##
+  # Add an email to the account unprincipal waiting for verification
+  #
+  def self.add_email(email_params, user_id)
+    email = Email.new(email_params)
+    email.user_id = user_id
+    email.principal = false
+    email.save
+  end
   ##
   # Set this email id like principal
   #

@@ -9,7 +9,6 @@ class DashboardController < ApplicationController
   #
   def show
     user = find_owner
-    return if user.nil?
 
     @space = Space.new
     @logs = Log.where(user_id: user.id).limit(20)

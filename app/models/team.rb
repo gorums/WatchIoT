@@ -5,6 +5,9 @@ class Team < ActiveRecord::Base
   belongs_to :user
   belongs_to :permission
 
+  scope :my_team, -> user_id { where(user_id: user_id) }
+  scope :i_belong, -> user_id { where(user_team_id: user_id) }
+
   ##
   # If that user has permission to execute the action
   #

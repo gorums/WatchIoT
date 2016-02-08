@@ -8,17 +8,14 @@ class SettingController < ApplicationController
   # Get /:username/setting
   #
   def show
-    user = find_owner
+    @user = me
 
-    # setting emails data
-    @emails = Email.where(user_id: user.id).order(principal: :desc)
     @email = Email.new
-    # end setting emails data
+    @emails = Email.my_emails(@user.id)
 
-    @user = user
+    @teams = Team.my_team @user.id
+    @teams_belong = Team.i_belong @user.id
 
-    @teams = Team.where(user_id: user.id)
-    @teams_belong = Team.where(user_team_id: user.id)
     @in = valid_tab? ? params[:val] : ''
   end
 
@@ -26,7 +23,7 @@ class SettingController < ApplicationController
   # Patch /:username/setting/profile
   #
   def profile
-    user = find_owner
+    user = me
 
     save_log 'Edit the profile setting',
              'Setting', user.id if user.update(profile_params)
@@ -35,26 +32,24 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Post /:username/setting/account/email/add
+  # Post /:username/setting/account/add/email
   #
-  def account_email_add
-    user = find_owner
+  def account_add_email
+    user = me
 
-    email = Email.new(email_params)
-    email.user_id = user.id
-    email.principal = false
-
-    save_log 'Add new email <b>' + email.email + '</b>',
-             'Setting', user.id if email.save
+    # TODO: catch exception
+    Email.add_email(email_params, user.id)
+    save_log 'Add new email <b>' + email_params[:email] + '</b>',
+             'Setting', user.id
 
     redirect_to '/' + login_user.username + '/setting/account'
   end
 
   ##
-  # Delete /:username/setting/account/email/delete/:id
+  # Delete /:username/setting/account/remove/email/:id
   #
-  def account_email_delete
-    user = find_owner
+  def account_remove_email
+    user = me
 
     email = Email.where(id: params[:id]).where(user_id: user.id).take
     return email.nil? || email.principal?
@@ -69,9 +64,9 @@ class SettingController < ApplicationController
   # Get /:username/setting/account/email/principal/:id
   #
   def account_email_principal
-    user = find_owner
+    user = me
 
-    email = Email.where(id: params[:id]).where(user_id: user.id).take || not_found
+    email = Email.where(id: email_id_param[:id]).where(user_id: user.id).take || not_found
     save_log 'Set email ' + email +'like principal',
              'Setting', user.id if Email.principal(email)
 
@@ -82,7 +77,7 @@ class SettingController < ApplicationController
   # Get /:username/setting/account/email/verify/:id
   #
   def account_email_verify
-    user = find_owner
+    user = me
 
     email = Email.where(id: params[:id]).where(user_id: user.id).take
     # throw exception
@@ -98,7 +93,7 @@ class SettingController < ApplicationController
   # Patch /:username/setting/account/chpassword
   #
   def account_ch_password
-    user = find_owner
+    user = me
 
     save_log 'Change password', 'Setting',
              user.id if User.change_passwd(user, passwd_params)
@@ -111,7 +106,7 @@ class SettingController < ApplicationController
   # Patch /:username/setting/account/chusername
   #
   def account_ch_username
-    user = find_owner
+    user = me
 
     old_username = user.username
     save_log 'Change username <b>' + old_username + '</b> by ' + params[:username],
@@ -124,7 +119,7 @@ class SettingController < ApplicationController
   # Delete /:username/setting/account/delete
   #
   def account_delete
-    user = find_owner
+    user = me
 
     return if user.username != username_params[:username]
     # you have to transfer or your spaces or delete their
@@ -141,7 +136,7 @@ class SettingController < ApplicationController
   # Post /:username/setting/team/add
   #
   def team_add
-    user = find_owner
+    user = me
 
     user_member = User.find_member(user.id, email_params[:email])
     return if user_member.nil?
@@ -163,7 +158,7 @@ class SettingController < ApplicationController
   # Delete /:username/setting/team/delete
   #
   def team_delete
-    user = find_owner
+    user = me
 
     team = Team.where(user_id: user.id)
                .where(user_team_id: params[:id]).take || not_found
@@ -178,7 +173,7 @@ class SettingController < ApplicationController
   # Patch /:username/setting/key/generate
   #
   def key_generate
-    user = find_owner
+    user = me
 
     begin
       api_key_uuid = SecureRandom.uuid
@@ -211,6 +206,13 @@ class SettingController < ApplicationController
   end
 
   ##
+  # Email id params
+  #
+  def email_id_param
+    params.require(:email).permit(:id)
+  end
+
+  ##
   # Passwd change params
   #
   def passwd_params
@@ -234,7 +236,7 @@ class SettingController < ApplicationController
   ##
   # if the request was doing for the user login
   #
-  def find_owner
+  def me
     user = User.find_by_username(params[:username]) || not_found
     user if auth? && login_user.username == user.username || not_found
   end
