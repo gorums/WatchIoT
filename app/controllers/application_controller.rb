@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   helper_method :user_name
 
   rescue_from ActionController::RoutingError, with: :render_404
+  rescue_from ActionController::BadRequest, with: :render_400
 
   private
 
@@ -75,18 +76,45 @@ class ApplicationController < ActionController::Base
   end
 
   ##
-  # Render 404 page
+  # Throw RoutingError exception
+  #
+  def bad_request
+    raise ActionController::BadRequest.new('Bad request')
+  end
+
+  ##
+  # Throw RoutingError exception
+  #
+  def unauthorized
+    raise Errors::UnauthorizedError.new('Unauthorized')
+  end
+
+  ##
+  # Render not found page
   #
   def render_404
     render file: "#{Rails.root}/public/404.html", layout: false, status: 404
   end
 
   ##
+  # Render unauthorized page
+  #
+  def render_401
+    render file: "#{Rails.root}/public/401.html", layout: false, status: 401
+  end
+
+  ##
+  # Render bad request page
+  #
+  def render_400
+    render file: "#{Rails.root}/public/400.html", layout: false, status: 400
+  end
+
+  ##
   # Save logs by actions
   #
   def save_log(description, action, owner_user_id)
-    Log.save_log description: description, action: action,
-                  user_id: owner_user_id, user_action_id: login_user.ids
+    Log.save_log(description,  action, owner_user_id, login_user.id)
   end
 
   ##

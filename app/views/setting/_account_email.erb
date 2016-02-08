@@ -38,7 +38,7 @@
 								<%end%>
 							<%end%>
 
-							<%= link_to '/' + login_user.username + '/setting/account/email/delete/' + email.id.to_s,
+							<%= link_to '/' + login_user.username + '/setting/account/remove/email/' + email.id.to_s,
 													method: :delete, class: 'clear-background' do %>
 								<i class="fa fa-trash fa-2x" title="Delete the email"></i>
 							<%end%>
