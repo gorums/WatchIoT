@@ -1,6 +1,9 @@
 <div role="tabpanel" class="tab-pane<%if @in == ''%> active<%end%>" id="profile">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
+
+				<%= render 'alert_message'%>
+
 				<%= form_for login_user, url: '/' + login_user.username + '/setting/profile'  do |f| %>
 				<div class="form-group">
 					<%= div_for(login_user, class: 'form-group col-lg-12') do %>

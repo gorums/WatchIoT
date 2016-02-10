@@ -54,7 +54,7 @@
 				<%= div_for(@email, class: 'form-group col-lg-6') do %>
 					<label>New email</label>
 					<div>
-						<%= f.email_field :email, class: 'form-control', placeholder: 'New Email' %>
+						<%= f.email_field :email, class: 'form-control', placeholder: 'New Email', required: true %>
 					</div>
 				<%end%>
 				<%= div_for(@email, class: 'form-group col-lg-9') do %>

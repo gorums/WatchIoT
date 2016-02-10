@@ -1,6 +1,9 @@
+
 <div role="tabpanel" class="tab-pane<%if @in == 'account'%> active<%end%>" id="account">
 		<div class="panel-body">
 			<div data-example-id="simple-table" class="bs-example">
+
+				<%= render 'alert_message'%>
 
 				<%= render 'account_email' %>
 				<%= render 'account_passwd' %>

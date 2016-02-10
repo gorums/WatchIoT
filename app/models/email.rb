@@ -9,15 +9,22 @@ class Email < ActiveRecord::Base
 
   scope :my_emails, -> user_id { where(user_id: user_id).order(principal: :desc) }
   scope :my_email, -> user_id { where(user_id: user_id).order(principal: :desc) }
+  scope :has_email, -> user_id, email { where(user_id: user_id).where('email = ?', email) if email.present? }
+
   ##
   # Add an email to the account unprincipal waiting for verification
   #
-  def self.add_email(email_params, user_id)
-    email = Email.new(email_params)
+  def self.add_email(user_id, email)
+    return if has_email(user_id, email).exists?
+
+    email = Email.new(email: email)
     email.user_id = user_id
     email.principal = false
     email.save
+
+    email
   end
+
   ##
   # Set this email id like principal
   #

@@ -4,7 +4,7 @@
 class SettingController < ApplicationController
   layout 'dashboard'
 
-  before_filter :find_me
+  before_filter :allow_me
 
   ##
   # Get /:username/setting
@@ -23,33 +23,36 @@ class SettingController < ApplicationController
   # Patch /:username/setting/profile
   #
   def profile
-    save_log 'Edit the profile setting',
-             'Setting', @user.id if @user.update(profile_params)
-
     redirect_to '/' + @user.username + '/setting'
+
+    profile_flash if @user.update(profile_params)
+  rescue StandardError
+    flash[:error] = 'Profile update failed'
   end
 
   ##
   # Post /:username/setting/account/add/email
   #
   def account_add_email
-    # TODO: catch exception
-    Email.add_email(email_params, @user.id)
-    save_log 'Add new email <b>' + email_params[:email] + '</b>',
-             'Setting', @user.id
-
     redirect_to '/' + login_user.username + '/setting/account'
+
+    email_add = Email.add_email(@user.id, email_params[:email])
+    account_add_flash(email_add)
+  rescue StandardError
+    account_add_flash(nil)
   end
 
   ##
   # Delete /:username/setting/account/remove/email/:id
   #
   def account_remove_email
-    email = Email.where(id: params[:id]).where(user_id: @user.id).take
+
+    email = Email.where(id: email_id_param[:id]).where(user_id: @user.id).take
     return if email.nil? || email.principal?
 
+    email.destroy
     save_log 'Delete email <b>' + email.email + '</b>',
-             'Setting', @user.id if email.destroy
+             'Setting', @user.id
 
     redirect_to '/' + @user.username + '/setting/account'
   end
@@ -214,7 +217,7 @@ class SettingController < ApplicationController
   ##
   # if the request was doing for the user login
   #
-  def find_me
+  def allow_me
     @user = User.find_by_username(params[:username]) || not_found
     @user if auth? && login_user.username == @user.username || unauthorized
   rescue Errors::UnauthorizedError
@@ -226,5 +229,28 @@ class SettingController < ApplicationController
   #
   def valid_tab?
     %w(account team api).any? { |word|  params[:val] == word }
+  end
+
+  ##
+  # Set profile flash and log
+  #
+  def profile_flash
+    save_log 'Edit the profile setting',
+             'Setting', @user.id
+    flash[:notice] = 'Profile updated correctly'
+  end
+
+  ##
+  # Set account add flash and log
+  #
+  def account_add_flash(email_add)
+    if email_add.nil?
+      flash[:error] = 'Add a new email failed'
+      return
+    end
+
+    save_log 'Add new email <b>' + email_add.email + '</b>',
+               'Setting', @user.id
+    flash[:notice] = 'Added a new email correctly'
   end
 end
