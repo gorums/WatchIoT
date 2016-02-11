@@ -25,8 +25,8 @@ class SettingController < ApplicationController
   def profile
     redirect_to '/' + @user.username + '/setting'
 
-    profile_flash if @user.update(profile_params)
-  rescue StandardError
+    flash_log_profile if @user.update(profile_params)
+  rescue => ex
     flash[:error] = 'Profile update failed'
   end
 
@@ -36,36 +36,22 @@ class SettingController < ApplicationController
   def account_add_email
     redirect_to '/' + login_user.username + '/setting/account'
 
-    email_add = Email.add_email(@user.id, email_params[:email])
-    account_add_flash(email_add)
-  rescue StandardError
-    account_add_flash(nil)
+    Email.add_email(@user.id, email_params[:email])
+    flash_log_add_email email_params[:email]
+  rescue => ex
+    flash[:error] = ex.message
   end
 
   ##
   # Delete /:username/setting/account/remove/email/:id
   #
   def account_remove_email
-
-    email = Email.where(id: email_id_param[:id]).where(user_id: @user.id).take
-    return if email.nil? || email.principal?
-
-    email.destroy
-    save_log 'Delete email <b>' + email.email + '</b>',
-             'Setting', @user.id
-
     redirect_to '/' + @user.username + '/setting/account'
-  end
 
-  ##
-  # Get /:username/setting/account/email/principal/:id
-  #
-  def account_email_principal
-    email = Email.where(id: email_id_param[:id]).where(user_id: @user.id).take || not_found
-    save_log 'Set email ' + email +'like principal',
-             'Setting', @user.id if Email.principal(email)
-
-    redirect_to '/' + @user.username + '/setting/account'
+    email = Email.remove_email(@user.id, params[:id])
+    flash_log_remove_email email
+  rescue => ex
+    flash[:error] = ex.message
   end
 
   ##
@@ -78,6 +64,17 @@ class SettingController < ApplicationController
 
     token = VerifyClient.create_token(@user.id, email.email, 'verify_email')
     Notifier.send_verify_email(user, token, email.email).deliver_later
+
+    redirect_to '/' + @user.username + '/setting/account'
+  end
+
+  ##
+  # Get /:username/setting/account/email/principal/:id
+  #
+  def account_email_principal
+    email = Email.where(id: email_id_param[:id]).where(user_id: @user.id).take || not_found
+    save_log 'Set email ' + email +'like principal',
+             'Setting', @user.id if Email.principal(email)
 
     redirect_to '/' + @user.username + '/setting/account'
   end
@@ -234,23 +231,27 @@ class SettingController < ApplicationController
   ##
   # Set profile flash and log
   #
-  def profile_flash
+  def flash_log_profile
     save_log 'Edit the profile setting',
              'Setting', @user.id
     flash[:notice] = 'Profile updated correctly'
   end
 
   ##
-  # Set account add flash and log
+  # Set add email flash and log
   #
-  def account_add_flash(email_add)
-    if email_add.nil?
-      flash[:error] = 'Add a new email failed'
-      return
-    end
-
-    save_log 'Add new email <b>' + email_add.email + '</b>',
+  def flash_log_add_email(email)
+    save_log 'Add new email <b>' + email + '</b>',
                'Setting', @user.id
     flash[:notice] = 'Added a new email correctly'
+  end
+
+  ##
+  # Set remove email flash and log
+  #
+  def flash_log_remove_email(email)
+    save_log 'Delete email <b>' + email + '</b>',
+             'Setting', @user.id
+    flash[:notice] = 'The email was remove correctly'
   end
 end

@@ -9,22 +9,29 @@ class Email < ActiveRecord::Base
 
   scope :my_emails, -> user_id { where(user_id: user_id).order(principal: :desc) }
   scope :my_email, -> user_id { where(user_id: user_id).order(principal: :desc) }
-  scope :has_email, -> user_id, email { where(user_id: user_id).where('email = ?', email) if email.present? }
+  scope :has_email, -> user_id, email { where(user_id: user_id)
+                                        .where('email = ?', email) if email.present? }
 
+  scope :my_email_by_id, -> user_id, id { where(user_id: user_id)
+                                            .where('id = ?', id).take if id.present? }
   ##
   # Add an email to the account unprincipal waiting for verification
   #
   def self.add_email(user_id, email)
-    return if has_email(user_id, email).exists?
+    raise StandardError, 'The email already added' if has_email(user_id, email).exists?
 
-    email = Email.new(email: email)
-    email.user_id = user_id
-    email.principal = false
-    email.save
-
-    email
+    email = Email.new(email: email, user_id: user_id)
+    email.save!
   end
 
+  def self.remove_email(user_id, email_id)
+    email = my_email_by_id(user_id, email_id)
+    raise StandardError, 'The email is not valid' if email.nil?
+    raise StandardError, 'The email can be principal' if email.principal?
+    email_str = email.email
+    email.destroy!
+    email_str
+  end
   ##
   # Set this email id like principal
   #
