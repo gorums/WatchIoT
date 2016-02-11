@@ -10,7 +10,7 @@ class Email < ActiveRecord::Base
   scope :my_emails, -> user_id { where(user_id: user_id).order(principal: :desc) }
   scope :my_email, -> user_id { where(user_id: user_id).order(principal: :desc) }
   scope :has_email, -> user_id, email { where(user_id: user_id)
-                                        .where('email = ?', email) if email.present? }
+                                        .where('email = ?', email).exists? if email.present? }
 
   scope :my_email_by_id, -> user_id, id { where(user_id: user_id)
                                             .where('id = ?', id).take if id.present? }
@@ -18,20 +18,38 @@ class Email < ActiveRecord::Base
   # Add an email to the account unprincipal waiting for verification
   #
   def self.add_email(user_id, email)
-    raise StandardError, 'The email already added' if has_email(user_id, email).exists?
+    raise StandardError, 'The email already added' if has_email(user_id, email)
 
     email = Email.new(email: email, user_id: user_id)
     email.save!
   end
 
+  ##
+  # Remove an email unprincipal
+  #
   def self.remove_email(user_id, email_id)
     email = my_email_by_id(user_id, email_id)
     raise StandardError, 'The email is not valid' if email.nil?
-    raise StandardError, 'The email can be principal' if email.principal?
+    raise StandardError, 'The email can not be principal' if email.principal?
+
     email_str = email.email
     email.destroy!
-    email_str
+    email_str # return email.email
   end
+
+  ##
+  # Send the verification email
+  #
+  def self.send_verify(user_id, email_id)
+    email = my_email_by_id(user_id, email_id)
+    raise StandardError, 'The email is not valid' if email.nil?
+    raise StandardError, 'The email has to be uncheck' if email.checked?
+
+    token = VerifyClient.create_token(user_id, email.email, 'verify_email')
+    Notifier.send_verify_email(email.user, token, email.email).deliver_later
+    email.email # return email.email
+  end
+
   ##
   # Set this email id like principal
   #

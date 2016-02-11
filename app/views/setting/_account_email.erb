@@ -27,12 +27,12 @@
 						<%unless email.principal? %>
 
 							<%if email.checked?%>
-								<%= link_to  '/' + login_user.username + '/setting/account/email/principal/' + email.id.to_s,
+								<%= link_to  '/' + login_user.username + '/setting/account/principal/email/' + email.id.to_s,
 														class: 'clear-background' do %>
 									<i class="fa fa-check-circle-o fa-2x" title="Check like principal"></i>
 								<%end%>
 							<%else%>
-								<%= link_to  '/' + login_user.username + '/setting/account/email/verify/' + email.id.to_s,
+								<%= link_to  '/' + login_user.username + '/setting/account/verify/email/' + email.id.to_s,
 														class: 'clear-background' do %>
 									<i class="fa fa-check-circle fa-2x" title="Verify email"></i>
 								<%end%>

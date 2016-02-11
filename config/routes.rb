@@ -25,17 +25,26 @@ Rails.application.routes.draw do
 
   # setting route
   get '/:username/setting(//:val)', controller: 'setting', action: 'show'
+
+  # setting profile route
   patch '/:username/setting/profile', controller: 'setting', action: 'profile'
+
+  # setting account email route
   post '/:username/setting/account/add/email', controller: 'setting', action: 'account_add_email'
   delete '/:username/setting/account/remove/email/:id', controller: 'setting', action: 'account_remove_email'
-  get '/:username/setting/account/email/principal/:id', controller: 'setting', action: 'account_email_principal'
-  get '/:username/setting/account/email/verify/:id', controller: 'setting', action: 'account_email_verify'
+  get '/:username/setting/account/verify/email/:id', controller: 'setting', action: 'account_verify_email'
+  get '/:username/setting/account/principal/email/:id', controller: 'setting', action: 'account_principal_email'
+
+  # setting account route
   patch '/:username/setting/account/password', controller: 'setting', action: 'account_ch_password'
   patch '/:username/setting/account/username', controller: 'setting', action: 'account_ch_username'
   delete '/:username/setting/account/delete', controller: 'setting', action: 'account_delete'
-  get '/:username/setting/plan/upgrade/:id', controller: 'setting', action: 'plan_upgrade'
+
+  # setting team route
   post '/:username/setting/team/add', controller: 'setting', action: 'team_add'
   delete '/:username/setting/team/delete/:id', controller: 'setting', action: 'team_delete'
+  
+  # setting api route
   patch '/:username/setting/key/generate', controller: 'setting', action: 'key_generate'
 
   # spaces route

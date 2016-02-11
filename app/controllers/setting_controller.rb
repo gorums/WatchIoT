@@ -36,8 +36,9 @@ class SettingController < ApplicationController
   def account_add_email
     redirect_to '/' + login_user.username + '/setting/account'
 
-    Email.add_email(@user.id, email_params[:email])
-    flash_log_add_email email_params[:email]
+    email_s = email_params[:email]
+    Email.add_email(@user.id, email_s)
+    flash_log_add_email email_s
   rescue => ex
     flash[:error] = ex.message
   end
@@ -48,30 +49,28 @@ class SettingController < ApplicationController
   def account_remove_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.remove_email(@user.id, params[:id])
-    flash_log_remove_email email
+    email_s = Email.remove_email(@user.id, params[:id])
+    flash_log_remove_email email_s
   rescue => ex
     flash[:error] = ex.message
   end
 
   ##
-  # Get /:username/setting/account/email/verify/:id
+  # Get /:username/setting/account/verify/email/:id
   #
-  def account_email_verify
-    email = Email.where(id: params[:id]).where(user_id: @user.id).take
-    # throw exception
-    return if email.nil? || email.principal? || email.checked?
-
-    token = VerifyClient.create_token(@user.id, email.email, 'verify_email')
-    Notifier.send_verify_email(user, token, email.email).deliver_later
-
+  def account_verify_email
     redirect_to '/' + @user.username + '/setting/account'
+
+    email_s = Email.send_verify(@user.id, params[:id])
+    flash_log_verify_email email_s
+  rescue => ex
+    flash[:error] = ex.message
   end
 
   ##
-  # Get /:username/setting/account/email/principal/:id
+  # Get /:username/setting/account/principal/email/:id
   #
-  def account_email_principal
+  def account_principal_email
     email = Email.where(id: email_id_param[:id]).where(user_id: @user.id).take || not_found
     save_log 'Set email ' + email +'like principal',
              'Setting', @user.id if Email.principal(email)
@@ -212,6 +211,7 @@ class SettingController < ApplicationController
   end
 
   ##
+  # Filter method
   # if the request was doing for the user login
   #
   def allow_me
@@ -253,5 +253,14 @@ class SettingController < ApplicationController
     save_log 'Delete email <b>' + email + '</b>',
              'Setting', @user.id
     flash[:notice] = 'The email was remove correctly'
+  end
+
+  ##
+  # Set verify email flash and log
+  #
+  def flash_log_verify_email(email)
+    save_log 'Send to verify the email <b>' + email + '</b>',
+             'Setting', @user.id
+    flash[:notice] = 'The email to verify was sending correctly'
   end
 end
