@@ -4,6 +4,7 @@
 class VerifyClient < ActiveRecord::Base
   belongs_to :user
 
+  scope :find_token, ->token, concept {where('token = ?', token).where('concept = ?', concept).take }
   ##
   # Register customer verification
   #

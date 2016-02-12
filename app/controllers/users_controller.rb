@@ -2,6 +2,11 @@
 # User controller
 #
 class UsersController < ApplicationController
+
+  after_filter :find_reset_user_by_token, :only => [:reset, :do_reset]
+  after_filter :find_active_user_by_token, :only => :active
+  after_filter :find_verify_email_by_token, :only => :verify_email
+  after_filter :find_active_user_by_token, :only => [:invite, :do_invite]
   ##
   # GET /register
   #
@@ -18,24 +23,16 @@ class UsersController < ApplicationController
   end
 
   ##
-  # Post /forgot_notf
+  # Post /forgot_notif
   #
-  def forgot_notif
-    username = user_forget_params[:username]
-    user = User.find_by_username(username) || not_found
-    email = user_email(user.id)
-    # TODO: throw exception
-    return if email.nil?
-    token = VerifyClient.create_token(user.id, email, 'reset')
-    Notifier.send_forget_passwd_email(user, token, email).deliver_later
+  def forgot_notification
+    User.send_forgot_notification user_forget_params[:username]
   end
 
   ##
   # Get /reset
   #
   def reset
-    verifyClient = find_token(type = 'reset')
-    @user = User.where(id: verifyClient.user_id).take || not_found
     @token = params[:token]
   end
 
@@ -43,69 +40,58 @@ class UsersController < ApplicationController
   # Patch /do_reset
   #
   def do_reset
-    verifyClient = find_token(type = 'reset')
-    user = User.where(id: verifyClient.user_id).take || not_found
-
-    verifyClient.destroy! if User.change_passwd(user, params[:user], false)
-
     redirect_to '/login'
+
+    User.change_passwd(@user, params[:user], false)
+    @verifyClient.destroy!
+  rescue => ex
   end
 
   ##
   # Get /active
   #
   def active
-    verifyClient = find_token(type = 'register')
-
-    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
-    user = User.where(id: verifyClient.user_id).take || not_found
-
-    User.active_account(user, email, verifyClient)
-    Notifier.send_signup_verify_email(user, email.email).deliver_later
-
-    cookies[:auth_token] = user.auth_token
     redirect_to '/' + user.username
+
+    User.active_account(@user, @email, @verifyClient)
+    Notifier.send_signup_verify_email(@user, @email.email).deliver_later
+
+    cookies[:auth_token] = @user.auth_token
+  rescue => ex
   end
 
   ##
   # Get /verify_email
   #
   def verify_email
-    verifyClient = find_token(type = 'verify_email')
-
-    @email = Email.email_to_check(verifyClient.user_id, verifyClient.data) || not_found
-    @user = User.where(id: verifyClient.user_id).take || not_found
-
-    verifyClient.destroy if @email.update(checked: true)
+    @email.update(checked: true)
+    verifyClient.destroy!
+  rescue => ex
   end
 
   ##
   # Get /invited
   #
-  def invited
-    verifyClient = find_token(type = 'invited')
-    @user = User.where(id: verifyClient.user_id).take || not_found
+  def invite
     @token = params[:token]
   end
 
   ##
   # Patch /do_invited
   #
-  def do_invited
-    verifyClient = find_token(type = 'invited')
+  def do_invite
+    redirect_to '/' + @user.username
+    email = Email.email_to_activate(@verifyClient.user_id, @verifyClient.data) || not_found
 
-    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
-    user = User.where(id: verifyClient.user_id).take || not_found
+    @user.username = user_params[:username]
+    @user.passwd = user_params[:passwd]
+    @user.passwd_confirmation = user_params[:passwd_confirmation]
 
-    user.username = user_params[:username]
-    user.passwd = user_params[:passwd]
-    user.passwd_confirmation = user_params[:passwd_confirmation]
+    Notifier.send_signup_verify_email(@user, email.email).deliver_later if
+        User.save_user_and_mail(@user, email, true)
 
-    Notifier.send_signup_verify_email(user, email.email).deliver_later if
-        User.save_user_and_mail(user, email, true)
-
-    cookies[:auth_token] = user.auth_token
-    redirect_to '/' + user.username
+    cookies[:auth_token] = @user.auth_token
+  rescue => ex
   end
 
   ##
@@ -201,8 +187,37 @@ class UsersController < ApplicationController
   ##
   # Get a token
   #
-  def find_token(type)
-    VerifyClient.where(token: params[:token])
-        .where(concept: type).take || not_found
+  def find_reset_user_by_token
+    @verifyClient = VerifyClient.find_token params[:token], 'reset' || not_found
+    @user = User.where(id: @verifyClient.user_id).take || not_found
   end
+
+  ##
+  # Get a token
+  #
+  def find_active_user_by_token
+    @verifyClient = VerifyClient.find_token params[:token], 'register' || not_found
+
+    @email = Email.email_to_activate(@verifyClient.user_id, @verifyClient.data) || not_found
+    @user = User.where(id: @verifyClient.user_id).take || not_found
+  end
+
+  ##
+  # Get a token
+  #
+  def find_verify_email_by_token
+    @verifyClient = VerifyClient.find_token params[:token], 'verify_email' || not_found
+
+    @email = Email.email_to_check(@verifyClient.user_id, @verifyClient.data) || not_found
+    @user = User.where(id: @verifyClient.user_id).take || not_found
+  end
+
+  ##
+  # Get a token
+  #
+  def find_invite_user_by_token
+    @verifyClient = VerifyClient.find_token params[:token], 'invited' || not_found
+    @user = User.where(id: @verifyClient.user_id).take || not_found
+  end
+
 end

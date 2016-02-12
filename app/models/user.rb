@@ -56,6 +56,15 @@ class User < ActiveRecord::Base
     user.update(username: new_username)
   end
 
+  def self.send_forgot_notification(username)
+    user = User.find_by_username(username) || not_found
+    email = user_email(user.id)
+    # TODO: throw exception
+    return if email.nil?
+    token = VerifyClient.create_token(user.id, email, 'reset')
+    Notifier.send_forget_passwd_email(user, token, email).deliver_later
+  end
+
   ##
   # This method try to authenticate the client
   #
