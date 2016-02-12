@@ -43,6 +43,19 @@ class User < ActiveRecord::Base
 
   before_save :username_format
 
+  def self.account_delete(user, username)
+    return if user.username != username
+    # you have to transfer or your spaces or delete their
+    return if Space.where(user_id: user.id).any?
+
+    # disable user
+    User.disable user
+  end
+
+  def self.change_username(user, new_username)
+    user.update(username: new_username)
+  end
+
   ##
   # This method try to authenticate the client
   #

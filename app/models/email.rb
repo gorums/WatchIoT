@@ -53,11 +53,13 @@ class Email < ActiveRecord::Base
   ##
   # Set this email id like principal
   #
-  def self.principal(email)
+  def self.principal(user_id, email_id)
+    email = Email.where(id: email_id).where(user_id: user_id).take || not_found
     return if email.nil? || email.principal? || !email.checked?
 
     Email.unprincipal(email.user_id)
     email.update(principal: true)
+    email.email
   end
 
   ##
