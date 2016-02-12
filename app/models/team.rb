@@ -7,6 +7,7 @@ class Team < ActiveRecord::Base
 
   scope :my_teams, -> user_id { where(user_id: user_id) }
   scope :belong_to, -> user_id { where(user_team_id: user_id) }
+  scope :member?, -> user_id, user_team_id {where(user_id: user_id).where(user_team_id: user_team_id).exists? }
 
   def self.add_member(user, email_s)
     user_member = User.find_member(user.id, email_s)

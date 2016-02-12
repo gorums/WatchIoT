@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   # GET /forgot
   #
   def forgot
-    @user = login_user || User.new
+    @user = me || User.new
   end
 
   ##

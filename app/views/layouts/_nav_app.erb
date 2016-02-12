@@ -19,29 +19,29 @@
 				<li><a href="/#contactus">Contact us</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<% if login_user %>
+				<% if me %>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <span class="login">
 									<span class="caret"></span>
              			<img class="img-circle" data-email="<%= login_user_email %>" width="23" height="23">
-									<%= login_user.username %> (<%= login_user_email %>)
+									<%= me.username %> (<%= login_user_email %>)
                 </span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><%= link_to '/' + login_user.username do%>
+							<li><%= link_to '/' + me.username do%>
 									<i class="fa fa-th"></i>
 									Dashboard
 								<%end%></li>
-							<li><%= link_to '/' + login_user.username + '/spaces' do%>
+							<li><%= link_to '/' + me.username + '/spaces' do%>
 									<i class="fa fa-laptop"></i>
 									Spaces
 								<%end%></li>
-							<li><%= link_to '/' + login_user.username + '/chart' do%>
+							<li><%= link_to '/' + me.username + '/chart' do%>
 									<i class="fa fa-bar-chart"></i>
 									Chart
 								<%end%></li>
-							<li><%= link_to '/' + login_user.username + '/setting' do%>
+							<li><%= link_to '/' + me.username + '/setting' do%>
 									<i class="fa fa-cogs"></i>
 									Setting
 								<%end%></li>

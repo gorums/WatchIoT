@@ -3,7 +3,7 @@
 	<div class="panel-body">
 
 		<small>Do you need delete all the spaces or transfer they to other account.</small>
-		<%= form_for @user, url: '/' + login_user.username + '/setting/account/delete', method: :delete  do |f| %>
+		<%= form_for @user, url: '/' + me.username + '/setting/account/delete', method: :delete  do |f| %>
 			<div class="form-group">
 
 				<%= div_for(@user, class: 'form-group col-lg-9') do %>

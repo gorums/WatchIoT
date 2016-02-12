@@ -9,7 +9,7 @@
 				<%= login_api_key %>
 				<br /><br />
 
-				<%= form_for @user, url: '/' + login_user.username + '/setting/key/generate' do |f| %>
+				<%= form_for @user, url: '/' + me.username + '/setting/key/generate' do |f| %>
 					<div class="form-group">
 						<%= div_for(@user, class: 'form-group') do %>
 							<%= submit_tag 'Generate new', class: 'btn btn-primary' %>

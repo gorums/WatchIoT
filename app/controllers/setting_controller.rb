@@ -34,7 +34,7 @@ class SettingController < ApplicationController
   # Post /:username/setting/account/add/email
   #
   def account_add_email
-    redirect_to '/' + login_user.username + '/setting/account'
+    redirect_to '/' + me.username + '/setting/account'
 
     Email.add_email(@user.id, email_params[:email])
 
@@ -212,7 +212,7 @@ class SettingController < ApplicationController
   #
   def allow_me
     @user = User.find_by_username(params[:username]) || not_found
-    @user if auth? && login_user.username == @user.username || unauthorized
+    @user if auth? && me.username == @user.username || unauthorized
   rescue Errors::UnauthorizedError
     render_401
   end

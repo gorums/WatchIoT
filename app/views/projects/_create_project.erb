@@ -10,7 +10,7 @@
 	</div>
 <% end %>
 
-<%= form_for @project, url: '/' + login_user.username + '/' + @space.name + '/create' do |f| %>
+<%= form_for @project, url: '/' + me.username + '/' + @space.name + '/create' do |f| %>
 <div class="form-horizontal">
 
 	<%= div_for(@project, class: 'form-group') do %>

@@ -27,18 +27,18 @@
 						<%unless email.principal? %>
 
 							<%if email.checked?%>
-								<%= link_to  '/' + login_user.username + '/setting/account/principal/email/' + email.id.to_s,
+								<%= link_to  '/' + me.username + '/setting/account/principal/email/' + email.id.to_s,
 														class: 'clear-background' do %>
 									<i class="fa fa-check-circle-o fa-2x" title="Check like principal"></i>
 								<%end%>
 							<%else%>
-								<%= link_to  '/' + login_user.username + '/setting/account/verify/email/' + email.id.to_s,
+								<%= link_to  '/' + me.username + '/setting/account/verify/email/' + email.id.to_s,
 														class: 'clear-background' do %>
 									<i class="fa fa-check-circle fa-2x" title="Verify email"></i>
 								<%end%>
 							<%end%>
 
-							<%= link_to  '/' + login_user.username + '/setting/account/remove/email/'+ email.id.to_s,
+							<%= link_to  '/' + me.username + '/setting/account/remove/email/'+ email.id.to_s,
 													method: :delete, class: 'clear-background' do %>
 								<i class="fa fa-trash fa-2x" title="Delete the email"></i>
 							<%end%>
@@ -49,7 +49,7 @@
 			</tbody>
 		</table>
 
-		<%= form_for @email, url: '/' + login_user.username + '/setting/account/add/email'  do |f| %>
+		<%= form_for @email, url: '/' + me.username + '/setting/account/add/email'  do |f| %>
 			<div class="form-group">
 				<%= div_for(@email, class: 'form-group col-lg-6') do %>
 					<label>New email</label>

@@ -50,20 +50,20 @@ Rails.application.routes.draw do
   # spaces route
   post '/:username/create', controller: 'spaces', action: 'create'
   get '/:username/spaces', controller: 'spaces', action: 'index'
-  patch '/:username/:spacename', controller: 'spaces', action: 'edit'
-  get '/:username/:spacename/setting', controller: 'spaces', action: 'setting'
-  patch '/:username/:spacename/setting/change', controller: 'spaces', action: 'change'
-  delete '/:username/:spacename/setting/delete', controller: 'spaces', action: 'delete'
-  patch '/:username/:spacename/setting/transfer', controller: 'spaces', action: 'transfer'
-  get '/:username/:spacename', controller: 'spaces', action: 'show'
+  patch '/:username/:namespace', controller: 'spaces', action: 'edit'
+  get '/:username/:namespace/setting', controller: 'spaces', action: 'setting'
+  patch '/:username/:namespace/setting/change', controller: 'spaces', action: 'change'
+  delete '/:username/:namespace/setting/delete', controller: 'spaces', action: 'delete'
+  patch '/:username/:namespace/setting/transfer', controller: 'spaces', action: 'transfer'
+  get '/:username/:namespace', controller: 'spaces', action: 'show'
 
   # projects route
-  post '/:username/:spacename/create', controller: 'spaces', action: 'create'
-  get '/:username/:spacename/projects', controller: 'projects', action: 'index'
-  patch '/:username/:spacename/:projectname', controller: 'projects', action: 'edit'
-  get '/:username/:spacename/:projectname/setting', controller: 'projects', action: 'setting'
-  get '/:username/:spacename/:projectname/delete', controller:'projects', action: 'delete'
-  get '/:username/:spacename/:projectname', controller: 'projects', action: 'show'
+  post '/:username/:namespace/create', controller: 'spaces', action: 'create'
+  get '/:username/:namespace/projects', controller: 'projects', action: 'index'
+  patch '/:username/:namespace/:projectname', controller: 'projects', action: 'edit'
+  get '/:username/:namespace/:projectname/setting', controller: 'projects', action: 'setting'
+  get '/:username/:namespace/:projectname/delete', controller:'projects', action: 'delete'
+  get '/:username/:namespace/:projectname', controller: 'projects', action: 'show'
 
   root 'home#index'
 

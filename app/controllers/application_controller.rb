@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :login_user
+  helper_method :me
   helper_method :login_user_email
   helper_method :login_api_key
   helper_method :param_user
@@ -22,14 +22,14 @@ class ApplicationController < ActionController::Base
   # This method return the client api key
   #
   def login_api_key
-    api_key = ApiKey.find_by(id: login_user.api_key_id) unless login_user == nil
+    api_key = ApiKey.find_by(id: me.api_key_id) unless me == nil
     api_key.api_key
   end
 
   ##
   # This method return the user authenticate or nil
   #
-  def login_user
+  def me
     cookie = cookies[:auth_token]
     @current_user ||= User.find_by_auth_token( cookie) if cookie
   end
@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   # This method return the client principal email
   #
   def login_user_email
-    email = User.email(login_user.id) unless login_user.nil?
+    email = User.email(me.id) unless me.nil?
     email.email
   end
 
@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
   # If exist user authenticate
   #
   def auth?
-    login_user != nil
+    me != nil
   end
 
   ##
@@ -114,17 +114,16 @@ class ApplicationController < ActionController::Base
   # Save logs by actions
   #
   def save_log(description, action, owner_user_id)
-    Log.save_log(description,  action, owner_user_id, login_user.id)
+    Log.save_log(description,  action, owner_user_id, me.id)
   end
 
   ##
   # if the request was doing for the user login or an user team
   #
-  def find_owner
-    user = User.find_by_username(params[:username]) || not_found
-    return user if auth? && login_user.username == user.username
-    return user if Team.where(user_id: user.id).where(user_team_id: login_user.id).any?
-
-    not_found
+  def allow
+    @user = User.find_by_username(params[:username]) || not_found
+    @user if auth? && @user.username == me.username || Team.member?(@user.id, me.id) || unauthorized
+  rescue Errors::UnauthorizedError
+    render_401
   end
 end

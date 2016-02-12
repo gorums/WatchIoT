@@ -6,7 +6,7 @@
             <span class="dropdown-user">
 							<span class="caret"></span>
              	<img class="img-circle" data-email="<%= login_user_email %>" width="23" height="23">
-							<%= login_user.username %> (<%= login_user_email %>)
+							<%= me.username %> (<%= login_user_email %>)
             </span>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-left">
@@ -25,7 +25,7 @@
 						Chart
 					<%end%>
 				</li>
-				<%if login_user.username == param_user %>
+				<%if me.username == param_user %>
 				<li><%= link_to "/" + param_user + "/setting" do%>
 						<i class="fa fa-cogs"></i>
 						Setting

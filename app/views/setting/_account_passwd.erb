@@ -1,7 +1,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading"><b>Change password</b></div>
 	<div class="panel-body">
-		<%= form_for @user, url: '/' + login_user.username + '/setting/account/password'  do |f| %>
+		<%= form_for @user, url: '/' + me.username + '/setting/account/password'  do |f| %>
 			<div class="form-group">
 				<%= div_for(@email, class: 'form-group col-lg-6') do %>
 					<label>Old password</label>

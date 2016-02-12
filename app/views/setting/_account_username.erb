@@ -2,13 +2,13 @@
 	<div class="panel-heading"><b>Change username</b></div>
 	<div class="panel-body">
 		<small>This change can be painful and break your applications.</small>
-		<%= form_for @user, url: '/' + login_user.username + '/setting/account/username'  do |f| %>
+		<%= form_for @user, url: '/' + me.username + '/setting/account/username'  do |f| %>
 			<div class="form-group">
 
 				<%= div_for(@user, class: 'form-group col-lg-6') do %>
 					<label>Username</label>
 					<div>
-						<%= f.text_field :username, class: 'form-control', placeholder: 'Username', value: login_user.username %>
+						<%= f.text_field :username, class: 'form-control', placeholder: 'Username', value: me.username %>
 					</div>
 				<%end%>
 

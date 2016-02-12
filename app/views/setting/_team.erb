@@ -9,7 +9,7 @@
 					<div class="panel-body">
 
 						<small>if the member does not exist on <b>WatchIoT</b> we will send an email to the new member and we will create an account with a default password.</small>
-						<%= form_for @email, url: '/' + login_user.username + '/setting/team/add' do |f| %>
+						<%= form_for @email, url: '/' + me.username + '/setting/team/add' do |f| %>
 						<div class="form-group">
 								<%= div_for(@email, class: 'form-group col-lg-6') do %>
 								<label>Email</label>
@@ -46,7 +46,7 @@
 								<%= user_name(team.user_team_id) %> (<b><%= user_email(team.user_team_id) %></b>)
 							</td>
 							<td>
-								<%= link_to '/' + login_user.username + '/setting/team/delete/' + team.user_team_id.to_s,
+								<%= link_to '/' + me.username + '/setting/team/delete/' + team.user_team_id.to_s,
 														method: :delete , class: 'list-action clear-background' do%>
 									<i class="fa fa-trash fa-2x"></i>
 								<%end%>

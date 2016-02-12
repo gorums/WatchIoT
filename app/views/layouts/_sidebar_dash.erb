@@ -25,9 +25,9 @@
 				Chart
 			<%end%>
 		</li>
-		<%if login_user.username == param_user%>
+		<%if me.username == param_user%>
 		<li class="dashboard-menu">
-			<%= link_to "/" + login_user.username + "/setting" do%>
+			<%= link_to "/" + me.username + "/setting" do%>
 				<i class="fa fa-cogs"></i>
 				Setting
 			<%end%>
