@@ -4,12 +4,11 @@
 class ChartController < ApplicationController
   layout 'dashboard'
 
+  before_filter :allow
+
   ##
   # Get /:username/chart
   #
   def show
-    user = find_owner
-    return if user.nil?
   end
-
 end

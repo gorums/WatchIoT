@@ -126,13 +126,6 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # Get space to transfer
-  #
-  def allow_space
-    @space = Space.my_space @user.id, params[:namespace] || not_found
-  end
-
-  ##
   # Set flash and log
   #
   def flash_log(log_description, msg)

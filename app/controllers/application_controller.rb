@@ -126,4 +126,11 @@ class ApplicationController < ActionController::Base
   rescue Errors::UnauthorizedError
     render_401
   end
+
+  ##
+  # Get space to transfer
+  #
+  def allow_space
+    @space = Space.my_space @user.id, params[:namespace] || not_found
+  end
 end
