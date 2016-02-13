@@ -55,7 +55,7 @@ class SpacesController < ApplicationController
   # Get /:username/:spacename/setting
   #
   def setting
-    @teams = my_teams @user.id
+    @teams = Team.my_teams @user.id
   end
 
   ##
@@ -66,7 +66,7 @@ class SpacesController < ApplicationController
     redirect_to '/' + @user.username + '/' + @space.name + '/setting'
 
     old_name = @space.name
-    Space.edit_space(@space, space_name_params)
+    Space.edit_space(@space, space_edit_params)
 
     flash_log('Change name space ' + old_name + ' by ' + @space.name,
               'The space name was hange correctly')
@@ -94,7 +94,7 @@ class SpacesController < ApplicationController
   def delete
     redirect_to '/' + @user.username + '/spaces'
 
-    Space.delete_space(@space, space_name_params)
+    Space.delete_space(@space, space_name_params[:name])
 
     flash_log('Delete name space <b>' + space_name_params[:name] + '</b>',
               'The space was delete correctly')
@@ -108,7 +108,7 @@ class SpacesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   #
   def space_create_params
-    params.require(:space).permit(:name, :description, :is_public)
+    params.require(:space).permit(:name, :description)
   end
 
   ##
@@ -122,7 +122,7 @@ class SpacesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   #
   def space_edit_params
-    params.require(:space).permit(:description, :is_public)
+    params.require(:space).permit(:name, :description)
   end
 
   ##
