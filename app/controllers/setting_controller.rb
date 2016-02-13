@@ -87,7 +87,7 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch /:username/setting/account/chpassword
+  # Patch /:username/setting/account/password
   #
   def account_ch_password
     redirect_to '/' + @user.username + '/setting/account'
@@ -100,7 +100,7 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Patch /:username/setting/account/chusername
+  # Patch /:username/setting/account/username
   #
   def account_ch_username
     redirect_to '/' + @user.username + '/setting/account'

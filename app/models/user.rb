@@ -43,17 +43,47 @@ class User < ActiveRecord::Base
 
   before_save :username_format
 
+  ##
+  # Disable the account
+  #
   def self.account_delete(user, username)
-    return if user.username != username
-    # you have to transfer or your spaces or delete their
-    return if Space.where(user_id: user.id).any?
+    raise StandardError, 'The username is not valid' if user.username != username
+    raise StandardError, 'You have to transfer or your spaces or delete their' if Space.has_spaces? user.id
 
-    # disable user
-    User.disable user
+    user.update!(statu: false)
   end
 
+  ##
+  # Find member to add the team
+  #
+  def self.find_member(user_id, email_member)
+    emails = Email.where('email = ?', email_member).all
+    # if dont exist create a new account
+    return create_new_member(email_member) if emails.nil? || emails.empty?
+    # if we find only one account
+    return User.find(emails.first.user_id) if emails.length == 1
+    # if we find more of one account, return the principal
+    email = Email.find_principal email_member
+    return User.find_by(id: email.user_id) unless email.nil?
+  end
+
+  ##
+  # change the username
+  #
   def self.change_username(user, new_username)
-    user.update(username: new_username)
+    user.update!(username: new_username)
+  end
+
+  ##
+  # Change the password
+  #
+  def self.change_passwd(user, params)
+    same_old_passwd =  user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+    raise StandardError, 'The old password is not correctly' unless same_old_passwd
+    passwd_confirmation = params[:passwd_new] != params[:passwd_confirmation]
+    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+
+    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
 
   def self.send_forgot_notification(username)
@@ -145,47 +175,6 @@ class User < ActiveRecord::Base
   end
 
   ##
-  # Find member to add the team
-  #
-  def self.find_member(user_id, email_member)
-    emails = Email.where(email: email_member).all
-
-    return create_new_member(email_member) if emails.nil? || emails.empty?
-    # if we find only one account
-    if emails.length == 1
-      # if is my email
-      return if user_id == emails.first.user_id
-      return User.find(emails.first.user_id)
-    end
-
-    # if we find more of one account, return the principal
-    email = Email.where(email: email_member).where(principal: true).take
-    unless email.nil?
-      # if is my email
-      return if user_id == email.user_id
-      return User.find_by(id: email.user_id)
-    end
-
-  end
-
-  ##
-  # Create a new acount member
-  #
-  def self.create_new_member(email_member)
-    email = Email.new(email: email_member)
-
-    user_member = User.new
-    user_member.username = email_member
-    user_member.passwd = User.generate_passwd
-    user_member.passwd_confirmation = user_member.passwd
-    User.save_user_and_mail(user_member, email)
-
-    token = VerifyClient.create_token(user_member.id, email_member, 'invited')
-    Notifier.send_create_user_email(token, email_member).deliver_later
-    user_member
-  end
-
-  ##
   # Get the principal email
   #
   def self.email(user_id)
@@ -204,17 +193,6 @@ class User < ActiveRecord::Base
   ##
   # Change the password
   #
-  def self.change_passwd(user, params)
-    return if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
-    return if params[:passwd_new] != params[:passwd_confirmation]
-
-    user.update(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
-    true
-  end
-
-  ##
-  # Change the password
-  #
   def self.reset_passwd(user, params, verifyClient)
     return if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
     return if params[:passwd_new] != params[:passwd_confirmation]
@@ -222,14 +200,6 @@ class User < ActiveRecord::Base
     verifyClient.destroy!
     user.update(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
     true
-  end
-
-  ##
-  # Change the user status to disable
-  #
-  def self.disable(user)
-    user.status = false
-    user.save!
   end
 
   ##
@@ -326,5 +296,20 @@ class User < ActiveRecord::Base
   #
   def self.last_name(name)
     name.split(' ', 2).last
+  end
+
+  ##
+  # Create a new account member
+  #
+  def self.create_new_member(email_member)
+    email = Email.new(email: email_member)
+
+    password = User.generate_passwd
+    user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
+    save_user_and_mail(user, email)
+
+    token = VerifyClient.create_token(user.id, email_member, 'invited')
+    Notifier.send_create_user_email(token, email_member).deliver_later
+    user
   end
 end

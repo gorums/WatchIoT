@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   after_filter :find_reset_user_by_token, :only => [:reset, :do_reset]
   after_filter :find_active_user_by_token, :only => :active
   after_filter :find_verify_email_by_token, :only => :verify_email
-  after_filter :find_active_user_by_token, :only => [:invite, :do_invite]
+  after_filter :find_invite_user_by_token, :only => [:invite, :do_invite]
 
   ##
   # GET /register
@@ -63,7 +63,7 @@ class UsersController < ApplicationController
   # Get /verify_email
   #
   def verify_email
-    Email.check @email, @verifyClient
+    Email.email_verify @email, @verifyClient
 
   rescue => ex
     flash[:error] = ex.message

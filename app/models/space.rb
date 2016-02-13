@@ -16,9 +16,10 @@ class Space < ActiveRecord::Base
   # validates_with SpaceCanCreateValidator, on: :create
   # validates_with SpaceCanEditValidator, on: :update
 
-  scope :my_spaces, -> user_id {where(user_id: user_id).order(created_at: :desc)}
-  scope :my_space, -> user_id, namespace {where(user_id: user_id).
-      where('name = ?', namespace).first if namespace.present?}
+  scope :my_spaces, -> user_id { where('user_id = ?', user_id).order(created_at: :desc) }
+  scope :my_space, -> user_id, namespace { where('user_id = ?', user_id)
+                                               .where('name = ?', namespace).first if namespace.present? }
+  scope :has_spaces?, -> user_id {where('user_id = ?', user_id).exists? }
 
   before_save :name_format
 
