@@ -86,13 +86,77 @@ class User < ActiveRecord::Base
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
 
-  def self.send_forgot_notification(username)
-    user = User.find_by_username(username) || not_found
-    email = user_email(user.id)
-    # TODO: throw exception
-    return if email.nil?
-    token = VerifyClient.create_token(user.id, email, 'reset')
-    Notifier.send_forget_passwd_email(user, token, email).deliver_later
+  ##
+  # This method try to authenticate the client, other way return nil
+  #
+  def self.authenticate(email, passwd)
+    return if passwd.empty?
+    user_email = Email.find_principal email
+
+    user = user_email.user unless user_email.nil?
+    user = User.find_by_username(email) if user_email.nil?
+    return if user.nil?
+
+    same_passwd = user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
+    user if user.status? && same_passwd
+  end
+
+  ##
+  # Register a new account
+  #
+  def self.register(user_params, email)
+    user = User.new(user_params)
+
+    User.transaction do
+      begin
+        #TODO: verificate passwd confirmation an email new or unprincipal
+        save_user_and_mail user, Email.new(email: email)
+        token = VerifyClient.create_token(user.id, email, 'register')
+        Notifier.send_signup_email(user, email, token).deliver_later
+      rescue
+        raise ActiveRecord::Rollback, 'Can register the account!'
+      end
+    end
+  end
+
+  def self.login(email, passwd, remember_me)
+    user = User.authenticate(email, passwd)
+    raise StandardError, 'Account is not valid' if user.nil?
+
+    cookies.permanent[:auth_token] = user.auth_token if remember_me
+    cookies[:auth_token] = user.auth_token unless remember_me
+  end
+
+  def self.omniauth
+    auth = request.env['omniauth.auth']
+    user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
+
+    cookies[:auth_token] = user.auth_token
+  end
+
+  ##
+  # Reset the password
+  #
+  def self.reset_passwd(user, params, verifyClient)
+    passwd_confirmation = params[:passwd_new] != params[:passwd_confirmation]
+    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+
+    # TODO: send notification, the password was change
+
+    verifyClient.destroy!
+    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
+  end
+
+  ##
+  # Active the account after register and validate the email
+  #
+  def self.active_account(user, email, verifyClient)
+    email.update(checked: true, principal: true)
+    user.update(status: true)
+
+    Notifier.send_signup_verify_email(user, email.email).deliver_later
+    verifyClient.destroy!
+    cookies[:auth_token] = user.auth_token
   end
 
   def self.invite(user, user_params, verifyClient)
@@ -107,127 +171,6 @@ class User < ActiveRecord::Base
 
     Notifier.send_signup_verify_email(user, email.email).deliver_later
     verifyClient.destroy!
-  end
-
-  def self.login(params)
-    user = User.authenticate(params[:email], params[:passwd])
-    return if user.nil?
-
-    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
-    cookies[:auth_token] = user.auth_token unless params[:remember_me]
-  end
-
-  def self.omniauth
-    auth = request.env['omniauth.auth']
-    user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
-
-    cookies[:auth_token] = user.auth_token
-  end
-
-  def self.register(user_params)
-    user = User.new(user_params)
-    email = email_params[:email]
-
-    User.transaction do
-      begin
-        #TODO: verificate passwd confirmation
-        save_user_and_mail user, Email.new(email: email)
-        token = VerifyClient.create_token(user.id, email, 'register')
-        Notifier.send_signup_email(user, email, token).deliver_later
-      rescue
-        raise ActiveRecord::Rollback, 'Can register the account!'
-      end
-    end
-  end
-
-  ##
-  # This method try to authenticate the client
-  #
-  def self.authenticate(email, passwd)
-    return if passwd.empty?
-    # find by email
-    user_email = Email.where(email: email).where(principal: true).take
-
-    user = user_email.user unless user_email.nil?
-    # else find by username
-    user = User.find_by_username(email) if user_email.nil?
-    return if user.nil?
-
-    user if user.status? && user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
-  end
-
-  ##
-  # Register with omniauth
-  #
-  def self.create_with_omniauth(auth)
-    user = User.new
-    user.provider = auth['provider']
-    user.uid = auth['uid']
-    user.first_name = first_name(auth['info']['name'])
-    user.last_name = last_name(auth['info']['name'])
-    user.username = auth['info']['nickname']
-    user.passwd = generate_passwd
-
-    email = Email.new
-    email.email = auth['info']['email']
-    save_user_and_mail user, email, true
-    user
-  end
-
-  ##
-  # Get the principal email
-  #
-  def self.email(user_id)
-    email = Email.find_by user_id: user_id, principal: true
-    email
-  end
-
-  ##
-  # Get the api key
-  #
-  def self.api_key(api_key_id)
-    api_key = ApiKey.find_by id: api_key_id
-    api_key.api_key
-  end
-
-  ##
-  # Change the password
-  #
-  def self.reset_passwd(user, params, verifyClient)
-    return if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
-    return if params[:passwd_new] != params[:passwd_confirmation]
-
-    verifyClient.destroy!
-    user.update(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
-    true
-  end
-
-  ##
-  # Save user and email routine
-  #
-  def self.save_user_and_mail(user, email, checked = false)
-    user.passwd_salt = BCrypt::Engine.generate_salt
-    user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
-    user.passwd_confirmation = user.passwd
-    user.status = checked
-    user.save!
-
-    email.checked = checked
-    email.principal = checked
-    email.user_id = user.id
-    email.save!
-  end
-
-  ##
-  # Active the account after register and validate the email
-  #
-  def self.active_account(user, email, verifyClient)
-    email.update(checked: true, principal: true)
-    user.update(status: true)
-
-    Notifier.send_signup_verify_email(user, email.email).deliver_later
-    verifyClient.destroy!
-    cookies[:auth_token] = user.auth_token
   end
 
   protected
@@ -311,5 +254,39 @@ class User < ActiveRecord::Base
     token = VerifyClient.create_token(user.id, email_member, 'invited')
     Notifier.send_create_user_email(token, email_member).deliver_later
     user
+  end
+
+  ##
+  # Register with omniauth
+  #
+  def self.create_with_omniauth(auth)
+    user = User.new
+    user.provider = auth['provider']
+    user.uid = auth['uid']
+    user.first_name = first_name(auth['info']['name'])
+    user.last_name = last_name(auth['info']['name'])
+    user.username = auth['info']['nickname']
+    user.passwd = generate_passwd
+
+    email = Email.new
+    email.email = auth['info']['email']
+    save_user_and_mail user, email, true
+    user
+  end
+
+  ##
+  # Save user and email routine
+  #
+  def self.save_user_and_mail(user, email, checked = false)
+    user.passwd_salt = BCrypt::Engine.generate_salt
+    user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
+    user.passwd_confirmation = user.passwd
+    user.status = checked
+    user.save!
+
+    email.checked = checked
+    email.principal = checked
+    email.user_id = user.id
+    email.save!
   end
 end

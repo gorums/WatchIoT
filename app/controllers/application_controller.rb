@@ -37,20 +37,19 @@ class ApplicationController < ActionController::Base
   def param_user
     params[:username]
   end
+
   ##
   # This method return the client principal email
   #
   def login_user_email
-    email = User.email(me.id) unless me.nil?
-    email.email
+    Email.my_principal me.id || ''
   end
 
   ##
   # This method return the principal email
   #
   def user_email(user_id)
-    email = User.email(user_id) unless user_id.nil?
-    email.email unless email.nil?
+    Email.my_principal user_id  || ''
   end
 
   ##

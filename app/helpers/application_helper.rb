@@ -3,15 +3,14 @@ module ApplicationHelper
   # This method return the principal email
   #
   def user_email(user_id)
-    email = User.email(user_id) unless user_id.nil?
-    email.email unless email.nil?
+    Email.my_principal user_id  || ''
   end
 
   ##
-  # This method return the principal email
+  # This method return the username
   #
   def user_name(user_id)
-    user = User.find(user_id) unless user_id.nil?
-    user.username
+    user = User.find(user_id)
+    user.username unless user.nil?
   end
 end
