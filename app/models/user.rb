@@ -104,19 +104,13 @@ class User < ActiveRecord::Base
   ##
   # Register a new account
   #
-  def self.register(user_params, email)
+  def self.register(user_params, email_s)
     user = User.new(user_params)
+    email = Email.new(email: email_s)
+    save_user_and_mail user, email
 
-    User.transaction do
-      begin
-        #TODO: verificate passwd confirmation an email new or unprincipal
-        save_user_and_mail user, Email.new(email: email)
-        token = VerifyClient.create_token(user.id, email, 'register')
-        Notifier.send_signup_email(user, email, token).deliver_later
-      rescue
-        raise ActiveRecord::Rollback, 'Can register the account!'
-      end
-    end
+    token = VerifyClient.create_token(user.id, email_s, 'register')
+    Notifier.send_signup_email(user, email_s, token).deliver_later
   end
 
   def self.login(email, passwd, remember_me)
@@ -151,8 +145,8 @@ class User < ActiveRecord::Base
   # Active the account after register and validate the email
   #
   def self.active_account(user, email, verifyClient)
-    email.update(checked: true, principal: true)
-    user.update(status: true)
+    user.update!(status: true)
+    email.update!(checked: true, principal: true)
 
     Notifier.send_signup_verify_email(user, email.email).deliver_later
     verifyClient.destroy!
@@ -168,8 +162,6 @@ class User < ActiveRecord::Base
 
     save_user_and_mail(user, email, true)
     cookies[:auth_token] = user.auth_token
-
-    Notifier.send_signup_verify_email(user, email.email).deliver_later
     verifyClient.destroy!
   end
 
@@ -245,10 +237,9 @@ class User < ActiveRecord::Base
   # Create a new account member
   #
   def self.create_new_member(email_member)
-    email = Email.new(email: email_member)
-
     password = User.generate_passwd
     user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
+    email = Email.new(email: email_member)
     save_user_and_mail(user, email)
 
     token = VerifyClient.create_token(user.id, email_member, 'invited')
@@ -260,24 +251,24 @@ class User < ActiveRecord::Base
   # Register with omniauth
   #
   def self.create_with_omniauth(auth)
-    user = User.new
-    user.provider = auth['provider']
-    user.uid = auth['uid']
+    user = User.new(username: auth['info']['nickname'], provider: auth['provider'], uid: auth['uid'])
     user.first_name = first_name(auth['info']['name'])
     user.last_name = last_name(auth['info']['name'])
-    user.username = auth['info']['nickname']
     user.passwd = generate_passwd
+    user.passwd_confirmation = user.passwd
 
-    email = Email.new
-    email.email = auth['info']['email']
+    email = Email.new(email: auth['info']['email'])
     save_user_and_mail user, email, true
-    user
   end
 
   ##
   # Save user and email routine
   #
   def self.save_user_and_mail(user, email, checked = false)
+    passwd_confirmation = user.passwd != user.passwd_confirmation
+    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+    raise StandardError, 'The email is principal in other account' if Email.is_principal? email.email
+
     user.passwd_salt = BCrypt::Engine.generate_salt
     user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
     user.passwd_confirmation = user.passwd
@@ -288,5 +279,7 @@ class User < ActiveRecord::Base
     email.principal = checked
     email.user_id = user.id
     email.save!
+    # if it is checked = true
+    Notifier.send_signup_verify_email(user, email.email).deliver_later if checked
   end
 end

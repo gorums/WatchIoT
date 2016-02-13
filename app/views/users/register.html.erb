@@ -1,14 +1,4 @@
-<% if @user.errors.any? %>
-    <div class="error_messages">
-      <ul>
-        <% for message in @user.errors.full_messages %>
-            <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-<% end %>
-
-
+<%= render 'layouts/alert_message'%>
 
 <div class="auth-form-header">
   <h1>Sign Up</h1>
