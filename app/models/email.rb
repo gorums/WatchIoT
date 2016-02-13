@@ -62,6 +62,10 @@ class Email < ActiveRecord::Base
     email.email
   end
 
+  def self.check(email, verifyClient)
+    email.update(checked: true)
+    verifyClient.destroy!
+  end
   ##
   # I forget my password process
   #

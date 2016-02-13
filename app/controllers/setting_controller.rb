@@ -171,6 +171,32 @@ class SettingController < ApplicationController
   private
 
   ##
+  # Filter method
+  # if the request was doing for the user login
+  #
+  def allow_me
+    @user = User.find_by_username(params[:username]) || not_found
+    @user if auth? && me.username == @user.username || unauthorized
+  rescue Errors::UnauthorizedError
+    render_401
+  end
+
+  ##
+  # Validate tabs when redirect is throw
+  #
+  def valid_tab?
+    %w(account team api).any? { |word|  params[:val] == word }
+  end
+
+  ##
+  # Set flash and log
+  #
+  def flash_log(log_description, msg)
+    save_log log_description, 'Setting', @user.id
+    flash[:notice] = msg
+  end
+
+  ##
   # Profile params
   #
   def profile_params
@@ -204,31 +230,5 @@ class SettingController < ApplicationController
   #
   def username_params
     params.require(:user).permit(:username)
-  end
-
-  ##
-  # Filter method
-  # if the request was doing for the user login
-  #
-  def allow_me
-    @user = User.find_by_username(params[:username]) || not_found
-    @user if auth? && me.username == @user.username || unauthorized
-  rescue Errors::UnauthorizedError
-    render_401
-  end
-
-  ##
-  # Validate tabs when redirect is throw
-  #
-  def valid_tab?
-    %w(account team api).any? { |word|  params[:val] == word }
-  end
-
-  ##
-  # Set flash and log
-  #
-  def flash_log(log_description, msg)
-    save_log log_description, 'Setting', @user.id
-    flash[:notice] = msg
   end
 end

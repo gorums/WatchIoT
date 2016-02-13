@@ -65,6 +65,51 @@ class User < ActiveRecord::Base
     Notifier.send_forget_passwd_email(user, token, email).deliver_later
   end
 
+  def self.invite(user, user_params, verifyClient)
+    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
+
+    user.username = user_params[:username]
+    user.passwd = user_params[:passwd]
+    user.passwd_confirmation = user_params[:passwd_confirmation]
+
+    save_user_and_mail(user, email, true)
+    cookies[:auth_token] = user.auth_token
+
+    Notifier.send_signup_verify_email(user, email.email).deliver_later
+    verifyClient.destroy!
+  end
+
+  def self.login(params)
+    user = User.authenticate(params[:email], params[:passwd])
+    return if user.nil?
+
+    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
+    cookies[:auth_token] = user.auth_token unless params[:remember_me]
+  end
+
+  def self.omniauth
+    auth = request.env['omniauth.auth']
+    user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
+
+    cookies[:auth_token] = user.auth_token
+  end
+
+  def self.register(user_params)
+    user = User.new(user_params)
+    email = email_params[:email]
+
+    User.transaction do
+      begin
+        #TODO: verificate passwd confirmation
+        save_user_and_mail user, Email.new(email: email)
+        token = VerifyClient.create_token(user.id, email, 'register')
+        Notifier.send_signup_email(user, email, token).deliver_later
+      rescue
+        raise ActiveRecord::Rollback, 'Can register the account!'
+      end
+    end
+  end
+
   ##
   # This method try to authenticate the client
   #
@@ -159,10 +204,22 @@ class User < ActiveRecord::Base
   ##
   # Change the password
   #
-  def self.change_passwd(user, params, validate = true)
-    return if validate && user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+  def self.change_passwd(user, params)
+    return if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
     return if params[:passwd_new] != params[:passwd_confirmation]
 
+    user.update(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
+    true
+  end
+
+  ##
+  # Change the password
+  #
+  def self.reset_passwd(user, params, verifyClient)
+    return if user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+    return if params[:passwd_new] != params[:passwd_confirmation]
+
+    verifyClient.destroy!
     user.update(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
     true
   end
@@ -197,7 +254,10 @@ class User < ActiveRecord::Base
   def self.active_account(user, email, verifyClient)
     email.update(checked: true, principal: true)
     user.update(status: true)
-    verifyClient.destroy
+
+    Notifier.send_signup_verify_email(user, email.email).deliver_later
+    verifyClient.destroy!
+    cookies[:auth_token] = user.auth_token
   end
 
   protected
