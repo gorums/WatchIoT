@@ -47,6 +47,8 @@ gem 'bcrypt', '~> 3.1.7'
 # gravatar plugins
 gem 'gravtastic'
 
+gem 'codeclimate-test-reporter', group: :test, require: nil
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   # gem 'mysql'
@@ -62,4 +64,6 @@ group :development, :test do
   # gem 'capybara', '2.4.1'
   # gem 'rb-inotify', '0.9.5'
   # gem 'libnotify', '0.9.1'
+
+  gem 'rspec-rails', '~> 3.0'
 end

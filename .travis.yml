@@ -13,3 +13,7 @@ deploy:
   run:
       - "rake db:migrate"
       - "rake cleanup"
+
+addons:
+    code_climate:
+        repo_token: 3b0d4309de7ce4f9c59194b941fb872dc8acf4896ecc54d92eaba82411bac0b1
