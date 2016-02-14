@@ -23,12 +23,25 @@ class VerifyClient < ActiveRecord::Base
     verifyClient.token
   end
 
+  ##
+  # Send forgot notification
+  #
   def self.send_forgot_notification(username)
-    user = User.find_by_username(username) || not_found
-    email = user_email(user.id)
-    # TODO: throw exception
-    return if email.nil?
+    user = User.find_by_username(username)
+    user = find_user_by_email username if user.nil?
+    raise StandardError, 'The account does not exist' if user.nil?
+
+    email = Email.my_principal(user.id)
+    raise StandardError, 'The account does not exist'  if email.nil?
+
     token = VerifyClient.create_token(user.id, email, 'reset')
     Notifier.send_forget_passwd_email(user, token, email).deliver_later
+  end
+
+  private
+
+  def self.find_user_by_email(username)
+    email = Email.find_principal username
+    User.find(email.user_id) unless email.nil?
   end
 end

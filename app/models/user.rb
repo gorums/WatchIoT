@@ -113,6 +113,9 @@ class User < ActiveRecord::Base
     Notifier.send_signup_email(user, email_s, token).deliver_later
   end
 
+  ##
+  # Login the account
+  #
   def self.login(email, passwd, remember_me)
     user = User.authenticate(email, passwd)
     raise StandardError, 'Account is not valid' if user.nil?
@@ -121,6 +124,9 @@ class User < ActiveRecord::Base
     cookies[:auth_token] = user.auth_token unless remember_me
   end
 
+  ##
+  # Register or login with omniauth
+  #
   def self.omniauth
     auth = request.env['omniauth.auth']
     user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
@@ -135,8 +141,10 @@ class User < ActiveRecord::Base
     passwd_confirmation = params[:passwd_new] != params[:passwd_confirmation]
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
 
-    # TODO: send notification, the password was change
+    email = Email.my_principal user.id
+    raise StandardError, 'You dont have a principal email, please contact us' if email.nil?
 
+    Notifier.send_reset_passwd_email(user, email.email).deliver_later
     verifyClient.destroy!
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
@@ -153,8 +161,11 @@ class User < ActiveRecord::Base
     cookies[:auth_token] = user.auth_token
   end
 
+  ##
+  # A member was invite, finish register
+  #
   def self.invite(user, user_params, verifyClient)
-    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data) || not_found
+    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data)
 
     user.username = user_params[:username]
     user.passwd = user_params[:passwd]
@@ -199,8 +210,7 @@ class User < ActiveRecord::Base
   end
 
   ##
-  # Set username always lowercase
-  # self.name.gsub! /[^0-9a-z ]/i, '_'
+  # Set username always lowercase, self.name.gsub! /[^0-9a-z ]/i, '_'
   #
   def username_format
     username.gsub! /[^0-9a-z\- ]/i, '_'
@@ -269,17 +279,20 @@ class User < ActiveRecord::Base
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
     raise StandardError, 'The email is principal in other account' if Email.is_principal? email.email
 
+    save_user user
+    Email.save_email email, user.id, checked
+
+    Notifier.send_signup_verify_email(user, email.email).deliver_later if checked
+  end
+
+  ##
+  # Save user
+  #
+  def self.save_user(user)
     user.passwd_salt = BCrypt::Engine.generate_salt
     user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
     user.passwd_confirmation = user.passwd
     user.status = checked
     user.save!
-
-    email.checked = checked
-    email.principal = checked
-    email.user_id = user.id
-    email.save!
-    # if it is checked = true
-    Notifier.send_signup_verify_email(user, email.email).deliver_later if checked
   end
 end

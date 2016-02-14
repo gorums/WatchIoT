@@ -22,8 +22,8 @@ class ApplicationController < ActionController::Base
   # This method return the client api key
   #
   def login_api_key
-    api_key = ApiKey.find_by(id: me.api_key_id) unless me == nil
-    api_key.api_key
+    api_key = ApiKey.find_by(id: me.api_key_id) unless me.nil?
+    api_key.api_key || ''
   end
 
   ##

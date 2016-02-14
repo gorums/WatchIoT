@@ -52,4 +52,11 @@ class Notifier < ApplicationMailer
     mail( :to => email,
           :subject => 'WatchIoT verify email!!')
   end
+
+  # send forget passwd token
+  def send_reset_passwd_email(user, email)
+    @user = user
+    mail( :to => email,
+          :subject => 'WatchIoT password reset correctly!!')
+  end
 end

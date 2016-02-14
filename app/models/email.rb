@@ -108,6 +108,12 @@ class Email < ActiveRecord::Base
     email
   end
 
+  def self.save_email(email, user_id, checked)
+    email.checked = checked
+    email.principal = checked
+    email.user_id = user_id
+    email.save!
+  end
   private
 
   ##
