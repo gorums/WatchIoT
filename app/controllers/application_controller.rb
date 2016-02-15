@@ -7,11 +7,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :me
+  helper_method :auth?
   helper_method :login_user_email
   helper_method :login_api_key
   helper_method :param_user
-  helper_method :user_email
-  helper_method :user_name
 
   rescue_from ActionController::RoutingError, with: :render_404
   rescue_from ActionController::BadRequest, with: :render_400
@@ -43,21 +42,6 @@ class ApplicationController < ActionController::Base
   #
   def login_user_email
     Email.my_principal me.id || ''
-  end
-
-  ##
-  # This method return the principal email
-  #
-  def user_email(user_id)
-    Email.my_principal user_id  || ''
-  end
-
-  ##
-  # This method return the principal email
-  #
-  def user_name(user_id)
-    user = User.find(user_id) unless user_id.nil?
-    user.username
   end
 
   ##
