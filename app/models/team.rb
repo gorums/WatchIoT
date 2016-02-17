@@ -17,6 +17,7 @@ class Team < ActiveRecord::Base
   # added a member for the team
   #
   def self.add_member(user, email_s)
+    can_add_member(user)
     user_member = User.find_member(user.id, email_s)
     raise StandardError, 'The member can not be added' if user_member.nil?
     raise StandardError, 'The member can not be yourself' if user.id == user_member.id
@@ -34,5 +35,18 @@ class Team < ActiveRecord::Base
     member = Team.member user.id, user_team_id
     raise StandardError, 'The member is not valid' if member.nil?
     member.destroy!
+  end
+
+  private
+
+  ##
+  # If i can added more members, free account such has 3 members permitted
+  #
+  def can_add_member(user)
+    members_count = Team.my_teams(user.id).count
+    value = Plan.plan_value user.plan_id, 'Team members'
+    if members_count >= value
+      raise StandardError, 'You can not added more members, please contact with us!'
+    end
   end
 end

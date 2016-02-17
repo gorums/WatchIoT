@@ -50,7 +50,7 @@ PlanFeature.create(plan_id: 3, feature_id: 5, value: 'true')
 PlanFeature.create(plan_id: 4, feature_id: 5, value: 'true')
 
 # Team members
-PlanFeature.create(plan_id: 1, feature_id: 6, value: '1')
+PlanFeature.create(plan_id: 1, feature_id: 6, value: '3')
 PlanFeature.create(plan_id: 2, feature_id: 6, value: '5')
 PlanFeature.create(plan_id: 3, feature_id: 6, value: '10')
 PlanFeature.create(plan_id: 4, feature_id: 6, value: 'unlimited')

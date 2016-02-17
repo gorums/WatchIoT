@@ -27,6 +27,7 @@ class Space < ActiveRecord::Base
   # add a new space
   #
   def self.add_space(space_params, user_id, user_owner_id)
+    can_add_space user_id
     space = Space.new(space_params)
     space.user_id = user_id
     space.user_owner_id = user_owner_id
@@ -77,5 +78,16 @@ class Space < ActiveRecord::Base
   def name_format
     name.gsub! /[^0-9a-z\- ]/i, '_'
     name.downcase.gsub! /\s+/, '_'
+  end
+
+  ##
+  # If i can added more space, free account such has 3 spaces permitted
+  #
+  def self.can_add_space(user_id)
+    spaces_count = Space.my_spaces(user_id).count
+    value = Plan.plan_value user.plan_id, 'Number of spaces'
+    if spaces_count >= value
+      raise StandardError, 'You can not added more spaces, please contact with us!'
+    end
   end
 end
