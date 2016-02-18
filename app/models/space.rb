@@ -77,7 +77,7 @@ class Space < ActiveRecord::Base
   #
   def name_format
     name.gsub! /[^0-9a-z\- ]/i, '_'
-    name.downcase.gsub! /\s+/, '_'
+    name.gsub! /\s+/, '_'
   end
 
   ##
