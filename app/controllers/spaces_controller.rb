@@ -12,7 +12,7 @@ class SpacesController < ApplicationController
   #
   def index
     @space = Space.new
-    @spaces = Space.my_spaces @user.id
+    @spaces = Space.find_by_user_order @user.id
   end
 
   ##
@@ -26,12 +26,12 @@ class SpacesController < ApplicationController
   # Post /:username/create
   #
   def create
-    Space.add_space(space_create_params, @user.id, me.id)
+    space = Space.create_new_space(space_create_params, @user, me)
 
-    flash_log('Create the space <b>' + space_params[:name] + '</b>',
+    flash_log('Create the space <b>' + space.name + '</b>',
               'Space created correctly')
 
-    redirect_to '/' + @user.username + '/' + space_params[:name]
+    redirect_to '/' + @user.username + '/' + space.name
   rescue => ex
     flash[:error] = ex.message
     redirect_to '/' + @user.username + '/spaces'

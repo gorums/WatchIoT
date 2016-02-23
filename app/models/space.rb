@@ -5,34 +5,31 @@ class Space < ActiveRecord::Base
   belongs_to :user
   has_many :projects
 
-  validates_presence_of :name, on: :create
   validates_uniqueness_of :name, scope: [:user_id]
-
-  validates :name, length: { maximum: 15 }
-
+  validates :name, presence: true, length: { maximum: 25 }
   validates :name, exclusion: { in: %w(create setting spaces chart),
                                 message: '%{value} is reserved.' }
-  # include ActiveModel::Validations
-  # validates_with SpaceCanCreateValidator, on: :create
-  # validates_with SpaceCanEditValidator, on: :update
-
-  scope :my_spaces, -> user_id { where('user_id = ?', user_id).order(created_at: :desc) }
-  scope :my_space, -> user_id, namespace { where('user_id = ?', user_id)
-                                               .where('name = ?', namespace).first if namespace.present? }
-  scope :has_spaces?, -> user_id {where('user_id = ?', user_id).exists? }
 
   before_save :name_format
+
+  scope :has_spaces_by_user?, -> user_id { where('user_id = ?', user_id).exists? }
+
+  scope :find_by_user_order, -> user_id { where('user_id = ?', user_id).
+        order(created_at: :desc) }
+
+  scope :find_by_user_and_name, -> user_id, namespace {
+        where('user_id = ?', user_id).where('name = ?', namespace) if namespace.present? }
 
   ##
   # add a new space
   #
-  def self.add_space(space_params, user_id, user_owner_id)
-    can_add_space user_id
-    space = Space.new(space_params)
-    space.user_id = user_id
-    space.user_owner_id = user_owner_id
+  def self.create_new_space(space_params, user, user_owner)
+    raise StandardError, 'You can not added more spaces,'\
+              ' please contact with us!' unless can_create_space?(user)
 
-    space.save!
+    Space.create!(
+        name: space_params[:name], description: space_params[:description],
+        user_id: user.id, user_owner_id: user_owner.id)
   end
 
   ##
@@ -83,11 +80,9 @@ class Space < ActiveRecord::Base
   ##
   # If i can added more space, free account such has 3 spaces permitted
   #
-  def self.can_add_space(user_id)
-    spaces_count = Space.my_spaces(user_id).count
+  def self.can_create_space?(user)
+    spaces_count = Space.find_by_user_order(user.id).count
     value = Plan.plan_value user.plan_id, 'Number of spaces'
-    if spaces_count >= value
-      raise StandardError, 'You can not added more spaces, please contact with us!'
-    end
+    spaces_count < value.to_i
   end
 end

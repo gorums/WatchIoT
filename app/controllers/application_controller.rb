@@ -114,6 +114,6 @@ class ApplicationController < ActionController::Base
   # Get space to transfer
   #
   def allow_space
-    @space = Space.my_space @user.id, params[:namespace] || not_found
+    @space = Space.find_by_user_and_name @user.id, params[:namespace] || not_found
   end
 end

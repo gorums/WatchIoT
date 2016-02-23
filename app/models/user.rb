@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
   #
   def self.account_delete(user, username)
     raise StandardError, 'The username is not valid' if user.username != username
-    raise StandardError, 'You have to transfer or your spaces or delete their' if Space.has_spaces? user.id
+    raise StandardError, 'You have to transfer or your spaces or delete their' if Space.has_spaces_by_user? user.id
 
     user.update!(statu: false)
   end
@@ -206,7 +206,7 @@ class User < ActiveRecord::Base
   # This method assign the free plan by default
   #
   def assign_plan
-    self.plan_id = 1
+    self.plan_id = Plan.find_by_name('Free').id
   end
 
   ##

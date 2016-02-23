@@ -4,7 +4,7 @@
 class CreateSpaces < ActiveRecord::Migration
   def change
     create_table :spaces do |t|
-      t.string :name
+      t.string :name, length: 25
       t.text :description
       t.boolean :is_public, default: true
       t.boolean :can_subscribe, default: true
