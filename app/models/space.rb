@@ -5,7 +5,7 @@ class Space < ActiveRecord::Base
   belongs_to :user
   has_many :projects
 
-  validates_uniqueness_of :name, scope: [:user_id]
+  validates_uniqueness_of :name, scope: [:user_id], message: 'You have a space with this name'
   validates :name, presence: true, length: { maximum: 25 }
   validates :name, exclusion: { in: %w(create setting spaces chart),
                                 message: '%{value} is reserved.' }
@@ -35,10 +35,17 @@ class Space < ActiveRecord::Base
   end
 
   ##
-  # edit a space
+  # edit a space, only can edit the description for now
   #
-  def self.edit_space(space, space_params)
-    space.update!(space_params)
+  def self.edit_space(description, space)
+    space.update!(description: description)
+  end
+
+  ##
+  # edit a space, only can edit the namespace for now
+  #
+  def self.change_space(namespace, space)
+    space.update!(name: namespace)
   end
 
   ##
@@ -46,10 +53,8 @@ class Space < ActiveRecord::Base
   #
   def self.delete_space(space, namespace)
     raise StandardError, 'The space name is not valid' if space.name != namespace
-    if Project.has_projects? space.id
-      raise StandardError, 'You have to transfer or your projects or delete their'
-    end
-
+    raise StandardError, 'You have to transfer or your projects'\
+                         ' or delete their' if Project.has_projects? space.id
     space.destroy!
   end
 
@@ -57,7 +62,8 @@ class Space < ActiveRecord::Base
   # Transfer space and projects to a member team
   #
   def self.transfer(space, user, user_member_id)
-    raise StandardError, 'The member is not valid' unless Team.member? user.id, user_member_id
+    raise StandardError,
+          'The member is not valid' unless Team.member? user.id, user_member_id
 
     space.update!(user_id: user_member_id)
     Project.find_each('space_id = ?', space.id) do |p|
@@ -65,17 +71,18 @@ class Space < ActiveRecord::Base
     end
 
     member_email = Email.my_principal user_member_id
-    Notifier.send_transfer_space_email(user, space, member_email).deliver_later unless member_email.nil?
+    Notifier.send_transfer_space_email(user, space, member_email)
+        .deliver_later unless member_email.nil?
   end
 
   private
 
   ##
   # Format name field, lowercase and '_' by space
-  # Admitted only alphanumeric characters
+  # Admitted only alphanumeric characters, - and _
   #
   def name_format
-    name.gsub! /[^0-9a-z\- ]/i, '_'
+    name.gsub! /[^0-9a-z\-_ ]/i, ''
     name.gsub! /\s+/, '_'
   end
 

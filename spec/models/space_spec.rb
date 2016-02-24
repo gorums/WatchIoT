@@ -80,13 +80,32 @@ RSpec.describe Space, type: :model do
   end
 
   it 'return a format name' do
-    namespace = 'ad/*\@#&)@as'
+    namespace = 'aA/*\ @#&)@as'
     space = Space.create!(name: namespace, user_id: @user.id)
-    expect(space.name).to include('ad________as')
+    expect(space.name).to include('aA_as')
   end
 
-  it 'is valid edit a namespace'
-  it 'is valid edit a namespace for duplicate them'
+  it 'is valid edit a namespace' do
+    params = { name: 'my space', description: 'my descrition'}
+    space = Space.create_new_space(params, @user, @user)
+    expect(space.description).to include('my descrition')
+
+    Space.edit_space 'my edit descrition', space
+    expect(space.name).to include('my_space') # the name space can not change
+    expect(space.description).to include('my edit descrition')
+  end
+
+  it 'is valid edit a namespace for duplicate them' do
+    params = { name: 'space', description: 'space description'}
+    params1 = { name: 'space1', description: 'space1 description'}
+
+    space = Space.create_new_space(params, @user, @user)
+    expect(space).to be_valid
+    space1 = Space.create_new_space(params1, @user, @user)
+    expect(space1).to be_valid
+
+    expect { Space.change_space 'space', space1 }.to raise_error(/You have a space with this name/)
+  end
   it 'is valid delete a space'
   it 'is valid transfer a space to a member'
   it 'is valid transfer a space to a not member'

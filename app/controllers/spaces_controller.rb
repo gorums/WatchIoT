@@ -43,7 +43,7 @@ class SpacesController < ApplicationController
   def edit
     render 'show'
 
-    Space.edit_space(@space, space_edit_params)
+    Space.edit_space(space_edit_params[:description], @space)
     @project = Project.new
 
     flash_log('Edit the space <b>' + @space.name + '</b>', 'Space edited correctly')    
@@ -66,7 +66,7 @@ class SpacesController < ApplicationController
     redirect_to '/' + @user.username + '/' + @space.name + '/setting'
 
     old_name = @space.name
-    Space.edit_space(@space, space_edit_params)
+    Space.change_space(space_edit_params[:name], @space)
 
     flash_log('Change name space ' + old_name + ' by ' + @space.name,
               'The space name was hange correctly')
