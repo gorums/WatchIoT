@@ -14,6 +14,8 @@ class Space < ActiveRecord::Base
 
   scope :has_spaces_by_user?, -> user_id { where('user_id = ?', user_id).exists? }
 
+  scope :count_spaces_by_user, -> user_id { where('user_id = ?', user_id).count }
+
   scope :find_by_user_order, -> user_id { where('user_id = ?', user_id).
         order(created_at: :desc) }
 
@@ -81,8 +83,8 @@ class Space < ActiveRecord::Base
   # If i can added more space, free account such has 3 spaces permitted
   #
   def self.can_create_space?(user)
-    spaces_count = Space.find_by_user_order(user.id).count
-    value = Plan.plan_value user.plan_id, 'Number of spaces'
+    spaces_count = Space.count_spaces_by_user user.id
+    value = Plan.find_plan_value user.plan_id, 'Number of spaces'
     spaces_count < value.to_i
   end
 end

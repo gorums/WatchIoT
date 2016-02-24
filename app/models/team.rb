@@ -44,7 +44,7 @@ class Team < ActiveRecord::Base
   #
   def can_add_member(user)
     members_count = Team.my_teams(user.id).count
-    value = Plan.plan_value user.plan_id, 'Team members'
+    value = Plan.find_plan_value user.plan_id, 'Team members'
     if members_count >= value
       raise StandardError, 'You can not added more members, please contact with us!'
     end
