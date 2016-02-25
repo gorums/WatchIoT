@@ -48,7 +48,8 @@ class User < ActiveRecord::Base
   #
   def self.account_delete(user, username)
     raise StandardError, 'The username is not valid' if user.username != username
-    raise StandardError, 'You have to transfer or your spaces or delete their' if Space.has_spaces_by_user? user.id
+    raise StandardError, 'You have to transfer or'/
+                         ' your spaces or delete their' if Space.exists?(user_id: user.id)
 
     user.update!(statu: false)
   end

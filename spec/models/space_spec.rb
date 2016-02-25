@@ -110,13 +110,13 @@ RSpec.describe Space, type: :model do
   it 'is valid delete a space' do
     params = { name: 'space', description: 'space description'}
 
-    expect(Space.count_spaces_by_user @user.id).to eq(0)
+    expect(Space.count_by_user @user.id).to eq(0)
     space = Space.create_new_space(params, @user, @user)
     expect(space).to be_valid
-    expect(Space.count_spaces_by_user @user.id).to eq(1)
+    expect(Space.count_by_user @user.id).to eq(1)
 
     Space.delete_space('space', space)
-    expect(Space.count_spaces_by_user @user.id).to eq(0)
+    expect(Space.count_by_user @user.id).to eq(0)
 
     space = Space.create_new_space(params, @user, @user)
     project =Project.create!(name: 'project', space_id: space.id)
@@ -125,7 +125,7 @@ RSpec.describe Space, type: :model do
 
     project.destroy!
     Space.delete_space('space', space)
-    expect(Space.count_spaces_by_user @user.id).to eq(0)
+    expect(Space.count_by_user @user.id).to eq(0)
   end
 
   it 'is valid transfer a space to a member'

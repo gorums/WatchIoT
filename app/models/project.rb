@@ -11,8 +11,6 @@ class Project < ActiveRecord::Base
   validates :name, exclusion: { in: %w(create setting projects),
                                 message: '%{value} is reserved.' }
 
-  scope :find_projects_by_space?, -> space_id { where('space_id = ?', space_id) }
-
   before_save :name_format
 
   private
