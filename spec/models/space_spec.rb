@@ -72,7 +72,7 @@ RSpec.describe Space, type: :model do
 
     space = Space.new(name: 'my_space', user_id: @user.id)
     space.valid?
-    expect(space.errors[:name]).to include('has already been taken')
+    expect(space.errors[:name]).to include('You have a space with this name')
 
     space = Space.new(name: 'my_space', user_id: @user_two.id)
     space.valid?
