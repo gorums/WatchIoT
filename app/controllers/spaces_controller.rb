@@ -94,7 +94,7 @@ class SpacesController < ApplicationController
   def delete
     redirect_to '/' + @user.username + '/spaces'
 
-    Space.delete_space(@space, space_name_params[:name])
+    Space.delete_space(space_name_params[:name], @space)
 
     flash_log('Delete name space <b>' + space_name_params[:name] + '</b>',
               'The space was delete correctly')

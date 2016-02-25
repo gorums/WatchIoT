@@ -85,7 +85,7 @@ RSpec.describe Space, type: :model do
     expect(space.name).to include('aA_as')
   end
 
-  it 'is valid edit a namespace' do
+  it 'is valid edit description space' do
     params = { name: 'my space', description: 'my descrition'}
     space = Space.create_new_space(params, @user, @user)
     expect(space.description).to include('my descrition')
@@ -106,7 +106,28 @@ RSpec.describe Space, type: :model do
 
     expect { Space.change_space 'space', space1 }.to raise_error(/You have a space with this name/)
   end
-  it 'is valid delete a space'
+
+  it 'is valid delete a space' do
+    params = { name: 'space', description: 'space description'}
+
+    expect(Space.count_spaces_by_user @user.id).to eq(0)
+    space = Space.create_new_space(params, @user, @user)
+    expect(space).to be_valid
+    expect(Space.count_spaces_by_user @user.id).to eq(1)
+
+    Space.delete_space('space', space)
+    expect(Space.count_spaces_by_user @user.id).to eq(0)
+
+    space = Space.create_new_space(params, @user, @user)
+    project =Project.create!(name: 'project', space_id: space.id)
+
+    expect { Space.delete_space('space', space) }.to raise_error('This space can not be delete because it has one or more projects associate')
+
+    project.destroy!
+    Space.delete_space('space', space)
+    expect(Space.count_spaces_by_user @user.id).to eq(0)
+  end
+
   it 'is valid transfer a space to a member'
   it 'is valid transfer a space to a not member'
 end

@@ -12,7 +12,7 @@ class Space < ActiveRecord::Base
 
   before_save :name_format
 
-  scope :has_spaces_by_user?, -> user_id { where('user_id = ?', user_id).exists? }
+  scope :has_spaces_by_user?, -> user_id { where('user_id = ?', user_id).any? }
 
   scope :count_spaces_by_user, -> user_id { where('user_id = ?', user_id).count }
 
@@ -51,10 +51,11 @@ class Space < ActiveRecord::Base
   ##
   # delete a space
   #
-  def self.delete_space(space, namespace)
-    raise StandardError, 'The space name is not valid' if space.name != namespace
-    raise StandardError, 'You have to transfer or your projects'\
-                         ' or delete their' if Project.has_projects? space.id
+  def self.delete_space(namespace, space)
+    raise StandardError, 'The space name is not valid' if namespace != space.name
+
+    raise StandardError, 'This space can not be delete because it has'\
+                       ' one or more projects associate' if Project.find_projects_by_space?(space.id).any?
     space.destroy!
   end
 
