@@ -7,11 +7,9 @@ class Team < ActiveRecord::Base
 
   scope :my_teams, -> user_id { where('user_id = ?', user_id) }
   scope :belong_to, -> user_team_id { where('user_team_id = ?', user_team_id) }
-  scope :member?, -> user_id, user_team_id { where('user_id = ?', user_id)
-                                                 .where('user_team_id = ?', user_team_id).exists? }
 
   scope :member, -> user_id, user_team_id { where('user_id = ?', user_id)
-                                                .where('user_team_id = ?', user_team_id).take }
+                                                .where('user_team_id = ?', user_team_id) }
 
   ##
   # added a member for the team
@@ -31,7 +29,7 @@ class Team < ActiveRecord::Base
   ##
   # remove a member for the team
   #
-  def self.remove(user, user_team_id)
+  def self.remove_member(user, user_team_id)
     member = Team.member user.id, user_team_id
     raise StandardError, 'The member is not valid' if member.nil?
     member.destroy!

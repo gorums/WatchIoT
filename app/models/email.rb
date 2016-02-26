@@ -4,38 +4,53 @@
 class Email < ActiveRecord::Base
   belongs_to :user
 
-  validates_uniqueness_of :email, scope: [:user_id]
   validates :email, email: true , presence: true
+  validates_uniqueness_of :email, scope: [:user_id],
+                          message: 'The email already exist in your account'
 
-  scope :my_emails, -> user_id { where('user_id = ?', user_id).order(principal: :desc) }
-  scope :my_email, -> user_id { where('user_id = ?', user_id).order(principal: :desc) }
-  scope :has_email?, -> user_id, email { where('user_id = ?', user_id)
-                                        .where('email = ?', email).exists? if email.present? }
-  scope :find_email, -> user_id, email { where('user_id = ?', user_id)
-                                            .where('email = ?', email).take if email.present? }
+  scope :find_by_user, -> user_id {
+        where('user_id = ?', user_id).order(principal: :desc) }
+  scope :count_by_user, -> user_id {
+        where('user_id = ?', user_id).count }
+  scope :find_principal_by_user, -> user_id {
+        where('user_id = ?', user_id).where(principal: true) }
+  scope :find_by_user_and_by_id, -> user_id, id {
+        where('user_id = ?', user_id).where('id = ?', id) if id.present? }
+  scope :find_principal_by_email, -> email {
+        where('email = ?', email).where(principal: true) if email.present? }
+  scope :find_by_user_and_by_email, -> user_id, email {
+        where('user_id = ?', user_id).where('email = ?', email) if email.present? }
 
-  scope :my_email_by_id, -> user_id, id { where('user_id = ?', user_id)
-                                            .where('id = ?', id).take if id.present? }
-
-  scope :is_principal?, -> email { where('email = ?', email).where(principal: true).exists? if email.present? }
-  scope :find_principal, -> email { where('email = ?', email).where(principal: true).take if email.present? }
-  scope :my_principal, -> user_id { where('user_id = ?', user_id).where(principal: true).take }
 
   ##
   # Add an email to the account unprincipal waiting for verification
   #
   def self.add_email(user_id, email)
-    raise StandardError, 'The email already added' if has_email?(user_id, email)
+    Email.create!(email: email, user_id: user_id)
+  end
 
-    email = Email.new(email: email, user_id: user_id)
-    email.save!
+  ##
+  # Set this email id like principal
+  #
+  def self.principal(user_id, email_id)
+    email = find_by_user_and_by_id(user_id, email_id).take
+    raise StandardError, 'The email is not valid' if email.nil?
+    raise StandardError, 'The email has to be check' unless email.checked?
+    raise StandardError, 'The email already is principal in your account' if email.principal
+    raise StandardError, 'The email is principal in other '/
+                           'account' if Email.find_principal_by_email(email.email).exists?
+
+    # set like not principal if exist the current principal email
+    Email.unprincipal(email.user_id)
+    email.update!(principal: true)
+    email
   end
 
   ##
   # Remove an email unprincipal
   #
   def self.remove_email(user_id, email_id)
-    email = my_email_by_id(user_id, email_id)
+    email = find_by_user_and_by_id(user_id, email_id)
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email can not be principal' if email.principal?
 
@@ -48,7 +63,7 @@ class Email < ActiveRecord::Base
   # Send the verification email
   #
   def self.send_verify(user_id, email_id)
-    email = my_email_by_id(user_id, email_id)
+    email = find_by_user_and_by_id(user_id, email_id)
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email has to be uncheck' if email.checked?
 
@@ -66,25 +81,10 @@ class Email < ActiveRecord::Base
   end
 
   ##
-  # Set this email id like principal
-  #
-  def self.principal(user_id, email_id)
-    email = my_email_by_id(user_id, email_id)
-    raise StandardError, 'The email is not valid' if email.nil?
-    raise StandardError, 'The email has to be check' unless email.checked?
-    raise StandardError, 'The email has not to be principal' if email.principal
-    raise StandardError, 'The email is principal in other account' if Email.is_principal? email.email
-
-    Email.unprincipal(email.user_id)
-    email.update!(principal: true)
-    email.email
-  end
-
-  ##
   # I forget my password process
   #
   def self.forget(email)
-    email = Email.find_principal email
+    email = Email.find_principal_by_email email
     raise StandardError, 'The email is not principal' if email.nil?
     email.user
   end
@@ -93,7 +93,7 @@ class Email < ActiveRecord::Base
   # Define if the email can checked like principal
   #
   def self.email_to_activate(user_id, email_s)
-    email = Email.find_email user_id, email_s
+    email = Email.find_by_user_and_by_email user_id, email_s
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email is principal in other account' if Email.is_principal? email.email
     email
@@ -103,7 +103,7 @@ class Email < ActiveRecord::Base
   # by other user
   #
   def self.email_to_check(user_id, email)
-    email = Email.find_email user_id, email
+    email = Email.find_by_user_and_by_email user_id, email
     raise StandardError, 'The email is not valid' if email.nil?
     email
   end
@@ -120,7 +120,7 @@ class Email < ActiveRecord::Base
   # Find the principal email for this user and set it like not principal
   #
   def self.unprincipal(user_id)
-    email_principal = Email.my_principal user_id
+    email_principal = Email.find_principal_by_user(user_id).take
     email_principal.update!(principal: false) unless email_principal.nil?
   end
 end

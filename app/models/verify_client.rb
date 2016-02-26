@@ -31,7 +31,7 @@ class VerifyClient < ActiveRecord::Base
     user = find_user_by_email username if user.nil?
     raise StandardError, 'The account does not exist' if user.nil?
 
-    email = Email.my_principal(user.id)
+    email = Email.find_principal_by_user(user.id)
     raise StandardError, 'The account does not exist'  if email.nil?
 
     token = VerifyClient.create_token(user.id, email, 'reset')
@@ -41,7 +41,7 @@ class VerifyClient < ActiveRecord::Base
   private
 
   def self.find_user_by_email(username)
-    email = Email.find_principal username
+    email = Email.find_principal_by_email username
     User.find(email.user_id) unless email.nil?
   end
 end

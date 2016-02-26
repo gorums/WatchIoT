@@ -62,14 +62,14 @@ class Space < ActiveRecord::Base
   #
   def self.transfer(space, user, user_member_id)
     raise StandardError,
-          'The member is not valid' unless Team.member? user.id, user_member_id
+          'The member is not valid' unless Team.member(user.id, user_member_id).exists?
 
     space.update!(user_id: user_member_id)
     Project.find_each('space_id = ?', space.id) do |p|
       p.update!(user_id: user_member_id)
     end
 
-    member_email = Email.my_principal user_member_id
+    member_email = Email.find_principal_by_user user_member_id
     Notifier.send_transfer_space_email(user, space, member_email)
         .deliver_later unless member_email.nil?
   end

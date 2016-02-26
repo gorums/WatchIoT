@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
     # if we find only one account
     return User.find(emails.first.user_id) if emails.length == 1
     # if we find more of one account, return the principal
-    email = Email.find_principal email_member
+    email = Email.find_principal_by_email email_member
     return User.find_by(id: email.user_id) unless email.nil?
   end
 
@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
   #
   def self.authenticate(email, passwd)
     return if passwd.empty?
-    user_email = Email.find_principal email
+    user_email = Email.find_principal_by_email email
 
     user = user_email.user unless user_email.nil?
     user = User.find_by_username(email) if user_email.nil?
@@ -142,7 +142,7 @@ class User < ActiveRecord::Base
     passwd_confirmation = params[:passwd_new] != params[:passwd_confirmation]
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
 
-    email = Email.my_principal user.id
+    email = Email.find_principal_by_user user.id
     raise StandardError, 'You dont have a principal email, please contact us' if email.nil?
 
     Notifier.send_reset_passwd_email(user, email.email).deliver_later

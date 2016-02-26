@@ -11,7 +11,7 @@ class SettingController < ApplicationController
   #
   def show
     @email = Email.new
-    @emails = Email.my_emails(@user.id)
+    @emails = Email.find_by_user(@user.id)
     @teams = Team.my_teams @user.id
     @teams_belong = Team.belong_to @user.id
     @in = valid_tab? ? params[:val] : ''
@@ -78,9 +78,9 @@ class SettingController < ApplicationController
   def account_principal_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email_s = Email.principal(@user.id, params[:id])
+    email = Email.principal(@user.id, params[:id])
 
-    flash_log('Set email <b>' + email_s + '</b> like principal',
+    flash_log('Set email <b>' + email.email + '</b> like principal',
                   'The email was set principal correctly')
   rescue => ex
     flash[:error] = ex.message
@@ -147,7 +147,7 @@ class SettingController < ApplicationController
   def team_delete
     redirect_to '/' + @user.username + '/setting/team'
 
-    Team.remove @user, params[:id]
+    Team.remove_member @user, params[:id]
 
     flash_log('Delete a member <b>' + user_email(params[:id]) + '</b>',
               'The member was delete correctly')

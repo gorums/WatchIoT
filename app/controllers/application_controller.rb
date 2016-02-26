@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   # This method return the client principal email
   #
   def login_user_email
-    Email.my_principal me.id || ''
+    Email.find_principal_by_user me.id || ''
   end
 
   ##

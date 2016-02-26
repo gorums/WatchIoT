@@ -128,6 +128,18 @@ RSpec.describe Space, type: :model do
     expect(Space.count_by_user @user.id).to eq(0)
   end
 
-  it 'is valid transfer a space to a member'
-  it 'is valid transfer a space to a not member'
+  it 'is valid transfer a space to a not member' do
+    params = { name: 'space', description: 'space description'}
+    space = Space.create_new_space(params, @user, @user)
+
+    expect { Space.transfer(space, @user, @user_two.id) }.to raise_error('The member is not valid')
+  end
+
+  it 'is valid transfer a space to a member' do
+    params = { name: 'space', description: 'space description'}
+    space = Space.create_new_space(params, @user, @user)
+
+    # Team.add_member()
+    # expect { Space.transfer(space, @user, @user_two.id) }.to raise_error('The member is not valid')
+  end
 end
