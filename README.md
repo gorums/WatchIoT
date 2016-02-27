@@ -55,7 +55,3 @@ Finished the first part of the home page
 *1 june 2015*
 
 Create watchIoT project on github, first commit
-
-TODO
---
-
