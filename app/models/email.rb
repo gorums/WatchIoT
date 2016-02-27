@@ -37,11 +37,11 @@ class Email < ActiveRecord::Base
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email has to be check' unless email.checked?
     raise StandardError, 'The email already is principal in your account' if email.principal
-    raise StandardError, 'The email is principal in other '/
-                           'account' if Email.find_principal_by_email(email.email).exists?
+    raise StandardError, 'The email is principal in other '\
+                         'account' if Email.find_principal_by_email(email.email).exists?
 
     # set like not principal if exist the current principal email
-    Email.unprincipal(email.user_id)
+    Email.unprincipal(user_id)
     email.update!(principal: true)
     email
   end
@@ -50,52 +50,50 @@ class Email < ActiveRecord::Base
   # Remove an email unprincipal
   #
   def self.remove_email(user_id, email_id)
-    email = find_by_user_and_by_id(user_id, email_id)
+    email = find_by_user_and_by_id(user_id, email_id).take
     raise StandardError, 'The email is not valid' if email.nil?
+    raise StandardError, 'You can not delete the only email '\
+                         'in your account' if Email.count_by_user(user_id) == 1
     raise StandardError, 'The email can not be principal' if email.principal?
 
-    email_str = email.email
     email.destroy!
-    email_str # return email.email
+  end
+
+  ##
+  # Set the check email field like true
+  #
+  def self.email_verify(email)
+    email.update!(checked: true)
   end
 
   ##
   # Send the verification email
   #
   def self.send_verify(user_id, email_id)
-    email = find_by_user_and_by_id(user_id, email_id)
+    email = find_by_user_and_by_id(user_id, email_id).take
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email has to be uncheck' if email.checked?
 
     token = VerifyClient.create_token(user_id, email.email, 'verify_email')
     Notifier.send_verify_email(email.user, token, email.email).deliver_later
-    email.email # return email.email
-  end
-
-  ##
-  # Set the check email field like true
-  #
-  def self.email_verify(email, verifyClient)
-    email.update!(checked: true)
-    verifyClient.destroy!
+    email
   end
 
   ##
   # I forget my password process
   #
   def self.forget(email)
-    email = Email.find_principal_by_email email
+    email = Email.find_principal_by_email(email).take
     raise StandardError, 'The email is not principal' if email.nil?
-    email.user
+    email
   end
 
   ##
   # Define if the email can checked like principal
   #
   def self.email_to_activate(user_id, email_s)
-    email = Email.find_by_user_and_by_email user_id, email_s
-    raise StandardError, 'The email is not valid' if email.nil?
-    raise StandardError, 'The email is principal in other account' if Email.is_principal? email.email
+    email = Email.find_principal_by_user(user_id).take
+    raise StandardError, 'The email is not valid' if email.nil? || email.email != email_s
     email
   end
 
@@ -103,17 +101,18 @@ class Email < ActiveRecord::Base
   # by other user
   #
   def self.email_to_check(user_id, email)
-    email = Email.find_by_user_and_by_email user_id, email
+    email = Email.find_by_user_and_by_email(user_id, email).take
     raise StandardError, 'The email is not valid' if email.nil?
     email
   end
 
-  def self.save_email(email, user_id, checked)
-    email.checked = checked
-    email.principal = checked
-    email.user_id = user_id
-    email.save!
+  ##
+  # Update the email record
+  #
+  def self.save_email(email, user_id, checked)user_id
+    email.update!(user_id: user_id, checked: checked, principal: checked)
   end
+
   private
 
   ##
