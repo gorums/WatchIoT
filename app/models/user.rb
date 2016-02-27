@@ -138,7 +138,7 @@ class User < ActiveRecord::Base
   ##
   # Reset the password
   #
-  def self.reset_passwd(user, params, verifyClient)
+  def self.reset_passwd(user, params)
     passwd_confirmation = params[:passwd_new] != params[:passwd_confirmation]
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
 
@@ -146,35 +146,30 @@ class User < ActiveRecord::Base
     raise StandardError, 'You dont have a principal email, please contact us' if email.nil?
 
     Notifier.send_reset_passwd_email(user, email.email).deliver_later
-    verifyClient.destroy!
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
 
   ##
   # Active the account after register and validate the email
   #
-  def self.active_account(user, email, verifyClient)
+  def self.active_account(user, email)
     user.update!(status: true)
     email.update!(checked: true, principal: true)
 
     Notifier.send_signup_verify_email(user, email.email).deliver_later
-    verifyClient.destroy!
     cookies[:auth_token] = user.auth_token
   end
 
   ##
   # A member was invite, finish register
   #
-  def self.invite(user, user_params, verifyClient)
-    email = Email.email_to_activate(verifyClient.user_id, verifyClient.data)
-
+  def self.invite(user, user_params, email)
     user.username = user_params[:username]
     user.passwd = user_params[:passwd]
     user.passwd_confirmation = user_params[:passwd_confirmation]
 
     save_user_and_mail(user, email, true)
     cookies[:auth_token] = user.auth_token
-    verifyClient.destroy!
   end
 
   protected

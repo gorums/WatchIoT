@@ -36,7 +36,8 @@ class NotificationsController < ApplicationController
   # Patch /do_reset
   #
   def do_reset
-    User.reset_passwd(@user, params[:user], @verifyClient)
+    User.reset_passwd @user, params[:user]
+    @verifyClient.destroy!
 
     redirect_to '/login'
   rescue => ex
@@ -48,7 +49,8 @@ class NotificationsController < ApplicationController
   # Get /active
   #
   def active
-    User.active_account(@user, @email, @verifyClient)
+    User.active_account @user, @email
+    @verifyClient.destroy!
 
     redirect_to '/' + user.username
   rescue => ex
@@ -59,8 +61,8 @@ class NotificationsController < ApplicationController
   # Get /verify_email
   #
   def verify_email
-    Email.email_verify @email, @verifyClient
-
+    Email.email_verify @email
+    @verifyClient.destroy!
   rescue => ex
     flash[:error] = ex.message
   end
@@ -76,7 +78,9 @@ class NotificationsController < ApplicationController
   # Patch /do_invited
   #
   def do_invite
-    User.invite @user, user_params, @verifyClient
+    email = Email.email_to_activate(@verifyClient.user_id, @verifyClient.data)
+    User.invite @user, user_params, email
+    @verifyClient.destroy!
 
     redirect_to '/' + @user.username
   rescue => ex
@@ -124,7 +128,7 @@ class NotificationsController < ApplicationController
   # Get a token
   #
   def find_by_concept(concept, token)
-    @verifyClient = VerifyClient.find_token token, concept || not_found
+    @verifyClient = VerifyClient.find_by_token_and_concept token, concept || not_found
     @user = User.find(id: @verifyClient.user_id) || not_found
   end
 

@@ -36,9 +36,9 @@ class SettingController < ApplicationController
   def account_add_email
     redirect_to '/' + me.username + '/setting/account'
 
-    Email.add_email(@user.id, email_params[:email])
+    email = Email.add_email(@user.id, email_params[:email])
 
-    flash_log('Add new email <b>' + email_params[:email] + '</b>',
+    flash_log('Add new email <b>' + email .email + '</b>',
                         'Added a new email correctly')
   rescue => ex
     flash[:error] = ex.message
@@ -50,24 +50,11 @@ class SettingController < ApplicationController
   def account_remove_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email_s = Email.remove_email(@user.id, params[:id])
+    email = Email.find(params[:id])
+    Email.remove_email(@user.id, params[:id])
 
-    flash_log('Delete email <b>' + email_s + '</b>',
+    flash_log('Delete email <b>' + email.email + '</b>',
               'The email was remove correctly')
-  rescue => ex
-    flash[:error] = ex.message
-  end
-
-  ##
-  # Get /:username/setting/account/verify/email/:id
-  #
-  def account_verify_email
-    redirect_to '/' + @user.username + '/setting/account'
-
-    email_s = Email.send_verify(@user.id, params[:id])
-
-    flash_log('Send to verify the email <b>' + email_s + '</b>',
-              'The email to verify was sending correctly')
   rescue => ex
     flash[:error] = ex.message
   end
@@ -81,7 +68,21 @@ class SettingController < ApplicationController
     email = Email.principal(@user.id, params[:id])
 
     flash_log('Set email <b>' + email.email + '</b> like principal',
-                  'The email was set principal correctly')
+              'The email was set principal correctly')
+  rescue => ex
+    flash[:error] = ex.message
+  end
+
+  ##
+  # Get /:username/setting/account/verify/email/:id
+  #
+  def account_verify_email
+    redirect_to '/' + @user.username + '/setting/account'
+
+    email = Email.send_verify(@user.id, params[:id])
+
+    flash_log('Send to verify the email <b>' + email.email + '</b>',
+              'The email to verify was sending correctly')
   rescue => ex
     flash[:error] = ex.message
   end

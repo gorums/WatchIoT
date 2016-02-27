@@ -7,7 +7,7 @@
 
 <h1>Hi <%= @user.username %>!</h1>
 
-Click here to verify your email <%= url_for(controller: 'users', action: 'verify_email', token: @token, only_path: false)  %><br/><br/>
+Click here to verify your email <%= url_for(controller: 'notifications', action: 'verify_email', token: @token, only_path: false)  %><br/><br/>
 
 WatchIoT Support
 </body>
