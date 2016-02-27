@@ -89,13 +89,6 @@ RSpec.describe Email, type: :model do
     expect { Email.send_verify(@user_two.id, @email_two.id) }.to raise_error('The email has to be uncheck')
   end
 
-  it 'is valid forgot the email' do
-    expect { Email.forget @email.email }.to raise_error('The email is not principal')
-
-    user = Email.forget @email_two.email
-    expect(user).to be_valid
-  end
-
   it 'is valid to checked the email like principal' do
     expect { Email.email_to_activate @user.id, 'aass@watchiot.com' }.to raise_error('The email is not valid')
     expect { Email.email_to_activate @user_two.id, @email_two.email }.to_not raise_error

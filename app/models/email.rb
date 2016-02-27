@@ -80,15 +80,6 @@ class Email < ActiveRecord::Base
   end
 
   ##
-  # I forget my password process
-  #
-  def self.forget(email)
-    email = Email.find_principal_by_email(email).take
-    raise StandardError, 'The email is not principal' if email.nil?
-    email
-  end
-
-  ##
   # Define if the email can checked like principal
   #
   def self.email_to_activate(user_id, email_s)

@@ -20,9 +20,6 @@ class NotificationsController < ApplicationController
   #
   def forgot_notification
     VerifyClient.send_forgot_notification user_forget_params[:username]
-  rescue => ex
-    flash[:error] = ex.message
-    render 'forgot'
   end
 
   ##
