@@ -19,7 +19,7 @@ class NotificationsController < ApplicationController
   # Post /forgot_notification
   #
   def forgot_notification
-    VerifyClient.send_forgot_notification user_forget_params[:username]
+    User.send_forgot_notification user_forget_params[:username]
   end
 
   ##

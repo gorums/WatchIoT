@@ -172,6 +172,25 @@ class User < ActiveRecord::Base
     cookies[:auth_token] = user.auth_token
   end
 
+  ##
+  # Send forgot notification
+  #
+  def self.send_forgot_notification(criteria)
+    user = User.find_by_username(criteria)
+    if user.nil?
+      email = Email.find_principal_by_email(criteria).take
+      user = email.user unless email.nil?
+    end
+
+    return if user.nil?
+
+    email = Email.find_principal_by_user(user.id).take if email.nil?
+    return if email.nil?
+
+    token = VerifyClient.create_token(user.id, email, 'reset')
+    Notifier.send_forget_passwd_email(user, token, email).deliver_later
+  end
+
   protected
 
   ##

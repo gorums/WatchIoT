@@ -4,8 +4,10 @@
 class VerifyClient < ActiveRecord::Base
   belongs_to :user
 
-  scope :find_by_token_and_concept, ->token, concept {where('token = ?', token).where('concept = ?', concept) }
-  scope :find_by_user_and_concept, ->user_id, concept {where('user_id = ?', user_id).where('concept = ?', concept) }
+  scope :find_by_token_and_concept, ->token, concept {
+            where('token = ?', token).where('concept = ?', concept) }
+  scope :find_by_user_and_concept, ->user_id, concept {
+            where('user_id = ?', user_id).where('concept = ?', concept) }
 
   ##
   # Register customer verification
@@ -22,24 +24,4 @@ class VerifyClient < ActiveRecord::Base
 
     verifyClient.token
   end
-
-  ##
-  # Send forgot notification
-  #
-  def self.send_forgot_notification(criteria)
-    user = User.find_by_username(criteria)
-    if user.nil?
-      email = Email.find_principal_by_email(criteria).take
-      user = email.user unless email.nil?
-    end
-
-    return if user.nil?
-
-    email = Email.find_principal_by_user(user.id).take if email.nil?
-    return if email.nil?
-
-    token = VerifyClient.create_token(user.id, email, 'reset')
-    Notifier.send_forget_passwd_email(user, token, email).deliver_later
-  end
-
 end
