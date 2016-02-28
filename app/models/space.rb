@@ -62,7 +62,7 @@ class Space < ActiveRecord::Base
   #
   def self.transfer(space, user, user_member_id)
     raise StandardError,
-          'The member is not valid' unless Team.member(user.id, user_member_id).exists?
+          'The member is not valid' unless Team.find_member(user.id, user_member_id).exists?
 
     space.update!(user_id: user_member_id)
     Project.find_each('space_id = ?', space.id) do |p|

@@ -44,6 +44,20 @@ class User < ActiveRecord::Base
   before_save :username_format
 
   ##
+  # Create a new account member
+  #
+  def self.create_new_account(email_member)
+    password = User.generate_passwd
+    user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
+    email = Email.new(email: email_member)
+    save_user_and_mail(user, email)
+
+    token = VerifyClient.create_token(user.id, email_member, 'invited')
+    Notifier.send_create_user_email(token, email_member).deliver_later
+    user
+  end
+
+  ##
   # Disable the account
   #
   def self.account_delete(user, username)
@@ -52,20 +66,6 @@ class User < ActiveRecord::Base
                          ' your spaces or delete their' if Space.exists?(user_id: user.id)
 
     user.update!(statu: false)
-  end
-
-  ##
-  # Find member to add the team
-  #
-  def self.find_member(user_id, email_member)
-    emails = Email.where('email = ?', email_member).all
-    # if dont exist create a new account
-    return create_new_member(email_member) if emails.nil? || emails.empty?
-    # if we find only one account
-    return User.find(emails.first.user_id) if emails.length == 1
-    # if we find more of one account, return the principal
-    email = Email.find_principal_by_email email_member
-    return User.find_by(id: email.user_id) unless email.nil?
   end
 
   ##
@@ -257,20 +257,6 @@ class User < ActiveRecord::Base
   #
   def self.last_name(name)
     name.split(' ', 2).last
-  end
-
-  ##
-  # Create a new account member
-  #
-  def self.create_new_member(email_member)
-    password = User.generate_passwd
-    user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
-    email = Email.new(email: email_member)
-    save_user_and_mail(user, email)
-
-    token = VerifyClient.create_token(user.id, email_member, 'invited')
-    Notifier.send_create_user_email(token, email_member).deliver_later
-    user
   end
 
   ##

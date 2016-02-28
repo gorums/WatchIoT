@@ -83,8 +83,8 @@ RSpec.describe Email, type: :model do
   end
 
   it 'is valid to send verification' do
-    # email = Email.send_verify(@user.id, @email.id)
-    # expect(email).to be_valid
+    expect { Email.send_verify(@user.id, @email.id) }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
 
     expect { Email.send_verify(@user_two.id, @email_two.id) }.to raise_error('The email has to be uncheck')
   end
