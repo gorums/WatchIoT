@@ -11,7 +11,7 @@ RSpec.describe Space, type: :model do
     plan = Plan.create!(name: 'Free', amount_per_month: 0)
     # add features
     fHook = Feature.create!(name: 'Webhook support')
-    fTema = Feature.create!(name: 'Team members')
+    fTeam = Feature.create!(name: 'Team members')
     fSpace = Feature.create!(name: 'Number of spaces')
     fNotif = Feature.create!(name: 'Notification by email')
     fPerMin = Feature.create!(name: 'Request per minutes')
@@ -28,7 +28,7 @@ RSpec.describe Space, type: :model do
     # Webhook support for free account
     PlanFeature.create(plan_id: plan.id, feature_id: fHook.id, value: 'false')
     # Team members for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fTema.id, value: '3')
+    PlanFeature.create(plan_id: plan.id, feature_id: fTeam.id, value: '3')
 
     # add two users
     @user = User.create!(username: 'my_user_name', passwd: '12345678', passwd_confirmation: '12345678')
