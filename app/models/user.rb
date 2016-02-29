@@ -228,9 +228,9 @@ class User < ActiveRecord::Base
   # Set username always lowercase, self.name.gsub! /[^0-9a-z ]/i, '_'
   #
   def username_format
-    username.gsub! /[^0-9a-z\- ]/i, '_'
-    username.gsub! /\s+/, '_'
-    username.downcase!
+    self.username.gsub! /[^0-9a-z\- ]/i, '_'
+    self.username.gsub! /\s+/, '_'
+    self.username = self.username.byteslice 0 , 20
   end
 
   ##
@@ -249,14 +249,14 @@ class User < ActiveRecord::Base
   # Split first name
   #
   def self.first_name(name)
-    name.split(' ').first
+    name.split(' ').first[0..24]
   end
 
   ##
   # Split last name
   #
   def self.last_name(name)
-    name.split(' ', 2).last
+    name.split(' ', 2).last[0..34]
   end
 
   ##
@@ -277,11 +277,11 @@ class User < ActiveRecord::Base
   # Save user and email routine
   #
   def self.save_user_and_mail(user, email, checked = false)
-    passwd_confirmation = user.passwd != user.passwd_confirmation
+    passwd_confirmation = user.passwd == user.passwd_confirmation
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
-    raise StandardError, 'The email is principal in other account' if Email.is_principal? email.email
+    raise StandardError, 'The email is principal in other account' if Email.find_principal_by_email(email.email).exists?
 
-    save_user user
+    save_user user, checked
     Email.save_email email, user.id, checked
 
     Notifier.send_signup_verify_email(user, email.email).deliver_later if checked
@@ -290,7 +290,7 @@ class User < ActiveRecord::Base
   ##
   # Save user
   #
-  def self.save_user(user)
+  def self.save_user(user, checked)
     user.passwd_salt = BCrypt::Engine.generate_salt
     user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
     user.passwd_confirmation = user.passwd

@@ -47,7 +47,17 @@ RSpec.describe Team, type: :model do
   end
 
   it 'is valid add a new member dont register' do
+    # send two emails for register and added to the team
+    expect { Team.add_member(@user, 'user_dont_exist@watchiot.com') }
+        .to change { ActionMailer::Base.deliveries.count }.by(2)
 
+    username = ('user_dont_exist@watchiot.com'.gsub! /[^0-9a-z\- ]/i, '_').byteslice 0 , 20
+    new_user = User.find_by_username username
+    expect(new_user).to be_valid
+    member = Team.find_member(@user.id, new_user.id).take
+    expect(member).to be_valid
+
+    expect(User.all.count).to eq(3)
   end
 
   it 'is valid add a new member in two account and one of they are principal' do
