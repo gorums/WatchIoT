@@ -23,8 +23,9 @@ class User < ActiveRecord::Base
   has_one :plan
 
   validates_uniqueness_of :username
+  # dont space admitted
   validates :username, format: { without: /\s+/,
-                                 message: 'No empty spaces admitted for the username.' } # dont space admitted
+                                 message: 'No empty spaces admitted for the username.' }
   validates_presence_of :username, on: :create
   validates_presence_of :passwd, on: :create
   validates_presence_of :passwd_confirmation, on: :create
@@ -60,11 +61,10 @@ class User < ActiveRecord::Base
   ##
   # Disable the account
   #
-  def self.account_delete(user, username)
+  def self.delete_account(user, username)
     raise StandardError, 'The username is not valid' if user.username != username
     raise StandardError, 'You have to transfer or'/
                          ' your spaces or delete their' if Space.exists?(user_id: user.id)
-
     user.update!(statu: false)
   end
 

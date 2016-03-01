@@ -121,7 +121,7 @@ class SettingController < ApplicationController
   def account_delete
     redirect_to root_url
 
-    User.account_delete @user, username_params[:username]
+    User.delete_account @user, username_params[:username]
 
     cookies.clear
   rescue => ex
