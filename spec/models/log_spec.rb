@@ -14,8 +14,8 @@ RSpec.describe Log, type: :model do
   end
 
   it 'is valid save log' do
-    expect{ Log.save_log('description', 'this description action is to big',
-                         @user.id, @user.id) }.to raise_error(ActiveRecord::StatementInvalid)
+    expect{ Log.save_log('description', 'this description action is to big', @user.id, @user.id) }
+        .to raise_error(ActiveRecord::StatementInvalid)
 
     Log.save_log('description', 'action', @user.id, @user.id)
     expect(Log.all.count).to eq(1)

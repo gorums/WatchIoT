@@ -47,7 +47,7 @@ class Team < ActiveRecord::Base
     # if we find only one account
     return emails.first.user if emails.length == 1
     # if we find more of one account, return the principal
-    email = Email.find_principal_by_email email_member
+    email = Email.find_principal_by_email(email_member).take
     return email.user unless email.nil?
   end
 

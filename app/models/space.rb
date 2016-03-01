@@ -65,11 +65,11 @@ class Space < ActiveRecord::Base
           'The member is not valid' unless Team.find_member(user.id, user_member_id).exists?
 
     space.update!(user_id: user_member_id)
-    Project.find_each('space_id = ?', space.id) do |p|
+    Project.where('space_id = ?', space.id).find_each do |p|
       p.update!(user_id: user_member_id)
     end
 
-    member_email = Email.find_principal_by_user user_member_id
+    member_email = Email.find_principal_by_user(user_member_id).take
     Notifier.send_transfer_space_email(user, space, member_email)
         .deliver_later unless member_email.nil?
   end

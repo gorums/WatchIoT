@@ -35,7 +35,7 @@ RSpec.describe Plan, type: :model do
     @email = Email.create!(email: 'user@watchiot.com', user_id: @user.id)
   end
 
-  it 'is valid find paln value' do
+  it 'is valid find plan value' do
     value = Plan.find_plan_value(Plan.find_by_name('Free'), 'dont exist')
     expect(value).to eq(0)
 

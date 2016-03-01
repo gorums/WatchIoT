@@ -33,6 +33,8 @@ RSpec.describe Space, type: :model do
     # add two users
     @user = User.create!(username: 'my_user_name', passwd: '12345678', passwd_confirmation: '12345678')
     @user_two = User.create!(username: 'my_user_name1', passwd: '12345678', passwd_confirmation: '12345678')
+
+    @email_two = Email.create!(email: 'user1@watchiot.com', user_id: @user_two.id, checked: true, principal: true)
   end
 
   it 'is valid with a namespace' do
@@ -63,7 +65,8 @@ RSpec.describe Space, type: :model do
     expect(space1).to be_valid
     space2 = Space.create_new_space(params2, @user, @user)
     expect(space2).to be_valid
-    expect { Space.create_new_space(params3, @user, @user) }.to raise_error('You can not added more spaces, please contact with us!')
+    expect { Space.create_new_space(params3, @user, @user) }
+        .to raise_error('You can not added more spaces, please contact with us!')
   end
 
   it 'is valid with duplicate namespace' do
@@ -104,7 +107,8 @@ RSpec.describe Space, type: :model do
     space1 = Space.create_new_space(params1, @user, @user)
     expect(space1).to be_valid
 
-    expect { Space.change_space 'space', space1 }.to raise_error(/You have a space with this name/)
+    expect { Space.change_space 'space', space1 }
+        .to raise_error(/You have a space with this name/)
   end
 
   it 'is valid delete a space' do
@@ -121,7 +125,8 @@ RSpec.describe Space, type: :model do
     space = Space.create_new_space(params, @user, @user)
     project =Project.create!(name: 'project', space_id: space.id)
 
-    expect { Space.delete_space('space', space) }.to raise_error('This space can not be delete because it has one or more projects associate')
+    expect { Space.delete_space('space', space) }
+        .to raise_error('This space can not be delete because it has one or more projects associate')
 
     project.destroy!
     Space.delete_space('space', space)
@@ -139,7 +144,8 @@ RSpec.describe Space, type: :model do
     params = { name: 'space', description: 'space description'}
     space = Space.create_new_space(params, @user, @user)
 
-    # Team.add_member()
-    # expect { Space.transfer(space, @user, @user_two.id) }.to raise_error('The member is not valid')
+    Team.add_member(@user, @email_two.email)
+    expect { Space.transfer(space, @user, @user_two.id) }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
   end
 end
