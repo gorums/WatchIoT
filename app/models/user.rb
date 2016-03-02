@@ -63,9 +63,9 @@ class User < ActiveRecord::Base
   #
   def self.delete_account(user, username)
     raise StandardError, 'The username is not valid' if user.username != username
-    raise StandardError, 'You have to transfer or'/
+    raise StandardError, 'You have to transfer or'\
                          ' your spaces or delete their' if Space.exists?(user_id: user.id)
-    user.update!(statu: false)
+    user.update!(status: false)
   end
 
   ##
@@ -230,7 +230,7 @@ class User < ActiveRecord::Base
   def username_format
     self.username.gsub! /[^0-9a-z\- ]/i, '_'
     self.username.gsub! /\s+/, '_'
-    self.username = self.username.byteslice 0 , 20
+    self.username = self.username.byteslice 0 , 24
   end
 
   ##
