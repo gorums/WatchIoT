@@ -53,7 +53,7 @@ RSpec.describe Team, type: :model do
     expect { Team.add_member(@user, 'user_dont_exist@watchiot.com') }
         .to change { ActionMailer::Base.deliveries.count }.by(2)
 
-    username = ('user_dont_exist@watchiot.com'.gsub! /[^0-9a-z\- ]/i, '_').byteslice 0 , 20
+    username = ('user_dont_exist@watchiot.com'.gsub! /[^0-9a-z\- ]/i, '_').byteslice 0 , 24
     new_user = User.find_by_username username
     expect(new_user).to be_valid
     member = Team.find_member(@user.id, new_user.id).take
