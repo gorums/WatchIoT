@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
     password = User.generate_passwd
     user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
     email = Email.new(email: email_member)
-    save_user_and_mail(user, email)
+    save_user_and_email(user, email)
 
     token = VerifyClient.create_token(user.id, email_member, 'invited')
     Notifier.send_create_user_email(token, email_member).deliver_later
@@ -76,53 +76,39 @@ class User < ActiveRecord::Base
   end
 
   ##
-  # Change the password
-  #
-  def self.change_passwd(user, params)
-    same_old_passwd =  user.passwd != BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
-    raise StandardError, 'The old password is not correctly' unless same_old_passwd
-    passwd_confirmation = params[:passwd_new] != params[:passwd_confirmation]
-    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
-
-    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
-  end
-
-  ##
-  # This method try to authenticate the client, other way return nil
-  #
-  def self.authenticate(email, passwd)
-    return if passwd.empty?
-    user_email = Email.find_principal_by_email email
-
-    user = user_email.user unless user_email.nil?
-    user = User.find_by_username(email) if user_email.nil?
-    return if user.nil?
-
-    same_passwd = user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
-    user if user.status? && same_passwd
-  end
-
-  ##
   # Register a new account
   #
   def self.register(user_params, email_s)
     user = User.new(user_params)
     email = Email.new(email: email_s)
-    save_user_and_mail user, email
+
+    save_user_and_email user, email
 
     token = VerifyClient.create_token(user.id, email_s, 'register')
     Notifier.send_signup_email(user, email_s, token).deliver_later
   end
 
   ##
+  # Change the password
+  #
+  def self.change_passwd(user, params)
+    old_password = BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
+    same_old_passwd = user.passwd == old_password
+
+    raise StandardError, 'The old password is not correctly' unless same_old_passwd
+    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+
+    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
+  end
+
+  ##
   # Login the account
   #
-  def self.login(email, passwd, remember_me)
-    user = User.authenticate(email, passwd)
+  def self.login(email, passwd)
+    user = authenticate(email, passwd)
     raise StandardError, 'Account is not valid' if user.nil?
-
-    cookies.permanent[:auth_token] = user.auth_token if remember_me
-    cookies[:auth_token] = user.auth_token unless remember_me
+    user
   end
 
   ##
@@ -131,8 +117,6 @@ class User < ActiveRecord::Base
   def self.omniauth
     auth = request.env['omniauth.auth']
     user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
-
-    cookies[:auth_token] = user.auth_token
   end
 
   ##
@@ -168,7 +152,7 @@ class User < ActiveRecord::Base
     user.passwd = user_params[:passwd]
     user.passwd_confirmation = user_params[:passwd_confirmation]
 
-    save_user_and_mail(user, email, true)
+    save_user_and_email(user, email, true)
     cookies[:auth_token] = user.auth_token
   end
 
@@ -246,17 +230,45 @@ class User < ActiveRecord::Base
   private
 
   ##
-  # Split first name
+  # Save user and email routine
   #
-  def self.first_name(name)
-    name.split(' ').first[0..24]
+  def self.save_user_and_email(user, email, checked = false)
+    passwd_confirmation = user.passwd == user.passwd_confirmation
+    passwd_is_short = user.passwd.length >= 8
+
+    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+    raise StandardError, 'Password has less than 8 characters' unless passwd_is_short
+    raise StandardError, 'The email is principal in other account' if Email.find_principal_by_email(email.email).exists?
+
+    save_user user, checked
+    Email.save_email email, user.id, checked
+    Notifier.send_signup_verify_email(user, email.email).deliver_later if checked
   end
 
   ##
-  # Split last name
+  # Save user
   #
-  def self.last_name(name)
-    name.split(' ', 2).last[0..34]
+  def self.save_user(user, checked)
+    user.passwd_salt = BCrypt::Engine.generate_salt
+    user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
+    user.passwd_confirmation = user.passwd
+    user.status = checked
+    user.save!
+  end
+
+  ##
+  # This method try to authenticate the client, other way return nil
+  #
+  def self.authenticate(email, passwd)
+    return if passwd.empty?
+    user_email = Email.find_principal_by_email(email).take
+
+    user = user_email.user unless user_email.nil?
+    user = User.find_by_username(email) if user_email.nil?
+    return if user.nil?
+
+    same_passwd = user.passwd == BCrypt::Engine.hash_secret(passwd, user.passwd_salt)
+    user if user.status? && same_passwd
   end
 
   ##
@@ -270,31 +282,20 @@ class User < ActiveRecord::Base
     user.passwd_confirmation = user.passwd
 
     email = Email.new(email: auth['info']['email'])
-    save_user_and_mail user, email, true
+    save_user_and_email user, email, true
   end
 
   ##
-  # Save user and email routine
+  # Split first name
   #
-  def self.save_user_and_mail(user, email, checked = false)
-    passwd_confirmation = user.passwd == user.passwd_confirmation
-    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
-    raise StandardError, 'The email is principal in other account' if Email.find_principal_by_email(email.email).exists?
-
-    save_user user, checked
-    Email.save_email email, user.id, checked
-
-    Notifier.send_signup_verify_email(user, email.email).deliver_later if checked
+  def self.first_name(name)
+    name.split(' ').first[0..24]
   end
 
   ##
-  # Save user
+  # Split last name
   #
-  def self.save_user(user, checked)
-    user.passwd_salt = BCrypt::Engine.generate_salt
-    user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
-    user.passwd_confirmation = user.passwd
-    user.status = checked
-    user.save!
+  def self.last_name(name)
+    name.split(' ', 2).last[0..34]
   end
 end

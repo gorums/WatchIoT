@@ -33,8 +33,10 @@ class UsersController < ApplicationController
   # POST /do_login
   #
   def do_login
-    User.login(user_params[:email], user_params[:passwd], user_params[:remember_me])
+    user = User.login(user_params[:email], user_params[:passwd])
 
+    cookies.permanent[:auth_token] = user.auth_token if user_params[:remember_me]
+    cookies[:auth_token] = user.auth_token unless user_params[:remember_me]
     redirect_to '/' + user.username
   rescue => ex
     render 'login'
@@ -45,8 +47,9 @@ class UsersController < ApplicationController
   # Get /do_omniauth
   #
   def do_omniauth
-    User.omniauth
+    user = User.omniauth
 
+    cookies[:auth_token] = user.auth_token
     redirect_to '/' + user.username
   rescue => ex
     flash[:error] = ex.message
