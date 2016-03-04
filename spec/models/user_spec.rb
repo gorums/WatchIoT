@@ -55,6 +55,7 @@ RSpec.describe User, type: :model do
     expect(email).to_not be_nil
 
     expect(email.user.username).to include('user12_watchiot_org')
+    expect(email.user.api_key_id).to_not be_nil
   end
 
   it 'is valid delete account' do
@@ -173,10 +174,6 @@ RSpec.describe User, type: :model do
     expect(user_login).to_not be_nil
   end
 
-  it 'is valid omniauth' do
-
-  end
-
   it 'is valid reset the password' do
     params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
     expect {User.register params, 'newemail@watchiot.org'}.to_not raise_error
@@ -279,5 +276,9 @@ RSpec.describe User, type: :model do
 
     expect { User.send_forgot_notification @email.email }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
+  end
+
+  it 'is valid omniauth' do
+
   end
 end
