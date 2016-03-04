@@ -279,6 +279,10 @@ RSpec.describe User, type: :model do
   end
 
   it 'is valid omniauth' do
+    params = { 'provider' => 'github', 'uid' => '12345678', 'info' =>
+        {'nickname' => 'aa', 'name' => 'aa', 'email' => 'omniauth@watchio.org'}}
 
+    expect {  User.create_with_omniauth params }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
   end
 end
