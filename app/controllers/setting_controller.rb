@@ -12,7 +12,7 @@ class SettingController < ApplicationController
   def show
     @email = Email.new
     @emails = Email.find_by_user(@user.id)
-    @teams = Team.my_teams @user.id
+    @teams = Team.my_teams(@user.id)
     @teams_belong = Team.belong_to @user.id
     @in = valid_tab? ? params[:val] : ''
   end
@@ -23,7 +23,7 @@ class SettingController < ApplicationController
   def profile
     redirect_to '/' + @user.username + '/setting'
 
-    @user.update(profile_params)
+    @user.update!(profile_params)
 
     flash_log('Edit the profile setting', 'Profile updated correctly')
   rescue => ex
@@ -132,11 +132,11 @@ class SettingController < ApplicationController
   # Post /:username/setting/team/add
   #
   def team_add
-    redirect_to '/' + @ser.username + '/setting/team'
+    redirect_to '/' + @user.username + '/setting/team'
+    email = email_params[:email]
+    Team.add_member @user, email
 
-    Team.add_member @user, email_params[:email]
-
-    flash_log('Adding a new member <b>' + email_params[:email] + '</b>',
+    flash_log('Adding a new member <b>' + email + '</b>',
               'The member was add correctly')
   rescue => ex
     flash[:error] = ex.message
@@ -149,8 +149,9 @@ class SettingController < ApplicationController
     redirect_to '/' + @user.username + '/setting/team'
 
     Team.remove_member @user, params[:id]
+    email = Email.find_principal_by_user(user_id).take
 
-    flash_log('Delete a member <b>' + user_email(params[:id]) + '</b>',
+    flash_log('Delete a member <b>' + email+ '</b>',
               'The member was delete correctly')
   rescue => ex
     flash[:error] = ex.message

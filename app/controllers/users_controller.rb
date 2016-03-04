@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   # POST /do_register
   #
   def do_register
-    User.register user_params, email_params[:email]
+    User.register(user_params, email_params[:email])
 
     render 'need_verify_notification'
   rescue => ex
@@ -35,8 +35,9 @@ class UsersController < ApplicationController
   def do_login
     user = User.login(user_params[:email], user_params[:passwd])
 
-    cookies.permanent[:auth_token] = user.auth_token if user_params[:remember_me]
     cookies[:auth_token] = user.auth_token unless user_params[:remember_me]
+    cookies.permanent[:auth_token] = user.auth_token if user_params[:remember_me]
+
     redirect_to '/' + user.username
   rescue => ex
     render 'login'
@@ -50,6 +51,7 @@ class UsersController < ApplicationController
     user = User.omniauth
 
     cookies[:auth_token] = user.auth_token
+
     redirect_to '/' + user.username
   rescue => ex
     flash[:error] = ex.message
@@ -60,6 +62,7 @@ class UsersController < ApplicationController
   #
   def logout
     cookies.clear
+
     redirect_to root_url
   end
 

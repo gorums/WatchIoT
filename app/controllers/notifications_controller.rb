@@ -102,7 +102,8 @@ class NotificationsController < ApplicationController
   #
   def find_active_user_by_token
     find_by_concept 'register', params[:token]
-    @email = Email.email_to_activate(@verifyClient.user_id, @verifyClient.data) || not_found
+    @email = Email.email_to_activate(@verifyClient.user_id, @verifyClient.data) ||
+        not_found
   rescue => ex
     not_found
   end
@@ -112,7 +113,8 @@ class NotificationsController < ApplicationController
   #
   def find_verify_email_by_token
     find_by_concept 'verify_email', params[:token]
-    @email = Email.email_to_check(@verifyClient.user_id, @verifyClient.data) || not_found
+    @email = Email.email_to_check(@verifyClient.user_id, @verifyClient.data) ||
+        not_found
   rescue => ex
     not_found
   end

@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   # This method return the client api key
   #
   def login_api_key
-    api_key = ApiKey.find_by(id: me.api_key_id) unless me.nil?
+    api_key = ApiKey.find(me.api_key_id) unless me.nil?
     api_key.api_key || ''
   end
 
@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   # This method return the client principal email
   #
   def login_user_email
-    Email.find_principal_by_user me.id || ''
+    Email.find_principal_by_user(me.id).take || ''
   end
 
   ##
@@ -104,8 +104,9 @@ class ApplicationController < ActionController::Base
   # if the request was doing for the user login or an user team
   #
   def allow
-    @user = User.find_by_username(params[:username]) || not_found
-    @user if auth? && @user.username == me.username || Team.member?(@user.id, me.id) || unauthorized
+    @user = User.find_by_username params[:username] || not_found
+    @user if auth? && @user.username == me.username ||
+          Team.find_member(@user.id, me.id).exists? || unauthorized
   rescue Errors::UnauthorizedError
     render_401
   end
@@ -114,6 +115,7 @@ class ApplicationController < ActionController::Base
   # Get space to transfer
   #
   def allow_space
-    @space = Space.find_by_user_and_name @user.id, params[:namespace] || not_found
+    @space = Space.find_by_user_and_name(@user.id, params[:namespace]).take ||
+        not_found
   end
 end

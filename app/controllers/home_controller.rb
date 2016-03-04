@@ -15,8 +15,7 @@ class HomeController < ApplicationController
   # POST /contactus
   #
   def contact
-    @contactus = ContactUs.new(contact_params)
-    @contactus.save
+    @contactus = ContactUs.create(contact_params)
 
     flash[:success] = 'Thank you for contact us!'
     redirect_to root_url + '#contactus'

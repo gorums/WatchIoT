@@ -7,6 +7,7 @@ class Team < ActiveRecord::Base
 
   scope :count_by_user, -> user_id { where('user_id = ?', user_id).count }
   scope :belong_to, -> user_team_id { where('user_team_id = ?', user_team_id) }
+  scope :my_teams, -> user_team_id { where('user_team_id = ?', user_team_id) }
   scope :find_member, -> user_id, user_team_id { where('user_id = ?', user_id)
                                                 .where('user_team_id = ?', user_team_id) }
 

@@ -35,21 +35,21 @@ class Space < ActiveRecord::Base
   ##
   # edit a space, only can edit the description for now
   #
-  def self.edit_space(description, space)
+  def self.edit_space(space, description)
     space.update!(description: description)
   end
 
   ##
   # edit a space, only can edit the namespace for now
   #
-  def self.change_space(namespace, space)
+  def self.change_space(space, namespace)
     space.update!(name: namespace)
   end
 
   ##
   # delete a space
   #
-  def self.delete_space(namespace, space)
+  def self.delete_space(space, namespace)
     raise StandardError, 'The space name is not valid' if namespace != space.name
 
     raise StandardError, 'This space can not be delete because it has'\

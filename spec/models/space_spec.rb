@@ -93,7 +93,7 @@ RSpec.describe Space, type: :model do
     space = Space.create_new_space(params, @user, @user)
     expect(space.description).to include('my descrition')
 
-    Space.edit_space 'my edit descrition', space
+    Space.edit_space space, 'my edit descrition'
     expect(space.name).to include('my_space') # the name space can not change
     expect(space.description).to include('my edit descrition')
   end
@@ -107,7 +107,7 @@ RSpec.describe Space, type: :model do
     space1 = Space.create_new_space(params1, @user, @user)
     expect(space1).to be_valid
 
-    expect { Space.change_space 'space', space1 }
+    expect { Space.change_space space1, 'space' }
         .to raise_error(/You have a space with this name/)
   end
 
@@ -119,17 +119,17 @@ RSpec.describe Space, type: :model do
     expect(space).to be_valid
     expect(Space.count_by_user @user.id).to eq(1)
 
-    Space.delete_space('space', space)
+    Space.delete_space(space, 'space')
     expect(Space.count_by_user @user.id).to eq(0)
 
     space = Space.create_new_space(params, @user, @user)
     project =Project.create!(name: 'project', space_id: space.id)
 
-    expect { Space.delete_space('space', space) }
+    expect { Space.delete_space(space, 'space') }
         .to raise_error('This space can not be delete because it has one or more projects associate')
 
     project.destroy!
-    Space.delete_space('space', space)
+    Space.delete_space(space, 'space')
     expect(Space.count_by_user @user.id).to eq(0)
   end
 
