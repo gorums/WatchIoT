@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :username
   # dont space admitted
-  validates :username, format: { without: /\s+/,
+  validates :username, length: { minimum: 1 }, format: { without: /\s+/,
                                  message: 'No empty spaces admitted for the username.' }
   validates_presence_of :username, on: :create
   validates_presence_of :passwd, on: :create
@@ -123,10 +123,10 @@ class User < ActiveRecord::Base
   # Reset the password
   #
   def self.reset_passwd(user, params)
-    passwd_confirmation = params[:passwd_new] != params[:passwd_confirmation]
+    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
 
-    email = Email.find_principal_by_user user.id
+    email = Email.find_principal_by_user(user.id).take
     raise StandardError, 'You dont have a principal email, please contact us' if email.nil?
 
     Notifier.send_reset_passwd_email(user, email.email).deliver_later
@@ -141,35 +141,31 @@ class User < ActiveRecord::Base
     email.update!(checked: true, principal: true)
 
     Notifier.send_signup_verify_email(user, email.email).deliver_later
-    cookies[:auth_token] = user.auth_token
   end
 
   ##
-  # A member was invite, finish register
+  # A member was invite, finish register, enter username,
+  # password and confirmation
   #
   def self.invite(user, user_params, email)
-    user.username = user_params[:username]
-    user.passwd = user_params[:passwd]
+    user.username = user_params[:username] # set the username
+    user.passwd = user_params[:passwd] # set the password
     user.passwd_confirmation = user_params[:passwd_confirmation]
 
     save_user_and_email(user, email, true)
-    cookies[:auth_token] = user.auth_token
   end
 
   ##
   # Send forgot notification
   #
   def self.send_forgot_notification(criteria)
-    user = User.find_by_username(criteria)
-    if user.nil?
-      email = Email.find_principal_by_email(criteria).take
-      user = email.user unless email.nil?
-    end
+    user = User.find_by_username criteria # find by username
+    email = Email.find_principal_by_email(criteria).take # find by principal email
 
-    return if user.nil?
+    user = email.user if user.nil? && !email.nil?
+    email = Email.find_principal_by_user(user.id).take if email.nil? && !user.nil?
 
-    email = Email.find_principal_by_user(user.id).take if email.nil?
-    return if email.nil?
+    return if user.nil? || email.nil?
 
     token = VerifyClient.create_token(user.id, email, 'reset')
     Notifier.send_forget_passwd_email(user, token, email).deliver_later

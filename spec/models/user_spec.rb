@@ -50,6 +50,7 @@ RSpec.describe User, type: :model do
     # create a new acount
     expect { User.create_new_account('user12@watchiot.org') }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
+
     email = Email.find_by_email 'user12@watchiot.org'
     expect(email).to_not be_nil
 
@@ -177,18 +178,106 @@ RSpec.describe User, type: :model do
   end
 
   it 'is valid reset the password' do
+    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    expect {User.register params, 'newemail@watchiot.org'}.to_not raise_error
 
+    user_new = User.find_by_username 'new_ergister_user'
+    user_new.update!(status: true)
+
+    # login fine
+    user_login = User.login 'new_ergister_user', '12345678'
+    expect(user_login).to_not be_nil
+
+    # password and confirmation do not match
+    params = { passwd_new: 'new12345678', passwd_confirmation: 'new12345678bad'}
+    expect { User.reset_passwd user_new, params }
+        .to raise_error('Password does not match the confirm password')
+
+    # does not exist email like principal
+    params = { passwd_new: 'new12345678', passwd_confirmation: 'new12345678'}
+    expect { User.reset_passwd user_new, params }
+        .to raise_error('You dont have a principal email, please contact us')
+
+    # set the email like principal
+    email_login = user_new.emails.first
+    email_login.update!(principal: true, checked:true)
+
+    params = { passwd_new: 'new12345678', passwd_confirmation: 'new12345678'}
+
+    expect { User.reset_passwd user_new, params }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    # the pasword was change
+    expect { user_login = User.login 'new_ergister_user', '12345678' }
+        .to raise_error('Account is not valid')
+
+    # login with the new passsword
+    user_login = User.login user_new.username, 'new12345678'
+    expect(user_login).to_not be_nil
   end
 
   it 'is valid activate the account' do
+    expect { User.active_account @user, @email }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
 
+    expect(@user.status).to eq(true)
+    expect(@email.principal).to eq(true)
+    expect(@email.checked).to eq(true)
   end
 
   it 'is valid invited' do
+    user = User.create_new_account('user12@watchiot.org')
+    email = Email.find_by_email 'user12@watchiot.org'
 
+    # bad password
+    params = { username: 'new_ergister_user', passwd: '12345678bad', passwd_confirmation: '12345678'}
+    expect { User.invite user, params, email }
+        .to raise_error('Password does not match the confirm password')
+
+    # short password
+    params = { username: 'new_ergister_user', passwd: '12345', passwd_confirmation: '12345'}
+    expect { User.invite user, params, email }
+        .to raise_error('Password has less than 8 characters')
+
+    # bad username
+    params = { username: '', passwd: '12345678', passwd_confirmation: '12345678'}
+    expect { User.invite user, params, email }
+        .to raise_error(/Username is too short \(minimum is 1 character\)/)
+
+    # username exist
+    params = { username: @user.username, passwd: '12345678', passwd_confirmation: '12345678'}
+    expect { User.invite user, params, email }
+        .to raise_error(/Username has already been taken/)
+
+    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    expect { User.invite user, params, email }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    expect(user.auth_token).to_not be_nil
+    expect(user.status).to eq(true)
+    expect(email.principal).to eq(true)
+    expect(email.checked).to eq(true)
   end
 
   it 'is valid send forgot notification' do
+    expect { User.send_forgot_notification 'the user do no exist' }
+        .to change { ActionMailer::Base.deliveries.count }.by(0)
 
+    # the email is not set like principal
+    expect { User.send_forgot_notification @user.username }
+        .to change { ActionMailer::Base.deliveries.count }.by(0)
+
+    # the email is not set like principal
+    expect { User.send_forgot_notification @email.email }
+        .to change { ActionMailer::Base.deliveries.count }.by(0)
+
+    # set the email like principal
+    @email.update!(principal: true, checked:true)
+
+    expect { User.send_forgot_notification @user.username }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    expect { User.send_forgot_notification @email.email }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
   end
 end

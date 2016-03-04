@@ -17,6 +17,7 @@ class NotificationsController < ApplicationController
 
   ##
   # Post /forgot_notification
+  # never show if the username or email exist in the system, security reason
   #
   def forgot_notification
     User.send_forgot_notification user_forget_params[:username]
@@ -49,6 +50,7 @@ class NotificationsController < ApplicationController
     User.active_account @user, @email
     @verifyClient.destroy!
 
+    cookies[:auth_token] = @user.auth_token
     redirect_to '/' + user.username
   rescue => ex
     flash[:error] = ex.message
@@ -79,6 +81,7 @@ class NotificationsController < ApplicationController
     User.invite @user, user_params, email
     @verifyClient.destroy!
 
+    cookies[:auth_token] = @user.auth_token
     redirect_to '/' + @user.username
   rescue => ex
     flash[:error] = ex.message
@@ -134,5 +137,11 @@ class NotificationsController < ApplicationController
   #
   def user_forget_params
     params.require(:user).permit(:username)
+  end
+  ##
+  # User params
+  #
+  def user_params
+    params.require(:user).permit(:passwd, :passwd_confirmation, :username)
   end
 end
