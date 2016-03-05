@@ -39,8 +39,8 @@ RSpec.describe Space, type: :model do
 
   it 'is valid with a namespace' do
     # it is a valid namespace
-    space = Space.new(name: 'my_space', user_id: @user.id)
-    expect(space).to be_valid
+    space = Space.create!(name: 'my_space', user_id: @user.id)
+    expect(space.name).to include('my_space')
 
     # the namespace can be nil
     space = Space.new(name: nil, user_id: @user.id)
@@ -54,13 +54,18 @@ RSpec.describe Space, type: :model do
   end
 
   it 'is valid with more than 3 spaces with a free plan' do
-    params = { name: 'space', description: 'space description'}
+    params = { name: 'my_space', description: 'space description'}
     params1 = { name: 'space1', description: 'space1 description'}
     params2 = { name: 'space2', description: 'space2 description'}
     params3 = { name: 'space3', description: 'space3 description'}
 
     space = Space.create_new_space(params, @user, @user)
     expect(space).to be_valid
+
+    params = { name: 'my space', description: 'space description'}
+    expect { Space.create_new_space(params, @user, @user) }
+        .to raise_error('You have a space with this name')
+
     space1 = Space.create_new_space(params1, @user, @user)
     expect(space1).to be_valid
     space2 = Space.create_new_space(params2, @user, @user)
@@ -73,9 +78,8 @@ RSpec.describe Space, type: :model do
     space = Space.create(name: 'my_space', user_id: @user.id)
     expect(space).to be_valid
 
-    space = Space.new(name: 'my_space', user_id: @user.id)
-    space.valid?
-    expect(space.errors[:name]).to include('You have a space with this name')
+    expect { Space.create!(name: 'my space', user_id: @user.id) }
+        .to raise_error('You have a space with this name')
 
     space = Space.new(name: 'my_space', user_id: @user_two.id)
     space.valid?
@@ -99,15 +103,15 @@ RSpec.describe Space, type: :model do
   end
 
   it 'is valid edit a namespace for duplicate them' do
-    params = { name: 'space', description: 'space description'}
-    params1 = { name: 'space1', description: 'space1 description'}
+    params = { name: 'my space', description: 'space description'}
+    params1 = { name: 'my space1', description: 'space1 description'}
 
     space = Space.create_new_space(params, @user, @user)
     expect(space).to be_valid
     space1 = Space.create_new_space(params1, @user, @user)
     expect(space1).to be_valid
 
-    expect { Space.change_space space1, 'space' }
+    expect { Space.change_space space1, 'my_space' }
         .to raise_error(/You have a space with this name/)
   end
 
@@ -123,7 +127,7 @@ RSpec.describe Space, type: :model do
     expect(Space.count_by_user @user.id).to eq(0)
 
     space = Space.create_new_space(params, @user, @user)
-    project =Project.create!(name: 'project', space_id: space.id)
+    project = Project.create!(name: 'project', space_id: space.id)
 
     expect { Space.delete_space(space, 'space') }
         .to raise_error('This space can not be delete because it has one or more projects associate')
@@ -147,5 +151,31 @@ RSpec.describe Space, type: :model do
     Team.add_member(@user, @email_two.email)
     expect { Space.transfer(space, @user, @user_two.id) }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    # user do not have space
+    expect(Space.count_by_user @user.id).to eq(0)
+
+    # user two have new space
+    space = Space.find_by_user_id @user_two.id
+    expect(space.name).to eq('space')
+
+    # add a new space to the user two
+    params = { name: 'space1', description: 'space description'}
+    Space.create_new_space(params, @user_two, @user_two)
+
+    # user one add a new space
+    params = { name: 'space', description: 'space description'}
+    space = Space.create_new_space(params, @user, @user)
+
+    # we can not transfer a space with the same name
+    expect { Space.transfer(space, @user, @user_two.id) }
+        .to raise_error(/You have a space with this name/)
+
+    # add a new space to the user two, it has now 3 space
+    params = { name: 'space2', description: 'space description'}
+    Space.create_new_space(params, @user_two, @user_two)
+
+    expect { Space.transfer(space, @user, @user_two.id) }
+        .to raise_error('The team member can not add more spaces, please contact with us!')
   end
 end

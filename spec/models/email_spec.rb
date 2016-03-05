@@ -98,8 +98,20 @@ RSpec.describe Email, type: :model do
   it 'is valid to checked the email like principal' do
     expect { Email.email_to_activate @user.id, 'aass@watchiot.com' }
         .to raise_error('The email is not valid')
-    expect { Email.email_to_activate @user_two.id, @email_two.email }
+    expect { Email.email_to_activate @user.id, @email.email }
         .to_not raise_error
+
+    expect { Email.email_to_activate @user.id, @email_two.email }
+        .to raise_error('The email is not valid')
+
+    expect { Email.email_to_activate @user_two.id, @email_two.email }
+        .to raise_error('The email is not valid')
+
+    # add email two but like it is principal in other account
+    # we can not add to activate
+    Email.add_email(@user.id, @email_two.email)
+    expect { Email.email_to_activate @user.id, @email_two.email }
+        .to raise_error('The email is not valid')
   end
 
   it 'is valid checked the email' do

@@ -36,13 +36,14 @@ RSpec.describe Plan, type: :model do
   end
 
   it 'is valid find plan value' do
-    value = Plan.find_plan_value(Plan.find_by_name('Free'), 'dont exist')
+    plan = Plan.find_by_name('Free')
+    value = Plan.find_plan_value(plan, 'dont exist')
     expect(value).to eq(0)
 
-    value = Plan.find_plan_value(Plan.find_by_name('Free'), 'Team members')
+    value = Plan.find_plan_value(plan, 'Team members')
     expect(value.to_i).to eq(3)
 
-    value = Plan.find_plan_value(Plan.find_by_name('Free'), 'Notification by email')
+    value = Plan.find_plan_value(plan, 'Notification by email')
     expect(value).to eq('true')
   end
 end

@@ -64,6 +64,10 @@ class Space < ActiveRecord::Base
     raise StandardError,
           'The member is not valid' unless Team.find_member(user.id, user_member_id).exists?
 
+    user = User.find(user_member_id)
+    raise StandardError, 'The team member can not add more spaces,'\
+              ' please contact with us!' unless can_create_space?(user)
+
     space.update!(user_id: user_member_id)
     Project.where('space_id = ?', space.id).find_each do |p|
       p.update!(user_id: user_member_id)
@@ -83,6 +87,10 @@ class Space < ActiveRecord::Base
   def name_format
     name.gsub! /[^0-9a-z\-_ ]/i, ''
     name.gsub! /\s+/, '_'
+
+    space = Space.find_by_user_and_name(user_id, name).take
+    raise StandardError, 'You have a space with this name' unless
+        space.nil? || space.id == id
   end
 
   ##

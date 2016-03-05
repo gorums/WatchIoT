@@ -83,8 +83,10 @@ class Email < ActiveRecord::Base
   # Define if the email can checked like principal
   #
   def self.email_to_activate(user_id, email_s)
-    email = Email.find_principal_by_user(user_id).take
-    raise StandardError, 'The email is not valid' if email.nil? || email.email != email_s
+    email = Email.find_principal_by_email(email_s).take
+    raise StandardError, 'The email is not valid' unless email.nil?
+    email = Email.find_by_user_and_by_email(user_id, email_s).take
+    raise StandardError, 'The email is not valid' if email.nil?
     email
   end
 

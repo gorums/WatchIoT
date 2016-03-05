@@ -85,7 +85,11 @@ class SpacesController < ApplicationController
     flash_log('Change the owner of space ' + @space.name + ' to ' + user_email(params[:team_id]),
               'The space was transfer correctly')
   rescue => ex
-    flash[:error] = ex.message
+     if ex.message == 'You have a space with this name'
+       flash[:error] = 'The team member has a space with this name'
+     else
+       flash[:error] = ex.message
+     end
   end
 
   ##
