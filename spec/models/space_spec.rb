@@ -64,7 +64,7 @@ RSpec.describe Space, type: :model do
 
     params = { name: 'my space', description: 'space description'}
     expect { Space.create_new_space(params, @user, @user) }
-        .to raise_error('You have a space with this name')
+        .to raise_error(/You have a space with this name/)
 
     space1 = Space.create_new_space(params1, @user, @user)
     expect(space1).to be_valid
@@ -79,7 +79,7 @@ RSpec.describe Space, type: :model do
     expect(space).to be_valid
 
     expect { Space.create!(name: 'my space', user_id: @user.id) }
-        .to raise_error('You have a space with this name')
+        .to raise_error(/You have a space with this name/)
 
     space = Space.new(name: 'my_space', user_id: @user_two.id)
     space.valid?

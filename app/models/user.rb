@@ -36,13 +36,13 @@ class User < ActiveRecord::Base
   validates :username, exclusion: { in: %w(home auth register verify login logout doc price download contact),
                                     message: '%{value} is reserved.' }
 
+  before_validation :username_format
+
   before_create do
     generate_token(:auth_token)
     generate_api_key
     assign_plan
   end
-
-  before_save :username_format
 
   ##
   # Create a new account member

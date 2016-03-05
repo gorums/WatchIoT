@@ -10,7 +10,7 @@ class Space < ActiveRecord::Base
   validates :name, exclusion: { in: %w(create setting spaces chart),
                                 message: '%{value} is reserved.' }
 
-  before_save :name_format
+  before_validation :name_format
 
   scope :count_by_user, -> user_id { where('user_id = ?', user_id).count }
 
@@ -85,12 +85,8 @@ class Space < ActiveRecord::Base
   # Admitted only alphanumeric characters, - and _
   #
   def name_format
-    name.gsub! /[^0-9a-z\-_ ]/i, ''
-    name.gsub! /\s+/, '_'
-
-    space = Space.find_by_user_and_name(user_id, name).take
-    raise StandardError, 'You have a space with this name' unless
-        space.nil? || space.id == id
+    name.gsub! /[^0-9a-z\-_ ]/i, '' unless name.nil?
+    name.gsub! /\s+/, '_' unless name.nil?
   end
 
   ##
