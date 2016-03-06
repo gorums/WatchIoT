@@ -174,7 +174,7 @@ class User < ActiveRecord::Base
     email = Email.find_principal_by_user(user.id).take ||
             Email.find_by_user(user.id).take if email.nil? && !user.nil?
 
-    return if user.nil? || email.nil?
+    return if user.nil? || !user.status? || email.nil?
 
     token = VerifyClient.create_token(user.id, email, 'reset')
     Notifier.send_forget_passwd_email(user, token, email).deliver_later

@@ -330,7 +330,23 @@ RSpec.describe User, type: :model do
 
     expect { User.send_forgot_notification @email.email }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
+  end
 
+  it 'is valid send forgot notification with the account disabled' do
+    User.delete_account(@user, @user.username)
+    expect { User.send_forgot_notification @user.username }
+        .to change { ActionMailer::Base.deliveries.count }.by(0)
+
+    expect { User.send_forgot_notification @email.email }
+        .to change { ActionMailer::Base.deliveries.count }.by(0)
+
+    @user.update!(status: true)
+    # it can
+    expect { User.send_forgot_notification @user.username }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    expect { User.send_forgot_notification @email.email }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
   end
 
   it 'is valid omniauth' do
