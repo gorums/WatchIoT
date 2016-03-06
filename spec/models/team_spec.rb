@@ -8,7 +8,7 @@ RSpec.describe Team, type: :model do
     plan = Plan.create!(name: 'Free', amount_per_month: 0)
     # add features
     fHook = Feature.create!(name: 'Webhook support')
-    fTema = Feature.create!(name: 'Team members')
+    fTeam = Feature.create!(name: 'Team members')
     fSpace = Feature.create!(name: 'Number of spaces')
     fNotif = Feature.create!(name: 'Notification by email')
     fPerMin = Feature.create!(name: 'Request per minutes')
@@ -25,7 +25,7 @@ RSpec.describe Team, type: :model do
     # Webhook support for free account
     PlanFeature.create(plan_id: plan.id, feature_id: fHook.id, value: 'false')
     # Team members for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fTema.id, value: '3')
+    PlanFeature.create(plan_id: plan.id, feature_id: fTeam.id, value: '3')
 
     # add two users
     @user = User.create!(username: 'my_user_name', passwd: '12345678', passwd_confirmation: '12345678')
@@ -46,6 +46,8 @@ RSpec.describe Team, type: :model do
         .to raise_error('The member can not be yourself')
     expect { Team.add_member(@user, 'user1@watchiot.com') }
         .to raise_error('The member was adding before')
+    expect { Team.add_member(@user, 'bad_emailwatchiot.com') }
+        .to raise_error(/is not a valid email/)
   end
 
   it 'is valid add a new member dont register' do
@@ -56,19 +58,30 @@ RSpec.describe Team, type: :model do
     username = ('user_dont_exist@watchiot.com'.gsub! /[^0-9a-z\- ]/i, '_').byteslice 0 , 24
     new_user = User.find_by_username username
     expect(new_user).to be_valid
+    # the new account status has to be false
+    expect(new_user.status).to eq(false)
+
+    # the email has to be not principal and unchecked
+    new_email = Email.find_by_email 'user_dont_exist@watchiot.com'
+    expect(new_email).to be_valid
+    expect(new_email.principal).to eq(false)
+    expect(new_email.checked).to eq(false)
+
     member = Team.find_member(@user.id, new_user.id).take
     expect(member).to be_valid
 
     expect(User.all.count).to eq(3)
   end
 
-  it 'is valid add a new member in two account and one of they are principal' do
+  it 'is valid add a new member of two accounts and one of they are principal' do
     user_tree = User.create!(username: 'my_user_name2', passwd: '12345678', passwd_confirmation: '12345678')
+    # not principal email
     email_tree = Email.create!(email: 'user1@watchiot.com', user_id: user_tree.id)
 
     expect { Team.add_member(@user, 'user1@watchiot.com') }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
 
+    # the account with the principal email was add
     member = Team.find_member(@user.id, @user_two.id).take
     expect(member).to be_valid
 
@@ -82,7 +95,7 @@ RSpec.describe Team, type: :model do
 
     user_four = User.create!(username: 'my_user_name3', passwd: '12345678', passwd_confirmation: '12345678')
     email_four = Email.create!(email: 'user3@watchiot.com', user_id: user_four.id)
-
+    # the email has to be principal
     expect { Team.add_member(@user, 'user3@watchiot.com') }
         .to raise_error('The member can not be added')
   end

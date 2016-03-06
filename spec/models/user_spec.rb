@@ -17,6 +17,7 @@ RSpec.describe User, type: :model do
     @user_two = User.create!(username: 'my_user_name1', passwd: '12345678', passwd_confirmation: '12345678')
 
     @email = Email.create!(email: 'user@watchiot.com', user_id: @user.id)
+    @email_two = Email.create!(email: 'user1@watchiot.com', user_id: @user_two.id)
   end
 
   it 'is valid create new account' do
@@ -32,7 +33,7 @@ RSpec.describe User, type: :model do
     user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa', passwd: 'aaadddSSaa', passwd_confirmation: 'aaaddd11aa')
     expect(user_new).to_not be_valid
 
-    # the password have to be more than 8 characters
+    # the password has to be more than 8 characters
     user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa', passwd: 'aaaddd', passwd_confirmation: 'aaaddd')
     expect(user_new).to_not be_valid
 
@@ -67,7 +68,7 @@ RSpec.describe User, type: :model do
     Space.create_new_space(params, @user_two, @user_two)
 
     expect { User.delete_account(@user_two, @user_two.username) }
-        .to raise_error('You have to transfer or your spaces or delete their')
+        .to raise_error('You have to transfer your spaces or delete their')
 
     # when i delete the account the status change to false
     expect(@user.status).to eq(true)
@@ -89,44 +90,60 @@ RSpec.describe User, type: :model do
     # exist username
     expect { User.change_username @user, 'my_user_name1'}
       .to raise_error(/Username has already been taken/)
+
+    # exist username keyspace equals _
+    expect { User.change_username @user, 'my user_name1'}
+        .to raise_error(/Username has already been taken/)
   end
 
   it 'is valid register' do
-    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    # the register was correctly
+    params = { username: 'new_register_user', passwd: '12345678', passwd_confirmation: '12345678'}
     expect {User.register params, 'newemail@watchiot.org'}.to_not raise_error
 
-    user = User.find_by_username 'new_ergister_user'
+    user = User.find_by_username 'new_register_user'
     expect(user).to_not be_nil
     expect(user.status).to eq(false)
     expect(user.passwd_salt).to_not be_empty
+    expect(user.auth_token).to_not be_empty
     expect(user.passwd.length).to be == 60 # length of hash
+    expect(user.api_key_id).to_not be_nil
+    expect(user.plan_id).to_not be_nil
 
     emails = user.emails
-    expect(emails).to_not be_nil
-    expect(emails.first.email).to include('newemail@watchiot.org')
+    email = emails.first
+    expect(email).to_not be_nil
+    expect(email.email).to include('newemail@watchiot.org')
+    expect(email.principal).to eq(false)
+    expect(email.checked).to eq(false)
 
     # invalid user
-    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    params = { username: 'new_register_user', passwd: '12345678', passwd_confirmation: '12345678'}
     expect {User.register params, 'newemail@watchiot.org'}
         .to raise_error(/Username has already been taken/)
 
+    # invalid email
+    params = { username: 'new_register_user1', passwd: '12345678', passwd_confirmation: '12345678'}
+    expect {User.register params, 'newemail_bad_watchiot.org'}
+        .to raise_error(/Email is not a valid email/)
+
     # password too short
-    params = { username: 'new_ergister_user1', passwd: '123456', passwd_confirmation: '123456'}
+    params = { username: 'new_register_user1', passwd: '123456', passwd_confirmation: '123456'}
     expect {User.register params, 'newemail@watchiot.org'}
         .to raise_error('Password has less than 8 characters')
 
     # passwords do not match
-    params = { username: 'new_ergister_user1', passwd: '123456678', passwd_confirmation: '123456'}
+    params = { username: 'new_register_user1', passwd: '123456678', passwd_confirmation: '123456'}
     expect {User.register params, 'newemail@watchiot.org'}
         .to raise_error('Password does not match the confirm password')
   end
 
   it 'is valid change password' do
-    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    params = { username: 'new_register_user', passwd: '12345678', passwd_confirmation: '12345678'}
     expect {User.register params, 'newemail@watchiot.org'}.to_not raise_error
 
     # no problem change the password
-    new_user = User.find_by_username 'new_ergister_user'
+    new_user = User.find_by_username 'new_register_user'
     params = { passwd: '12345678', passwd_new: '123456789999', passwd_confirmation: '123456789999'}
     expect { User.change_passwd new_user, params }.to_not raise_error
 
@@ -142,25 +159,25 @@ RSpec.describe User, type: :model do
   end
 
   it 'is valid login' do
-    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    params = { username: 'new_register_user', passwd: '12345678', passwd_confirmation: '12345678'}
     expect {User.register params, 'newemail@watchiot.org'}.to_not raise_error
 
     # user status is false
-    expect { user = User.login 'new_ergister_user', '12345678' }
+    expect { user = User.login 'new_register_user', '12345678' }
         .to raise_error('Account is not valid')
 
-    user_new = User.find_by_username 'new_ergister_user'
+    user_new = User.find_by_username 'new_register_user'
     user_new.update!(status: true)
 
-    user_login = User.login 'new_ergister_user', '12345678'
+    user_login = User.login 'new_register_user', '12345678'
     expect(user_login).to_not be_nil
 
     # bad password
-    expect { user = User.login 'new_ergister_user', '123456789' }
+    expect { user = User.login 'new_register_user', '123456789' }
         .to raise_error('Account is not valid')
 
     # user does not exist
-    expect { user = User.login 'new_ergister_user_1', '123456789' }
+    expect { user = User.login 'new_register_user_1', '123456789' }
         .to raise_error('Account is not valid')
 
     # email exist but it is not principal
@@ -168,21 +185,21 @@ RSpec.describe User, type: :model do
         .to raise_error('Account is not valid')
 
     email_login = user_new.emails.first
-    email_login.update!(principal: true, checked:true)
+    User.active_account(user_new, email_login)
 
     user_login = User.login 'newemail@watchiot.org', '12345678'
     expect(user_login).to_not be_nil
   end
 
   it 'is valid reset the password' do
-    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    params = { username: 'new_register_user', passwd: '12345678', passwd_confirmation: '12345678'}
     expect {User.register params, 'newemail@watchiot.org'}.to_not raise_error
 
-    user_new = User.find_by_username 'new_ergister_user'
+    user_new = User.find_by_username 'new_register_user'
     user_new.update!(status: true)
 
     # login fine
-    user_login = User.login 'new_ergister_user', '12345678'
+    user_login = User.login 'new_register_user', '12345678'
     expect(user_login).to_not be_nil
 
     # password and confirmation do not match
@@ -190,14 +207,17 @@ RSpec.describe User, type: :model do
     expect { User.reset_passwd user_new, params }
         .to raise_error('Password does not match the confirm password')
 
-    # does not exist email like principal
-    params = { passwd_new: 'new12345678', passwd_confirmation: 'new12345678'}
-    expect { User.reset_passwd user_new, params }
-        .to raise_error('You dont have a principal email, please contact us')
-
-    # set the email like principal
+    # does not exist email like principal not problem
     email_login = user_new.emails.first
-    email_login.update!(principal: true, checked:true)
+    expect(email_login.principal).to eq(false)
+    expect(email_login.checked).to eq(false)
+
+    params = { passwd_new: 'new12345678', passwd_confirmation: 'new12345678'}
+    expect { User.reset_passwd user_new, params }.to_not raise_error
+
+    email_login = user_new.emails.first
+    expect(email_login.principal).to eq(true)
+    expect(email_login.checked).to eq(true)
 
     params = { passwd_new: 'new12345678', passwd_confirmation: 'new12345678'}
 
@@ -205,17 +225,44 @@ RSpec.describe User, type: :model do
         .to change { ActionMailer::Base.deliveries.count }.by(1)
 
     # the pasword was change
-    expect { user_login = User.login 'new_ergister_user', '12345678' }
+    expect { user_login = User.login 'new_register_user', '12345678' }
         .to raise_error('Account is not valid')
 
     # login with the new passsword
     user_login = User.login user_new.username, 'new12345678'
     expect(user_login).to_not be_nil
+
+  end
+
+  it 'is valid reset the password with the account disabled' do
+    params = { username: 'new_register_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    expect {User.register params, 'newemail@watchiot.org'}.to_not raise_error
+
+    email = Email.find_by_email 'newemail@watchiot.org'
+    user_new = User.find_by_username 'new_register_user'
+    email.update!(principal: true, checked: true)
+    user_new.update!(status: false)
+
+    # the pasword was change
+    expect { user_login = User.login user_new.username, '12345678' }
+        .to raise_error('Account is not valid')
+
+    params = { passwd_new: 'new12345678', passwd_confirmation: 'new12345678'}
+    expect { User.reset_passwd user_new, params }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    # the account continue disabled
+    expect(user_new.status).to eq(false)
+    expect { user_login = User.login user_new.username, 'new12345678' }
+        .to raise_error('Account is not valid')
   end
 
   it 'is valid activate the account' do
     expect { User.active_account @user, @email }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    expect { User.active_account @user, @email_two }
+        .to raise_error('The account can not be activate')
 
     expect(@user.status).to eq(true)
     expect(@email.principal).to eq(true)
@@ -227,12 +274,12 @@ RSpec.describe User, type: :model do
     email = Email.find_by_email 'user12@watchiot.org'
 
     # bad password
-    params = { username: 'new_ergister_user', passwd: '12345678bad', passwd_confirmation: '12345678'}
+    params = { username: 'new_register_user', passwd: '12345678bad', passwd_confirmation: '12345678'}
     expect { User.invite user, params, email }
         .to raise_error('Password does not match the confirm password')
 
     # short password
-    params = { username: 'new_ergister_user', passwd: '12345', passwd_confirmation: '12345'}
+    params = { username: 'new_register_user', passwd: '12345', passwd_confirmation: '12345'}
     expect { User.invite user, params, email }
         .to raise_error('Password has less than 8 characters')
 
@@ -246,7 +293,7 @@ RSpec.describe User, type: :model do
     expect { User.invite user, params, email }
         .to raise_error(/Username has already been taken/)
 
-    params = { username: 'new_ergister_user', passwd: '12345678', passwd_confirmation: '12345678'}
+    params = { username: 'new_register_user', passwd: '12345678', passwd_confirmation: '12345678'}
     expect { User.invite user, params, email }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
 
@@ -262,11 +309,11 @@ RSpec.describe User, type: :model do
 
     # the email is not set like principal
     expect { User.send_forgot_notification @user.username }
-        .to change { ActionMailer::Base.deliveries.count }.by(0)
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
 
-    # the email is not set like principal
+    # the email is not set like principal buy it can recovery the password
     expect { User.send_forgot_notification @email.email }
-        .to change { ActionMailer::Base.deliveries.count }.by(0)
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
 
     # set the email like principal
     @email.update!(principal: true, checked:true)
@@ -276,6 +323,14 @@ RSpec.describe User, type: :model do
 
     expect { User.send_forgot_notification @email.email }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+    # two account with the same email no principal
+    user = User.create!(username: 'my_user_name_new', passwd: '12345678', passwd_confirmation: '12345678')
+    Email.create!(email: 'user@watchiot.com', user_id: user.id)
+
+    expect { User.send_forgot_notification @email.email }
+        .to change { ActionMailer::Base.deliveries.count }.by(1)
+
   end
 
   it 'is valid omniauth' do

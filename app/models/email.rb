@@ -106,6 +106,20 @@ class Email < ActiveRecord::Base
     email.update!(user_id: user_id, checked: checked, principal: checked)
   end
 
+  ##
+  # find an email to send an email
+  #
+  def self.find_email_forgot (email_s)
+    emails = Email.where(email: email_s).all
+    return if emails.nil? || emails.empty?
+    return emails.first if emails.length == 1
+
+    emails.each do |email|
+      user = email.user
+      return email if user.emails.length == 1 && !email.principal?
+    end
+  end
+
   private
 
   ##

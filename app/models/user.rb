@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
   #
   def self.delete_account(user, username)
     raise StandardError, 'The username is not valid' if user.username != username
-    raise StandardError, 'You have to transfer or'\
+    raise StandardError, 'You have to transfer'\
                          ' your spaces or delete their' if Space.exists?(user_id: user.id)
     user.update!(status: false)
   end
@@ -126,8 +126,11 @@ class User < ActiveRecord::Base
     passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
 
-    email = Email.find_principal_by_user(user.id).take
+    email = Email.find_principal_by_user(user.id).take || Email.find_by_user(user.id).take
     raise StandardError, 'You dont have a principal email, please contact us' if email.nil?
+
+    # if the email is not principal it never has activated the account
+    User.active_account(user, email) unless email.principal?
 
     Notifier.send_reset_passwd_email(user, email.email).deliver_later
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
@@ -137,8 +140,9 @@ class User < ActiveRecord::Base
   # Active the account after register and validate the email
   #
   def self.active_account(user, email)
-    user.update!(status: true)
+    raise StandardError, 'The account can not be activate' if email.user.id != user.id
     email.update!(checked: true, principal: true)
+    user.update!(status: true)
 
     Notifier.send_signup_verify_email(user, email.email).deliver_later
   end
@@ -162,8 +166,13 @@ class User < ActiveRecord::Base
     user = User.find_by_username criteria # find by username
     email = Email.find_principal_by_email(criteria).take # find by principal email
 
+    # if it does not principal try to find for no principal
+    email = Email.find_email_forgot(criteria) if user.nil? || email.nil?
+
     user = email.user if user.nil? && !email.nil?
-    email = Email.find_principal_by_user(user.id).take if email.nil? && !user.nil?
+    # find by user id first try with the principal or any
+    email = Email.find_principal_by_user(user.id).take ||
+            Email.find_by_user(user.id).take if email.nil? && !user.nil?
 
     return if user.nil? || email.nil?
 

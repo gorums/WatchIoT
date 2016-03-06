@@ -121,4 +121,24 @@ RSpec.describe Email, type: :model do
     email = Email.email_to_check @user.id, @email.email
     expect(email.email).to eq(@email.email)
   end
+
+  it 'is valid find email to send forgot' do
+      # only one email and one account
+      email = Email.find_email_forgot @user.emails.first.email
+      expect(email).to_not be_nil
+
+      user = User.create!(username: 'my_user_name_new', passwd: '12345678', passwd_confirmation: '12345678')
+      Email.create!(email: 'user@watchiot.com', user_id: user.id)
+      # two account with the same email no principal
+      email = Email.find_email_forgot @user.emails.first.email
+      expect(email).to_not be_nil
+      expect(email.email).to eq(@user.emails.first.email)
+
+      # two account with the same email but @user have an email like principal
+      Email.create!(email: 'user_new@watchiot.com', user_id: @user.id, principal: true, checked: true)
+
+      email = Email.find_email_forgot @user.emails.first.email
+      expect(email).to_not be_nil
+      expect(email.email).to eq(user.emails.first.email)
+  end
 end
