@@ -16,7 +16,7 @@ class NotificationsController < ApplicationController
   end
 
   ##
-  # Post /forgot_notification
+  # Post /forgot
   # never show if the username or email exist in the system, security reason
   #
   def forgot_notification
@@ -24,14 +24,14 @@ class NotificationsController < ApplicationController
   end
 
   ##
-  # Get /reset
+  # Get /reset/:token
   #
   def reset
     @token = params[:token]
   end
 
   ##
-  # Patch /do_reset
+  # Patch /reset/:token
   #
   def do_reset
     User.reset_passwd @user, params[:user]
