@@ -75,6 +75,9 @@ Rails.application.routes.draw do
 
   # at the end of you routes.rb
   get '*a', to: 'errors#routing'
+  post '*a', to: 'errors#routing'
+  patch '*a', to: 'errors#routing'
+  delete '*a', to: 'errors#routing'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

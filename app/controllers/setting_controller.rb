@@ -143,7 +143,7 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Delete /:username/setting/team/delete
+  # Delete /:username/setting/team/delete/:id
   #
   def team_delete
     redirect_to '/' + @user.username + '/setting/team'
