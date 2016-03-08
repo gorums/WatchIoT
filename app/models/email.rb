@@ -75,7 +75,7 @@ class Email < ActiveRecord::Base
     raise StandardError, 'The email has to be uncheck' if email.checked?
 
     token = VerifyClient.create_token(user_id, email.email, 'verify_email')
-    Notifier.send_verify_email(email.user, token, email.email).deliver_later
+    Notifier.send_verify_email(email.email, email.user, token).deliver_later
     email
   end
 

@@ -3,7 +3,8 @@ module ApplicationHelper
   # This method return the principal email
   #
   def user_email(user_id)
-    Email.find_principal_by_user(user_id).take  || ''
+    email = Email.find_principal_by_user(user_id).take
+    email.email unless email.nil?
   end
 
   ##

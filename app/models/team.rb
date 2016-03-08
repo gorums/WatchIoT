@@ -24,7 +24,7 @@ class Team < ActiveRecord::Base
     raise StandardError, 'The member was adding before' if Team.find_member(user.id, user_member.id).exists?
 
     Team.create!(user_id: user.id, user_team_id: user_member.id)
-    Notifier.send_new_team_email(user, user_member, email_s).deliver_later
+    Notifier.send_new_team_email(email_s, user, user_member).deliver_later
   end
 
   ##

@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
     save_user_and_email(user, email)
 
     token = VerifyClient.create_token(user.id, email_member, 'invited')
-    Notifier.send_create_user_email(token, email_member).deliver_later
+    Notifier.send_create_user_email(email_member, token).deliver_later
     user
   end
 
@@ -85,7 +85,7 @@ class User < ActiveRecord::Base
     save_user_and_email user, email
 
     token = VerifyClient.create_token(user.id, email_s, 'register')
-    Notifier.send_signup_email(user, email_s, token).deliver_later
+    Notifier.send_signup_email(email_s, user, token).deliver_later
   end
 
   ##
@@ -132,7 +132,7 @@ class User < ActiveRecord::Base
     # if the email is not principal it never has activated the account
     User.active_account(user, email) unless email.principal?
 
-    Notifier.send_reset_passwd_email(user, email.email).deliver_later
+    Notifier.send_reset_passwd_email(email.email, user).deliver_later
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
 
@@ -144,7 +144,7 @@ class User < ActiveRecord::Base
     email.update!(checked: true, principal: true)
     user.update!(status: true)
 
-    Notifier.send_signup_verify_email(user, email.email).deliver_later
+    Notifier.send_signup_verify_email(email.email, user).deliver_later
   end
 
   ##
@@ -177,7 +177,7 @@ class User < ActiveRecord::Base
     return if user.nil? || !user.status? || email.nil?
 
     token = VerifyClient.create_token(user.id, email, 'reset')
-    Notifier.send_forget_passwd_email(user, token, email).deliver_later
+    Notifier.send_forget_passwd_email(email, user, token).deliver_later
   end
 
   protected
@@ -247,7 +247,7 @@ class User < ActiveRecord::Base
 
     save_user user, checked
     Email.save_email email, user.id, checked
-    Notifier.send_signup_verify_email(user, email.email).deliver_later if checked
+    Notifier.send_signup_verify_email(email.email, user).deliver_later if checked
   end
 
   ##

@@ -74,7 +74,7 @@ class Space < ActiveRecord::Base
     end
 
     member_email = Email.find_principal_by_user(user_member_id).take
-    Notifier.send_transfer_space_email(user, space, member_email)
+    Notifier.send_transfer_space_email(member_email, user, space)
         .deliver_later unless member_email.nil?
   end
 
