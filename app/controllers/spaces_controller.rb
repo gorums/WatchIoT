@@ -38,7 +38,7 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # Patch /:username/:spacename/edit
+  # Patch /:username/:spacename
   #
   def edit
     render 'show'
