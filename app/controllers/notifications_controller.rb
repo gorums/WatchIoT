@@ -13,6 +13,7 @@ class NotificationsController < ApplicationController
   #
   def forgot
     @user = me || User.new
+    render 'users/forgot'
   end
 
   ##
@@ -21,6 +22,7 @@ class NotificationsController < ApplicationController
   #
   def forgot_notification
     User.send_forgot_notification user_forget_params[:username]
+    render 'users/forgot_notification'
   end
 
   ##
@@ -28,6 +30,7 @@ class NotificationsController < ApplicationController
   #
   def reset
     @token = params[:token]
+    render 'users/reset'
   end
 
   ##
@@ -40,7 +43,7 @@ class NotificationsController < ApplicationController
     redirect_to '/login'
   rescue => ex
     flash[:error] = ex.message
-    render 'reset'
+    render 'users/reset'
   end
 
   ##
@@ -54,12 +57,15 @@ class NotificationsController < ApplicationController
     redirect_to '/' + user.username
   rescue => ex
     flash[:error] = ex.message
+    redirect_to '/'
   end
 
   ##
   # Get /verify_email
   #
   def verify_email
+    render 'users/verify_email'
+
     Email.email_verify @email
     @verifyClient.destroy!
   rescue => ex
@@ -71,6 +77,7 @@ class NotificationsController < ApplicationController
   #
   def invite
     @token = params[:token]
+    render 'users/invited'
   end
 
   ##
@@ -85,7 +92,7 @@ class NotificationsController < ApplicationController
     redirect_to '/' + @user.username
   rescue => ex
     flash[:error] = ex.message
-    render 'invite'
+    render 'users/invited'
   end
 
   private
@@ -130,8 +137,8 @@ class NotificationsController < ApplicationController
   # Get a token
   #
   def find_by_concept(concept, token)
-    @verifyClient = VerifyClient.find_by_token_and_concept token, concept || not_found
-    @user = User.find(id: @verifyClient.user_id) || not_found
+    @verifyClient = VerifyClient.find_by_token_and_concept(token, concept).take || not_found
+    @user = User.find(@verifyClient.user_id) || not_found
   end
 
   ##
