@@ -17,22 +17,31 @@ RSpec.describe Plan, type: :model do
 
 
     # Number of spaces for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fSpace.id, value: '3')
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fSpace.id, value: '3')
     # Number of projects by space for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fProject.id, value: '5')
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fProject.id, value: '5')
     # Request per minutes for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fPerMin.id, value: '1')
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fPerMin.id, value: '1')
     # Notification by email for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fNotif.id, value: 'true')
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fNotif.id, value: 'true')
     # Webhook support for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fHook.id, value: 'false')
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fHook.id, value: 'false')
     # Team members for free account
-    PlanFeature.create(plan_id: plan.id, feature_id: fTeam.id, value: '3')
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fTeam.id, value: '3')
 
     # add two users
-    @user = User.create!(username: 'my_user_name', passwd: '12345678', passwd_confirmation: '12345678')
+    @user = User.create!(username: 'my_user_name',
+                         passwd: '12345678',
+                         passwd_confirmation: '12345678')
 
-    @email = Email.create!(email: 'user@watchiot.com', user_id: @user.id)
+    @email = Email.create!(email: 'user@watchiot.com',
+                           user_id: @user.id)
   end
 
   it 'is valid find plan value' do

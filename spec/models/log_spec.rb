@@ -8,14 +8,18 @@ RSpec.describe Log, type: :model do
     Plan.create!(name: 'Free', amount_per_month: 0)
 
     # add two users
-    @user = User.create!(username: 'my_user_name', passwd: '12345678', passwd_confirmation: '12345678')
+    @user = User.create!(username: 'my_user_name',
+                         passwd: '12345678',
+                         passwd_confirmation: '12345678')
 
-    @email = Email.create!(email: 'user@watchiot.com', user_id: @user.id)
+    @email = Email.create!(email: 'user@watchiot.com',
+                           user_id: @user.id)
   end
 
   it 'is valid save log' do
     # the action text have to be more short
-    expect{ Log.save_log('description', 'this description action is to big', @user.id, @user.id) }
+    expect{ Log.save_log('description', 'this '\
+    'description action is to big', @user.id, @user.id) }
         .to raise_error(ActiveRecord::StatementInvalid)
 
     Log.save_log('description', 'action short', @user.id, @user.id)

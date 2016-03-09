@@ -8,11 +8,18 @@ RSpec.describe Email, type: :model do
     Plan.create!(name: 'Free', amount_per_month: 0)
 
     # add two users
-    @user = User.create!(username: 'my_user_name', passwd: '12345678', passwd_confirmation: '12345678')
-    @user_two = User.create!(username: 'my_user_name1', passwd: '12345678', passwd_confirmation: '12345678')
+    @user = User.create!(username: 'my_user_name',
+                         passwd: '12345678',
+                         passwd_confirmation: '12345678')
+    @user_two = User.create!(username: 'my_user_name1',
+                             passwd: '12345678',
+                             passwd_confirmation: '12345678')
 
-    @email = Email.create!(email: 'user@watchiot.com', user_id: @user.id)
-    @email_two = Email.create!(email: 'user1@watchiot.com', user_id: @user_two.id, checked: true, principal: true)
+    @email = Email.create!(email: 'user@watchiot.com',
+                           user_id: @user.id)
+    @email_two = Email.create!(email: 'user1@watchiot.com',
+                               user_id: @user_two.id,
+                               checked: true, principal: true)
   end
 
   it 'is valid add a new email' do
@@ -43,14 +50,16 @@ RSpec.describe Email, type: :model do
     other_email = Email.add_email(@user.id, 'other_user@watchiot.com')
     other_email.update!(checked: true)
 
-    expect(Email.find_by_email('user@watchiot.com').principal).to eq(true)
+    expect(Email.find_by_email('user@watchiot.com').principal)
+        .to eq(true)
 
     # set this new email like principal
     new_principal = Email.principal @user.id, other_email.id
 
     expect(new_principal.principal).to eq(true)
     # this email can be principal
-    expect(Email.find_by_email('user@watchiot.com').principal).to eq(false)
+    expect(Email.find_by_email('user@watchiot.com')
+               .principal).to eq(false)
   end
 
   it 'is valid add the email like principal being principal in other account' do
@@ -84,7 +93,8 @@ RSpec.describe Email, type: :model do
     email = Email.principal @user.id, email.id
     expect(email.principal).to eq(true)
 
-    expect { Email.remove_email @user.id, @email.id}.to_not raise_error
+    expect { Email.remove_email @user.id, @email.id}
+        .to_not raise_error
   end
 
   it 'is valid to send verification' do
@@ -127,7 +137,9 @@ RSpec.describe Email, type: :model do
       email = Email.find_email_forgot @user.emails.first.email
       expect(email).to_not be_nil
 
-      user = User.create!(username: 'my_user_name_new', passwd: '12345678', passwd_confirmation: '12345678')
+      user = User.create!(username: 'my_user_name_new',
+                          passwd: '12345678',
+                          passwd_confirmation: '12345678')
       Email.create!(email: 'user@watchiot.com', user_id: user.id)
       # two account with the same email no principal
       email = Email.find_email_forgot @user.emails.first.email
@@ -135,7 +147,10 @@ RSpec.describe Email, type: :model do
       expect(email.email).to eq(@user.emails.first.email)
 
       # two account with the same email but @user have an email like principal
-      Email.create!(email: 'user_new@watchiot.com', user_id: @user.id, principal: true, checked: true)
+      Email.create!(email: 'user_new@watchiot.com',
+                    user_id: @user.id,
+                    principal: true,
+                    checked: true)
 
       email = Email.find_email_forgot @user.emails.first.email
       expect(email).to_not be_nil
