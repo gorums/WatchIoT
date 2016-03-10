@@ -107,9 +107,9 @@ class SettingController < ApplicationController
     redirect_to '/' + @user.username + '/setting/account'
 
     old_username = @user.username
-    User.change_username @user, params[:username]
+    User.change_username @user, username_params[:username]
 
-    flash_log('Change username <b>' + old_username + '</b> by ' + params[:username],
+    flash_log('Change username <b>' + old_username + '</b> by ' + username_params[:username],
               'The new username was save correctly')
   rescue => ex
     flash[:error] = ex.message
@@ -149,9 +149,9 @@ class SettingController < ApplicationController
     redirect_to '/' + @user.username + '/setting/team'
 
     Team.remove_member @user, params[:id]
-    email = Email.find_principal_by_user(user_id).take
+    email = Email.find_principal_by_user(params[:id]).take || Email.find_by_user(params[:id]).take
 
-    flash_log('Delete a member <b>' + email+ '</b>',
+    flash_log('Delete a member <b>' + email.email + '</b>',
               'The member was delete correctly')
   rescue => ex
     flash[:error] = ex.message

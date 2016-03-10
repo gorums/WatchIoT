@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   has_many :project_webhooks
   has_many :project_evaluators
   has_many :verify_clients
-  has_one :api_key
+  belongs_to :api_key
   has_one :plan
 
   validates_uniqueness_of :username
