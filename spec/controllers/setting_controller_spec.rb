@@ -5,7 +5,7 @@ RSpec.describe SettingController, type: :controller do
     # Create plans and users static values for free account
 
     # add plan
-    Plan.create!(name: 'Free', amount_per_month: 0)
+    plan = Plan.create!(name: 'Free', amount_per_month: 0)
 
     fTeam = Feature.create!(name: 'Team members')
 

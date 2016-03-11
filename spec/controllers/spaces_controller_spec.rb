@@ -8,9 +8,14 @@ RSpec.describe SpacesController, type: :controller do
     plan = Plan.create!(name: 'Free', amount_per_month: 0)
 
     fSpace = Feature.create!(name: 'Number of spaces')
+    fTeam = Feature.create!(name: 'Team members')
 
     # Number of spaces for free account
     PlanFeature.create(plan_id: plan.id, feature_id: fSpace.id, value: '3')
+
+    # Team members for free account
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fTeam.id, value: '3')
 
     params = { username: 'user_name',
                passwd: '12345678',
