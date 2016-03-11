@@ -7,6 +7,12 @@ RSpec.describe SettingController, type: :controller do
     # add plan
     Plan.create!(name: 'Free', amount_per_month: 0)
 
+    fTeam = Feature.create!(name: 'Team members')
+
+    # Team members for free account
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fTeam.id, value: '3')
+
     params = { username: 'user_name',
                passwd: '12345678',
                passwd_confirmation: '12345678'}
