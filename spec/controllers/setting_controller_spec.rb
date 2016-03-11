@@ -107,7 +107,8 @@ RSpec.describe SettingController, type: :controller do
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(2)
 
-      expect(user.emails.first.principal).to be(false)
+      email = Email.find_by_email 'user@watchiot.com'
+      expect(email.principal).to be(false)
 
       email = Email.find_by_email 'my_new_email@watchiot.org'
       expect(email.principal).to be(true)
@@ -171,7 +172,8 @@ RSpec.describe SettingController, type: :controller do
       post :team_add, :username => 'user_name',
             :email => {:email => 'user_unauthorized@watchiot.com'}
 
-      expect(@user.teams.length).to eq(1)
+      user = User.find_by_username 'user_name'
+      expect(user.teams.length).to eq(1)
     end
   end
 

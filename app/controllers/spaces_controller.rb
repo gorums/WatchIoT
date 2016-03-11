@@ -12,11 +12,11 @@ class SpacesController < ApplicationController
   #
   def index
     @space = Space.new
-    @spaces = Space.find_by_user_order @user.id
+    @spaces = Space.find_by_user_order(@user.id).all
   end
 
   ##
-  # Get /:username/:spacename
+  # Get /:username/:namespace
   #
   def show
     @project = Project.new
@@ -38,7 +38,7 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # Patch /:username/:spacename
+  # Patch /:username/:namespace
   #
   def edit
     render 'show'
@@ -52,14 +52,14 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # Get /:username/:spacename/setting
+  # Get /:username/:namespace/setting
   #
   def setting
     @teams = Team.my_teams @user.id
   end
 
   ##
-  # Patch /:username/:spacename/setting/change
+  # Patch /:username/:namespace/setting/change
   # Change space name
   #
   def change
@@ -75,14 +75,14 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # Patch /:username/:spacename/setting/transfer
+  # Patch /:username/:namespace/setting/transfer
   #
   def transfer
     redirect_to '/' + @user.username + '/spaces'
 
-    Space.transfer @space, @user, params[:team_id]
+    Space.transfer @space, @user, params[:user_member_id]
 
-    flash_log('Change the owner of space ' + @space.name + ' to ' + user_email(params[:team_id]),
+    flash_log('Change the owner of space ' + @space.name + ' to ' + user_email(params[:user_member_id]),
               'The space was transfer correctly')
   rescue => ex
      if ex.message == 'You have a space with this name'
@@ -93,7 +93,7 @@ class SpacesController < ApplicationController
   end
 
   ##
-  # Delete /:username/:spacename/setting/delete
+  # Delete /:username/:namespace/setting/delete
   #
   def delete
     redirect_to '/' + @user.username + '/spaces'
