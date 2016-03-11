@@ -45,42 +45,42 @@ RSpec.describe NotificationsController, type: :controller do
 
   describe 'GET reset' do
     it 'has a 200 status code' do
-      get :reset, { :token => '12345' }
+      get :reset, { token: '12345' }
       expect(response.status).to eq(200)
     end
   end
 
   describe 'PATCH do reset' do
     it 'has a 200 status code' do
-      patch :reset, { :token => '12345' }
+      patch :reset, { token: '12345' }
       expect(response.status).to eq(200)
     end
   end
 
   describe 'GET active' do
     it 'has a 302 status code' do
-      get :active, { :token => '12345' }
+      get :active, { token: '12345' }
       expect(response.status).to eq(302)
     end
   end
 
   describe 'GET verify email' do
     it 'has a 200 status code' do
-      get :verify_email, { :token => '12345' }
+      get :verify_email, { token: '12345' }
       expect(response.status).to eq(200)
     end
   end
 
   describe 'GET invite' do
     it 'has a 200 status code' do
-      get :invite, { :token => '12345' }
+      get :invite, { token: '12345' }
       expect(response.status).to eq(200)
     end
   end
 
   describe 'GET do invite' do
     it 'has a 200 status code' do
-      get :invite, { :token => '12345' }
+      get :invite, { token: '12345' }
       expect(response.status).to eq(200)
     end
   end
