@@ -30,6 +30,9 @@ RSpec.describe SpacesController, type: :controller do
     email_login = user_new.emails.first
     User.active_account(user_new, email_login)
 
+    params = { name: 'my_space',
+               description: 'space description'}
+    Space.create_new_space params, @user, @user
   end
 
   describe 'GET all spaces' do
@@ -42,9 +45,6 @@ RSpec.describe SpacesController, type: :controller do
 
   describe 'GET show space' do
     it 'has a 200 status code' do
-      params = { name: 'my_space',
-                 description: 'space description'}
-      Space.create_new_space params, @user, @user
       get :show, username: 'user_name', namespace: 'my_space'
       expect(assigns[:project]).to_not be_nil
       expect(response.status).to eq(200)
@@ -71,9 +71,6 @@ RSpec.describe SpacesController, type: :controller do
 
   describe 'PATCH edit space' do
     it 'has a 200 status code' do
-      params = { name: 'my_space',
-                 description: 'space description'}
-      Space.create_new_space params, @user, @user
       patch :edit, username: 'user_name', namespace: 'my_space',
             space: {description: 'my new description'}
       space = Space.first
@@ -85,9 +82,6 @@ RSpec.describe SpacesController, type: :controller do
 
   describe 'GET setting space' do
     it 'has a 200 status code' do
-      params = { name: 'my_space',
-                 description: 'space description'}
-      Space.create_new_space params, @user, @user
       get :setting, username: 'user_name', namespace: 'my_space'
       expect(assigns[:teams]).to_not be_nil
       expect(response.status).to eq(200)
@@ -96,9 +90,6 @@ RSpec.describe SpacesController, type: :controller do
 
   describe 'PATCH change name space setting' do
     it 'has a 302 status code' do
-      params = { name: 'my_space',
-                 description: 'space description'}
-      Space.create_new_space params, @user, @user
       patch :change, username: 'user_name', namespace: 'my_space',
             space: {name: 'my_new space', description: 'my new description'}
       space = Space.first
@@ -110,9 +101,6 @@ RSpec.describe SpacesController, type: :controller do
 
   describe 'PATCH transfer space setting no member' do
     it 'has a 302 status code' do
-      params = { name: 'my_space',
-                 description: 'space description'}
-      Space.create_new_space params, @user, @user
       patch :transfer, username: 'user_name', namespace: 'my_space',
             user_member_id: '1'
 
@@ -127,9 +115,6 @@ RSpec.describe SpacesController, type: :controller do
 
   describe 'PATCH transfer space setting member' do
     it 'has a 302 status code' do
-      params = { name: 'my_space',
-                 description: 'space description'}
-      Space.create_new_space params, @user, @user
       Team.add_member(@user, 'user_unauthorized@watchiot.com')
       user_new = User.find_by_username 'user_name_unauthorized'
       patch :transfer, username: 'user_name', namespace: 'my_space',
@@ -144,9 +129,6 @@ RSpec.describe SpacesController, type: :controller do
 
   describe 'DELETE space setting' do
     it 'has a 302 status code' do
-      params = { name: 'my_space',
-                 description: 'space description'}
-      Space.create_new_space params, @user, @user
       delete :delete, username: 'user_name', namespace: 'my_space',
             space: {:name => 'my_space'}
       space = Space.first
