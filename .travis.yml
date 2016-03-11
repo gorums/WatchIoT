@@ -1,8 +1,5 @@
-language: ruby
-rvm:
-  - 2.2.0
-
   before_script:
+    - rvm install 2.2.0
     - cp config/database.yml.travis config/database.yml
     - psql -c 'create database watchiot_test;' -U postgres
 
