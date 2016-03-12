@@ -265,7 +265,7 @@ class User < ActiveRecord::Base
   # This method try to authenticate the client, other way return nil
   #
   def self.authenticate(email, passwd)
-    return if passwd.empty?
+    return if passwd.empty? || email.empty?
     user_email = Email.find_principal_by_email(email).take
 
     user = user_email.user unless user_email.nil?

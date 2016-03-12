@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   # POST /do_login
   #
   def do_login
-    user = User.login(user_params[:email], user_params[:passwd])
+    user = User.login(user_params[:username], user_params[:passwd])
 
     cookies[:auth_token] = user.auth_token unless user_params[:remember_me]
     cookies.permanent[:auth_token] = user.auth_token if user_params[:remember_me]
