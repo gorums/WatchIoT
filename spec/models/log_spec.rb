@@ -2,18 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Log, type: :model do
   before :each do
-    # Create plans and users static values for free account
-
-    # add plan
-    Plan.create!(name: 'Free', amount_per_month: 0)
-
-    # add two users
-    @user = User.create!(username: 'my_user_name',
-                         passwd: '12345678',
-                         passwd_confirmation: '12345678')
-
-    @email = Email.create!(email: 'user@watchiot.com',
-                           user_id: @user.id)
+    before_each 'logModel'
   end
 
   describe 'valid save log' do
