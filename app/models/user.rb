@@ -85,6 +85,7 @@ class User < ActiveRecord::Base
 
     token = VerifyClient.create_token(user.id, email_s, 'register')
     Notifier.send_signup_email(email_s, user, token).deliver_later
+    user
   end
 
   ##
@@ -216,6 +217,7 @@ class User < ActiveRecord::Base
   # Set username always lowercase, self.name.gsub! /[^0-9a-z ]/i, '_'
   #
   def username_format
+    return if self.username.nil?
     self.username.gsub!(/[^0-9a-z\- ]/i, '_')
     self.username.gsub!(/\s+/, '_')
     self.username = self.username.byteslice(0, 24) #substring 24

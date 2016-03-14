@@ -45,8 +45,8 @@ RSpec.describe Plan, type: :model do
   end
 
   describe 'valid find plan value' do
+    let(:plan) {Plan.find_by_name('Free') }
     it 'is valid find not no exist plan value' do
-      plan = Plan.find_by_name('Free')
       value = Plan.find_plan_value(plan, 'dont exist')
       expect(value).to eq(0)
     end

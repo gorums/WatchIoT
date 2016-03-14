@@ -31,7 +31,7 @@ RSpec.describe Email, type: :model do
 
     email = Email.add_email(@user.id, 'othEr_useR2@watchIot.Com')
     expect(email).to be_valid
-    expect(email).to eq('other_user2@watchiot.com')
+    expect(email.email).to eq('other_user2@watchiot.com')
 
     expect( Email.count_by_user(@user.id)).to eq(3)
   end
@@ -61,7 +61,7 @@ RSpec.describe Email, type: :model do
 
   it 'is valid add email with bad user' do
     expect { Email.add_email(-1, 'other_user@watchiot.com') }
-        .to raise_error(/is not a valid email/)
+        .to raise_error(/is not a valid user id/)
   end
 
   it 'is valid add the email like principal' do

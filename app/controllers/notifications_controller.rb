@@ -3,10 +3,10 @@
 #
 class NotificationsController < ApplicationController
 
-  after_filter :find_reset_user_by_token, :only => [:reset, :do_reset]
-  after_filter :find_active_user_by_token, :only => :active
-  after_filter :find_verify_email_by_token, :only => :verify_email
-  after_filter :find_invite_user_by_token, :only => [:invite, :do_invite]
+  before_filter :find_reset_user_by_token, :only => [:reset, :do_reset]
+  before_filter :find_active_user_by_token, :only => :active
+  before_filter :find_verify_email_by_token, :only => :verify_email
+  before_filter :find_invite_user_by_token, :only => [:invite, :do_invite]
 
   ##
   # GET /forgot
@@ -37,11 +37,11 @@ class NotificationsController < ApplicationController
   # Patch /reset/:token
   #
   def do_reset
-    User.reset_passwd @user, params[:user]
+    User.reset_passwd @user, user_reset_params
     @verifyClient.destroy!
 
     redirect_to '/login'
-  rescue => ex
+  rescue StandardError => ex
     flash[:error] = ex.message
     render 'users/reset'
   end
@@ -54,8 +54,8 @@ class NotificationsController < ApplicationController
     @verifyClient.destroy!
 
     cookies[:auth_token] = @user.auth_token
-    redirect_to '/' + user.username
-  rescue => ex
+    redirect_to '/' + @user.username
+  rescue StandardError => ex
     flash[:error] = ex.message
     redirect_to '/'
   end
@@ -147,6 +147,14 @@ class NotificationsController < ApplicationController
   def user_forget_params
     params.require(:user).permit(:username)
   end
+
+  ##
+  # User params
+  #
+  def user_reset_params
+    params.require(:user).permit(:passwd_new, :passwd_confirmation)
+  end
+
   ##
   # User params
   #

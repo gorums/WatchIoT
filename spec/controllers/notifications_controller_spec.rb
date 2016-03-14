@@ -7,10 +7,11 @@ RSpec.describe NotificationsController, type: :controller do
     # add plan
     Plan.create!(name: 'Free', amount_per_month: 0)
 
-    # add two users
-    @user = User.create!(username: 'my_user_name',
-                         passwd: '12345678',
-                         passwd_confirmation: '12345678')
+    # add one users
+    params = { username: 'my_user_name',
+               passwd: '12345678',
+               passwd_confirmation: '12345678'}
+    @user = User.register params, 'newemail@watchiot.org'
 
     @email = Email.create!(email: 'user@watchiot.com',
                            user_id: @user.id)
@@ -39,7 +40,7 @@ RSpec.describe NotificationsController, type: :controller do
 
   describe 'POST forgot notification' do
     it 'has a 200 status code' do
-      post :forgot_notification
+      post :forgot_notification, user: {username: 'my_user_name'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/forgot_notification')
     end
@@ -55,7 +56,9 @@ RSpec.describe NotificationsController, type: :controller do
 
   describe 'PATCH do reset' do
     it 'has a 302 status code' do
-      patch :do_reset, { token: '12345' }
+      patch :do_reset, token: '12345',
+            user: {passwd_new: 'my_user_name',
+                   passwd_confirmation: 'my_user_name'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/login')
     end
@@ -94,7 +97,10 @@ RSpec.describe NotificationsController, type: :controller do
 
   describe 'GET do invite' do
     it 'has a 302 status code' do
-      get :do_invite, { token: '12345' }
+      get :do_invite, token: '12345',
+          user: { username: 'my_user_name',
+                  passwd: 'my_user_name',
+                  passwd_confirmation: 'my_user_name'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/' + @user.username)
     end

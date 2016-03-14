@@ -8,7 +8,7 @@ class Email < ActiveRecord::Base
   validates_uniqueness_of :email, scope: [:user_id],
                           message: 'The email already exist in your account'
 
-  before_save { |email| email.email = email.downcase }
+  before_validation :downcase_email
 
   scope :find_by_user, -> user_id {
         where('user_id = ?', user_id).order(principal: :desc) }
@@ -28,6 +28,8 @@ class Email < ActiveRecord::Base
   # Add an email to the account unprincipal waiting for verification
   #
   def self.add_email(user_id, email)
+    raise StandardError, 'is not a valid user id' unless
+        User.where('id=?', user_id).exists?
     Email.create!(email: email, user_id: user_id)
   end
 
@@ -120,6 +122,15 @@ class Email < ActiveRecord::Base
       user = email.user
       return email if user.emails.length == 1 && !email.principal?
     end
+  end
+
+  protected
+
+  ##
+  # Downcase email
+  #
+  def downcase_email
+    self.email = self.email.downcase unless self.email.nil?
   end
 
   private
