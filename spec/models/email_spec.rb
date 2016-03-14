@@ -29,11 +29,39 @@ RSpec.describe Email, type: :model do
     email = Email.add_email(@user.id, 'other_user@watchiot.com')
     expect(email).to be_valid
 
-    expect( Email.count_by_user(@user.id)).to eq(2)
+    email = Email.add_email(@user.id, 'othEr_useR2@watchIot.Com')
+    expect(email).to be_valid
+    expect(email).to eq('other_user2@watchiot.com')
+
+    expect( Email.count_by_user(@user.id)).to eq(3)
+  end
+
+  it 'is valid add exists email' do
+    # add a new email
+    email = Email.add_email(@user.id, 'other_user@watchiot.com')
+    expect(email).to be_valid
 
     # try to add the same email to the account
     expect { Email.add_email(@user.id, 'other_user@watchiot.com') }
         .to raise_error(/The email already exist in your account/)
+
+    # try to add the same email to the account
+    expect { Email.add_email(@user.id, 'Other_useR@watChiot.Com') }
+        .to raise_error(/The email already exist in your account/)
+  end
+
+  it 'is valid add bad email' do
+    # bad email
+    expect { Email.add_email(@user.id, nil) }
+        .to raise_error(/is not a valid email/)
+
+    expect { Email.add_email(@user.id, 'other_use@@r@watchio@t.com') }
+        .to raise_error(/is not a valid email/)
+  end
+
+  it 'is valid add email with bad user' do
+    expect { Email.add_email(-1, 'other_user@watchiot.com') }
+        .to raise_error(/is not a valid email/)
   end
 
   it 'is valid add the email like principal' do
@@ -74,11 +102,13 @@ RSpec.describe Email, type: :model do
         .to raise_error('The email is principal in other account')
   end
 
-  it 'is valid remove an email' do
+  it 'is valid remove the unique email' do
     # you can not delete your unique email in your account
     expect { Email.remove_email @user.id, @email.id }
         .to raise_error('You can not delete the only email in your account')
+  end
 
+  it 'is valid remove an principal email' do
     @email.update!(checked: true)
     # set this email like principal
     email = Email.principal @user.id, @email.id
@@ -87,8 +117,15 @@ RSpec.describe Email, type: :model do
     # set the other email like principal
     email = Email.add_email(@user.id, 'user12@watchiot.com')
     email.update!(checked: true)
+
     expect { Email.remove_email @user.id, @email.id }
         .to raise_error('The email can not be principal')
+  end
+
+  it 'is valid remove an not principal email' do
+    # set the other email like principal
+    email = Email.add_email(@user.id, 'user12@watchiot.com')
+    email.update!(checked: true)
 
     email = Email.principal @user.id, email.id
     expect(email.principal).to eq(true)
@@ -97,10 +134,12 @@ RSpec.describe Email, type: :model do
         .to_not raise_error
   end
 
-  it 'is valid to send verification' do
+  it 'is valid to send verification check email' do
     expect { Email.send_verify(@user.id, @email.id) }
         .to change { ActionMailer::Base.deliveries.count }.by(1)
+  end
 
+  it 'is valid to send verification uncheck email' do
     expect { Email.send_verify(@user_two.id, @email_two.id) }
         .to raise_error('The email has to be uncheck')
   end
@@ -108,6 +147,7 @@ RSpec.describe Email, type: :model do
   it 'is valid to checked the email like principal' do
     expect { Email.email_to_activate @user.id, 'aass@watchiot.com' }
         .to raise_error('The email is not valid')
+
     expect { Email.email_to_activate @user.id, @email.email }
         .to_not raise_error
 

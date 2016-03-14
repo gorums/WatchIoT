@@ -65,5 +65,7 @@ group :development, :test do
   # gem 'rb-inotify', '0.9.5'
   # gem 'libnotify', '0.9.1'
 
+
+  gem 'annotate', '~> 2.7.0'
   gem 'rspec-rails', '~> 3.0'
 end

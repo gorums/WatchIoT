@@ -16,13 +16,17 @@ RSpec.describe Log, type: :model do
                            user_id: @user.id)
   end
 
-  it 'is valid save log' do
-    # the action text have to be more short
-    expect{ Log.save_log('description', 'this '\
-    'description action is to big', @user.id, @user.id) }
-        .to raise_error(ActiveRecord::StatementInvalid)
+  describe 'valid save log' do
+    it 'is valid save log with big description action' do
+      # the action text have to be more short
+      expect{ Log.save_log('description', 'this '\
+      'description action is to big', @user.id, @user.id) }
+          .to raise_error(ActiveRecord::StatementInvalid)
+    end
 
-    Log.save_log('description', 'action short', @user.id, @user.id)
-    expect(Log.all.count).to eq(1)
+    it 'is valid save log' do
+      Log.save_log('description', 'action short', @user.id, @user.id)
+      expect(Log.all.count).to eq(1)
+    end
   end
 end

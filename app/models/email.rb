@@ -8,6 +8,8 @@ class Email < ActiveRecord::Base
   validates_uniqueness_of :email, scope: [:user_id],
                           message: 'The email already exist in your account'
 
+  before_save { |email| email.email = email.downcase }
+
   scope :find_by_user, -> user_id {
         where('user_id = ?', user_id).order(principal: :desc) }
   scope :count_by_user, -> user_id {

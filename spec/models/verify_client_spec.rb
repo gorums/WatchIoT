@@ -25,14 +25,19 @@ RSpec.describe VerifyClient, type: :model do
                                principal: true)
   end
 
-  it 'is valid create a token' do
-    token = VerifyClient.create_token @user.id,
-                                      @email.email,
-                                      'verify_client'
+  describe 'valid create a token' do
+    it 'is valid create a token' do
+      token = VerifyClient.create_token @user.id,
+                                        @email.email,
+                                        'verify_client'
 
-    expect(token.length).to eq(36)
+      expect(token.length).to eq(36)
 
-    v = VerifyClient.find_by_concept 'verify_client'
-    expect(v.data).to include(@email.email)
+      verifyClient = VerifyClient.find_by_concept 'verify_client'
+      expect(verifyClient.data).to include(@email.email)
+
+      verifyClient = VerifyClient.find_by_concept 'concept_not_exist'
+      expect(verifyClient).to be_nil
+    end
   end
 end

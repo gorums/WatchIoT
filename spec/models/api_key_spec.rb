@@ -16,12 +16,14 @@ RSpec.describe ApiKey, type: :model do
                            user_id: @user.id)
   end
 
-  it 'is valid generate api key' do
-    api_key = ApiKey.find(@user.api_key_id)
+  describe 'valid generate api key' do
+    it 'is valid generate api key' do
+      api_key = ApiKey.find(@user.api_key_id)
 
-    ApiKey.generate @user
+      ApiKey.generate @user
 
-    new_api_key = ApiKey.find(@user.api_key_id)
-    expect(new_api_key.api_key).to_not eq(api_key.api_key)
+      new_api_key = ApiKey.find(@user.api_key_id)
+      expect(new_api_key.api_key).to_not eq(api_key.api_key)
+    end
   end
 end

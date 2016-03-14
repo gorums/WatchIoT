@@ -33,13 +33,15 @@ RSpec.describe NotificationsController, type: :controller do
     it 'has a 200 status code' do
       get :forgot
       expect(response.status).to eq(200)
+      expect(response).to render_template('users/forgot')
     end
   end
 
   describe 'POST forgot notification' do
     it 'has a 200 status code' do
-      post :forgot
+      post :forgot_notification
       expect(response.status).to eq(200)
+      expect(response).to render_template('users/forgot_notification')
     end
   end
 
@@ -47,13 +49,22 @@ RSpec.describe NotificationsController, type: :controller do
     it 'has a 200 status code' do
       get :reset, { token: '12345' }
       expect(response.status).to eq(200)
+      expect(response).to render_template('users/reset')
     end
   end
 
   describe 'PATCH do reset' do
-    it 'has a 200 status code' do
-      patch :reset, { token: '12345' }
-      expect(response.status).to eq(200)
+    it 'has a 302 status code' do
+      patch :do_reset, { token: '12345' }
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/login')
+    end
+  end
+
+  describe 'PATCH do reset bad token' do
+    it 'has a 404 status code' do
+      patch :do_reset, { token: '123456' }
+      expect(response.status).to eq(404)
     end
   end
 
@@ -61,6 +72,7 @@ RSpec.describe NotificationsController, type: :controller do
     it 'has a 302 status code' do
       get :active, { token: '12345' }
       expect(response.status).to eq(302)
+      expect(response).to redirect_to('/' + @user.username)
     end
   end
 
@@ -68,6 +80,7 @@ RSpec.describe NotificationsController, type: :controller do
     it 'has a 200 status code' do
       get :verify_email, { token: '12345' }
       expect(response.status).to eq(200)
+      expect(response).to render_template('users/verify_email')
     end
   end
 
@@ -75,13 +88,15 @@ RSpec.describe NotificationsController, type: :controller do
     it 'has a 200 status code' do
       get :invite, { token: '12345' }
       expect(response.status).to eq(200)
+      expect(response).to render_template('users/invited')
     end
   end
 
   describe 'GET do invite' do
-    it 'has a 200 status code' do
-      get :invite, { token: '12345' }
-      expect(response.status).to eq(200)
+    it 'has a 302 status code' do
+      get :do_invite, { token: '12345' }
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/' + @user.username)
     end
   end
 

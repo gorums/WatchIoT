@@ -22,9 +22,8 @@ class User < ActiveRecord::Base
   belongs_to :api_key
   has_one :plan
 
-  validates_uniqueness_of :username
   # dont space admitted
-  validates :username, length: { minimum: 1 }, format: { without: /\s+/,
+  validates :username, uniqueness: true, length: { minimum: 1 }, format: { without: /\s+/,
                                  message: 'No empty spaces admitted for the username.' }
   validates_presence_of :username, on: :create
   validates_presence_of :passwd, on: :create
@@ -217,9 +216,9 @@ class User < ActiveRecord::Base
   # Set username always lowercase, self.name.gsub! /[^0-9a-z ]/i, '_'
   #
   def username_format
-    self.username.gsub! /[^0-9a-z\- ]/i, '_'
-    self.username.gsub! /\s+/, '_'
-    self.username = self.username.byteslice 0 , 24
+    self.username.gsub!(/[^0-9a-z\- ]/i, '_')
+    self.username.gsub!(/\s+/, '_')
+    self.username = self.username.byteslice(0, 24) #substring 24
   end
 
   ##
@@ -243,7 +242,8 @@ class User < ActiveRecord::Base
 
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
     raise StandardError, 'Password has less than 8 characters' unless passwd_is_short
-    raise StandardError, 'The email is principal in other account' if Email.find_principal_by_email(email.email).exists?
+    raise StandardError, 'The email is principal in other account' if
+        Email.find_principal_by_email(email.email).exists?
 
     save_user user, checked
     Email.save_email email, user.id, checked
