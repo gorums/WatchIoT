@@ -86,7 +86,7 @@ class Email < ActiveRecord::Base
   ##
   # Define if the email can checked like principal
   #
-  def self.email_to_activate(user_id, email_s)
+  def self.to_activate_by_invitation(user_id, email_s)
     email = Email.find_principal_by_email(email_s).take
     raise StandardError, 'The email is not valid' unless email.nil?
     email = Email.find_by_user_and_by_email(user_id, email_s).take
@@ -97,7 +97,7 @@ class Email < ActiveRecord::Base
   ##
   # by other user
   #
-  def self.email_to_check(user_id, email)
+  def self.to_check(user_id, email)
     email = Email.find_by_user_and_by_email(user_id, email).take
     raise StandardError, 'The email is not valid' if email.nil?
     email
@@ -111,13 +111,14 @@ class Email < ActiveRecord::Base
   end
 
   ##
-  # find an email to send an email
+  # find an email not principal valid
   #
   def self.find_email_forgot (email_s)
     emails = Email.where(email: email_s).all
     return if emails.nil? || emails.empty?
     return emails.first if emails.length == 1
 
+    # find a registered account by never activate him account
     emails.each do |email|
       user = email.user
       return email if user.emails.length == 1 && !email.principal?

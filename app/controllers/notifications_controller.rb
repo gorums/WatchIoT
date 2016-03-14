@@ -84,7 +84,7 @@ class NotificationsController < ApplicationController
   # Patch /do_invited
   #
   def do_invite
-    email = Email.email_to_activate(@verifyClient.user_id, @verifyClient.data)
+    email = Email.to_activate_by_invitation(@verifyClient.user_id, @verifyClient.data)
     User.invite @user, user_params, email
     @verifyClient.destroy!
 
@@ -109,7 +109,7 @@ class NotificationsController < ApplicationController
   #
   def find_active_user_by_token
     find_by_concept 'register', params[:token]
-    @email = Email.email_to_activate(@verifyClient.user_id, @verifyClient.data) ||
+    @email = Email.to_activate_by_invitation(@verifyClient.user_id, @verifyClient.data) ||
         not_found
   rescue => ex
     not_found
@@ -120,7 +120,7 @@ class NotificationsController < ApplicationController
   #
   def find_verify_email_by_token
     find_by_concept 'verify_email', params[:token]
-    @email = Email.email_to_check(@verifyClient.user_id, @verifyClient.data) ||
+    @email = Email.to_check(@verifyClient.user_id, @verifyClient.data) ||
         not_found
   rescue => ex
     not_found

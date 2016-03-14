@@ -174,7 +174,7 @@ RSpec.describe User, type: :model do
         .to_not raise_error
 
     # user status is false
-    expect { user = User.login 'new_register_user', '12345678' }
+    expect { User.login 'new_register_user', '12345678' }
         .to raise_error('Account is not valid')
 
     user_new = User.find_by_username 'new_register_user'
@@ -184,15 +184,15 @@ RSpec.describe User, type: :model do
     expect(user_login).to_not be_nil
 
     # bad password
-    expect { user = User.login 'new_register_user', '123456789' }
+    expect { User.login 'new_register_user', '123456789' }
         .to raise_error('Account is not valid')
 
     # user does not exist
-    expect { user = User.login 'new_register_user_1', '123456789' }
+    expect { User.login 'new_register_user_1', '123456789' }
         .to raise_error('Account is not valid')
 
     # email exist but it is not principal
-    expect { user = User.login 'newemail@watchiot.org', '12345678' }
+    expect { User.login 'newemail@watchiot.org', '12345678' }
         .to raise_error('Account is not valid')
 
     email_login = user_new.emails.first
@@ -242,7 +242,7 @@ RSpec.describe User, type: :model do
         .to change { ActionMailer::Base.deliveries.count }.by(1)
 
     # the pasword was change
-    expect { user_login = User.login 'new_register_user', '12345678' }
+    expect { User.login 'new_register_user', '12345678' }
         .to raise_error('Account is not valid')
 
     # login with the new passsword

@@ -111,7 +111,7 @@ def before_each(type_test)
                                passwd_confirmation: '12345678')
       @email_two = Email.create!(email: 'user1@watchiot.com',
                                  user_id: @user_two.id,
-                               checked: true, principal: true)
+                                 checked: true, principal: true)
     end
 
   if 'notif'  == type_test
