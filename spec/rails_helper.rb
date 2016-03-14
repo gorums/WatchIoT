@@ -104,7 +104,8 @@ def before_each(type_test)
     if 'emailModel'  == type_test ||
         'spaceModel' == type_test ||
         'teamModel'  == type_test ||
-        'userModel'  == type_test
+        'userModel'  == type_test ||
+        'notif'      == type_test
       @user_two = User.create!(username: 'my_user_name1',
                                passwd: '12345678',
                                passwd_confirmation: '12345678')
@@ -112,6 +113,11 @@ def before_each(type_test)
                                  user_id: @user_two.id,
                                checked: true, principal: true)
     end
+
+  if 'notif'  == type_test
+    @email.update(checked: true, principal: true)
+    @space = Space.create!(name: 'my_space', user_id: @user_two.id)
+  end
 
 end
 

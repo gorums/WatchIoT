@@ -2,26 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Notifier, type: :mailer do
   before :each do
-    # add plan
-    Plan.create!(name: 'Free', amount_per_month: 0)
-
-    @user = User.create!(username: 'my_user_name', passwd: '12345678',
-                         passwd_confirmation: '12345678')
-    @email = Email.create!(email: 'user1@watchiot.com', user_id: @user.id,
-                           checked: true, principal: true)
-    @user_two = User.create!(username: 'my_user_name2', passwd: '12345678',
-                             passwd_confirmation: '12345678')
-    @space = Space.create!(name: 'my_space', user_id: @user_two.id)
+    before_each 'notif'
   end
-  describe 'Send signup email' do
 
+  describe 'Send signup email' do
     let(:mail) { Notifier
            .send_signup_email('email@watchiot.com', @user, '123456789') }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('WatchIoT Account Activation')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'WatchIoT Account Activation'
     end
 
     it 'renders the body' do
@@ -37,9 +26,7 @@ RSpec.describe Notifier, type: :mailer do
            .send_signup_verify_email('email@watchiot.com', @user) }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('Welcome to WatchIoT!!')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'Welcome to WatchIoT!!'
     end
 
     it 'renders the body' do
@@ -56,17 +43,15 @@ RSpec.describe Notifier, type: :mailer do
            .send_transfer_space_email('email@watchiot.com', @user, @space) }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('Transferred space for you!!')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'Transferred space for you!!'
     end
 
     it 'renders the body' do
       expect(mail.body.encoded)
-          .to match('Hi my_user_name2,</h1><br/><br/> the space my_space'\
+          .to match('Hi my_user_name1,</h1><br/><br/> the space my_space'\
            ' was transferred for you!')
       expect(mail.body.encoded)
-          .to match('by <strong>my_user_name\(user1@watchiot.com\)'\
+          .to match('by <strong>my_user_name\(user@watchiot.com\)'\
           '</strong><br/><br/>')
     end
   end
@@ -76,15 +61,13 @@ RSpec.describe Notifier, type: :mailer do
            .send_new_team_email('email@watchiot.com', @user, @user_two) }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('Your belong a new team!!')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'Your belong a new team!!'
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match('<h1>Hi my_user_name2</h1>')
+      expect(mail.body.encoded).to match('<h1>Hi my_user_name1</h1>')
       expect(mail.body.encoded)
-          .to match('You have been invited by my_user_name\(user1@watchiot.com\)'\
+          .to match('You have been invited by my_user_name\(user@watchiot.com\)'\
           ' to join a new team on Watchiot.')
       expect(mail.body.encoded).to match('/my_user_name')
     end
@@ -95,9 +78,7 @@ RSpec.describe Notifier, type: :mailer do
            .send_create_user_email('email@watchiot.com', '123456789') }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('Your have been invited to WatchIoT!!')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'Your have been invited to WatchIoT!!'
     end
 
     it 'renders the body' do
@@ -112,9 +93,7 @@ RSpec.describe Notifier, type: :mailer do
            .send_forget_passwd_email('email@watchiot.com', @user, '123456789') }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('WatchIoT password reset!!')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'WatchIoT password reset!!'
     end
 
     it 'renders the body' do
@@ -128,9 +107,7 @@ RSpec.describe Notifier, type: :mailer do
            .send_verify_email('email@watchiot.com', @user, '123456789') }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('WatchIoT verify email!!')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'WatchIoT verify email!!'
     end
 
     it 'renders the body' do
@@ -144,9 +121,7 @@ RSpec.describe Notifier, type: :mailer do
            .send_reset_passwd_email('email@watchiot.com', @user) }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('WatchIoT password reset correctly!!')
-      expect(mail.to).to eq(['email@watchiot.com'])
-      expect(mail.from).to eq(['info@watchiot.org'])
+      expect_sub_to_from 'WatchIoT password reset correctly!!'
     end
 
     it 'renders the body' do
@@ -155,4 +130,10 @@ RSpec.describe Notifier, type: :mailer do
           .to match('<p>The password was reset correctly.</p></br>')
     end
   end
+end
+
+def expect_sub_to_from(subject)
+  expect(mail.subject).to eq(subject)
+  expect(mail.to).to eq(['email@watchiot.com'])
+  expect(mail.from).to eq(['info@watchiot.org'])
 end
