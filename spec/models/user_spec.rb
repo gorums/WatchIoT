@@ -5,91 +5,135 @@ RSpec.describe User, type: :model do
     before_each 'userModel'
   end
 
-  it 'is valid create new account' do
-    # the password is required
-    user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa')
-    expect(user_new).to_not be_valid
+  describe 'valid create new account' do
+    it 'is valid username' do
+      # the password is required
+      user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa')
+      expect(user_new).to_not be_valid
 
-    # the confirmation password is required
-    user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa',
-                        passwd: 'aaadddSSaa')
-    expect(user_new).to_not be_valid
+      # nil username
+      user_new = User.new(username: nil)
+      expect(user_new).to_not be_valid
 
-    # the password and the confirmation have to mach
-    user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa',
-                        passwd: 'aaadddSSaa',
-                        passwd_confirmation: 'aaaddd11aa')
-    expect(user_new).to_not be_valid
+      expect(user_new).to_not be_valid
+      # the username have to be less than 25 characters
+      user_new = User.create(username: 'aaaaaaabbbbDDDDaaaaaaGGGGGGsssssssqqqqqqqEEEqqqqqq',
+                             passwd: 'aaadddSSaa',
+                             passwd_confirmation: 'aaadddSSaa')
+      expect(user_new.username).to eq('aaaaaaabbbbddddaaaaaaggg')
 
-    # the password has to be more than 8 characters
-    user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa',
-                        passwd: 'aaaddd',
-                        passwd_confirmation: 'aaaddd')
-    expect(user_new).to_not be_valid
-
-    # the username have to be less than 25 characters
-    user_new = User.create(username: 'aaaaaaabbbbDDDDaaaaaaGGGGGGsssssssqqqqqqqEEEqqqqqq',
-                           passwd: 'aaadddSSaa',
-                           passwd_confirmation: 'aaadddSSaa')
-    expect(user_new.username).to include('aaaaaaabbbbDDDDaaaaa')
-
-    # the username exist
-    expect { User.create!(username: 'my_user_name',
+      user_new = User.create(username: 'aaaaaaabbbbDDDDaaaaaaggg',
                           passwd: 'aaadddSSaa',
-                          passwd_confirmation: 'aaadddSSaa')}
-        .to raise_error(/Username has already been taken/)
+                          passwd_confirmation: 'aaadddSSaa')
+      expect(user_new).to_not be_valid
+    end
 
-    user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa',
-                        passwd: 'aaadddSSaa',
-                        passwd_confirmation: 'aaadddSSaa')
-    expect(user_new).to be_valid
+    it 'is valid password' do
+      # the confirmation password is required
+      user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa',
+                          passwd: 'aaadddSSaa')
 
-    # create a new acount
-    expect { User.create_new_account('user12@watchiot.org') }
-        .to change { ActionMailer::Base.deliveries.count }.by(1)
+      # the password and the confirmation have to mach
+      user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa',
+                          passwd: 'aaadddSSaa',
+                          passwd_confirmation: 'aaaddd11aa')
+      expect(user_new).to_not be_valid
 
-    email = Email.find_by_email 'user12@watchiot.org'
-    expect(email).to_not be_nil
+      # the password has to be more than 8 characters
+      user_new = User.new(username: 'aaaaaaabbbbDDDDaaaaaa',
+                          passwd: 'aaaddd',
+                          passwd_confirmation: 'aaaddd')
+      expect(user_new).to_not be_valid
+    end
 
-    expect(email.user.username).to include('user12_watchiot_org')
-    expect(email.user.api_key_id).to_not be_nil
+    it 'is valid username exist' do
+      # the username exist
+      expect { User.create!(username: 'my_user_name',
+                            passwd: 'aaadddSSaa',
+                            passwd_confirmation: 'aaadddSSaa')}
+          .to raise_error(/Username has already been taken/)
+
+      # the username exist
+      expect { User.create!(username: 'my_User_NAme',
+                            passwd: 'aaadddSSaa',
+                            passwd_confirmation: 'aaadddSSaa')}
+          .to raise_error(/Username has already been taken/)
+
+      User.create!(username: 'my_User NAme',
+                   passwd: 'aaadddSSaa',
+                   passwd_confirmation: 'aaadddSSaa')
+
+      expect { User.create!(username: 'my_User-NAme',
+                            passwd: 'aaadddSSaa',
+                            passwd_confirmation: 'aaadddSSaa')}
+          .to raise_error(/Username has already been taken/)
+    end
+
+    it 'is valid create a new account' do
+      # create a new acount
+      expect { User.create_new_account('user12@watchiot.org') }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+
+      email = Email.find_by_email 'user12@watchiot.org'
+      expect(email).to_not be_nil
+
+      expect(email.user.username).to include('user12_watchiot_org')
+      expect(email.user.api_key_id).to_not be_nil
+    end
   end
 
-  it 'is valid delete account' do
-    expect { User.delete_account(@user, 'my_user_name_bad') }
-        .to raise_error('The username is not valid')
+  describe 'valid delete account' do
+    it 'is valid delete a bad account' do
+      expect { User.delete_account(@user, 'my_user_name_bad') }
+          .to raise_error('The username is not valid')
+    end
 
-    # you can not delete an account with space assigned
-    params = { name: 'space', description: 'space description'}
-    Space.create_new_space(params, @user_two, @user_two)
+    it 'is valid delete a nil confirmation account' do
+      expect { User.delete_account(@user, nil) }
+          .to raise_error('The username is not valid')
+    end
 
-    expect { User.delete_account(@user_two, @user_two.username) }
-        .to raise_error('You have to transfer your spaces or delete their')
+    it 'is valid delete an account with spaces' do
+      # you can not delete an account with space assigned
+      params = { name: 'space', description: 'space description'}
+      Space.create_new_space(params, @user_two, @user_two)
 
-    # when i delete the account the status change to false
-    expect(@user.status).to eq(true)
-    User.delete_account(@user, @user.username)
-    userDisabled = User.find_by_username 'my_user_name'
-    expect(userDisabled.status).to eq(false)
+      expect { User.delete_account(@user_two, @user_two.username) }
+          .to raise_error('You have to transfer your spaces or delete their')
+    end
 
+    it 'is valid delete account' do
+      expect(@user.status).to eq(true)
+      User.delete_account(@user, @user.username)
+      userDisabled = User.find_by_username 'my_user_name'
+      expect(userDisabled.status).to eq(false)
+    end
   end
 
-  it 'is valid change username' do
-    # the same username
-    expect {User.change_username @user, 'my_user_name'}
-        .to_not raise_error
+  describe 'valid change username' do
+    it 'is valid change username' do
+      # the same username
+      expect {User.change_username @user, 'my_user_name'}
+          .to_not raise_error
 
-    # new user name
-    expect {User.change_username @user, 'new_user_name'}
-        .to_not raise_error
+      # new user name
+      expect {User.change_username @user, 'new_user_name'}
+          .to_not raise_error
 
-    # exist username
-    expect { User.change_username @user, 'my_user_name1'}
-      .to raise_error(/Username has already been taken/)
+      # exist username
+      expect { User.change_username @user, 'my_User_Name1'}
+          .to raise_error(/Username has already been taken/)
 
-    # exist username keyspace equals _
-    expect { User.change_username @user, 'my user_name1'}
-        .to raise_error(/Username has already been taken/)
+      expect {User.change_username @user, 'my-user_name1'}
+          .to_not raise_error
+
+      # exist username
+      expect { User.change_username @user, 'my User_Name1'}
+          .to_not raise_error
+
+      user = User.find(@user.id)
+      expect(user.username).to eq('my-user_name1')
+    end
   end
 
   it 'is valid register' do
@@ -277,120 +321,143 @@ RSpec.describe User, type: :model do
         .to raise_error('Account is not valid')
   end
 
-  it 'is valid activate the account' do
-    expect { User.active_account @user, @email }
-        .to change { ActionMailer::Base.deliveries.count }.by(1)
+  describe 'valid activate the account' do
+    it 'is valid activate the account' do
+      expect { User.active_account @user, @email }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+      expect(@user.status).to eq(true)
+      expect(@email.principal).to eq(true)
+      expect(@email.checked).to eq(true)
+    end
 
-    expect { User.active_account @user, @email_two }
-        .to raise_error('The account can not be activate')
-
-    expect(@user.status).to eq(true)
-    expect(@email.principal).to eq(true)
-    expect(@email.checked).to eq(true)
+    it 'is valid activate the account with not belong email' do
+      expect { User.active_account @user, @email_two }
+          .to raise_error('The account can not be activate')
+    end
   end
 
-  it 'is valid invited' do
-    user = User.create_new_account('user12@watchiot.org')
-    email = Email.find_by_email 'user12@watchiot.org'
+  describe 'valid invited' do
+    let(:user) { User.create_new_account('user12@watchiot.org') }
+    let(:email) { Email.find_by_email('user12@watchiot.org') }
 
-    # bad password
-    params = { username: 'new_register_user', passwd: '12345678bad',
-               passwd_confirmation: '12345678'}
-    expect { User.invite user, params, email }
-        .to raise_error('Password does not match the confirm password')
+    it 'is valid invited with bad password' do
+      # bad password
+      params = { username: 'new_register_user', passwd: '12345678bad',
+                 passwd_confirmation: '12345678'}
+      expect { User.invite user, params, email }
+          .to raise_error('Password does not match the confirm password')
+    end
 
-    # short password
-    params = { username: 'new_register_user', passwd: '12345',
-               passwd_confirmation: '12345'}
-    expect { User.invite user, params, email }
-        .to raise_error('Password has less than 8 characters')
+    it 'is valid invited with short password' do
+      # short password
+      params = { username: 'new_register_user', passwd: '12345',
+                 passwd_confirmation: '12345'}
+      expect { User.invite user, params, email }
+          .to raise_error('Password has less than 8 characters')
+    end
 
-    # bad username
-    params = { username: '', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect { User.invite user, params, email }
-        .to raise_error(/Username is too short \(minimum is 1 character\)/)
+    it 'is valid invited with bad username' do
+      params = { username: '', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect { User.invite user, params, email }
+          .to raise_error(/Username is too short \(minimum is 1 character\)/)
 
-    # username exist
-    params = { username: @user.username, passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect { User.invite user, params, email }
-        .to raise_error(/Username has already been taken/)
+      # username exist
+      params = { username: @user.username, passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect { User.invite user, params, email }
+          .to raise_error(/Username has already been taken/)
 
-    params = { username: 'new_register_user', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect { User.invite user, params, email }
-        .to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
 
-    expect(user.auth_token).to_not be_nil
-    expect(user.status).to eq(true)
-    expect(email.principal).to eq(true)
-    expect(email.checked).to eq(true)
+    it 'is valid invited' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect { User.invite user, params, email }
+          .to change { ActionMailer::Base.deliveries.count }.by(2)
+
+      expect(user.auth_token).to_not be_nil
+      expect(user.status).to eq(true)
+      expect(email.principal).to eq(true)
+      expect(email.checked).to eq(true)
+    end
+
   end
 
-  it 'is valid send forgot notification' do
-    expect { User.send_forgot_notification 'the user do no exist' }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(0)
+  describe 'valid send forgot notification' do
+    it 'is valid send forgot notification user not exist' do
+      expect { User.send_forgot_notification 'the user do no exist' }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(0)
+    end
 
-    # the email is not set like principal
-    expect { User.send_forgot_notification @user.username }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(1)
+    it 'is valid send forgot notification email not principal' do
+      # the email is not set like principal
+      expect { User.send_forgot_notification @user.username }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(1)
 
-    # the email is not set like principal buy it can recovery the password
-    expect { User.send_forgot_notification @email.email }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(1)
+      # the email is not set like principal buy it can recovery the password
+      expect { User.send_forgot_notification @email.email }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(1)
+    end
 
-    # set the email like principal
-    @email.update!(principal: true, checked:true)
+    it 'is valid send forgot notification email principal' do
+      # set the email like principal
+      @email.update!(principal: true, checked:true)
 
-    expect { User.send_forgot_notification @user.username }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(1)
+      expect { User.send_forgot_notification @user.username }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(1)
 
-    expect { User.send_forgot_notification @email.email }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(1)
+      expect { User.send_forgot_notification @email.email }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(1)
+    end
 
-    # two account with the same email no principal
-    user = User.create!(username: 'my_user_name_new', passwd: '12345678',
-                        passwd_confirmation: '12345678')
-    Email.create!(email: 'user@watchiot.com', user_id: user.id)
+    it 'is valid send forgot notification two account with the same email no principal' do
+      # two account with the same email no principal
+      user = User.create!(username: 'my_user_name_new', passwd: '12345678',
+                          passwd_confirmation: '12345678')
+      Email.create!(email: 'user@watchiot.com', user_id: user.id)
 
-    expect { User.send_forgot_notification @email.email }
-        .to change { ActionMailer::Base.deliveries.count }.by(1)
+      # send to the first account with only one email and not principal
+      expect { User.send_forgot_notification @email.email }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+
+    it 'is valid send forgot notification with the account disabled' do
+      User.delete_account(@user, @user.username)
+      expect { User.send_forgot_notification @user.username }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(0)
+
+      expect { User.send_forgot_notification @email.email }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(0)
+
+      @user.update!(status: true)
+      # it can
+      expect { User.send_forgot_notification @user.username }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(1)
+
+      expect { User.send_forgot_notification @email.email }
+          .to change { ActionMailer::Base.deliveries.count }
+                  .by(1)
+    end
   end
 
-  it 'is valid send forgot notification with the account disabled' do
-    User.delete_account(@user, @user.username)
-    expect { User.send_forgot_notification @user.username }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(0)
+  describe 'valid omniauth' do
+    it 'is valid omniauth' do
+      params = { 'provider' => 'github',
+                 'uid' => '12345678', 'info' =>
+                     {'nickname' => 'aa', 'name' => 'aa',
+                      'email' => 'omniauth@watchio.org'}}
 
-    expect { User.send_forgot_notification @email.email }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(0)
-
-    @user.update!(status: true)
-    # it can
-    expect { User.send_forgot_notification @user.username }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(1)
-
-    expect { User.send_forgot_notification @email.email }
-        .to change { ActionMailer::Base.deliveries.count }
-                .by(1)
-  end
-
-  it 'is valid omniauth' do
-    params = { 'provider' => 'github',
-               'uid' => '12345678', 'info' =>
-        {'nickname' => 'aa', 'name' => 'aa',
-         'email' => 'omniauth@watchio.org'}}
-
-    expect {  User.create_with_omniauth params }
-        .to change { ActionMailer::Base.deliveries.count }.by(1)
+      expect {  User.create_with_omniauth params }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
   end
 end

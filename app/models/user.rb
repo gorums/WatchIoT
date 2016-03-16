@@ -220,7 +220,8 @@ class User < ActiveRecord::Base
   def username_format
     return if self.username.nil?
     self.username.gsub!(/[^0-9a-z\- ]/i, '_')
-    self.username.gsub!(/\s+/, '_')
+    self.username.gsub!(/\s+/, '-')
+    self.username = self.username.downcase
     self.username = self.username.byteslice(0, 24) #substring 24
   end
 
