@@ -19,9 +19,9 @@ class Email < ActiveRecord::Base
   scope :find_by_user_and_by_id, -> user_id, id {
         where('user_id = ?', user_id).where('id = ?', id) if id.present? }
   scope :find_principal_by_email, -> email {
-        where('email = ?', email).where(principal: true) if email.present? }
+        where('email = ?', email.downcase).where(principal: true) if email.present? }
   scope :find_by_user_and_by_email, -> user_id, email {
-        where('user_id = ?', user_id).where('email = ?', email) if email.present? }
+        where('user_id = ?', user_id).where('email = ?', email.downcase) if email.present? }
 
 
   ##
@@ -97,8 +97,8 @@ class Email < ActiveRecord::Base
   ##
   # by other user
   #
-  def self.to_check(user_id, email)
-    email = Email.find_by_user_and_by_email(user_id, email).take
+  def self.to_check(user_id, email_s)
+    email = Email.find_by_user_and_by_email(user_id, email_s).take
     raise StandardError, 'The email is not valid' if email.nil?
     email
   end
@@ -106,7 +106,7 @@ class Email < ActiveRecord::Base
   ##
   # Update the email record
   #
-  def self.save_email(email, user_id, checked)user_id
+  def self.save_email(email, user_id, checked)
     email.update!(user_id: user_id, checked: checked, principal: checked)
   end
 
@@ -114,7 +114,7 @@ class Email < ActiveRecord::Base
   # find an email not principal valid
   #
   def self.find_email_forgot (email_s)
-    emails = Email.where(email: email_s).all
+    emails = Email.where(email: email_s.downcase).all
     return if emails.nil? || emails.empty?
     return emails.first if emails.length == 1
 

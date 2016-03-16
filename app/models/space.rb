@@ -18,7 +18,7 @@ class Space < ActiveRecord::Base
         order(created_at: :desc) }
 
   scope :find_by_user_and_name, -> user_id, namespace {
-        where('user_id = ?', user_id).where('name = ?', namespace) if namespace.present? }
+        where('user_id = ?', user_id).where('name = ?', namespace.downcase) if namespace.present? }
 
   ##
   # add a new space
@@ -50,10 +50,14 @@ class Space < ActiveRecord::Base
   # delete a space
   #
   def self.delete_space(space, namespace)
-    raise StandardError, 'The space name is not valid' if namespace != space.name
+    raise StandardError, 'The space name is not valid' if
+        space.nil? || namespace.nil?
+    raise StandardError, 'The space name is not valid' if
+        namespace.downcase != space.name
 
     raise StandardError, 'This space can not be delete because it has'\
-                       ' one or more projects associate' if Project.exists?(space_id: space.id)
+                         ' one or more projects associate' if
+        Project.exists?(space_id: space.id)
     space.destroy!
   end
 
@@ -61,17 +65,16 @@ class Space < ActiveRecord::Base
   # Transfer space and projects to a member team
   #
   def self.transfer(space, user, user_member_id)
-    raise StandardError,
-          'The member is not valid' unless Team.find_member(user.id, user_member_id).exists?
+    raise StandardError, 'The member is not valid' if
+        space.nil? || user.nil? || user_member_id.nil?
+    raise StandardError, 'The member is not valid' unless
+        Team.find_member(user.id, user_member_id).exists?
 
     user = User.find(user_member_id)
     raise StandardError, 'The team member can not add more spaces,'\
               ' please contact with us!' unless can_create_space?(user)
 
-    space.update!(user_id: user_member_id)
-    Project.where('space_id = ?', space.id).find_each do |p|
-      p.update!(user_id: user_member_id)
-    end
+    transfer_projects space, user_member_id
 
     member_email = Email.find_principal_by_user(user_member_id).take
     Notifier.send_transfer_space_email(member_email, user, space)
@@ -81,18 +84,30 @@ class Space < ActiveRecord::Base
   private
 
   ##
+  # Transfer all the projects belong space
+  #
+  def self.transfer_projects(space, user_member_id)
+    space.update!(user_id: user_member_id)
+    Project.where('space_id = ?', space.id).find_each do |p|
+      p.update!(user_id: user_member_id)
+    end
+  end
+
+  ##
   # Format name field, lowercase and '_' by space
   # Admitted only alphanumeric characters, - and _
   #
   def name_format
-    name.gsub! /[^0-9a-z\-_ ]/i, '' unless name.nil?
-    name.gsub! /\s+/, '_' unless name.nil?
+    name.gsub!(/[^0-9a-z\-_ ]/i, '_') unless name.nil?
+    name.gsub!(/\s+/, '-') unless name.nil?
+    self.name = self.name.downcase unless self.name.nil?
   end
 
   ##
   # If i can added more space, free account such has 3 spaces permitted
   #
   def self.can_create_space?(user)
+    return false if user.nil?
     spaces_count = Space.count_by_user user.id
     value = Plan.find_plan_value user.plan_id, 'Number of spaces'
     spaces_count < value.to_i

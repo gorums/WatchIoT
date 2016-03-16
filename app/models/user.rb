@@ -163,6 +163,7 @@ class User < ActiveRecord::Base
   # Send forgot notification
   #
   def self.send_forgot_notification(criteria)
+    return if criteria.nil?
     user = User.find_by_username criteria # find by username
     email = Email.find_principal_by_email(criteria).take # find by principal email
 

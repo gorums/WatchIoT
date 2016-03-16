@@ -74,7 +74,7 @@ RSpec.describe SpacesController, type: :controller do
                                                    description: 'my description'}
       spaces = Space.all
       expect(spaces.length).to eq(2)
-      expect(spaces.last.name).to eq('my_new_space')
+      expect(spaces.last.name).to eq('my_new-space')
       expect(response.status).to eq(302)
     end
   end
@@ -103,7 +103,7 @@ RSpec.describe SpacesController, type: :controller do
       patch :change, username: 'user_name', namespace: 'my_space',
             space: {name: 'my_new space', description: 'my new description'}
       space = Space.first
-      expect(space.name).to eq('my_new_space')
+      expect(space.name).to eq('my_new-space')
       expect(space.description).to_not eq('my new description')
       expect(response.status).to eq(302)
     end
