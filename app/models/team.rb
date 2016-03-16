@@ -31,6 +31,8 @@ class Team < ActiveRecord::Base
   # remove a member for the team
   #
   def self.remove_member(user, user_team_id)
+    raise StandardError, 'The member is not valid' if
+        user.nil? || user_team_id.nil?
     member = Team.find_member(user.id, user_team_id).take
     raise StandardError, 'The member is not valid' if member.nil?
     member.destroy!
@@ -42,6 +44,7 @@ class Team < ActiveRecord::Base
   # Find or create a new member to add the team
   #
   def self.find_or_create_member(email_member)
+    return if email_member.nil?
     emails = Email.where(email: email_member).all
     # if dont exist create a new account
     return User.create_new_account(email_member) if emails.nil? || emails.empty?
@@ -56,6 +59,7 @@ class Team < ActiveRecord::Base
   # If i can added more members, free account such has 3 members permitted
   #
   def self.can_add_member?(user)
+    return false if user.nil?
     members_count = Team.count_by_user user.id
     value = Plan.find_plan_value user.plan_id, 'Team members'
     members_count < value.to_i
