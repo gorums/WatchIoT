@@ -111,214 +111,433 @@ RSpec.describe User, type: :model do
   end
 
   describe 'valid change username' do
-    it 'is valid change username' do
+    it 'is valid change the same username' do
       # the same username
       expect {User.change_username @user, 'my_user_name'}
           .to_not raise_error
+    end
 
+    it 'is valid change username' do
       # new user name
       expect {User.change_username @user, 'new_user_name'}
           .to_not raise_error
+    end
 
+    it 'is valid change to exist username' do
       # exist username
       expect { User.change_username @user, 'my_User_Name1'}
           .to raise_error(/Username has already been taken/)
 
-      expect {User.change_username @user, 'my-user_name1'}
+      expect {User.change_username @user_two, 'my-user_name1'}
           .to_not raise_error
 
       # exist username
       expect { User.change_username @user, 'my User_Name1'}
-          .to_not raise_error
-
-      user = User.find(@user.id)
-      expect(user.username).to eq('my-user_name1')
+          .to raise_error(/Username has already been taken/)
     end
   end
 
-  it 'is valid register' do
-    # the register was correctly
-    params = { username: 'new_register_user',
-               passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to_not raise_error
+  describe 'valid register' do
+    it 'is valid register' do
+      # the register was correctly
+      params = { username: 'new_register_user',
+                 passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    user = User.find_by_username 'new_register_user'
-    expect(user).to_not be_nil
-    expect(user.status).to eq(false)
-    expect(user.passwd_salt).to_not be_empty
-    expect(user.auth_token).to_not be_empty
-    expect(user.passwd.length).to be == 60 # length of hash
-    expect(user.api_key_id).to_not be_nil
-    expect(user.plan_id).to_not be_nil
+      user = User.find_by_username 'new_register_user'
+      expect(user).to_not be_nil
+      expect(user.status).to eq(false)
+      expect(user.passwd_salt).to_not be_empty
+      expect(user.auth_token).to_not be_empty
+      expect(user.passwd.length).to be == 60 # length of hash
+      expect(user.api_key_id).to_not be_nil
+      expect(user.plan_id).to_not be_nil
 
-    emails = user.emails
-    email = emails.first
-    expect(email).to_not be_nil
-    expect(email.email).to include('newemail@watchiot.org')
-    expect(email.principal).to eq(false)
-    expect(email.checked).to eq(false)
+      emails = user.emails
+      email = emails.first
+      expect(email).to_not be_nil
+      expect(email.email).to include('newemail@watchiot.org')
+      expect(email.principal).to eq(false)
+      expect(email.checked).to eq(false)
 
-    # invalid user
-    params = { username: 'new_register_user', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to raise_error(/Username has already been taken/)
+    end
 
-    # invalid email
-    params = { username: 'new_register_user1', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect {User.register params, 'newemail_bad_watchiot.org'}
-        .to raise_error(/Email is not a valid email/)
+    it 'is valid register with exist user' do
+      params = { username: 'new_register_user',
+                 passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    # password too short
-    params = { username: 'new_register_user1', passwd: '123456',
-               passwd_confirmation: '123456'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to raise_error('Password has less than 8 characters')
+      # invalid user
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to raise_error(/Username has already been taken/)
 
-    # passwords do not match
-    params = { username: 'new_register_user1', passwd: '123456678',
-               passwd_confirmation: '123456'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to raise_error('Password does not match the confirm password')
+    end
+
+    it 'is valid register with bad email' do
+      # invalid email
+      params = { username: 'new_register_user1', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail_bad_watchiot.org'}
+          .to raise_error(/Email is not a valid email/)
+    end
+
+    it 'is valid register with nil email' do
+      # invalid email
+      params = { username: 'new_register_user1', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, nil}
+          .to raise_error(/Email is not a valid email/)
+    end
+
+    it 'is valid register with empty email' do
+      # invalid email
+      params = { username: 'new_register_user1', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, ''}
+          .to raise_error(/Email is not a valid email/)
+    end
+
+    it 'is valid register with nil username' do
+      # invalid email
+      params = { username: nil, passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to raise_error(/Username is too short \(minimum is 1 character\), Username can\'t be blank/)
+    end
+
+    it 'is valid register with empty username' do
+      # invalid email
+      params = { username: '', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to raise_error(/Username is too short \(minimum is 1 character\), Username can\'t be blank/)
+    end
+
+    it 'is valid register with short password' do
+      # password too short
+      params = { username: 'new_register_user1', passwd: '123456',
+                 passwd_confirmation: '123456'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to raise_error('Password has less than 8 characters')
+    end
+
+    it 'is valid register with not match passwords' do
+      # passwords do not match
+      params = { username: 'new_register_user1', passwd: '123456678',
+                 passwd_confirmation: '123456'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to raise_error('Password does not match the confirm password')
+    end
   end
 
-  it 'is valid change password' do
-    params = { username: 'new_register_user', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to_not raise_error
+  describe 'valid change password' do
+    it 'is valid change password' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    # no problem change the password
-    new_user = User.find_by_username 'new_register_user'
-    params = { passwd: '12345678', passwd_new: '123456789999',
-               passwd_confirmation: '123456789999'}
-    expect { User.change_passwd new_user, params }
-        .to_not raise_error
+      # no problem change the password
+      new_user = User.find_by_username 'new_register_user'
+      params = { passwd: '12345678', passwd_new: '123456789999',
+                 passwd_confirmation: '123456789999'}
+      expect { User.change_passwd new_user, params }
+          .to_not raise_error
 
-    # no old password now is 123456789999 not 12345678
-    params = { passwd: '12345678', passwd_new: '123456789999',
-               passwd_confirmation: '123456789999'}
-    expect { User.change_passwd new_user, params }
-        .to raise_error('The old password is not correctly')
+      # no old password now is 123456789999 not 12345678
+      params = { passwd: '12345678', passwd_new: '123456789999',
+                 passwd_confirmation: '123456789999'}
+      expect { User.change_passwd new_user, params }
+          .to raise_error('The old password is not correctly')
 
-    # the confirmation passwords do not match
-    params = { passwd: '123456789999', passwd_new: '12345678',
-               passwd_confirmation: '123456789'}
-    expect { User.change_passwd new_user, params }
-        .to raise_error('Password does not match the confirm password')
+      # the confirmation passwords do not match
+      params = { passwd: '123456789999', passwd_new: '12345678',
+                 passwd_confirmation: '123456789'}
+      expect { User.change_passwd new_user, params }
+          .to raise_error('Password does not match the confirm password')
+    end
+
+    it 'is valid change pasword to short' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      # no problem change the password
+      new_user = User.find_by_username 'new_register_user'
+      params = { passwd: '12345678', passwd_new: '123',
+                 passwd_confirmation: '123'}
+      expect { User.change_passwd new_user, params }
+          .to raise_error(/Password has less than 8 characters/)
+    end
+
+    it 'is valid change nil pasword' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      # no problem change the password
+      new_user = User.find_by_username 'new_register_user'
+      params = { passwd: '12345678', passwd_new: nil,
+                 passwd_confirmation: '123'}
+      expect { User.change_passwd new_user, params }
+          .to raise_error(/Password has less than 8 characters/)
+    end
+
+
+    it 'is valid change pasword with do not match' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      # no problem change the password
+      new_user = User.find_by_username 'new_register_user'
+      params = { passwd: '12345678', passwd_new: '1234567890',
+                 passwd_confirmation: '0987654321'}
+      expect { User.change_passwd new_user, params }
+          .to raise_error(/Password does not match the confirm password/)
+    end
   end
 
-  it 'is valid login' do
-    params = { username: 'new_register_user', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to_not raise_error
+  describe 'valid login' do
+    it 'is valid login into the account with status false' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    # user status is false
-    expect { User.login 'new_register_user', '12345678' }
-        .to raise_error('Account is not valid')
+      # user status is false
+      expect { User.login 'new_register_user', '12345678' }
+          .to raise_error('Account is not valid')
+    end
 
-    user_new = User.find_by_username 'new_register_user'
-    user_new.update!(status: true)
+    it 'is valid login into the account with status true' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    user_login = User.login 'new_register_user', '12345678'
-    expect(user_login).to_not be_nil
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
 
-    # bad password
-    expect { User.login 'new_register_user', '123456789' }
-        .to raise_error('Account is not valid')
+      user_login = User.login 'new_register_user', '12345678'
+      expect(user_login).to_not be_nil
+      expect(user_login.username).to eq('new_register_user')
+    end
 
-    # user does not exist
-    expect { User.login 'new_register_user_1', '123456789' }
-        .to raise_error('Account is not valid')
+    it 'is valid login with bad password' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    # email exist but it is not principal
-    expect { User.login 'newemail@watchiot.org', '12345678' }
-        .to raise_error('Account is not valid')
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
 
-    email_login = user_new.emails.first
-    User.active_account(user_new, email_login)
+      # bad password
+      expect { User.login 'new_register_user', '123456789' }
+          .to raise_error('Account is not valid')
+    end
 
-    user_login = User.login 'newemail@watchiot.org', '12345678'
-    expect(user_login).to_not be_nil
+    it 'is valid login with not exist account' do
+      # user does not exist
+      expect { User.login 'new_register_user_1', '123456789' }
+          .to raise_error('Account is not valid')
+    end
+
+    it 'is valid login with not principal email' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
+
+      expect { User.login 'newemail@watchiot.org', '12345678' }
+          .to raise_error('Account is not valid')
+    end
+
+    it 'is valid login with principal email' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
+
+      email_login = user_new.emails.first
+      User.active_account(user_new, email_login)
+
+      user_login = User.login 'newemail@watchiot.org', '12345678'
+      expect(user_login).to_not be_nil
+      expect(user_login.username).to eq('new_register_user')
+    end
+
+    it 'is valid login with nil username' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
+
+      expect { User.login nil, '12345678' }
+          .to raise_error('Account is not valid')
+    end
+
+    it 'is valid login with empty username' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
+
+      expect { User.login '', '12345678' }
+          .to raise_error('Account is not valid')
+    end
+
+    it 'is valid login with nil password' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
+
+      expect { User.login 'new_register_user', nil }
+          .to raise_error('Account is not valid')
+    end
+
+    it 'is valid login with empty password' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
+
+      expect { User.login 'new_register_user', '' }
+          .to raise_error('Account is not valid')
+    end
   end
 
-  it 'is valid reset the password' do
-    params = { username: 'new_register_user', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to_not raise_error
+  describe 'valid reset the password' do
+    it 'is valid reset the password with not match' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    user_new = User.find_by_username 'new_register_user'
-    user_new.update!(status: true)
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
 
-    # login fine
-    user_login = User.login 'new_register_user', '12345678'
-    expect(user_login).to_not be_nil
+      # password and confirmation do not match
+      params = { passwd_new: 'new12345678',
+                 passwd_confirmation: 'new12345678bad'}
+      expect { User.reset_passwd user_new, params }
+          .to raise_error('Password does not match the confirm password')
+    end
 
-    # password and confirmation do not match
-    params = { passwd_new: 'new12345678',
-               passwd_confirmation: 'new12345678bad'}
-    expect { User.reset_passwd user_new, params }
-        .to raise_error('Password does not match the confirm password')
+    it 'is valid reset the password with short password' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    # does not exist email like principal not problem
-    email_login = user_new.emails.first
-    expect(email_login.principal).to eq(false)
-    expect(email_login.checked).to eq(false)
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
 
-    params = { passwd_new: 'new12345678',
-               passwd_confirmation: 'new12345678'}
-    expect { User.reset_passwd user_new, params }
-        .to_not raise_error
+      params = { passwd_new: '123',
+                 passwd_confirmation: '123'}
+      expect { User.reset_passwd user_new, params }
+          .to raise_error('Password has less than 8 characters')
 
-    email_login = user_new.emails.first
-    expect(email_login.principal).to eq(true)
-    expect(email_login.checked).to eq(true)
+      params = { passwd_new: nil,
+                 passwd_confirmation: '123'}
+      expect { User.reset_passwd user_new, params }
+          .to raise_error('Password has less than 8 characters')
+    end
 
-    params = { passwd_new: 'new12345678',
-               passwd_confirmation: 'new12345678'}
+    it 'is valid reset the password' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
 
-    expect { User.reset_passwd user_new, params }
-        .to change { ActionMailer::Base.deliveries.count }.by(1)
+      user_new = User.find_by_username 'new_register_user'
+      user_new.update!(status: true)
 
-    # the pasword was change
-    expect { User.login 'new_register_user', '12345678' }
-        .to raise_error('Account is not valid')
+      # does not exist email like principal, not problem
+      email_login = user_new.emails.first
+      expect(email_login.principal).to eq(false)
+      expect(email_login.checked).to eq(false)
 
-    # login with the new passsword
-    user_login = User.login user_new.username, 'new12345678'
-    expect(user_login).to_not be_nil
+      params = { passwd_new: 'new12345678',
+                 passwd_confirmation: 'new12345678'}
+      expect { User.reset_passwd user_new, params }
+          .to_not raise_error
 
-  end
+      email_login = user_new.emails.first
+      expect(email_login.principal).to eq(true)
+      expect(email_login.checked).to eq(true)
 
-  it 'is valid reset the password with the account disabled' do
-    params = { username: 'new_register_user', passwd: '12345678',
-               passwd_confirmation: '12345678'}
-    expect {User.register params, 'newemail@watchiot.org'}
-        .to_not raise_error
+      params = { passwd_new: 'new12345678',
+                 passwd_confirmation: 'new12345678'}
 
-    email = Email.find_by_email 'newemail@watchiot.org'
-    user_new = User.find_by_username 'new_register_user'
-    email.update!(principal: true, checked: true)
-    user_new.update!(status: false)
+      expect { User.reset_passwd user_new, params }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
 
-    # the pasword was change
-    expect { user_login = User.login user_new.username, '12345678' }
-        .to raise_error('Account is not valid')
+      # the pasword was change
+      expect { User.login 'new_register_user', '12345678' }
+          .to raise_error('Account is not valid')
 
-    params = { passwd_new: 'new12345678',
-               passwd_confirmation: 'new12345678'}
-    expect { User.reset_passwd user_new, params }
-        .to change { ActionMailer::Base.deliveries.count }.by(1)
+      # login with the new passsword
+      user_login = User.login user_new.username, 'new12345678'
+      expect(user_login).to_not be_nil
 
-    # the account continue disabled
-    expect(user_new.status).to eq(false)
-    expect { user_login = User.login user_new.username, 'new12345678' }
-        .to raise_error('Account is not valid')
+    end
+
+    it 'is valid reset the password with the account disabled' do
+      params = { username: 'new_register_user', passwd: '12345678',
+                 passwd_confirmation: '12345678'}
+      expect {User.register params, 'newemail@watchiot.org'}
+          .to_not raise_error
+
+      email = Email.find_by_email 'newemail@watchiot.org'
+      user_new = User.find_by_username 'new_register_user'
+      email.update!(principal: true, checked: true)
+      user_new.update!(status: false)
+
+      expect { User.login user_new.username, '12345678' }
+          .to raise_error('Account is not valid')
+
+      params = { passwd_new: 'new12345678',
+                 passwd_confirmation: 'new12345678'}
+
+      # not email is sending
+      expect { User.reset_passwd user_new, params }
+          .to change { ActionMailer::Base.deliveries.count }.by(0)
+
+      # the account continue disabled
+      expect(user_new.status).to eq(false)
+      expect { User.login user_new.username, 'new12345678' }
+          .to raise_error('Account is not valid')
+    end
   end
 
   describe 'valid activate the account' do
@@ -381,7 +600,6 @@ RSpec.describe User, type: :model do
       expect(email.principal).to eq(true)
       expect(email.checked).to eq(true)
     end
-
   end
 
   describe 'valid send forgot notification' do

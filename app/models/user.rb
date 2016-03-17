@@ -78,6 +78,8 @@ class User < ActiveRecord::Base
   # Register a new account
   #
   def self.register(user_params, email_s)
+    raise StandardError, 'Email is not a valid email' if
+        email_s.nil? || email_s.empty?
     user = User.new(user_params)
     email = Email.new(email: email_s)
 
@@ -95,8 +97,10 @@ class User < ActiveRecord::Base
     old_password = BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
     passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
     same_old_passwd = user.passwd == old_password
+    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
 
     raise StandardError, 'The old password is not correctly' unless same_old_passwd
+    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
 
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
@@ -124,10 +128,15 @@ class User < ActiveRecord::Base
   #
   def self.reset_passwd(user, params)
     passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
+    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
+
+    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
 
+    return if user.nil? || user.status.nil? || !user.status
+
     email = Email.find_principal_by_user(user.id).take || Email.find_by_user(user.id).take
-    raise StandardError, 'You dont have a principal email, please contact us' if email.nil?
+    raise StandardError, 'You dont have an email' if email.nil?
 
     # if the email is not principal it never has activated the account
     User.active_account(user, email) unless email.principal?
@@ -242,10 +251,10 @@ class User < ActiveRecord::Base
   #
   def self.save_user_and_email(user, email, checked = false)
     passwd_confirmation = user.passwd == user.passwd_confirmation
-    passwd_is_short = user.passwd.length >= 8
+    passwd_is_short = user.passwd.length < 8
 
     raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
-    raise StandardError, 'Password has less than 8 characters' unless passwd_is_short
+    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
     raise StandardError, 'The email is principal in other account' if
         Email.find_principal_by_email(email.email).exists?
 
@@ -269,7 +278,7 @@ class User < ActiveRecord::Base
   # This method try to authenticate the client, other way return nil
   #
   def self.authenticate(email, passwd)
-    return if passwd.empty? || email.empty?
+    return if passwd.nil? || passwd.empty? || email.nil? || email.empty?
     user_email = Email.find_principal_by_email(email).take
 
     user = user_email.user unless user_email.nil?
