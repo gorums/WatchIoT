@@ -4,25 +4,15 @@
 class User < ActiveRecord::Base
   attr_accessor :passwd_confirmation, :passwd_new
 
+  has_many :teams
   has_many :emails
   has_many :spaces
   has_many :projects
-  has_many :teams
-  has_many :team_spaces
-  has_many :team_projects
-  has_many :securities
   has_many :logs
-  has_many :stage_spaces
-  has_many :stage_projects
-  has_many :project_parameters
-  has_many :project_requests
-  has_many :project_webhooks
-  has_many :project_evaluators
   has_many :verify_clients
   belongs_to :api_key
   has_one :plan
 
-  # dont space admitted
   validates :username, uniqueness: true, length: { minimum: 1 }, format: { without: /\s+/,
                                  message: 'No empty spaces admitted for the username.' }
   validates_presence_of :username, on: :create
@@ -32,8 +22,9 @@ class User < ActiveRecord::Base
 
   validates :passwd, length: { minimum: 8 }
 
-  validates :username, exclusion: { in: %w(home auth register verify login logout doc price download contact),
-                                    message: '%{value} is reserved.' }
+  validates :username, exclusion: {
+                         in: %w(home auth register verify login logout doc price download contact),
+                         message: '%{value} is reserved.' }
 
   before_validation :username_format
 
@@ -44,42 +35,12 @@ class User < ActiveRecord::Base
   end
 
   ##
-  # Create a new account member
-  #
-  def self.create_new_account(email_member)
-    password = User.generate_passwd
-    user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
-    email = Email.new(email: email_member)
-    save_user_and_email(user, email)
-
-    token = VerifyClient.create_token(user.id, email_member, 'invited')
-    Notifier.send_create_user_email(email_member, token).deliver_later
-    user
-  end
-
-  ##
-  # Disable the account
-  #
-  def self.delete_account(user, username)
-    raise StandardError, 'The username is not valid' if user.username != username
-    raise StandardError, 'You have to transfer'\
-                         ' your spaces or delete their' if Space.exists?(user_id: user.id)
-    user.update!(status: false)
-  end
-
-  ##
-  # change the username
-  #
-  def self.change_username(user, new_username)
-    user.update!(username: new_username)
-  end
-
-  ##
   # Register a new account
   #
   def self.register(user_params, email_s)
-    raise StandardError, 'Email is not a valid email' if
+    raise StandardError, 'The email is not valid' if
         email_s.nil? || email_s.empty?
+
     user = User.new(user_params)
     email = Email.new(email: email_s)
 
@@ -88,22 +49,6 @@ class User < ActiveRecord::Base
     token = VerifyClient.create_token(user.id, email_s, 'register')
     Notifier.send_signup_email(email_s, user, token).deliver_later
     user
-  end
-
-  ##
-  # Change the password
-  #
-  def self.change_passwd(user, params)
-    old_password = BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
-    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
-    same_old_passwd = user.passwd == old_password
-    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
-
-    raise StandardError, 'The old password is not correctly' unless same_old_passwd
-    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
-    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
-
-    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
 
   ##
@@ -121,6 +66,55 @@ class User < ActiveRecord::Base
   def self.omniauth
     auth = request.env['omniauth.auth']
     user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
+  end
+
+  ##
+  # Create a new account member
+  #
+  def self.create_new_account(email_member)
+    password = User.generate_passwd
+    user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
+    email = Email.new(email: email_member)
+
+    save_user_and_email(user, email)
+
+    token = VerifyClient.create_token(user.id, email_member, 'invited')
+    Notifier.send_create_user_email(email_member, token).deliver_later
+    user
+  end
+
+  ##
+  # Disable the account
+  #
+  def self.delete_account(user, username)
+    raise StandardError, 'The username is not valid' if user.username != username
+    raise StandardError, 'You have to transfer'\
+                         ' your spaces or delete their' if Space.exists?(user_id: user.id)
+
+    user.update!(status: false)
+  end
+
+  ##
+  # change the username
+  #
+  def self.change_username(user, new_username)
+    user.update!(username: new_username)
+  end
+
+  ##
+  # Change the password
+  #
+  def self.change_passwd(user, params)
+    old_password = BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
+    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
+    same_old_passwd = user.passwd == old_password
+    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
+
+    raise StandardError, 'The old password is not correctly' unless same_old_passwd
+    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
+    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+
+    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
 
   ##
@@ -149,7 +143,9 @@ class User < ActiveRecord::Base
   # Active the account after register and validate the email
   #
   def self.active_account(user, email)
-    raise StandardError, 'The account can not be activate' if email.user.id != user.id
+    raise StandardError, 'The account can not be activate' if
+        email.nil? || user.nil? || email.user.id != user.id
+
     email.update!(checked: true, principal: true)
     user.update!(status: true)
 
@@ -161,10 +157,12 @@ class User < ActiveRecord::Base
   # password and confirmation
   #
   def self.invite(user, user_params, email)
+    raise StandardError, 'The account can not be activate' if user.nil? || email.nil?
     user.username = user_params[:username] # set the username
     user.passwd = user_params[:passwd] # set the password
     user.passwd_confirmation = user_params[:passwd_confirmation]
 
+    # save user and activate
     save_user_and_email(user, email, true)
   end
 
@@ -172,7 +170,7 @@ class User < ActiveRecord::Base
   # Send forgot notification
   #
   def self.send_forgot_notification(criteria)
-    return if criteria.nil?
+    return if criteria.nil? || criteria.empty?
     user = User.find_by_username criteria # find by username
     email = Email.find_principal_by_email(criteria).take # find by principal email
 
@@ -225,6 +223,7 @@ class User < ActiveRecord::Base
 
   ##
   # Set username always lowercase, self.name.gsub! /[^0-9a-z ]/i, '_'
+  # the space is change for -
   #
   def username_format
     return if self.username.nil?

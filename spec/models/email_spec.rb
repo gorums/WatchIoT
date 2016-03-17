@@ -37,10 +37,10 @@ RSpec.describe Email, type: :model do
     it 'is valid add bad email' do
       # bad email
       expect { Email.add_email(@user.id, nil) }
-          .to raise_error(/is not a valid email/)
+          .to raise_error(/The email is not valid/)
 
       expect { Email.add_email(@user.id, 'other_use@@r@watchio@t.com') }
-          .to raise_error(/is not a valid email/)
+          .to raise_error(/The email is not valid/)
     end
 
     it 'is valid add email with bad user' do

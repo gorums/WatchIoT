@@ -184,7 +184,7 @@ RSpec.describe User, type: :model do
       params = { username: 'new_register_user1', passwd: '12345678',
                  passwd_confirmation: '12345678'}
       expect {User.register params, 'newemail_bad_watchiot.org'}
-          .to raise_error(/Email is not a valid email/)
+          .to raise_error(/The email is not valid/)
     end
 
     it 'is valid register with nil email' do
@@ -192,7 +192,7 @@ RSpec.describe User, type: :model do
       params = { username: 'new_register_user1', passwd: '12345678',
                  passwd_confirmation: '12345678'}
       expect {User.register params, nil}
-          .to raise_error(/Email is not a valid email/)
+          .to raise_error(/The email is not valid/)
     end
 
     it 'is valid register with empty email' do
@@ -200,7 +200,7 @@ RSpec.describe User, type: :model do
       params = { username: 'new_register_user1', passwd: '12345678',
                  passwd_confirmation: '12345678'}
       expect {User.register params, ''}
-          .to raise_error(/Email is not a valid email/)
+          .to raise_error(/The email is not valid/)
     end
 
     it 'is valid register with nil username' do

@@ -33,6 +33,7 @@ class Team < ActiveRecord::Base
   def self.remove_member(user, user_team_id)
     raise StandardError, 'The member is not valid' if
         user.nil? || user_team_id.nil?
+
     member = Team.find_member(user.id, user_team_id).take
     raise StandardError, 'The member is not valid' if member.nil?
     member.destroy!

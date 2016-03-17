@@ -23,7 +23,7 @@ RSpec.describe Team, type: :model do
 
     it 'is valid add a new bad email member' do
       expect { Team.add_member(@user, 'bad_emailwatchiot.com') }
-          .to raise_error(/is not a valid email/)
+          .to raise_error(/The email is not valid/)
     end
 
     it 'is valid add yourself like member' do

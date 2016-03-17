@@ -28,8 +28,10 @@ class Space < ActiveRecord::Base
               ' please contact with us!' unless can_create_space?(user)
 
     Space.create!(
-        name: space_params[:name], description: space_params[:description],
-        user_id: user.id, user_owner_id: user_owner.id)
+        name: space_params[:name],
+        description: space_params[:description],
+        user_id: user.id,
+        user_owner_id: user_owner.id)
   end
 
   ##
@@ -67,6 +69,7 @@ class Space < ActiveRecord::Base
   def self.transfer(space, user, user_member_id)
     raise StandardError, 'The member is not valid' if
         space.nil? || user.nil? || user_member_id.nil?
+    
     raise StandardError, 'The member is not valid' unless
         Team.find_member(user.id, user_member_id).exists?
 

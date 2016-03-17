@@ -89,6 +89,7 @@ class Email < ActiveRecord::Base
   def self.to_activate_by_invitation(user_id, email_s)
     email = Email.find_principal_by_email(email_s).take
     raise StandardError, 'The email is not valid' unless email.nil?
+
     email = Email.find_by_user_and_by_email(user_id, email_s).take
     raise StandardError, 'The email is not valid' if email.nil?
     email
