@@ -29,81 +29,128 @@ RSpec.describe NotificationsController, type: :controller do
                          concept: 'invited', data: 'user@watchiot.com')
   end
 
-
-  describe 'GET forgot' do
-    it 'has a 200 status code' do
+  describe 'forgot notification' do
+    it 'has a 200 status code, all is ok' do
       get :forgot
       expect(response.status).to eq(200)
       expect(response).to render_template('users/forgot')
     end
-  end
 
-  describe 'POST forgot notification' do
-    it 'has a 200 status code' do
+    it 'using post has a 200 status code' do
       post :forgot_notification, user: {username: 'my_user_name'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('users/forgot_notification')
+    end
+
+    it 'using post with user not exist has a 200 status code too for security reasons' do
+      post :forgot_notification, user: {username: 'my_user_name_bad'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/forgot_notification')
     end
   end
 
-  describe 'GET reset' do
-    it 'has a 200 status code' do
+  describe 'reset' do
+    it 'has a 200 status code, good token' do
       get :reset, { token: '12345' }
       expect(response.status).to eq(200)
       expect(response).to render_template('users/reset')
     end
-  end
 
-  describe 'PATCH do reset' do
-    it 'has a 302 status code' do
+    it 'using bad token for rest has a 404 status code' do
+      get :reset, { token: '12345678' }
+      expect(response.status).to eq(404)
+    end
+
+    it 'using patch has a 302 status code, great' do
       patch :do_reset, token: '12345',
             user: {passwd_new: 'my_user_name',
                    passwd_confirmation: 'my_user_name'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/login')
     end
-  end
 
-  describe 'PATCH do reset bad token' do
-    it 'has a 404 status code' do
-      patch :do_reset, { token: '123456' }
-      expect(response.status).to eq(404)
+    it 'using patch with not match password has a 200 status code' do
+      patch :do_reset, token: '12345',
+            user: {passwd_new: 'my_user_name',
+                   passwd_confirmation: 'my_user_name_bad'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('users/reset')
+      expect(flash[:error]).to eq('Password does not match the confirm password')
+    end
+
+    it 'using patch with password to short has a 200 status code' do
+      patch :do_reset, token: '12345',
+            user: {passwd_new: '123',
+                   passwd_confirmation: '123'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('users/reset')
+      expect(flash[:error]).to eq('Password has less than 8 characters')
     end
   end
 
-  describe 'GET active' do
-    it 'has a 302 status code' do
+  describe 'active' do
+    it 'has a 302 status code, activate ok' do
       get :active, { token: '12345' }
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/' + @user.username)
     end
+
+    it 'using bad token for activate has a 404 status code' do
+      get :active, { token: '12345678' }
+      expect(response.status).to eq(404)
+    end
   end
 
   describe 'GET verify email' do
-    it 'has a 200 status code' do
+    it 'using correct token has a 200 status code' do
       get :verify_email, { token: '12345' }
       expect(response.status).to eq(200)
       expect(response).to render_template('users/verify_email')
     end
+
+    it 'using bad token for verify has a 404 status code' do
+      get :active, { token: '12345678' }
+      expect(response.status).to eq(404)
+    end
   end
 
-  describe 'GET invite' do
-    it 'has a 200 status code' do
+  describe 'invite' do
+    it 'using get for invite has a 200 status code' do
       get :invite, { token: '12345' }
       expect(response.status).to eq(200)
       expect(response).to render_template('users/invited')
     end
-  end
 
-  describe 'GET do invite' do
-    it 'has a 302 status code' do
-      get :do_invite, token: '12345',
+    it 'using bad token for invite has a 404 status code' do
+      get :active, { token: '12345678' }
+      expect(response.status).to eq(404)
+    end
+
+    it 'using patch to active the account invited has a 302 status code' do
+      patch :do_invite, token: '12345',
           user: { username: 'my_user_name',
                   passwd: 'my_user_name',
                   passwd_confirmation: 'my_user_name'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/' + @user.username)
     end
-  end
 
+    it 'using patch to active the account with not match password has a 200 status code' do
+      patch :do_invite, token: '12345',
+            user: {passwd: 'my_user_name',
+                   passwd_confirmation: 'my_user_name_bad'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('users/invited')
+      expect(flash[:error]).to eq('Password does not match the confirm password')
+    end
+
+    it 'using patch to active the account with password to short has a 200 status code' do
+      patch :do_invite, token: '12345',
+            user: {passwd: '123',
+                   passwd_confirmation: '123'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('users/invited')
+      expect(flash[:error]).to eq('Password has less than 8 characters')
+    end
+  end
 end

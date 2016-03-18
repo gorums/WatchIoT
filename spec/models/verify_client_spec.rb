@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: verify_clients
+#
+#  id      :integer          not null, primary key
+#  token   :string
+#  data    :string
+#  user_id :integer
+#  concept :string
+#
+
 require 'rails_helper'
 
 RSpec.describe VerifyClient, type: :model do

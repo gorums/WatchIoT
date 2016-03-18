@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: permissions
+#
+#  id         :integer          not null, primary key
+#  category   :string
+#  permission :string
+#
+
 ##
 # Permission model
 #

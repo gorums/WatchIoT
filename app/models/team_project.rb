@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: team_projects
+#
+#  id            :integer          not null, primary key
+#  user_id       :integer
+#  permission_id :integer
+#  space_id      :integer
+#  project_id    :integer
+#  user_team_id  :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 ##
 # Team project model
 #

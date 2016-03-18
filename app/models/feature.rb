@@ -1,3 +1,11 @@
+# == Schema Information
+#
+# Table name: features
+#
+#  id   :integer          not null, primary key
+#  name :string
+#
+
 ##
 # Feature model
 #

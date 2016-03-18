@@ -34,22 +34,18 @@ RSpec.describe SettingController, type: :controller do
 
   end
 
-  describe 'GET user setting' do
+  describe 'using get user setting with permissions' do
     it 'has a 200 status code' do
       get :show, username: 'user_name'
       expect(response.status).to eq(200)
     end
-  end
 
-  describe 'GET user setting unauthorized' do
-    it 'has a 401 status code' do
+    it ' user setting unauthorized has a 401 status code' do
       get :show, username: 'user_name_unauthorized'
       expect(response.status).to eq(401)
     end
-  end
 
-  describe 'GET not found user setting' do
-    it 'has a 404 status code' do
+    it 'using get not found user setting has a 404 status code' do
       get :show, username: 'user_name_not_exist'
       expect(response.status).to eq(404)
     end
@@ -57,30 +53,45 @@ RSpec.describe SettingController, type: :controller do
 
   describe 'Patch profile setting' do
     it 'has a 302 status code' do
+      user = User.find_by_username 'user_name'
+      expect(user.first_name).to be_nil
+      expect(user.last_name).to be_nil
+      expect(user.phone).to be_nil
+      expect(user.country_code).to be_nil
+      expect(user.address).to be_nil
+
       patch :profile, username: 'user_name',
-            user: {first_name: 'User', last_name: 'Name'}
+            user: {first_name: 'User',
+                   last_name: 'Name',
+                   phone: '172823424',
+                   country_code:'EUA',
+                   address: 'Miami'}
 
       expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting')
 
       user = User.find_by_username 'user_name'
       expect(user.first_name).to eq('User')
       expect(user.last_name).to eq('Name')
+      expect(user.phone).to eq('172823424')
+      expect(user.country_code).to eq('EUA')
+      expect(user.address).to eq('Miami')
     end
   end
 
-  describe 'Post add email setting' do
-    it 'has a 302 status code' do
+  describe 'workin with email setting' do
+    it 'using post add a new email has a 302 status code' do
       post :account_add_email, username: 'user_name',
             email: {email: 'my_new_email@watchiot.org'}
+
       expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(2)
     end
-  end
 
-  describe 'Delete add email setting' do
-    it 'has a 302 status code' do
+    it 'Delete add email setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
            email: {email: 'my_new_email@watchiot.org'}
 
@@ -91,14 +102,13 @@ RSpec.describe SettingController, type: :controller do
 
       delete :account_remove_email, username: 'user_name', id: email.id
       expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(1)
     end
-  end
 
-  describe 'Post add email like principal setting' do
-    it 'has a 302 status code' do
+    it 'add email like principal setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
            email: {email: 'my_new_email@watchiot.org'}
 
@@ -108,7 +118,9 @@ RSpec.describe SettingController, type: :controller do
 
       get :account_principal_email, username: 'user_name',
            id: email.id
+
       expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(2)
@@ -119,10 +131,8 @@ RSpec.describe SettingController, type: :controller do
       email = Email.find_by_email 'my_new_email@watchiot.org'
       expect(email.principal).to be(true)
     end
-  end
 
-  describe 'Get send email verify setting' do
-    it 'has a 302 status code' do
+    it 'send email verify setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
            email: {email: 'my_new_email@watchiot.org'}
 
@@ -130,7 +140,9 @@ RSpec.describe SettingController, type: :controller do
 
       post :account_verify_email, username: 'user_name',
            id: email.id
+
       expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
     end
   end
 
