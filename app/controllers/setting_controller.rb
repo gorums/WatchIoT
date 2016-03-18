@@ -50,7 +50,7 @@ class SettingController < ApplicationController
   def account_remove_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.find(params[:id])
+    email = Email.find_by(id: params[:id])
     Email.remove_email(@user.id, params[:id])
 
     flash_log('Delete email <b>' + email.email + '</b>',

@@ -80,7 +80,7 @@ RSpec.describe SettingController, type: :controller do
   end
 
   describe 'workin with email setting' do
-    it 'using post add a new email has a 302 status code' do
+    it 'using post to add a new email has a 302 status code' do
       post :account_add_email, username: 'user_name',
             email: {email: 'my_new_email@watchiot.org'}
 
@@ -91,7 +91,43 @@ RSpec.describe SettingController, type: :controller do
       expect(user.emails.length).to eq(2)
     end
 
-    it 'Delete add email setting has a 302 status code' do
+    it 'using post to add a bad email has a 302 status code' do
+      post :account_add_email, username: 'user_name',
+           email: {email: 'my_new_email^&%watchiot.org'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('Validation failed: Email The email is not valid')
+
+      user = User.find_by_username 'user_name'
+      expect(user.emails.length).to eq(1)
+    end
+
+    it 'using post to add a nil email has a 302 status code' do
+      post :account_add_email, username: 'user_name',
+           email: {email: nil}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('Validation failed: Email The email is not valid, Email can\'t be blank')
+
+      user = User.find_by_username 'user_name'
+      expect(user.emails.length).to eq(1)
+    end
+
+    it 'using post to add a nil email has a 302 status code' do
+      post :account_add_email, username: 'user_name',
+           email: {email: ''}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('Validation failed: Email The email is not valid, Email can\'t be blank')
+
+      user = User.find_by_username 'user_name'
+      expect(user.emails.length).to eq(1)
+    end
+
+    it 'Delete an email setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
            email: {email: 'my_new_email@watchiot.org'}
 
@@ -106,6 +142,21 @@ RSpec.describe SettingController, type: :controller do
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(1)
+    end
+
+    it 'Delete an not exists email setting has a 302 status code' do
+      delete :account_remove_email, username: 'user_name', id: -1
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('The email is not valid')
+    end
+
+    it 'Delete an email with not belong you setting has a 302 status code' do
+      email = Email.find_by_email 'user_unauthorized@watchiot.com'
+      delete :account_remove_email, username: 'user_name', id: email.id
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('The email is not valid')
     end
 
     it 'add email like principal setting has a 302 status code' do
