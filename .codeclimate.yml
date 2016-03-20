@@ -2,5 +2,8 @@
 languages:
   Ruby: true
   JavaScript: true
+  
 exclude_paths:
- - "spec/"
+- tests/**/*
+- spec/**/*
+- "**/vendor/**/*"
