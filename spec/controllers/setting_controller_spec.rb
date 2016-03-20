@@ -197,11 +197,14 @@ RSpec.describe SettingController, type: :controller do
     end
   end
 
-  describe 'Patch change password setting' do
-    it 'has a 302 status code' do
+  describe 'Change password setting' do
+    it 'using patch change password fine has a 302 status code' do
       patch :account_ch_password, username: 'user_name',
            user: {passwd: '12345678', passwd_new: '87654321',
                      passwd_confirmation: '87654321'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
 
       expect { User.login 'user@watchiot.com', '12345678' }
           .to raise_error('Account is not valid')
@@ -209,22 +212,99 @@ RSpec.describe SettingController, type: :controller do
       expect { User.login 'user@watchiot.com', '87654321' }
           .to_not raise_error
     end
+
+    it 'using patch change password too short has a 302 status code' do
+      patch :account_ch_password, username: 'user_name',
+            user: {passwd: '12345678', passwd_new: '8765',
+                   passwd_confirmation: '8765'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('Password has less than 8 characters')
+
+      expect { User.login 'user@watchiot.com', '8765' }
+          .to raise_error('Account is not valid')
+
+      expect { User.login 'user@watchiot.com', '12345678' }
+          .to_not raise_error
+    end
+
+    it 'using patch change password not match has a 302 status code' do
+      patch :account_ch_password, username: 'user_name',
+            user: {passwd: '12345678', passwd_new: '123456123123',
+                   passwd_confirmation: '12345123322'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('Password does not match the confirm password')
+
+      expect { User.login 'user@watchiot.com', '123456123123' }
+          .to raise_error('Account is not valid')
+
+      expect { User.login 'user@watchiot.com', '12345678' }
+          .to_not raise_error
+    end
   end
 
-  describe 'Patch change username setting' do
-    it 'has a 302 status code' do
+  describe 'Change username setting' do
+    it 'usign patch change username fine has a 302 status code' do
       patch :account_ch_username, username: 'user_name',
             user: {username: 'new_user_name'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
 
       user = User.find_by_username 'user_name'
       expect(user).to be_nil
       user = User.find_by_username 'new_user_name'
       expect(user).to_not be_nil
     end
+
+    it 'usign patch change username but it exist has a 302 status code' do
+      patch :account_ch_username, username: 'user_name',
+            user: {username: 'user_name_unauthorized'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('Validation failed: Username has already been taken')
+
+      user = User.find_by_username 'user_name'
+      expect(user).to_not be_nil
+      user = User.find_by_username 'new_user_name'
+      expect(user).to be_nil
+    end
+
+    it 'usign patch change username but it exist without _ has a 302 status code' do
+      patch :account_ch_username, username: 'user_name',
+            user: {username: 'user#name#unauthorized'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+      expect(flash[:error]).to eq('Validation failed: Username has already been taken')
+
+      user = User.find_by_username 'user_name'
+      expect(user).to_not be_nil
+      user = User.find_by_username 'new_user_name'
+      expect(user).to be_nil
+    end
+
+    it 'usign patch change username fine has a 302 status code' do
+      patch :account_ch_username, username: 'user_name',
+            user: {username: 'new user@$name'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
+
+      user = User.find_by_username 'user_name'
+      expect(user).to be_nil
+      user = User.find_by_username 'new-user__name'
+      expect(user).to_not be_nil
+    end
   end
 
-  describe 'Delete account setting' do
-    it 'has a 302 status code' do
+
+  describe 'delete account setting' do
+    it 'using delete has a 302 status code' do
       user = User.find_by_username 'user_name'
       expect(user.status).to be(true)
 
@@ -234,20 +314,72 @@ RSpec.describe SettingController, type: :controller do
       user = User.find_by_username 'user_name'
       expect(user.status).to be(false)
     end
+
+    it 'using delete with bad username confirmation a 302 status code' do
+      user = User.find_by_username 'user_name'
+      expect(user.status).to be(true)
+
+      delete :account_delete, username: 'user_name',
+             user: {username: 'user_name_not'}
+
+      expect(flash[:error]).to eq('The username is not valid')
+
+      user = User.find_by_username 'user_name'
+      expect(user.status).to be(true)
+    end
+
+    it 'using delete with space a 302 status code' do
+      user = User.find_by_username 'user_name'
+      expect(user.status).to be(true)
+
+      Space.create!(name: 'my_space', user_id: user.id)
+
+      delete :account_delete, username: 'user_name',
+             user: {username: 'user_name'}
+
+      expect(flash[:error]).to eq('You have to transfer your spaces or delete their')
+
+      user = User.find_by_username 'user_name'
+      expect(user.status).to be(true)
+    end
   end
 
-  describe 'Post add member setting' do
-    it 'has a 302 status code' do
+  describe 'add members setting' do
+    it 'using post add an exists user like member has a 302 status code' do
       post :team_add, username: 'user_name',
             email: {email: 'user_unauthorized@watchiot.com'}
 
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(1)
     end
+
+    it 'using post add a not exists user like member has a 302 status code' do
+      email = Email.find_by_email 'user_not_exist@watchiot.com'
+      expect(email).to be_nil
+
+      post :team_add, username: 'user_name',
+           email: {email: 'user_not_exist@watchiot.com'}
+
+      email = Email.find_by_email 'user_not_exist@watchiot.com'
+      expect(email).to_not be_nil
+
+      user = User.find_by_username 'user_name'
+      expect(user.teams.length).to eq(1)
+    end
+
+    it 'using post add yourself like member has a 302 status code' do
+      post :team_add, username: 'user_name',
+           email: {email: 'user@watchiot.com'}
+
+      expect(flash[:error]).to eq('The member can not be yourself')
+
+      user = User.find_by_username 'user_name'
+      expect(user.teams.length).to eq(0)
+    end
   end
 
-  describe 'Delete remove member setting' do
-    it 'has a 302 status code' do
+  describe 'remove member setting' do
+    it 'using delete has a 302 status code' do
       post :team_add, username: 'user_name',
            email: {email: 'user_unauthorized@watchiot.com'}
 
@@ -259,6 +391,22 @@ RSpec.describe SettingController, type: :controller do
 
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(0)
+    end
+
+    it 'using delete try eliminate not member a 302 status code' do
+      post :team_add, username: 'user_name',
+           email: {email: 'user_unauthorized@watchiot.com'}
+
+      user = User.find_by_username 'user_name'
+      expect(user.teams.length).to eq(1)
+
+      delete :team_delete, username: 'user_name',
+             id: -1
+
+      expect(flash[:error]).to eq('The member is not valid')
+
+      user = User.find_by_username 'user_name'
+      expect(user.teams.length).to eq(1)
     end
   end
 
