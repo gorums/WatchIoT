@@ -78,29 +78,30 @@ class SpacesController < ApplicationController
   # Change space name
   #
   def change
-    redirect_to '/' + @user.username + '/' + @space.name + '/setting'
-
     old_name = @space.name
     Space.change_space(@space, space_edit_params[:name])
-
-    flash_log('Change name space ' + old_name + ' by ' + @space.name,
+    new_name = @space.name
+    flash_log('Change name space ' + old_name + ' by ' + new_name,
               'The space name was hange correctly')
+
+    redirect_to '/' + @user.username + '/' + new_name + '/setting'
   rescue => ex
     flash[:error] = ex.message
+    redirect_to '/' + @user.username + '/' + old_name + '/setting'
   end
 
   ##
   # Patch /:username/:namespace/setting/transfer
   #
   def transfer
-    redirect_to '/' + @user.username + '/spaces'
-
     Space.transfer @space, @user, params[:user_member_id]
 
     flash_log('Change the owner of space ' + @space.name + ' to ' + user_email(params[:user_member_id]),
               'The space was transfer correctly')
+    redirect_to '/' + @user.username + '/spaces'
   rescue => ex
-     if ex.message == 'You have a space with this name'
+    redirect_to '/' + @user.username + '/' + @space.name + '/setting'
+     if ex.message == 'Validation failed: Name You have a space with this name'
        flash[:error] = 'The team member has a space with this name'
      else
        flash[:error] = ex.message

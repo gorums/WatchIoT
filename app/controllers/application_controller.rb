@@ -52,6 +52,14 @@ class ApplicationController < ActionController::Base
   end
 
   ##
+  # This method return the principal email
+  #
+  def user_email(user_id)
+    email = Email.find_principal_by_user(user_id).take
+    email.email unless email.nil?
+  end
+  
+  ##
   # Throw RoutingError exception
   #
   def not_found
