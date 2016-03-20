@@ -119,13 +119,13 @@ class SettingController < ApplicationController
   # Delete /:username/setting/account/delete
   #
   def account_delete
-    redirect_to root_url
-
     User.delete_account @user, username_params[:username]
 
     cookies.clear
+    redirect_to root_url
   rescue => ex
     flash[:error] = ex.message
+    redirect_to '/' + @user.username + '/setting/account'
   end
 
   ##

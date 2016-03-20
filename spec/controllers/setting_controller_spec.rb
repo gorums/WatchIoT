@@ -311,6 +311,9 @@ RSpec.describe SettingController, type: :controller do
       delete :account_delete, username: 'user_name',
             user: {username: 'user_name'}
 
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/')
+
       user = User.find_by_username 'user_name'
       expect(user.status).to be(false)
     end
@@ -322,6 +325,8 @@ RSpec.describe SettingController, type: :controller do
       delete :account_delete, username: 'user_name',
              user: {username: 'user_name_not'}
 
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
       expect(flash[:error]).to eq('The username is not valid')
 
       user = User.find_by_username 'user_name'
@@ -337,6 +342,8 @@ RSpec.describe SettingController, type: :controller do
       delete :account_delete, username: 'user_name',
              user: {username: 'user_name'}
 
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/account')
       expect(flash[:error]).to eq('You have to transfer your spaces or delete their')
 
       user = User.find_by_username 'user_name'
@@ -349,6 +356,9 @@ RSpec.describe SettingController, type: :controller do
       post :team_add, username: 'user_name',
             email: {email: 'user_unauthorized@watchiot.com'}
 
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/team')
+
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(1)
     end
@@ -359,6 +369,9 @@ RSpec.describe SettingController, type: :controller do
 
       post :team_add, username: 'user_name',
            email: {email: 'user_not_exist@watchiot.com'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/team')
 
       email = Email.find_by_email 'user_not_exist@watchiot.com'
       expect(email).to_not be_nil
@@ -371,7 +384,24 @@ RSpec.describe SettingController, type: :controller do
       post :team_add, username: 'user_name',
            email: {email: 'user@watchiot.com'}
 
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/team')
       expect(flash[:error]).to eq('The member can not be yourself')
+
+      user = User.find_by_username 'user_name'
+      expect(user.teams.length).to eq(0)
+    end
+
+    it 'using post add incalid email  like member has a 302 status code' do
+      post :team_add, username: 'user_name',
+           email: {email: 'user_bad_email_watchiot.com'}
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/team')
+      expect(flash[:error]).to eq('Validation failed: Email The email is not valid')
+
+      user = User.find_by_username 'user_bad_email_watchiot.com'
+      expect(user).to be_nil
 
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(0)
@@ -385,6 +415,9 @@ RSpec.describe SettingController, type: :controller do
 
       user = User.find_by_username 'user_name'
       expect(user.teams.length).to eq(1)
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/team')
 
       delete :team_delete, username: 'user_name',
            id: user.teams.first.user_team_id
@@ -403,6 +436,8 @@ RSpec.describe SettingController, type: :controller do
       delete :team_delete, username: 'user_name',
              id: -1
 
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/team')
       expect(flash[:error]).to eq('The member is not valid')
 
       user = User.find_by_username 'user_name'
@@ -416,6 +451,9 @@ RSpec.describe SettingController, type: :controller do
       api = user.api_key.api_key
 
       patch :key_generate, username: 'user_name'
+
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/setting/api')
 
       user = User.find_by_username 'user_name'
       new_api = user.api_key.api_key

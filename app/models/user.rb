@@ -281,8 +281,11 @@ class User < ActiveRecord::Base
     raise StandardError, 'The email is principal in other account' if
         Email.find_principal_by_email(email.email).exists?
 
-    save_user user, checked
-    Email.save_email email, user.id, checked
+    ActiveRecord::Base.transaction do
+      User.save_user user, checked
+      Email.save_email email, user.id, checked
+    end
+
     Notifier.send_signup_verify_email(email.email, user).deliver_later if checked
   end
 
