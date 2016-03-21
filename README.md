@@ -1,4 +1,4 @@
-WatchIoT [![Build Status](https://travis-ci.org/gorums/WatchIoT.svg)](https://travis-ci.org/gorums/WatchIoT) [![Code Climate](https://codeclimate.com/github/gorums/WatchIoT/badges/gpa.svg)](https://codeclimate.com/github/gorums/WatchIoT) [![Test Coverage](https://codeclimate.com/github/gorums/WatchIoT/badges/coverage.svg)](https://codeclimate.com/github/gorums/WatchIoT/coverage) [![Inline docs](http://inch-ci.org/github/gorums/watchiot.svg?branch=master)](http://inch-ci.org/github/gorums/watchiot) [![endorse](https://api.coderwall.com/gorums/endorsecount.png)](https://coderwall.com/gorums)
+WatchIoT [![Build Status](https://travis-ci.org/gorums/WatchIoT.svg)](https://travis-ci.org/gorums/WatchIoT) [![Code Climate](https://codeclimate.com/github/gorums/WatchIoT/badges/gpa.svg)](https://codeclimate.com/github/gorums/WatchIoT) [![Test Coverage](https://codeclimate.com/github/gorums/WatchIoT/badges/coverage.svg)](https://codeclimate.com/github/gorums/WatchIoT/coverage) [![Inline docs](http://inch-ci.org/github/gorums/watchiot.svg?branch=master)](http://inch-ci.org/github/gorums/watchiot) 
 ==
 
 **A monitor services, resources and IoT**
