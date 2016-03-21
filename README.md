@@ -35,6 +35,9 @@ All history data can be shown using charting and you can see how your services h
 
 Changelog
 --
+*20 March 2016*
+
+All the test is complite
 
 *30 november 2015*
 
