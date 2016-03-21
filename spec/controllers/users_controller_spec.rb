@@ -45,30 +45,26 @@ RSpec.describe UsersController, type: :controller do
                passwd: '12345678',
                passwd_confirmation: '12345678'}
 
-    User.register params, 'user@watchiot.com'
+    @user = User.register params, 'user@watchiot.com'
 
-    user_new = User.find_by_username 'user_name'
-    email_login = user_new.emails.first
-    User.active_account(user_new, email_login)
+    email_login = @user.emails.first
+    User.active_account(@user, email_login)
 
     params = { username: 'user_name2',
                passwd: '12345678',
                passwd_confirmation: '12345678'}
 
-    User.register params, 'user2@watchiot.com'
+    @user_two = User.register params, 'user2@watchiot.com'
   end
 
-
-  describe 'GET register' do
-    it 'has a 200 status code' do
+  describe 'register' do
+    it 'using get to register has a 200 status code' do
       get :register
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
     end
-  end
 
-  describe 'POST register' do
-    it 'has a 200 status code' do
+    it 'using post has a 200 status code' do
       post :do_register,
           user: {username: 'my_user',
                  passwd: '12345678',
@@ -77,10 +73,8 @@ RSpec.describe UsersController, type: :controller do
       expect(response.status).to eq(200)
       expect(response).to render_template('need_verify_notification')
     end
-  end
 
-  describe 'POST bad register' do
-    it 'has a 200 status code' do
+    it 'using post register password not match has a 200 status code' do
       post :do_register,
            user: {username: 'my_user',
                   passwd: '12345678',
@@ -91,36 +85,78 @@ RSpec.describe UsersController, type: :controller do
       expect(flash[:error])
           .to eq('Password does not match the confirm password')
     end
+
+    it 'using post register password too short has a 200 status code' do
+      post :do_register,
+           user: {username: 'my_user',
+                  passwd: '123',
+                  passwd_confirmation: '123'},
+           email: {email: 'myemail@watchiot.org'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('register')
+      expect(flash[:error])
+          .to eq('Password has less than 8 characters')
+    end
+
+    it 'using post register username empty has a 200 status code' do
+      post :do_register,
+           user: {username: '',
+                  passwd: '123123123',
+                  passwd_confirmation: '123123123'},
+           email: {email: 'myemail@watchiot.org'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('register')
+      expect(flash[:error])
+          .to eq('Validation failed: Username is too short (minimum is 1 character), Username can\'t be blank')
+    end
+
+    it 'using post register username nil has a 200 status code' do
+      post :do_register,
+           user: {username: nil,
+                  passwd: '123123123',
+                  passwd_confirmation: '123123123'},
+           email: {email: 'myemail@watchiot.org'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('register')
+      expect(flash[:error])
+          .to eq('Validation failed: Username is too short (minimum is 1 character), Username can\'t be blank')
+    end
+
+    it 'using post register username exist has a 200 status code' do
+      post :do_register,
+           user: {username: 'user_name',
+                  passwd: '123123123',
+                  passwd_confirmation: '123123123'},
+           email: {email: 'myemail@watchiot.org'}
+      expect(response.status).to eq(200)
+      expect(response).to render_template('register')
+      expect(flash[:error])
+          .to eq('Validation failed: Username has already been taken')
+    end
   end
 
-  describe 'GET login' do
-    it 'has a 200 status code' do
+  describe 'login' do
+    it 'using get has a 200 status code' do
       get :login
       expect(response.status).to eq(200)
       expect(response).to render_template('login')
     end
-  end
 
-  describe 'POST login' do
-    it 'has a 302 status code' do
+    it 'using post has a 302 status code' do
       get :do_login, user: {username: 'user_name',
                            passwd: '12345678' }
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name')
     end
-  end
 
-  describe 'POST login with email' do
-    it 'has a 302 status code' do
+    it 'using post with email has a 302 status code' do
       get :do_login, user: {username: 'user@watchiot.com',
                             passwd: '12345678' }
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name')
     end
-  end
 
-  describe 'POST login bad password' do
-    it 'has a 200 status code' do
+    it 'using post bad password has a 200 status code' do
       get :do_login, user: {username: 'user@watchiot.com',
                             passwd: '1234567891' }
 
@@ -129,10 +165,8 @@ RSpec.describe UsersController, type: :controller do
       expect(flash[:error])
           .to eq('Account is not valid')
     end
-  end
 
-  describe 'POST login bad username' do
-    it 'has a 200 status code' do
+    it 'using post bad username has a 200 status code' do
       get :do_login, user: { username: 'my_user_name_new',
                             passwd: '12345678' }
 
@@ -141,10 +175,8 @@ RSpec.describe UsersController, type: :controller do
       expect(flash[:error])
           .to eq('Account is not valid')
     end
-  end
 
-  describe 'POST login bad email' do
-    it 'has a 200 status code' do
+    it 'using post bad email has a 200 status code' do
       get :do_login, user: { username: 'my_user_name_new@watchiot.org',
                              passwd: '12345678' }
 
@@ -153,10 +185,8 @@ RSpec.describe UsersController, type: :controller do
       expect(flash[:error])
           .to eq('Account is not valid')
     end
-  end
 
-  describe 'POST login user inactive username' do
-    it 'has a 200 status code' do
+    it 'using post inactive user has a 200 status code' do
       get :do_login, user: { username: 'user_name2',
                              passwd: '12345678' }
 
@@ -165,12 +195,68 @@ RSpec.describe UsersController, type: :controller do
       expect(flash[:error])
           .to eq('Account is not valid')
     end
-  end
 
-  describe 'POST login user inactive email' do
-    it 'has a 200 status code' do
+    it 'using post inactive email has a 200 status code' do
       get :do_login, user: { username: 'user2@watchiot.com',
                              passwd: '12345678' }
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template('login')
+      expect(flash[:error])
+          .to eq('Account is not valid')
+    end
+
+    it 'using post empty username has a 200 status code' do
+      get :do_login, user: { username: '',
+                             passwd: '12345678' }
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template('login')
+      expect(flash[:error])
+          .to eq('Account is not valid')
+    end
+
+    it 'using post nil username has a 200 status code' do
+      get :do_login, user: { username: nil,
+                             passwd: '12345678' }
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template('login')
+      expect(flash[:error])
+          .to eq('Account is not valid')
+    end
+
+    it 'using post empty password has a 200 status code' do
+      get :do_login, user: {username: 'user@watchiot.com',
+                            passwd: '' }
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template('login')
+      expect(flash[:error])
+          .to eq('Account is not valid')
+    end
+
+    it 'using post nil password has a 200 status code' do
+      get :do_login, user: {username: 'user@watchiot.com',
+                            passwd: nil }
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template('login')
+      expect(flash[:error])
+          .to eq('Account is not valid')
+    end
+
+    it 'using post empty username and password has a 200 status code' do
+      get :do_login, user: {username: '', passwd: '' }
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template('login')
+      expect(flash[:error])
+          .to eq('Account is not valid')
+    end
+
+    it 'using post nil username and password has a 200 status code' do
+      get :do_login, user: {username: nil, passwd: nil }
 
       expect(response.status).to eq(200)
       expect(response).to render_template('login')
