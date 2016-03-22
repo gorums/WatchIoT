@@ -62,8 +62,8 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
-    question: 'Which brings us WatchIoT?',
-    answer: '<mark>WatchIot</mark> is a monitoring service that allows us to know in real time if our services they have some anomalous behavior or unwanted.',
+    question: 'What services provided WatchIoT?',
+    answer: '<mark>WatchIot</mark> is a monitoring service that allows us to know in real time and throw alert to us if our services, resources or devices (IoT) have some behavior that we want to pay attention.',
     lang: 'en')
 
 Faq.create(
@@ -72,8 +72,8 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
-    question: 'Is WatchIoT free',
-    answer: '<mark>WatchIot</mark> is absolutely free.',
+    question: 'How much costs the service of WatchIoT?',
+    answer: '<mark>WatchIot</mark> costs nothing, it is absolutely free.',
     lang: 'en')
 
 Faq.create(
@@ -82,8 +82,8 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
-    question: 'What is a space?',
-    answer: 'A space is a way of organizing the services you are monitoring. For example, you may be monitoring services of several companies can separate each company as a space.',
+    question: 'I have to create spaces. What is a space?',
+    answer: 'Space is a way of organizing the services, resources and devices (IoT) that you are monitoring. For example, maybe you are monitoring services of several companies. Then you can separate each company as a space.',
     lang: 'en')
 
 Faq.create(
@@ -92,8 +92,8 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
-    question: 'What is a project?',
-    answer: 'Each service that you monitor is configured as a project. For example such notifications, which will monitor service. Every time that I will send a HTTP request or receive, has who will notify, etc.',
+    question: 'I can create several projects into a space. What is a project?',
+    answer: 'Each service, resource or device (IoT) that you are monitoring can be seen as a project. You can configure whole respect your service. Example: url to send a request, ip for wait the request, when throw the alert (notification), email that must receive the notification, etc.',
     lang: 'en')
 
 Faq.create(
@@ -123,7 +123,7 @@ Faq.create(
 
 Faq.create(
     question: 'Can i add friends to manage the spaces and projects?',
-    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts.',
+    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts. In <mark>WatchIoT</mark> it is very easy',
     lang: 'en')
 
 Faq.create(
@@ -132,8 +132,8 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
-    question: 'What kind of reports I get?',
-    answer: 'You will receive notifications in real time via email, plus you can set <mark>WebHooks</mark> as a form of notification.',
+    question: 'What type of reports i can receive?',
+    answer: 'You will receive notifications in real time via email, plus you can set <mark>WebHooks</mark> as a form of notification. In the future you will can receive sms too.',
     lang: 'en')
 
 # Project descriptions static values
@@ -146,7 +146,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Multiplatform',
-    description: 'You can monitor various platforms, including <mark>Linux, Mac or Windows</mark> and can even monitor your cloud services, in addition to IoT devices (Internet of Things).',
+    description: 'You can monitor several platforms, like <mark>IOS, Windows, Linux, Android, etc</mark> and can even monitor your cloud services or web applications, in addition to devices (Internet of Things) too.',
     icon: 'cubes',
     lang: 'en'
 )
@@ -160,7 +160,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Configurable',
-    description: 'The power of <mark>WatchIoT</mark> is that everything is configurable and incredibly simple. You configure that server, terminal, resource or service you want to monitor.',
+    description: 'The power of <mark>WatchIoT</mark> is that everything is configurable and incredibly simple. You can configure all about how you want to handle your services, resources and devices (IoT) and send alert for many way.',
     icon: 'cog',
     lang: 'en'
 )
@@ -174,7 +174,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Notification',
-    description: 'Notifications are <mark>WebHooks</mark> via email and in real time. Feel safe, you have everything under control and can sleep relaxed we will be alert for you.',
+    description: 'Notifications are in real time via email and <mark>WebHooks</mark> for now. Feel safe, you have everything under control and can sleep relaxed we will be alert for you.',
     icon: 'envelope',
     lang: 'en'
 )
@@ -188,7 +188,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Bidirectional',
-    description: '<mark>WatchIoT</mark> can make <mark>HTTP</mark> requests their services or their services may send <mark>HTTP</mark> requests to us, depending on your needs.',
+    description: '<mark>WatchIoT</mark> can make <mark>HTTPS</mark> requests their services or their services may send <mark>HTTPS</mark> requests to us, depending on your needs.',
     icon: 'arrows-h',
     lang: 'en'
 )
@@ -202,7 +202,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Scripting',
-    description: 'You have two ways of processing the data collected by its services and decide whether or not to notify. Form or setting it by using a scripting language.',
+    description: 'You have two ways of processing the data collected by your services and decide whether or not to notify. Using <mark>WebForm</mark> or more powerful configuration language.',
     icon: 'code',
     lang: 'en'
 )
@@ -216,17 +216,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Charting',
-    description: 'Every time we recover data from their services, keep in shape history and offer the possibility of graphically the behavior in time of their monitored services.',
+    description: 'Every time we recover data from your services, keep in shape history and offer the possibility of graphically the behavior in time of your monitored services, resurces or devices (IoF).',
     icon: 'area-chart',
     lang: 'en'
 )
-
-# Permission static values (TODO: review this feature)
-# Permission.create(category: 'global', permission: 'create_space') # Can create spaces
-# Permission.create(category: 'global', permission: 'edit_space') # Can edit any space
-# Permission.create(category: 'global', permission: 'delete_space') # Can delete any space
-# Permission.create(category: 'global', permission: 'setting_space') # Can setting any space
-
-# Permission.create(category: 'space', permission: 'edit_space') # Can edit a space
-# Permission.create(category: 'space', permission: 'delete_space') # Can delete a space
-# Permission.create(category: 'space', permission: 'setting_space') # Can setting a space
