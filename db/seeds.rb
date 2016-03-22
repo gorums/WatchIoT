@@ -122,8 +122,8 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
-    question: 'Can i add friends to manage the spaces and projects?',
-    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts. In <mark>WatchIoT</mark> it is very easy',
+    question: 'Can I add friends to manage the spaces and projects?',
+    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts too. In <mark>WatchIoT</mark> it is very easy',
     lang: 'en')
 
 Faq.create(
@@ -132,8 +132,8 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
-    question: 'What type of reports i can receive?',
-    answer: 'You will receive notifications in real time via email, plus you can set <mark>WebHooks</mark> as a form of notification. In the future you will can receive sms too.',
+    question: 'What type of reports I can receive?',
+    answer: 'You will receive notifications in real time via email, plus you can set <mark>WebHooks</mark> as a form of notification. In the future you will receive sms too.',
     lang: 'en')
 
 # Project descriptions static values
@@ -188,7 +188,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Bidirectional',
-    description: '<mark>WatchIoT</mark> can make <mark>HTTPS</mark> requests their services or their services may send <mark>HTTPS</mark> requests to us, depending on your needs.',
+    description: '<mark>WatchIoT</mark> can make <mark>HTTPS</mark> requests your services or your services may send <mark>HTTPS</mark> requests to us, depending on your needs.',
     icon: 'arrows-h',
     lang: 'en'
 )
@@ -216,7 +216,7 @@ Descrip.create(
 
 Descrip.create(
     title: 'Charting',
-    description: 'Every time we recover data from your services, keep in shape history and offer the possibility of graphically the behavior in time of your monitored services, resurces or devices (IoF).',
+    description: 'Every time we recover data from your services, keep in shape history and offer the possibility of graphically the behavior in time of your monitored services, resources or devices (IoT).',
     icon: 'area-chart',
     lang: 'en'
 )
