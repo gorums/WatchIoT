@@ -164,10 +164,11 @@ RSpec.describe User, type: :model do
   describe 'valid register' do
     it 'is valid register' do
       # the register was correctly
-      params = { username: 'new_register_user',
-                 passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user = User.find_by_username 'new_register_user'
@@ -189,82 +190,102 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid register with exist user' do
-      params = { username: 'new_register_user',
-                 passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       # invalid user
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to raise_error(/Username has already been taken/)
 
     end
 
     it 'is valid register with bad email' do
       # invalid email
-      params = { username: 'new_register_user1', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail_bad_watchiot.org'}
+      user = User.new(username: 'new_register_user1',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail_bad_watchiot.org')
+      expect {User.register user, email}
           .to raise_error(/The email is not valid/)
     end
 
     it 'is valid register with nil email' do
       # invalid email
-      params = { username: 'new_register_user1', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, nil}
+
+      user = User.new(username: 'new_register_user1',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: nil)
+      expect {User.register user, email}
           .to raise_error(/The email is not valid/)
     end
 
     it 'is valid register with empty email' do
       # invalid email
-      params = { username: 'new_register_user1', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, ''}
+      user = User.new(username: 'new_register_user1',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: '')
+      expect {User.register user, email}
           .to raise_error(/The email is not valid/)
     end
 
     it 'is valid register with nil username' do
       # invalid email
-      params = { username: nil, passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: nil,
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to raise_error(/Username is too short \(minimum is 1 character\), Username can\'t be blank/)
     end
 
     it 'is valid register with empty username' do
       # invalid email
-      params = { username: '', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: '',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to raise_error(/Username is too short \(minimum is 1 character\), Username can\'t be blank/)
     end
 
     it 'is valid register with short password' do
       # password too short
-      params = { username: 'new_register_user1', passwd: '123456',
-                 passwd_confirmation: '123456'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user1',
+                      passwd: '123456',
+                      passwd_confirmation: '123456')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to raise_error('Password has less than 8 characters')
     end
 
     it 'is valid register with not match passwords' do
       # passwords do not match
-      params = { username: 'new_register_user1', passwd: '123456678',
-                 passwd_confirmation: '123456'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user1',
+                      passwd: '123456678',
+                      passwd_confirmation: '123456')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to raise_error('Password does not match the confirm password')
     end
   end
 
   describe 'valid change password' do
     it 'is valid change password' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       # no problem change the password
@@ -288,9 +309,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid change pasword to short' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       # no problem change the password
@@ -302,9 +325,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid change nil pasword' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       # no problem change the password
@@ -317,9 +342,11 @@ RSpec.describe User, type: :model do
 
 
     it 'is valid change pasword with do not match' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       # no problem change the password
@@ -333,9 +360,11 @@ RSpec.describe User, type: :model do
 
   describe 'valid login' do
     it 'is valid login into the account with status false' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       # user status is false
@@ -344,9 +373,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login into the account with status true' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -358,9 +389,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login with bad password' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -378,9 +411,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login with not principal email' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -391,9 +426,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login with principal email' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -408,9 +445,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login with nil username' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -421,9 +460,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login with empty username' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -434,9 +475,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login with nil password' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -447,9 +490,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid login with empty password' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -462,9 +507,11 @@ RSpec.describe User, type: :model do
 
   describe 'valid reset the password' do
     it 'is valid reset the password with not match' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -478,9 +525,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid reset the password with short password' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -498,9 +547,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid reset the password' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       user_new = User.find_by_username 'new_register_user'
@@ -537,9 +588,11 @@ RSpec.describe User, type: :model do
     end
 
     it 'is valid reset the password with the account disabled' do
-      params = { username: 'new_register_user', passwd: '12345678',
-                 passwd_confirmation: '12345678'}
-      expect {User.register params, 'newemail@watchiot.org'}
+      user = User.new(username: 'new_register_user',
+                      passwd: '12345678',
+                      passwd_confirmation: '12345678')
+      email = Email.new(email: 'newemail@watchiot.org')
+      expect {User.register user, email}
           .to_not raise_error
 
       email = Email.find_by_email 'newemail@watchiot.org'

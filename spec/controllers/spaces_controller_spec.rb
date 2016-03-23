@@ -32,11 +32,11 @@ RSpec.describe SpacesController, type: :controller do
     PlanFeature.create(plan_id: plan.id,
                        feature_id: fTeam.id, value: '3')
 
-    params = { username: 'user_name',
-               passwd: '12345678',
-               passwd_confirmation: '12345678'}
-
-    User.register params, 'user@watchiot.com'
+    user = User.new(username: 'user_name',
+                    passwd: '12345678',
+                    passwd_confirmation: '12345678')
+    email = Email.new(email: 'user@watchiot.com')
+    User.register user, email
 
     user_new = User.find_by_username 'user_name'
     email_login = user_new.emails.first
@@ -45,11 +45,11 @@ RSpec.describe SpacesController, type: :controller do
     @user = User.login 'user@watchiot.com', '12345678'
     request.cookies[:auth_token] = @user.auth_token
 
-    params = { username: 'user_name_unauthorized',
-               passwd: '12345678',
-               passwd_confirmation: '12345678'}
-
-    User.register params, 'user_unauthorized@watchiot.com'
+    user = User.new(username: 'user_name_unauthorized',
+                    passwd: '12345678',
+                    passwd_confirmation: '12345678')
+    email = Email.new(email: 'user_unauthorized@watchiot.com')
+    User.register user, email
 
     @user_new = User.find_by_username 'user_name_unauthorized'
     email_login = @user_new.emails.first

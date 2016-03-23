@@ -38,12 +38,15 @@ class UsersController < ApplicationController
   # POST /do_register
   #
   def do_register
-    User.register(user_params, email_params[:email])
+    @user = User.new(user_params)
+    @email = Email.new(email: email_params[:email])
+
+    User.register(@user, @email)
 
     render 'need_verify_notification'
   rescue => ex
-    render 'register'
     flash[:error] = ex.message
+    render 'register'
   end
 
   ##
@@ -52,20 +55,20 @@ class UsersController < ApplicationController
   def login
     @user = User.new
   end
-
   ##
-  # POST /do_login
+  # POST /login
   #
   def do_login
+    @user = User.new(user_params)
     user = User.login(user_params[:username], user_params[:passwd])
 
-    cookies[:auth_token] = user.auth_token unless user_params[:remember_me]
-    cookies.permanent[:auth_token] = user.auth_token if user_params[:remember_me]
+    cookies[:auth_token] = user.auth_token unless params[:remember_me]
+    cookies.permanent[:auth_token] = user.auth_token if params[:remember_me]
 
     redirect_to '/' + user.username
   rescue => ex
-    render 'login'
     flash[:error] = ex.message
+    render 'login'
   end
 
   ##
@@ -96,7 +99,7 @@ class UsersController < ApplicationController
   # User params
   #
   def user_params
-    params.require(:user).permit(:passwd, :passwd_confirmation, :username)
+    params.require(:user).permit(:passwd, :passwd_confirmation, :username, :remember_me)
   end
 
   ##

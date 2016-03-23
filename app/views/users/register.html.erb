@@ -1,10 +1,9 @@
-<%= render 'shared/alert_message'%>
 
 <div class="auth-form-header">
   <h1>Sign Up</h1>
 </div>
 
-<%= form_for @user, url: '/register'  do |f| %>
+<%= form_for @user, url: '/register' do |f| %>
     <div class="auth-form">
       <div class="input">
         <%= f.label :username %><br />
@@ -27,11 +26,12 @@
         <span><i class="fa fa-lock"></i></span>
       </div>
       <p><%= submit_tag "Create User", class: "btn btn-default btn-lg active" %></p>
-			<br />
+			<br /><br />
 			<p><%= link_to 'auth/github', class: "btn btn-primary btn-lg active" do%>
 					<i class="fa fa-github-square fa-1x"></i> Sing in with Github
 				<%end %>
 			</p>
+			<%= render 'shared/alert_message'%>
     </div>
 <% end %>
 

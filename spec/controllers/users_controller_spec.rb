@@ -41,20 +41,20 @@ RSpec.describe UsersController, type: :controller do
     PlanFeature.create(plan_id: plan.id,
                        feature_id: fTeam.id, value: '3')
 
-    params = { username: 'user_name',
-               passwd: '12345678',
-               passwd_confirmation: '12345678'}
-
-    @user = User.register params, 'user@watchiot.com'
+    user = User.new(username: 'user_name',
+                    passwd: '12345678',
+                    passwd_confirmation: '12345678')
+    email = Email.new(email: 'user@watchiot.com')
+    @user = User.register user, email
 
     email_login = @user.emails.first
     User.active_account(@user, email_login)
 
-    params = { username: 'user_name2',
-               passwd: '12345678',
-               passwd_confirmation: '12345678'}
-
-    @user_two = User.register params, 'user2@watchiot.com'
+    user = User.new(username: 'user_name2',
+                    passwd: '12345678',
+                    passwd_confirmation: '12345678')
+    email = Email.new(email: 'user2@watchiot.com')
+    @user_two = User.register user, email
   end
 
   describe 'register' do

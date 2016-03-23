@@ -26,7 +26,7 @@
 # User model
 #
 class User < ActiveRecord::Base
-  attr_accessor :passwd_confirmation, :passwd_new
+  attr_accessor :passwd_confirmation, :passwd_new, :remember_me
 
   has_many :teams
   has_many :emails
@@ -61,17 +61,14 @@ class User < ActiveRecord::Base
   ##
   # Register a new account
   #
-  def self.register(user_params, email_s)
+  def self.register(user, email)
     raise StandardError, 'The email is not valid' if
-        email_s.nil? || email_s.empty?
-
-    user = User.new(user_params)
-    email = Email.new(email: email_s)
+        email.email.nil? || email.email.empty?
 
     save_user_and_email user, email
 
-    token = VerifyClient.create_token(user.id, email_s, 'register')
-    Notifier.send_signup_email(email_s, user, token).deliver_later
+    token = VerifyClient.create_token(user.id, email.email, 'register')
+    Notifier.send_signup_email(email.email, user, token).deliver_later
     user
   end
 
