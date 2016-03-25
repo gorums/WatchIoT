@@ -84,9 +84,8 @@ class User < ActiveRecord::Base
   ##
   # Register or login with omniauth
   #
-  def self.omniauth
-    auth = request.env['omniauth.auth']
-    user = User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
+  def self.omniauth(auth)
+    User.find_by_provider_and_uid(auth['provider'], auth['uid']) || User.create_with_omniauth(auth)
   end
 
   ##
@@ -324,6 +323,7 @@ class User < ActiveRecord::Base
 
     email = Email.new(email: auth['info']['email'])
     save_user_and_email user, email, true
+    user
   end
 
   ##

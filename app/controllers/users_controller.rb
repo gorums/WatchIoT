@@ -75,7 +75,8 @@ class UsersController < ApplicationController
   # Get /do_omniauth
   #
   def do_omniauth
-    user = User.omniauth
+    auth = request.env['omniauth.auth']
+    user = User.omniauth(auth)
 
     cookies[:auth_token] = user.auth_token
 
