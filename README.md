@@ -37,7 +37,7 @@ Changelog
 --
 *20 March 2016*
 
-All the test is complite
+All the tests were complete
 
 *30 november 2015*
 
