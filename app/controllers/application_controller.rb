@@ -41,7 +41,9 @@ class ApplicationController < ActionController::Base
   # This method return the client principal email
   #
   def login_user_email
-    Email.find_principal_by_user(me.id).take || ''
+    email = Email.find_principal_by_user(me.id).take
+    return '' if email.nil?
+    email.email
   end
 
   ##
