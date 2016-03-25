@@ -83,6 +83,7 @@ class UsersController < ApplicationController
     redirect_to '/' + user.username
   rescue => ex
     flash[:error] = ex.message
+    redirect_to 'login'
   end
 
   ##
