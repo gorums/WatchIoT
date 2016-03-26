@@ -44,7 +44,7 @@ class SpacesController < ApplicationController
     space = Space.create_new_space(space_create_params, @user, me)
 
     flash_log('Create the space <b>' + space.name + '</b>',
-              'Space created correctly')
+              'Space was created correctly')
 
     redirect_to '/' + @user.username + '/' + space.name
   rescue => ex
@@ -61,7 +61,7 @@ class SpacesController < ApplicationController
     Space.edit_space(@space, space_edit_params[:description])
     @project = Project.new
 
-    flash_log('Edit the space <b>' + @space.name + '</b>', 'Space edited correctly')    
+    flash_log('Edit the space <b>' + @space.name + '</b>', 'Space was edited correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -82,7 +82,7 @@ class SpacesController < ApplicationController
     Space.change_space(@space, space_edit_params[:name])
     new_name = @space.name
     flash_log('Change name space ' + old_name + ' by ' + new_name,
-              'The space name was hange correctly')
+              'The namespace was changed correctly')
 
     redirect_to '/' + @user.username + '/' + new_name + '/setting'
   rescue => ex
@@ -97,15 +97,15 @@ class SpacesController < ApplicationController
     Space.transfer @space, @user, params[:user_member_id]
 
     flash_log('Change the owner of space ' + @space.name + ' to ' + user_email(params[:user_member_id]),
-              'The space was transfer correctly')
+              'The space was transferred correctly')
     redirect_to '/' + @user.username + '/spaces'
   rescue => ex
     redirect_to '/' + @user.username + '/' + @space.name + '/setting'
-     if ex.message == 'Validation failed: Name You have a space with this name'
-       flash[:error] = 'The team member has a space with this name'
-     else
-       flash[:error] = clear_exception ex.message
-     end
+    if ex.message == 'Validation failed: Name You have a space with this name'
+      flash[:error] = 'The team member has a space with this name'
+    else
+      flash[:error] = clear_exception ex.message
+    end
   end
 
   ##
@@ -116,8 +116,8 @@ class SpacesController < ApplicationController
 
     Space.delete_space(@space, space_name_params[:name])
 
-    flash_log('Delete name space <b>' + space_name_params[:name] + '</b>',
-              'The space was delete correctly')
+    flash_log('Delete space <b>' + space_name_params[:name] + '</b>',
+              'The space was deleted correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end

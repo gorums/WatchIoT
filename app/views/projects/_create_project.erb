@@ -30,13 +30,12 @@
 	<%= div_for(@project, class: 'form-group') do %>
 		<div class="col-lg-offset-2 col-lg-6">
 			<%= submit_tag 'Create Project', class: 'btn btn-primary' %>
-
 		</div>
-
-		<div class="col-lg-offset-2 col-lg-6">
-			<input type="file" class="btn btn-default">Import Project</input>
-		</div>
-
 	<% end %>
+
+	<div class="col-lg-offset-2 col-lg-6">
+		<input type="file" class="btn btn-default">Import Config Project</input>
+	</div>
+	
 </div>
 <% end %>

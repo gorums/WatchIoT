@@ -8,7 +8,7 @@
 					<div class="panel-heading"><b>Add a new member</b></div>
 					<div class="panel-body">
 
-						<small>if the member does not exist on <b>WatchIoT</b> we will send an email to the new member and we will create an account with a default password.</small>
+						<small>If the member does not exist on <b>WatchIoT</b> we will send an email to the new member and we will create an account with a default password.</small>
 						<%= form_for @email, url: '/' + me.username + '/setting/team/add' do |f| %>
 						<div class="form-group">
 								<%= div_for(@email, class: 'form-group col-lg-6') do %>
@@ -34,7 +34,7 @@
 					</colgroup>
 					<thead>
 					<tr>
-						<th>Members</th>
+						<th>Members in my team</th>
 						<th></th>
 					</tr>
 					</thead>
@@ -63,7 +63,7 @@
 					</colgroup>
 					<thead>
 					<tr>
-						<th>I belong</th>
+						<th>Participate in teams</th>
 						<th></th>
 					</tr>
 					</thead>

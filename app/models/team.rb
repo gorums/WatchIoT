@@ -27,13 +27,13 @@ class Team < ActiveRecord::Base
   # added a member for the team
   #
   def self.add_member(user, email_s)
-    raise StandardError, 'You can not added more members to the team,'\
+    raise StandardError, 'You can not add more members to the team,'\
               ' please contact with us!' unless can_add_member?(user)
 
     user_member = find_or_create_member(email_s)
     raise StandardError, 'The member can not be added' if user_member.nil?
     raise StandardError, 'The member can not be yourself' if user.id == user_member.id
-    raise StandardError, 'The member was adding before' if Team.find_member(user.id, user_member.id).exists?
+    raise StandardError, 'The member was added before' if Team.find_member(user.id, user_member.id).exists?
 
     Team.create!(user_id: user.id, user_team_id: user_member.id)
     Notifier.send_new_team_email(email_s, user, user_member).deliver_later

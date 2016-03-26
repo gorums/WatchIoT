@@ -1,7 +1,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading"><b>Emails</b></div>
 	<div class="panel-body">
-		<small>The principal email receive all the notifications.</small>
+		<small>The primary email receive all the notifications.</small>
 		<table class="table table-hover">
 			<colgroup>
 				<col class="col-xs-6">
@@ -12,7 +12,7 @@
 			<thead>
 			<tr>
 				<th>Email</th>
-				<th>Principal</th>
+				<th>Primary</th>
 				<th>Verify</th>
 				<th></th>
 			</tr>
@@ -29,7 +29,7 @@
 							<%if email.checked?%>
 								<%= link_to  '/' + me.username + '/setting/account/principal/email/' + email.id.to_s,
 														class: 'clear-background' do %>
-									<i class="fa fa-check-circle-o fa-2x" title="Check like principal"></i>
+									<i class="fa fa-check-circle-o fa-2x" title="Check like primary"></i>
 								<%end%>
 							<%else%>
 								<%= link_to  '/' + me.username + '/setting/account/verify/email/' + email.id.to_s,

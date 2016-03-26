@@ -25,7 +25,7 @@ class SettingController < ApplicationController
 
     @user.update!(profile_params)
 
-    flash_log('Edit the profile setting', 'Profile updated correctly')
+    flash_log('Edit the profile setting', 'Profile was updated correctly')
   rescue => ex
     flash[:error] = 'Profile update failed'
   end
@@ -54,7 +54,7 @@ class SettingController < ApplicationController
     Email.remove_email(@user.id, params[:id])
 
     flash_log('Delete email <b>' + email.email + '</b>',
-              'The email was remove correctly')
+              'The email was deleted correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -68,7 +68,7 @@ class SettingController < ApplicationController
     email = Email.principal(@user.id, params[:id])
 
     flash_log('Set email <b>' + email.email + '</b> like principal',
-              'The email was set principal correctly')
+              'The email was setted like primary correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -82,7 +82,7 @@ class SettingController < ApplicationController
     email = Email.send_verify(@user.id, params[:id])
 
     flash_log('Send to verify the email <b>' + email.email + '</b>',
-              'The email to verify was sending correctly')
+              'The email to verify was sended correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -95,7 +95,7 @@ class SettingController < ApplicationController
 
     User.change_passwd(@user, passwd_params)
 
-    flash_log('Change password', 'The password was change correctly')
+    flash_log('Change password', 'The password was changed correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -110,7 +110,7 @@ class SettingController < ApplicationController
     User.change_username @user, username_params[:username]
 
     flash_log('Change username <b>' + old_username + '</b> by ' + username_params[:username],
-              'The new username was save correctly')
+              'The new username was saved correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -137,7 +137,7 @@ class SettingController < ApplicationController
     Team.add_member @user, email
 
     flash_log('Adding a new member <b>' + email + '</b>',
-              'The member was add correctly')
+              'The member was added correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -152,7 +152,7 @@ class SettingController < ApplicationController
     email = Email.find_principal_by_user(params[:id]).take || Email.find_by_user(params[:id]).take
 
     flash_log('Delete a member <b>' + email.email + '</b>',
-              'The member was delete correctly')
+              'The member was deleted correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end
@@ -165,7 +165,7 @@ class SettingController < ApplicationController
 
     ApiKey.generate @user
 
-    flash_log('Change api key', 'The api key was change correctly')
+    flash_log('Change api key', 'The api key was changed correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
   end

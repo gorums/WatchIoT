@@ -3,7 +3,7 @@
 	<div class="panel-body">
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 			<% unless @spaces.any?%>
-				<p class="text-center">Dont space create.</p>
+				<p class="text-center">Don't exist spaces.</p>
 			<%else%>
 			<% @spaces.each do |space|%>
 			<div class="panel panel-default">
@@ -23,7 +23,7 @@
 				<div id="collapse<%= space.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= space.id %>">
 					<div class="panel-body">
 						<% unless space.projects.any?%>
-							<p class="text-center">Dont project exist below this space.</p>
+							<p class="text-center">Does not exist projects that belong to this Space.</p>
 						<%else%>
 						<table class="table table-striped">
 							<colgroup>
@@ -43,7 +43,7 @@
 							<tr>
 								<th scope="row"><%= project.name%></th>
 								<td><%= project.description%></td>
-								<td><a href="/<%= param_user %>/<%= space.name %>/<%= project.name %>" class="clear-background" title="Goto project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
+								<td><a href="/<%= param_user %>/<%= space.name %>/<%= project.name %>" class="clear-background" title="Go to project"><i class="fa fa-arrow-circle-right fa-2x"></i></a></td>
 							</tr>
 							<% end %>
 							</tbody>

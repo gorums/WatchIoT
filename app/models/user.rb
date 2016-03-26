@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
   validates :passwd, length: { minimum: 8 }
   validates :username, exclusion: {
                          in: %w(home auth register verify login logout doc price download contact),
-                         message: '%{value} is reserved.' }
+                         message: '"%{value}" is reserved.' }
 
   before_validation :username_format
 
@@ -109,8 +109,8 @@ class User < ActiveRecord::Base
   #
   def self.delete_account(user, username)
     raise StandardError, 'The username is not valid' if user.username != username
-    raise StandardError, 'You have to transfer'\
-                         ' your spaces or delete their' if Space.exists?(user_id: user.id)
+    raise StandardError, 'You have to transfer your spaces'\
+                         ' or delete them' if Space.exists?(user_id: user.id)
 
     user.update!(status: false)
   end
@@ -133,7 +133,7 @@ class User < ActiveRecord::Base
 
     raise StandardError, 'The old password is not correctly' unless same_old_passwd
     raise StandardError, 'Password has less than 8 characters' if passwd_is_short
-    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
 
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
   end
@@ -146,7 +146,7 @@ class User < ActiveRecord::Base
     passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
 
     raise StandardError, 'Password has less than 8 characters' if passwd_is_short
-    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
+    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
 
     return if user.nil? || user.status.nil? || !user.status
 
@@ -273,9 +273,9 @@ class User < ActiveRecord::Base
     passwd_confirmation = user.passwd == user.passwd_confirmation
     passwd_is_short = user.passwd.nil? || user.passwd.length < 8
 
-    raise StandardError, 'Password does not match the confirm password' unless passwd_confirmation
     raise StandardError, 'Password has less than 8 characters' if passwd_is_short
-    raise StandardError, 'The email is principal in other account' if
+    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
+    raise StandardError, 'The email is primary in other account' if
         Email.find_principal_by_email(email.email).exists?
 
     ActiveRecord::Base.transaction do

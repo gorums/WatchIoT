@@ -39,7 +39,7 @@ class Space < ActiveRecord::Base
   # add a new space
   #
   def self.create_new_space(space_params, user, user_owner)
-    raise StandardError, 'You can not added more spaces,'\
+    raise StandardError, 'You can not add more spaces,'\
               ' please contact with us!' unless can_create_space?(user)
 
     Space.create!(
@@ -67,9 +67,9 @@ class Space < ActiveRecord::Base
   # delete a space
   #
   def self.delete_space(space, namespace)
-    raise StandardError, 'The space name is not valid' if
+    raise StandardError, 'The namespace is not valid' if
         space.nil? || namespace.nil?
-    raise StandardError, 'The space name is not valid' if
+    raise StandardError, 'The namespace is not valid' if
         namespace.downcase != space.name
 
     raise StandardError, 'This space can not be delete because it has'\
@@ -84,7 +84,7 @@ class Space < ActiveRecord::Base
   def self.transfer(space, user, user_member_id)
     raise StandardError, 'The member is not valid' if
         space.nil? || user.nil? || user_member_id.nil?
-    
+
     raise StandardError, 'The member is not valid' unless
         Team.find_member(user.id, user_member_id).exists?
 

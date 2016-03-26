@@ -41,7 +41,7 @@ class Email < ActiveRecord::Base
   # Add an email to the account unprincipal waiting for verification
   #
   def self.add_email(user_id, email)
-    raise StandardError, 'is not a valid user id' unless
+    raise StandardError, 'is not a valid user' unless
         User.where('id=?', user_id).exists?
     Email.create!(email: email, user_id: user_id)
   end
@@ -53,9 +53,9 @@ class Email < ActiveRecord::Base
     email = find_by_user_and_by_id(user_id, email_id).take
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email has to be check' unless email.checked?
-    raise StandardError, 'The email already is principal in your account' if email.principal
-    raise StandardError, 'The email is principal in other '\
-                         'account' if Email.find_principal_by_email(email.email).exists?
+    raise StandardError, 'The email already is primary in your account' if email.principal
+    raise StandardError, 'The email is primary in other account' if
+          Email.find_principal_by_email(email.email).exists?
 
     # set like not principal if exist the current principal email
     Email.unprincipal(user_id)
@@ -69,9 +69,9 @@ class Email < ActiveRecord::Base
   def self.remove_email(user_id, email_id)
     email = find_by_user_and_by_id(user_id, email_id).take
     raise StandardError, 'The email is not valid' if email.nil?
-    raise StandardError, 'You can not delete the only email '\
+    raise StandardError, 'You can not delete the only email with you have '\
                          'in your account' if Email.count_by_user(user_id) == 1
-    raise StandardError, 'The email can not be principal' if email.principal?
+    raise StandardError, 'The email can not be primary' if email.principal?
 
     email.destroy!
   end
