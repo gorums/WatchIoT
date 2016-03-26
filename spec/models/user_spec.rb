@@ -184,7 +184,7 @@ RSpec.describe User, type: :model do
       email = emails.first
       expect(email).to_not be_nil
       expect(email.email).to include('newemail@watchiot.org')
-      expect(email.principal).to eq(false)
+      expect(email.primary).to eq(false)
       expect(email.checked).to eq(false)
 
     end
@@ -410,7 +410,7 @@ RSpec.describe User, type: :model do
           .to raise_error('Account is not valid')
     end
 
-    it 'is valid login with not principal email' do
+    it 'is valid login with not primary email' do
       user = User.new(username: 'new_register_user',
                       passwd: '12345678',
                       passwd_confirmation: '12345678')
@@ -425,7 +425,7 @@ RSpec.describe User, type: :model do
           .to raise_error('Account is not valid')
     end
 
-    it 'is valid login with principal email' do
+    it 'is valid login with primary email' do
       user = User.new(username: 'new_register_user',
                       passwd: '12345678',
                       passwd_confirmation: '12345678')
@@ -557,9 +557,9 @@ RSpec.describe User, type: :model do
       user_new = User.find_by_username 'new_register_user'
       user_new.update!(status: true)
 
-      # does not exist email like principal, not problem
+      # does not exist email like primary, not problem
       email_login = user_new.emails.first
-      expect(email_login.principal).to eq(false)
+      expect(email_login.primary).to eq(false)
       expect(email_login.checked).to eq(false)
 
       params = { passwd_new: 'new12345678',
@@ -568,7 +568,7 @@ RSpec.describe User, type: :model do
           .to_not raise_error
 
       email_login = user_new.emails.first
-      expect(email_login.principal).to eq(true)
+      expect(email_login.primary).to eq(true)
       expect(email_login.checked).to eq(true)
 
       params = { passwd_new: 'new12345678',
@@ -597,7 +597,7 @@ RSpec.describe User, type: :model do
 
       email = Email.find_by_email 'newemail@watchiot.org'
       user_new = User.find_by_username 'new_register_user'
-      email.update!(principal: true, checked: true)
+      email.update!(primary: true, checked: true)
       user_new.update!(status: false)
 
       expect { User.login user_new.username, '12345678' }
@@ -622,7 +622,7 @@ RSpec.describe User, type: :model do
       expect { User.active_account @user, @email }
           .to change { ActionMailer::Base.deliveries.count }.by(1)
       expect(@user.status).to eq(true)
-      expect(@email.principal).to eq(true)
+      expect(@email.primary).to eq(true)
       expect(@email.checked).to eq(true)
     end
 
@@ -674,7 +674,7 @@ RSpec.describe User, type: :model do
 
       expect(user.auth_token).to_not be_nil
       expect(user.status).to eq(true)
-      expect(email.principal).to eq(true)
+      expect(email.primary).to eq(true)
       expect(email.checked).to eq(true)
     end
   end
@@ -686,21 +686,21 @@ RSpec.describe User, type: :model do
                   .by(0)
     end
 
-    it 'is valid send forgot notification email not principal' do
-      # the email is not set like principal
+    it 'is valid send forgot notification email not primary' do
+      # the email is not set like primary
       expect { User.send_forgot_notification @user.username }
           .to change { ActionMailer::Base.deliveries.count }
                   .by(1)
 
-      # the email is not set like principal buy it can recovery the password
+      # the email is not set like primary buy it can recovery the password
       expect { User.send_forgot_notification @email.email }
           .to change { ActionMailer::Base.deliveries.count }
                   .by(1)
     end
 
-    it 'is valid send forgot notification email principal' do
-      # set the email like principal
-      @email.update!(principal: true, checked:true)
+    it 'is valid send forgot notification email primary' do
+      # set the email like primary
+      @email.update!(primary: true, checked:true)
 
       expect { User.send_forgot_notification @user.username }
           .to change { ActionMailer::Base.deliveries.count }
@@ -711,13 +711,13 @@ RSpec.describe User, type: :model do
                   .by(1)
     end
 
-    it 'is valid send forgot notification two account with the same email no principal' do
-      # two account with the same email no principal
+    it 'is valid send forgot notification two account with the same email no primary' do
+      # two account with the same email no primary
       user = User.create!(username: 'my_user_name_new', passwd: '12345678',
                           passwd_confirmation: '12345678')
       Email.create!(email: 'user@watchiot.com', user_id: user.id)
 
-      # send to the first account with only one email and not principal
+      # send to the first account with only one email and not primary
       expect { User.send_forgot_notification @email.email }
           .to change { ActionMailer::Base.deliveries.count }.by(1)
     end

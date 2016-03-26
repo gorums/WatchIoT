@@ -150,11 +150,11 @@ class User < ActiveRecord::Base
 
     return if user.nil? || user.status.nil? || !user.status
 
-    email = Email.find_principal_by_user(user.id).take || Email.find_by_user(user.id).take
+    email = Email.find_primary_by_user(user.id).take || Email.find_by_user(user.id).take
     raise StandardError, 'You dont have an email' if email.nil?
 
-    # if the email is not principal it never has activated the account
-    User.active_account(user, email) unless email.principal?
+    # if the email is not primary it never has activated the account
+    User.active_account(user, email) unless email.primary?
 
     Notifier.send_reset_passwd_email(email.email, user).deliver_later
     user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
@@ -167,7 +167,7 @@ class User < ActiveRecord::Base
     raise StandardError, 'The account can not be activate' if
         email.nil? || user.nil? || email.user.id != user.id
 
-    email.update!(checked: true, principal: true)
+    email.update!(checked: true, primary: true)
     user.update!(status: true)
 
     Notifier.send_signup_verify_email(email.email, user).deliver_later
@@ -193,14 +193,14 @@ class User < ActiveRecord::Base
   def self.send_forgot_notification(criteria)
     return if criteria.nil? || criteria.empty?
     user = User.find_by_username criteria # find by username
-    email = Email.find_principal_by_email(criteria).take # find by principal email
+    email = Email.find_primary_by_email(criteria).take # find by primary email
 
-    # if it does not principal try to find for no principal
+    # if it does not primary try to find for no primary
     email = Email.find_email_forgot(criteria) if user.nil? || email.nil?
 
     user = email.user if user.nil? && !email.nil?
-    # find by user id first try with the principal or any
-    email = Email.find_principal_by_user(user.id).take ||
+    # find by user id first try with the primary or any
+    email = Email.find_primary_by_user(user.id).take ||
             Email.find_by_user(user.id).take if email.nil? && !user.nil?
 
     return if user.nil? || !user.status? || email.nil?
@@ -276,7 +276,7 @@ class User < ActiveRecord::Base
     raise StandardError, 'Password has less than 8 characters' if passwd_is_short
     raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
     raise StandardError, 'The email is primary in other account' if
-        Email.find_principal_by_email(email.email).exists?
+        Email.find_primary_by_email(email.email).exists?
 
     ActiveRecord::Base.transaction do
       User.save_user user, checked
@@ -302,7 +302,7 @@ class User < ActiveRecord::Base
   #
   def self.authenticate(email, passwd)
     return if passwd.nil? || passwd.empty? || email.nil? || email.empty?
-    user_email = Email.find_principal_by_email(email).take
+    user_email = Email.find_primary_by_email(email).take
 
     user = user_email.user unless user_email.nil?
     user = User.find_by_username(email) if user_email.nil?

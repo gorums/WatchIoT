@@ -111,11 +111,11 @@ def before_each(type_test)
                                passwd_confirmation: '12345678')
       @email_two = Email.create!(email: 'user1@watchiot.com',
                                  user_id: @user_two.id,
-                                 checked: true, principal: true)
+                                 checked: true, primary: true)
     end
 
   if 'notif'  == type_test
-    @email.update(checked: true, principal: true)
+    @email.update(checked: true, primary: true)
     @space = Space.create!(name: 'my_space', user_id: @user_two.id)
   end
 

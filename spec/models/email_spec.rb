@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  email      :string(35)
-#  principal  :boolean          default(FALSE)
+#  primary  :boolean          default(FALSE)
 #  user_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -62,50 +62,50 @@ RSpec.describe Email, type: :model do
     end
   end
 
-  describe 'valid principal email' do
-    it 'is valid add the email like principal unchecked' do
-      expect { expect( Email.principal @user.id, @email.id) }
+  describe 'valid primary email' do
+    it 'is valid add the email like primary unchecked' do
+      expect { expect( Email.primary @user.id, @email.id) }
           .to raise_error('The email has to be check')
     end
 
-    it 'is valid add the email checked like principal' do
+    it 'is valid add the email checked like primary' do
       # set like checked
       @email.update!(checked: true)
-      # set this email like principal
-      email = Email.principal @user.id, @email.id
-      expect(email.principal).to eq(true)
+      # set this email like primary
+      email = Email.primary @user.id, @email.id
+      expect(email.primary).to eq(true)
     end
 
-    it 'is valid add other email checked like principal' do
+    it 'is valid add other email checked like primary' do
       # set like checked
       @email.update!(checked: true)
-      # set this email like principal
-      email = Email.principal @user.id, @email.id
-      expect(email.principal).to eq(true)
+      # set this email like primary
+      email = Email.primary @user.id, @email.id
+      expect(email.primary).to eq(true)
 
       # add other email to the account
       other_email = Email.add_email(@user.id, 'other_user@watchiot.com')
       other_email.update!(checked: true)
 
-      expect(Email.find_by_email('user@watchiot.com').principal)
+      expect(Email.find_by_email('user@watchiot.com').primary)
           .to eq(true)
 
-      # set this new email like principal
-      new_principal = Email.principal @user.id, other_email.id
+      # set this new email like primary
+      new_primary = Email.primary @user.id, other_email.id
 
-      expect(new_principal.principal).to eq(true)
-      # this email already left to be principal
+      expect(new_primary.primary).to eq(true)
+      # this email already left to be primary
       expect(Email.find_by_email('user@watchiot.com')
-                 .principal).to eq(false)
+                 .primary).to eq(false)
     end
 
-    it 'is valid add the email like principal being principal in other account' do
+    it 'is valid add the email like primary being primary in other account' do
       email = Email.add_email(@user.id, @email_two.email)
       email.update!(checked: true)
 
-      # try to set like principal an email principal in other account
-      expect { Email.principal @user.id, email.id }
-          .to raise_error('The email is principal in other account')
+      # try to set like primary an email primary in other account
+      expect { Email.primary @user.id, email.id }
+          .to raise_error('The email is primary in other account')
     end
   end
 
@@ -116,27 +116,27 @@ RSpec.describe Email, type: :model do
           .to raise_error('You can not delete the only email in your account')
     end
 
-    it 'is valid remove an principal email' do
+    it 'is valid remove an primary email' do
       @email.update!(checked: true)
-      # set this email like principal
-      email = Email.principal @user.id, @email.id
-      expect(email.principal).to eq(true)
+      # set this email like primary
+      email = Email.primary @user.id, @email.id
+      expect(email.primary).to eq(true)
 
-      # set the other email like principal
+      # set the other email like primary
       email = Email.add_email(@user.id, 'user12@watchiot.com')
       email.update!(checked: true)
 
       expect { Email.remove_email @user.id, @email.id }
-          .to raise_error('The email can not be principal')
+          .to raise_error('The email can not be primary')
     end
 
-    it 'is valid remove an not principal email' do
-      # set the other email like principal
+    it 'is valid remove an not primary email' do
+      # set the other email like primary
       email = Email.add_email(@user.id, 'user12@watchiot.com')
       email.update!(checked: true)
 
-      email = Email.principal @user.id, email.id
-      expect(email.principal).to eq(true)
+      email = Email.primary @user.id, email.id
+      expect(email.primary).to eq(true)
 
       expect { Email.remove_email @user.id, @email.id}
           .to_not raise_error
@@ -159,7 +159,7 @@ RSpec.describe Email, type: :model do
   end
 
   describe 'valid to can active an account by invitation' do
-    it 'is valid to active the email like principal' do
+    it 'is valid to active the email like primary' do
       expect { Email.to_activate_by_invitation @user.id, @email.email }
           .to_not raise_error
     end
@@ -174,7 +174,7 @@ RSpec.describe Email, type: :model do
       expect { Email.to_activate_by_invitation @user_two.id, @email_two.email }
           .to raise_error('The email is not valid')
 
-      # add email two but like it is principal in other account
+      # add email two but like it is primary in other account
       # we can not add to activate
       Email.add_email(@user.id, @email_two.email)
       expect { Email.to_activate_by_invitation @user.id, @email_two.email }
@@ -194,30 +194,30 @@ RSpec.describe Email, type: :model do
     end
   end
 
-  describe 'valid find email not principal to forgot password' do
-    it 'is valid one email unique and not principal' do
+  describe 'valid find email not primary to forgot password' do
+    it 'is valid one email unique and not primary' do
       # only one email and one account
       email = Email.find_email_forgot @user.emails.first.email
       expect(email).to_not be_nil
     end
 
-    it 'is valid find into two account with the same email no principal' do
+    it 'is valid find into two account with the same email no primary' do
       user = User.create!(username: 'my_user_name_new',
                           passwd: '12345678',
                           passwd_confirmation: '12345678')
       Email.create!(email: 'user@watchiot.com', user_id: user.id)
 
-      # two account with the same email no principal
+      # two account with the same email no primary
       email = Email.find_email_forgot 'user@watchiot.com'
       expect(email).to_not be_nil
       expect(email.email).to eq(@user.emails.first.email)
     end
 
-    it 'is valid find into two account with the same email but @user have an email like principal' do
-      # add new email to @user like principal
+    it 'is valid find into two account with the same email but @user have an email like primary' do
+      # add new email to @user like primary
       Email.create!(email: 'user_new@watchiot.com',
                     user_id: @user.id,
-                    principal: true,
+                    primary: true,
                     checked: true)
 
       user = User.create!(username: 'my_user_name_new',

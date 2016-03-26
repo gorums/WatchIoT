@@ -50,10 +50,10 @@ RSpec.describe 'routes for setting', type: :routing do
                     :username => 'gorums', :id => '1')
   end
 
-  it 'routes user setting set email principal' do
-    expect(:get => '/gorums/setting/account/principal/email/1').
+  it 'routes user setting set email primary' do
+    expect(:get => '/gorums/setting/account/primary/email/1').
         to route_to(:controller => 'setting',
-                    :action => 'account_principal_email',
+                    :action => 'account_primary_email',
                     :username => 'gorums', :id => '1')
   end
 

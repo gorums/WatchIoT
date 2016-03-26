@@ -21,13 +21,13 @@
 			<% @emails.each do |email| %>
 				<tr>
 					<td><%= email.email%></td>
-					<td><%if email.principal? %><i class="fa fa-check"></i><%end%></td>
+					<td><%if email.primary? %><i class="fa fa-check"></i><%end%></td>
 					<td><%if email.checked? %><i class="fa fa-check"></i><%end%></td>
 					<td>
-						<%unless email.principal? %>
+						<%unless email.primary? %>
 
 							<%if email.checked?%>
-								<%= link_to  '/' + me.username + '/setting/account/principal/email/' + email.id.to_s,
+								<%= link_to  '/' + me.username + '/setting/account/primary/email/' + email.id.to_s,
 														class: 'clear-background' do %>
 									<i class="fa fa-check-circle-o fa-2x" title="Check like primary"></i>
 								<%end%>

@@ -67,10 +67,10 @@ RSpec.describe Team, type: :model do
       # the new account status has to be false
       expect(new_user.status).to eq(false)
 
-      # the email has to be not principal and unchecked
+      # the email has to be not primary and unchecked
       new_email = Email.find_by_email 'user_dont_exist@watchiot.com'
       expect(new_email).to be_valid
-      expect(new_email.principal).to eq(false)
+      expect(new_email.primary).to eq(false)
       expect(new_email.checked).to eq(false)
 
       member = Team.find_member(@user.id, new_user.id).take
@@ -81,11 +81,11 @@ RSpec.describe Team, type: :model do
   end
 
   describe 'valid add a new member of two accounts' do
-    it 'is valid add a new member of two accounts and one of they are principal' do
+    it 'is valid add a new member of two accounts and one of they are primary' do
       user_tree = User.create!(username: 'my_user_name2',
                                passwd: '12345678',
                                passwd_confirmation: '12345678')
-      # not principal email
+      # not primary email
       email_tree = Email.create!(email: 'user1@watchiot.com',
                                  user_id: user_tree.id)
 
@@ -93,7 +93,7 @@ RSpec.describe Team, type: :model do
           .to change { ActionMailer::Base.deliveries.count }
                   .by(1)
 
-      # the account with the principal email was add
+      # the account with the primary email was add
       member = Team.find_member(@user.id, @user_two.id).take
       expect(member).to be_valid
 
@@ -101,7 +101,7 @@ RSpec.describe Team, type: :model do
       expect(member_two).to be_nil
     end
 
-    it 'is valid add a new member in two account and nobody are principal' do
+    it 'is valid add a new member in two account and nobody are primary' do
       user_tree = User.create!(username: 'my_user_name2',
                                passwd: '12345678',
                                passwd_confirmation: '12345678')
@@ -113,7 +113,7 @@ RSpec.describe Team, type: :model do
                                passwd_confirmation: '12345678')
       email_four = Email.create!(email: 'user3@watchiot.com',
                                  user_id: user_four.id)
-      # the email has to be principal
+      # the email has to be primary
       expect { Team.add_member(@user, 'user3@watchiot.com') }
           .to raise_error('The member can not be added')
     end

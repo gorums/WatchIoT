@@ -159,7 +159,7 @@ RSpec.describe SettingController, type: :controller do
       expect(flash[:error]).to eq('The email is not valid')
     end
 
-    it 'add email like principal setting has a 302 status code' do
+    it 'add email like primary setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
            email: {email: 'my_new_email@watchiot.org'}
 
@@ -167,7 +167,7 @@ RSpec.describe SettingController, type: :controller do
       Email.email_verify email
       expect(email.checked).to be(true)
 
-      get :account_principal_email, username: 'user_name',
+      get :account_primary_email, username: 'user_name',
            id: email.id
 
       expect(response.status).to eq(302)
@@ -177,10 +177,10 @@ RSpec.describe SettingController, type: :controller do
       expect(user.emails.length).to eq(2)
 
       email = Email.find_by_email 'user@watchiot.com'
-      expect(email.principal).to be(false)
+      expect(email.primary).to be(false)
 
       email = Email.find_by_email 'my_new_email@watchiot.org'
-      expect(email.principal).to be(true)
+      expect(email.primary).to be(true)
     end
 
     it 'send email verify setting has a 302 status code' do
