@@ -37,15 +37,16 @@ class User < ActiveRecord::Base
   belongs_to :api_key
   has_one :plan
 
-  validates :username, uniqueness: true, length: { minimum: 1 }, format: { without: /\s+/,
-                                 message: 'No empty spaces admitted for the username.' }
+  validates :username, uniqueness: true,
+            length: { minimum: 1 },
+            format: { without: /\s+/, message: 'No empty spaces admitted for the username.' }
   validates_presence_of :username, on: :create
   validates_presence_of :passwd, on: :create
   validates_presence_of :passwd_confirmation, on: :create
   validates_confirmation_of :passwd
 
+  validates :phone, numericality: { only_integer: true }, allow_nil: true
   validates :passwd, length: { minimum: 8 }
-
   validates :username, exclusion: {
                          in: %w(home auth register verify login logout doc price download contact),
                          message: '%{value} is reserved.' }
@@ -315,7 +316,10 @@ class User < ActiveRecord::Base
   # Register with omniauth
   #
   def self.create_with_omniauth(auth)
-    user = User.new(username: auth['info']['nickname'], provider: auth['provider'], uid: auth['uid'])
+    user = User.new(username: auth['info']['nickname'],
+                    provider: auth['provider'],
+                    uid: auth['uid'])
+
     user.first_name = first_name(auth['info']['name'])
     user.last_name = last_name(auth['info']['name'])
     user.passwd = generate_passwd

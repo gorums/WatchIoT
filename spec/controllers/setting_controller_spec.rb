@@ -97,7 +97,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('Validation failed: Email The email is not valid')
+      expect(flash[:error]).to eq('Email The email is not valid')
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(1)
@@ -109,7 +109,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('Validation failed: Email The email is not valid, Email can\'t be blank')
+      expect(flash[:error]).to eq('Email The email is not valid, Email can\'t be blank')
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(1)
@@ -121,7 +121,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('Validation failed: Email The email is not valid, Email can\'t be blank')
+      expect(flash[:error]).to eq('Email The email is not valid, Email can\'t be blank')
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(1)
@@ -266,7 +266,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('Validation failed: Username has already been taken')
+      expect(flash[:error]).to eq('Username has already been taken')
 
       user = User.find_by_username 'user_name'
       expect(user).to_not be_nil
@@ -280,7 +280,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('Validation failed: Username has already been taken')
+      expect(flash[:error]).to eq('Username has already been taken')
 
       user = User.find_by_username 'user_name'
       expect(user).to_not be_nil
@@ -398,7 +398,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/team')
-      expect(flash[:error]).to eq('Validation failed: Email The email is not valid')
+      expect(flash[:error]).to eq('Email The email is not valid')
 
       user = User.find_by_username 'user_bad_email_watchiot.com'
       expect(user).to be_nil

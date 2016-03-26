@@ -160,7 +160,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(spaces.length).to eq(2)
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/spaces')
-      expect(flash[:error]).to eq('Validation failed: Name You have a space with this name')
+      expect(flash[:error]).to eq('Name You have a space with this name')
     end
 
     it 'using post create an empty name has a 302 status code' do
@@ -170,7 +170,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(spaces.length).to eq(1)
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/spaces')
-      expect(flash[:error]).to eq('Validation failed: Name can\'t be blank')
+      expect(flash[:error]).to eq('Name can\'t be blank')
     end
 
     it 'using post create a nil name has a 302 status code' do
@@ -180,7 +180,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(spaces.length).to eq(1)
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/spaces')
-      expect(flash[:error]).to eq('Validation failed: Name can\'t be blank')
+      expect(flash[:error]).to eq('Name can\'t be blank')
     end
   end
 
@@ -245,7 +245,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(space.description).to eq('space description')
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/my_space/setting')
-      expect(flash[:error]).to eq('Validation failed: Name can\'t be blank')
+      expect(flash[:error]).to eq('Name can\'t be blank')
     end
 
     it 'using patch nil new namespace has a 302 status code' do
@@ -257,7 +257,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(space.description).to eq('space description')
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/my_space/setting')
-      expect(flash[:error]).to eq('Validation failed: Name can\'t be blank')
+      expect(flash[:error]).to eq('Name can\'t be blank')
     end
   end
 

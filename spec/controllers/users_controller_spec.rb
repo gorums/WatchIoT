@@ -107,7 +107,7 @@ RSpec.describe UsersController, type: :controller do
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
-          .to eq('Validation failed: Username is too short (minimum is 1 character), Username can\'t be blank')
+          .to eq('Username is too short (minimum is 1 character), Username can\'t be blank')
     end
 
     it 'using post register username nil has a 200 status code' do
@@ -119,7 +119,7 @@ RSpec.describe UsersController, type: :controller do
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
-          .to eq('Validation failed: Username is too short (minimum is 1 character), Username can\'t be blank')
+          .to eq('Username is too short (minimum is 1 character), Username can\'t be blank')
     end
 
     it 'using post register username exist has a 200 status code' do
@@ -131,7 +131,7 @@ RSpec.describe UsersController, type: :controller do
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
-          .to eq('Validation failed: Username has already been taken')
+          .to eq('Username has already been taken')
     end
   end
 

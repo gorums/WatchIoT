@@ -45,7 +45,7 @@ class UsersController < ApplicationController
 
     render 'need_verify_notification'
   rescue => ex
-    flash[:error] = ex.message
+    flash[:error] = clear_exception ex.message
     render 'register'
   end
 
@@ -67,7 +67,7 @@ class UsersController < ApplicationController
 
     redirect_to '/' + user.username
   rescue => ex
-    flash[:error] = ex.message
+    flash[:error] = clear_exception ex.message
     render 'login'
   end
 
@@ -82,7 +82,7 @@ class UsersController < ApplicationController
 
     redirect_to '/' + user.username
   rescue => ex
-    flash[:error] = ex.message
+    flash[:error] = clear_exception ex.message
     redirect_to 'login'
   end
 

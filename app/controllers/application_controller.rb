@@ -111,6 +111,14 @@ class ApplicationController < ActionController::Base
   end
 
   ##
+  # This method delete the chain Validation failed:
+  # render by validation exceptions
+  #
+  def clear_exception(msg)
+    msg.gsub(/Validation failed: /i, '')
+  end
+
+  ##
   # if the request was doing for the user login or an user team
   #
   def allow

@@ -48,7 +48,7 @@ class SpacesController < ApplicationController
 
     redirect_to '/' + @user.username + '/' + space.name
   rescue => ex
-    flash[:error] = ex.message
+    flash[:error] = clear_exception ex.message
     redirect_to '/' + @user.username + '/spaces'
   end
 
@@ -63,7 +63,7 @@ class SpacesController < ApplicationController
 
     flash_log('Edit the space <b>' + @space.name + '</b>', 'Space edited correctly')    
   rescue => ex
-    flash[:error] = ex.message
+    flash[:error] = clear_exception ex.message
   end
 
   ##
@@ -86,7 +86,7 @@ class SpacesController < ApplicationController
 
     redirect_to '/' + @user.username + '/' + new_name + '/setting'
   rescue => ex
-    flash[:error] = ex.message
+    flash[:error] = clear_exception ex.message
     redirect_to '/' + @user.username + '/' + old_name + '/setting'
   end
 
@@ -104,7 +104,7 @@ class SpacesController < ApplicationController
      if ex.message == 'Validation failed: Name You have a space with this name'
        flash[:error] = 'The team member has a space with this name'
      else
-       flash[:error] = ex.message
+       flash[:error] = clear_exception ex.message
      end
   end
 
@@ -119,7 +119,7 @@ class SpacesController < ApplicationController
     flash_log('Delete name space <b>' + space_name_params[:name] + '</b>',
               'The space was delete correctly')
   rescue => ex
-    flash[:error] = ex.message
+    flash[:error] = clear_exception ex.message
   end
 
   private
