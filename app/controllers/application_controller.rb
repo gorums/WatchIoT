@@ -38,10 +38,10 @@ class ApplicationController < ActionController::Base
   end
 
   ##
-  # This method return the client principal email
+  # This method return the client primary email
   #
   def login_user_email
-    email = Email.find_principal_by_user(me.id).take
+    email = Email.find_primary_by_user(me.id).take
     return '' if email.nil?
     email.email
   end
@@ -54,13 +54,13 @@ class ApplicationController < ActionController::Base
   end
 
   ##
-  # This method return the principal email
+  # This method return the primary email
   #
   def user_email(user_id)
-    email = Email.find_principal_by_user(user_id).take
+    email = Email.find_primary_by_user(user_id).take
     email.email unless email.nil?
   end
-  
+
   ##
   # Throw RoutingError exception
   #

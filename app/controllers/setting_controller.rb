@@ -60,14 +60,14 @@ class SettingController < ApplicationController
   end
 
   ##
-  # Get /:username/setting/account/principal/email/:id
+  # Get /:username/setting/account/primary/email/:id
   #
-  def account_principal_email
+  def account_primary_email
     redirect_to '/' + @user.username + '/setting/account'
 
-    email = Email.principal(@user.id, params[:id])
+    email = Email.primary(@user.id, params[:id])
 
-    flash_log('Set email <b>' + email.email + '</b> like principal',
+    flash_log('Set email <b>' + email.email + '</b> like primary',
               'The email was setted like primary correctly')
   rescue => ex
     flash[:error] = clear_exception ex.message
@@ -149,7 +149,7 @@ class SettingController < ApplicationController
     redirect_to '/' + @user.username + '/setting/team'
 
     Team.remove_member @user, params[:id]
-    email = Email.find_principal_by_user(params[:id]).take || Email.find_by_user(params[:id]).take
+    email = Email.find_primary_by_user(params[:id]).take || Email.find_by_user(params[:id]).take
 
     flash_log('Delete a member <b>' + email.email + '</b>',
               'The member was deleted correctly')

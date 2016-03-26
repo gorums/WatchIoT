@@ -94,7 +94,7 @@ class Space < ActiveRecord::Base
 
     transfer_projects space, user_member_id
 
-    member_email = Email.find_principal_by_user(user_member_id).take
+    member_email = Email.find_primary_by_user(user_member_id).take
     Notifier.send_transfer_space_email(member_email, user, space)
         .deliver_later unless member_email.nil?
   end

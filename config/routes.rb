@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   post '/:username/setting/account/add/email', controller: 'setting', action: 'account_add_email'
   delete '/:username/setting/account/remove/email/:id', controller: 'setting', action: 'account_remove_email'
   get '/:username/setting/account/verify/email/:id', controller: 'setting', action: 'account_verify_email'
-  get '/:username/setting/account/principal/email/:id', controller: 'setting', action: 'account_principal_email'
+  get '/:username/setting/account/primary/email/:id', controller: 'setting', action: 'account_primary_email'
 
   # setting account route
   patch '/:username/setting/account/password', controller: 'setting', action: 'account_ch_password'
@@ -49,7 +49,7 @@ Rails.application.routes.draw do
   # setting team route
   post '/:username/setting/team/add', controller: 'setting', action: 'team_add'
   delete '/:username/setting/team/delete/:id', controller: 'setting', action: 'team_delete'
-  
+
   # setting api route
   patch '/:username/setting/key/generate', controller: 'setting', action: 'key_generate'
 

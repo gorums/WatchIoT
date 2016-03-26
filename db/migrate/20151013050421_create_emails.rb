@@ -5,7 +5,7 @@ class CreateEmails < ActiveRecord::Migration
   def change
     create_table :emails do |t|
       t.string :email, limit: 35
-      t.boolean :principal, default: false
+      t.boolean :primary, default: false
       t.references :user
 
       t.timestamps null: false

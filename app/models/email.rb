@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  email      :string(35)
-#  principal  :boolean          default(FALSE)
+#  primary  :boolean          default(FALSE)
 #  user_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -24,21 +24,21 @@ class Email < ActiveRecord::Base
   before_validation :downcase_email
 
   scope :find_by_user, -> user_id {
-        where('user_id = ?', user_id).order(principal: :desc) }
+        where('user_id = ?', user_id).order(primary: :desc) }
   scope :count_by_user, -> user_id {
         where('user_id = ?', user_id).count }
-  scope :find_principal_by_user, -> user_id {
-        where('user_id = ?', user_id).where(principal: true) }
+  scope :find_primary_by_user, -> user_id {
+        where('user_id = ?', user_id).where(primary: true) }
   scope :find_by_user_and_by_id, -> user_id, id {
         where('user_id = ?', user_id).where('id = ?', id) if id.present? }
-  scope :find_principal_by_email, -> email {
-        where('email = ?', email.downcase).where(principal: true) if email.present? }
+  scope :find_primary_by_email, -> email {
+        where('email = ?', email.downcase).where(primary: true) if email.present? }
   scope :find_by_user_and_by_email, -> user_id, email {
         where('user_id = ?', user_id).where('email = ?', email.downcase) if email.present? }
 
 
   ##
-  # Add an email to the account unprincipal waiting for verification
+  # Add an email to the account unprimary waiting for verification
   #
   def self.add_email(user_id, email)
     raise StandardError, 'is not a valid user' unless
@@ -47,31 +47,31 @@ class Email < ActiveRecord::Base
   end
 
   ##
-  # Set this email id like principal
+  # Set this email id like primary
   #
-  def self.principal(user_id, email_id)
+  def self.primary(user_id, email_id)
     email = find_by_user_and_by_id(user_id, email_id).take
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'The email has to be check' unless email.checked?
-    raise StandardError, 'The email already is primary in your account' if email.principal
+    raise StandardError, 'The email already is primary in your account' if email.primary
     raise StandardError, 'The email is primary in other account' if
-          Email.find_principal_by_email(email.email).exists?
+          Email.find_primary_by_email(email.email).exists?
 
-    # set like not principal if exist the current principal email
-    Email.unprincipal(user_id)
-    email.update!(principal: true)
+    # set like not primary if exist the current primary email
+    Email.unprimary(user_id)
+    email.update!(primary: true)
     email
   end
 
   ##
-  # Remove an email unprincipal
+  # Remove an email unprimary
   #
   def self.remove_email(user_id, email_id)
     email = find_by_user_and_by_id(user_id, email_id).take
     raise StandardError, 'The email is not valid' if email.nil?
     raise StandardError, 'You can not delete the only email with you have '\
                          'in your account' if Email.count_by_user(user_id) == 1
-    raise StandardError, 'The email can not be primary' if email.principal?
+    raise StandardError, 'The email can not be primary' if email.primary?
 
     email.destroy!
   end
@@ -97,10 +97,10 @@ class Email < ActiveRecord::Base
   end
 
   ##
-  # Define if the email can checked like principal
+  # Define if the email can checked like primary
   #
   def self.to_activate_by_invitation(user_id, email_s)
-    email = Email.find_principal_by_email(email_s).take
+    email = Email.find_primary_by_email(email_s).take
     raise StandardError, 'The email is not valid' unless email.nil?
 
     email = Email.find_by_user_and_by_email(user_id, email_s).take
@@ -121,11 +121,11 @@ class Email < ActiveRecord::Base
   # Update the email record
   #
   def self.save_email(email, user_id, checked)
-    email.update!(user_id: user_id, checked: checked, principal: checked)
+    email.update!(user_id: user_id, checked: checked, primary: checked)
   end
 
   ##
-  # find an email not principal valid
+  # find an email not primary valid
   #
   def self.find_email_forgot (email_s)
     emails = Email.where(email: email_s.downcase).all
@@ -135,7 +135,7 @@ class Email < ActiveRecord::Base
     # find a registered account by never activate him account
     emails.each do |email|
       user = email.user
-      return email if user.emails.length == 1 && !email.principal?
+      return email if user.emails.length == 1 && !email.primary?
     end
   end
 
@@ -151,10 +151,10 @@ class Email < ActiveRecord::Base
   private
 
   ##
-  # Find the principal email for this user and set it like not principal
+  # Find the primary email for this user and set it like not primary
   #
-  def self.unprincipal(user_id)
-    email_principal = Email.find_principal_by_user(user_id).take
-    email_principal.update!(principal: false) unless email_principal.nil?
+  def self.unprimary(user_id)
+    email_primary = Email.find_primary_by_user(user_id).take
+    email_primary.update!(primary: false) unless email_primary.nil?
   end
 end
