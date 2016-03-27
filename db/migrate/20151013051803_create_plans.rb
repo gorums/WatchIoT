@@ -7,5 +7,7 @@ class CreatePlans < ActiveRecord::Migration
       t.string :name
       t.decimal :amount_per_month
     end
+
+    add_index :plans, :name
   end
 end

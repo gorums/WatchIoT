@@ -24,6 +24,7 @@ class Project < ActiveRecord::Base
   validates_presence_of :name, on: :create
   validates_uniqueness_of :name, scope: [:space_id, :user_id]
 
+  validates :name, presence: true, length: { maximum: 25 }
   validates :name, exclusion: { in: %w(create setting projects),
                                 message: '%{value} is reserved.' }
 

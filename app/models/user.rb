@@ -44,9 +44,10 @@ class User < ActiveRecord::Base
   validates_presence_of :passwd, on: :create
   validates_presence_of :passwd_confirmation, on: :create
   validates_confirmation_of :passwd
+  validates :passwd, length: { minimum: 8 }
 
   validates :phone, numericality: { only_integer: true }, allow_nil: true
-  validates :passwd, length: { minimum: 8 }
+
   validates :username, exclusion: {
                          in: %w(home auth register verify login logout doc price download contact),
                          message: '"%{value}" is reserved.' }

@@ -7,7 +7,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :username, limit: 25, unique: true
       t.string :first_name, limit: 25
       t.string :last_name, limit: 35
-      t.string :address
+      t.text :address
       t.string :country_code, limit: 3
       t.string :phone, limit: 15
       t.boolean :status, default: true
@@ -15,6 +15,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :passwd
       t.string :passwd_salt
       t.string :auth_token
+      t.string :provider
+      t.string :uid
       t.references :plan # foreign key for table plans
       t.references :api_key # foreign key for table api_keys
 
