@@ -56,14 +56,14 @@ class SpacesController < ApplicationController
   # Patch /:username/:namespace
   #
   def edit
-    render 'show'
-
     Space.edit_space(@space, space_edit_params[:description])
     @project = Project.new
 
     flash_log('Edit the space <b>' + @space.name + '</b>', 'Space was edited correctly')
+    redirect_to '/' + @user.username + '/' + @space.name
   rescue => ex
     flash[:error] = clear_exception ex.message
+    redirect_to '/' + @user.username + '/' + @space.name
   end
 
   ##

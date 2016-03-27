@@ -185,17 +185,17 @@ RSpec.describe SpacesController, type: :controller do
   end
 
   describe 'edit space' do
-    it 'using patch has a 200 status code' do
+    it 'using patch has a 302 status code' do
       patch :edit, username: 'user_name', namespace: 'my_space',
             space: {description: 'my new description'}
       space = Space.find_by_user_id @user.id
       expect(space.description).to eq('my new description')
       expect(assigns[:project]).to_not be_nil
-      expect(response.status).to eq(200)
-      expect(response).to render_template('show')
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/my_space')
     end
 
-    it 'using patch it can not change the namespace has a 200 status code' do
+    it 'using patch it can not change the namespace has a 302 status code' do
       patch :edit, username: 'user_name', namespace: 'my_space',
             space: {name: 'new_my space', description: 'my new description'}
 
@@ -204,8 +204,8 @@ RSpec.describe SpacesController, type: :controller do
       expect(space.name).to_not eq('new_my-space')
       expect(space.name).to eq('my_space')
       expect(assigns[:project]).to_not be_nil
-      expect(response.status).to eq(200)
-      expect(response).to render_template('show')
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to('/user_name/my_space')
     end
   end
 
