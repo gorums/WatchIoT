@@ -2,7 +2,7 @@
 
 <div class="container register-height">
 	<div class="jumbotron">
-		<h2>Resent the password!</h2>
+		<h2>Forget the password!</h2>
 
 		<p>We send the email to the primary email. For security purposes,
 			we can only resend to the primary email account for this account.
@@ -11,11 +11,11 @@
 		<%= form_for @user, url: '/forgot', method: 'post' do |f| %>
 			<div class="auth-form">
 				<div class="input">
-					<%= f.label :username %><br />
+					<%= f.label :username, 'Enter email or username' %><br />
 					<%= f.text_field :username, class: "form-control" %>
-					<span><i class="fa fa-user fa-fw"></i></span>
+
 				</div>
-				<p><%= submit_tag "Send", class: "btn btn-default btn-lg active" %></p>
+				<p><%= submit_tag "Send", class: "btn btn-primary btn-lg active" %></p>
 
 			</div>
 		<% end %>
