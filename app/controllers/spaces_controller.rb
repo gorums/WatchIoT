@@ -81,7 +81,7 @@ class SpacesController < ApplicationController
     old_name = @space.name
     Space.change_space(@space, space_edit_params[:name])
     new_name = @space.name
-    flash_log('Change name space ' + old_name + ' by ' + new_name,
+    flash_log('Change name space <b>' + old_name + '</b> by <b>' + new_name + '</b>',
               'The namespace was changed correctly')
 
     redirect_to '/' + @user.username + '/' + new_name + '/setting'
@@ -96,8 +96,10 @@ class SpacesController < ApplicationController
   def transfer
     Space.transfer @space, @user, params[:user_member_id]
 
-    flash_log('Change the owner of space ' + @space.name + ' to ' + user_email(params[:user_member_id]),
-              'The space was transferred correctly')
+    flash_log('Change the owner of space <b>' + @space.name +
+                '</b> to <b>' + user_email(params[:user_member_id]) + '</b>',
+                'The space was transferred correctly')
+
     redirect_to '/' + @user.username + '/spaces'
   rescue => ex
     redirect_to '/' + @user.username + '/' + @space.name + '/setting'
