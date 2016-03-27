@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20160130230750) do
 
   create_table "emails", force: :cascade do |t|
     t.string   "email",      limit: 35
-    t.boolean  "principal",             default: false
+    t.boolean  "primary",               default: false
     t.integer  "user_id"
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20160130230750) do
 
   create_table "faqs", force: :cascade do |t|
     t.string "question"
-    t.string "answer"
+    t.text   "answer"
     t.string "lang",     default: "en"
   end
 

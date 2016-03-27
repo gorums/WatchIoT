@@ -127,7 +127,7 @@ RSpec.describe Notifier, type: :mailer do
     it 'renders the body' do
       expect(mail.body.encoded).to match('Hi my_user_name!')
       expect(mail.body.encoded)
-          .to match('<p>The password was reset correctly.</p></br>')
+          .to match('<p>The password was restarted correctly.</p></br>')
     end
   end
 end

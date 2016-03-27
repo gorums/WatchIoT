@@ -49,7 +49,7 @@ RSpec.describe Team, type: :model do
                   .by(1)
 
       expect { Team.add_member(@user, 'user1@watchiot.com') }
-          .to raise_error('The member was adding before')
+          .to raise_error('The member was added before')
     end
   end
 
@@ -145,7 +145,7 @@ RSpec.describe Team, type: :model do
 
       # only 3 member of the team in the free plan
       expect {  Team.add_member(@user, email_five.email) }
-          .to raise_error('You can not added more members '\
+          .to raise_error('You can not add more members '\
         'to the team, please contact with us!')
 
     end

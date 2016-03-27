@@ -123,7 +123,7 @@ RSpec.describe User, type: :model do
       Space.create_new_space(params, @user_two, @user_two)
 
       expect { User.delete_account(@user_two, @user_two.username) }
-          .to raise_error('You have to transfer your spaces or delete their')
+          .to raise_error('You have to transfer your spaces or delete them')
     end
 
     it 'is valid delete account' do
@@ -275,7 +275,7 @@ RSpec.describe User, type: :model do
                       passwd_confirmation: '123456')
       email = Email.new(email: 'newemail@watchiot.org')
       expect {User.register user, email}
-          .to raise_error('Password does not match the confirm password')
+          .to raise_error('Password does not match the confirm')
     end
   end
 
@@ -305,7 +305,7 @@ RSpec.describe User, type: :model do
       params = { passwd: '123456789999', passwd_new: '12345678',
                  passwd_confirmation: '123456789'}
       expect { User.change_passwd new_user, params }
-          .to raise_error('Password does not match the confirm password')
+          .to raise_error('Password does not match the confirm')
     end
 
     it 'is valid change pasword to short' do
@@ -354,7 +354,7 @@ RSpec.describe User, type: :model do
       params = { passwd: '12345678', passwd_new: '1234567890',
                  passwd_confirmation: '0987654321'}
       expect { User.change_passwd new_user, params }
-          .to raise_error(/Password does not match the confirm password/)
+          .to raise_error(/Password does not match the confirm/)
     end
   end
 
@@ -521,7 +521,7 @@ RSpec.describe User, type: :model do
       params = { passwd_new: 'new12345678',
                  passwd_confirmation: 'new12345678bad'}
       expect { User.reset_passwd user_new, params }
-          .to raise_error('Password does not match the confirm password')
+          .to raise_error('Password does not match the confirm')
     end
 
     it 'is valid reset the password with short password' do
@@ -641,7 +641,7 @@ RSpec.describe User, type: :model do
       params = { username: 'new_register_user', passwd: '12345678bad',
                  passwd_confirmation: '12345678'}
       expect { User.invite user, params, email }
-          .to raise_error('Password does not match the confirm password')
+          .to raise_error('Password does not match the confirm')
     end
 
     it 'is valid invited with short password' do

@@ -83,7 +83,7 @@ RSpec.describe UsersController, type: :controller do
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
-          .to eq('Password does not match the confirm password')
+          .to eq('Password does not match the confirm')
     end
 
     it 'using post register password too short has a 200 status code' do

@@ -334,7 +334,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(space).to_not be_nil
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/spaces')
-      expect(flash[:error]).to eq('The space name is not valid')
+      expect(flash[:error]).to eq('The namespace is not valid')
     end
   end
 end

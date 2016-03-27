@@ -107,7 +107,7 @@ RSpec.describe Space, type: :model do
       space2 = Space.create_new_space(params2, @user, @user)
       expect(space2).to be_valid
       expect { Space.create_new_space(params3, @user, @user) }
-          .to raise_error('You can not added more spaces, '\
+          .to raise_error('You can not add more spaces, '\
           'please contact with us!')
     end
   end

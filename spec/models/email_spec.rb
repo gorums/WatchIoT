@@ -58,7 +58,7 @@ RSpec.describe Email, type: :model do
 
     it 'is valid add email with bad user' do
       expect { Email.add_email(-1, 'other_user@watchiot.com') }
-          .to raise_error(/is not a valid user id/)
+          .to raise_error(/is not a valid user/)
     end
   end
 
@@ -113,7 +113,7 @@ RSpec.describe Email, type: :model do
     it 'is valid remove the unique email' do
       # you can not delete your unique email in your account
       expect { Email.remove_email @user.id, @email.id }
-          .to raise_error('You can not delete the only email in your account')
+          .to raise_error('You can not delete the only email with you have in your account')
     end
 
     it 'is valid remove an primary email' do
@@ -142,7 +142,7 @@ RSpec.describe Email, type: :model do
           .to_not raise_error
 
       expect { Email.remove_email @user.id, email.id }
-          .to raise_error('You can not delete the only email in your account')
+          .to raise_error('You can not delete the only email with you have in your account')
     end
   end
 

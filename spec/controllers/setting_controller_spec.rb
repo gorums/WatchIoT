@@ -236,7 +236,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('Password does not match the confirm password')
+      expect(flash[:error]).to eq('Password does not match the confirm')
 
       expect { User.login 'user@watchiot.com', '123456123123' }
           .to raise_error('Account is not valid')
@@ -344,7 +344,7 @@ RSpec.describe SettingController, type: :controller do
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
-      expect(flash[:error]).to eq('You have to transfer your spaces or delete their')
+      expect(flash[:error]).to eq('You have to transfer your spaces or delete them')
 
       user = User.find_by_username 'user_name'
       expect(user.status).to be(true)

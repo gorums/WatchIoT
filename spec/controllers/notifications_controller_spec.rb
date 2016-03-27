@@ -76,7 +76,7 @@ RSpec.describe NotificationsController, type: :controller do
                    passwd_confirmation: 'my_user_name_bad'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/reset')
-      expect(flash[:error]).to eq('Password does not match the confirm password')
+      expect(flash[:error]).to eq('Password does not match the confirm')
     end
 
     it 'using patch with password to short has a 200 status code' do
@@ -142,7 +142,7 @@ RSpec.describe NotificationsController, type: :controller do
                    passwd_confirmation: 'my_user_name_bad'}
       expect(response.status).to eq(200)
       expect(response).to render_template('users/invited')
-      expect(flash[:error]).to eq('Password does not match the confirm password')
+      expect(flash[:error]).to eq('Password does not match the confirm')
     end
 
     it 'using patch to active the account with password to short has a 200 status code' do
