@@ -125,6 +125,7 @@ class ApplicationController < ActionController::Base
     @user = User.find_by_username(params[:username]) || not_found
     @user if auth? && @user.username == me.username ||
           Team.find_member(@user.id, me.id).exists? || unauthorized
+    @spaces = Space.find_by_user_order(@user.id).all
   rescue Errors::UnauthorizedError
     render_401
   end

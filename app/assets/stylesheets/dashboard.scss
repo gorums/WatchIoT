@@ -8,7 +8,12 @@ th > a:hover, th > a:focus {
   background: none !important;
 }
 
-﻿#wrapper {
+.spaces{
+  margin-left: 30px;
+  padding-top: 250px;
+
+}
+#wrapper {
   padding-left: 0;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
@@ -69,7 +74,7 @@ th > a:hover, th > a:focus {
 
 .sidebar-nav li {
   text-indent: 30px;
-  line-height: 40px;
+  line-height: 30px;
 }
 
 .sidebar-nav li a {

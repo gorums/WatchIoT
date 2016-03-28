@@ -4,6 +4,8 @@
 		<title><%= @title %></title>
 		<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
 		<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+		<%= stylesheet_link_tag    'application', media: 'all', 'bootstrap-treeview' => true %>
+		<%= javascript_include_tag 'application', 'bootstrap-treeview' => true %>
 		<%= csrf_meta_tags %>
 	</head>
 	<body>
@@ -40,6 +42,16 @@
 				$(element).attr("src", Gravtastic(email, {default: 'identicon'}));
 			})
 
+			$('#tree').treeview({
+				data: getTree(),
+				backColor: "#225079",
+				color: "#fff",
+				enableLinks: true,
+				onhoverColor: "#225079",
+				selectedBackColor: "#225079",
+				emptyIcon: "fa fa-laptop",
+				showBorder: false,
+			});
 	</script>
 
 	</body>

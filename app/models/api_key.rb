@@ -2,9 +2,10 @@
 #
 # Table name: api_keys
 #
-#  id      :integer          not null, primary key
-#  api_key :string
-#  user_id :integer
+#  id         :integer          not null, primary key
+#  api_key    :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 ##

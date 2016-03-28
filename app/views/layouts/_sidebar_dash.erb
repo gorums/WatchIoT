@@ -13,25 +13,62 @@
 				Dashboard
 			<%end%>
 		</li>
-		<li class="dashboard-menu">
-			<%= link_to "/" + param_user + "/spaces" do%>
-				<i class="fa fa-laptop"></i>
-				Spaces
-			<%end%>
-		</li>
+		<%if me.username == param_user%>
+			<li class="dashboard-menu">
+				<%= link_to "/" + me.username + "/setting" do%>
+					<i class="fa fa-cogs"></i>
+					Setting
+				<%end%>
+			</li>
+		<%end%>
 		<li class="dashboard-menu">
 			<%= link_to "/" + param_user + "/chart" do%>
 				<i class="fa fa-bar-chart"></i>
 				Chart
 			<%end%>
 		</li>
-		<%if me.username == param_user%>
-		<li class="dashboard-menu">
-			<%= link_to "/" + me.username + "/setting" do%>
-				<i class="fa fa-cogs"></i>
-				Setting
-			<%end%>
-		</li>
-		<%end%>
 	</ul>
+
+	<div class="spaces">
+		<div id="tree"></div>
+	</div>
 </div>
+
+
+<script>
+	function getTree() {
+		var tree = [
+			{
+				text: "My Spaces",
+				href: "/<%= me.username %>/spaces",
+				<%if !@spaces.nil? && @spaces.size > 0 %>
+				nodes: [
+				<% @spaces.each do |space| %>
+					{
+						text: "<%= space.name %>",
+						href: "/<%= me.username %>/<%= space.name %>",
+						<%if !@space.nil? && @space.name == space.name %>
+						state: { selected: true, expanded: true },
+						<% end %>
+						<%if !space.projects.nil? && space.projects.size > 0 %>
+						nodes: [
+							<% space.projects.each do |project| %>
+							{
+								text: "<%= project.name %>",
+								href: "/<%= me.username %>/<%= space.name %>/<%= project.name %>",
+								<%if !@space.nil? && @space.name == space.name && !@project.nil? && @project.name == project.name%>
+								state: { selected: true },
+								<% end %>
+							},
+							<% end %>
+						]
+						<% end %>
+					},
+				<% end %>
+				]
+				<%end%>
+			}
+		];
+		return tree;
+	}
+</script>

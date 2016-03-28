@@ -4,11 +4,11 @@
 #
 #  id         :integer          not null, primary key
 #  email      :string(35)
-#  primary  :boolean          default(FALSE)
+#  checked    :boolean          default(FALSE)
+#  primary    :boolean          default(FALSE)
 #  user_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  checked    :boolean          default(FALSE)
 #
 
 require 'rails_helper'

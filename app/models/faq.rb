@@ -3,9 +3,9 @@
 # Table name: faqs
 #
 #  id       :integer          not null, primary key
-#  question :string
-#  answer   :string
 #  lang     :string           default("en")
+#  question :string
+#  answer   :text
 #
 
 ##

@@ -107,7 +107,7 @@ class SettingController < ApplicationController
     old_username = @user.username
     User.change_username @user, username_params[:username]
 
-    flash_log('Change username <b>' + old_username + '</b> by ' + username_params[:username],
+    flash_log('Change username <b>' + old_username + '</b> by <b>' + username_params[:username] + '</b>',
               'The new username was saved correctly')
     redirect_to '/' + @user.username + '/setting/account'
   rescue => ex
@@ -179,6 +179,7 @@ class SettingController < ApplicationController
   def allow_me
     @user = User.find_by_username(params[:username]) || not_found
     @user if auth? && me.username == @user.username || unauthorized
+    @spaces = Space.find_by_user_order(@user.id).all
   rescue Errors::UnauthorizedError
     render_401
   end

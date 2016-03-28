@@ -18,7 +18,7 @@
 //= require_tree .
 //= require bootstrap-tagsinput
 //= require gravtastic
-
+//= require bootstrap-treeview
 
 (function ($, window){
     function CoreCode() {
