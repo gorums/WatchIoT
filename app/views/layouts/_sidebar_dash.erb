@@ -45,7 +45,7 @@
 				nodes: [
 				<% @spaces.each do |space| %>
 					{
-						text: "<%= space.name %>",
+						text: "<%= truncate(space.name, length: 15) %>",
 						href: "/<%= me.username %>/<%= space.name %>",
 						<%if !@space.nil? && @space.name == space.name %>
 						state: { selected: true, expanded: true },
@@ -54,7 +54,7 @@
 						nodes: [
 							<% space.projects.each do |project| %>
 							{
-								text: "<%= project.name %>",
+								text: "<%= truncate(project.name, length: 12) %>",
 								href: "/<%= me.username %>/<%= space.name %>/<%= project.name %>",
 								<%if !@space.nil? && @space.name == space.name && !@project.nil? && @project.name == project.name%>
 								state: { selected: true },
