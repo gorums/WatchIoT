@@ -104,15 +104,15 @@ class SettingController < ApplicationController
   # Patch /:username/setting/account/username
   #
   def account_ch_username
-    redirect_to '/' + @user.username + '/setting/account'
-
     old_username = @user.username
     User.change_username @user, username_params[:username]
 
     flash_log('Change username <b>' + old_username + '</b> by ' + username_params[:username],
               'The new username was saved correctly')
+    redirect_to '/' + @user.username + '/setting/account'
   rescue => ex
     flash[:error] = clear_exception ex.message
+    redirect_to '/' + old_username + '/setting/account'
   end
 
   ##

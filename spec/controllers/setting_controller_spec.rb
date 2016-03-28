@@ -252,7 +252,7 @@ RSpec.describe SettingController, type: :controller do
             user: {username: 'new_user_name'}
 
       expect(response.status).to eq(302)
-      expect(response).to redirect_to('/user_name/setting/account')
+      expect(response).to redirect_to('/new_user_name/setting/account')
 
       user = User.find_by_username 'user_name'
       expect(user).to be_nil
@@ -293,7 +293,7 @@ RSpec.describe SettingController, type: :controller do
             user: {username: 'new user@$name'}
 
       expect(response.status).to eq(302)
-      expect(response).to redirect_to('/user_name/setting/account')
+      expect(response).to redirect_to('/new-user__name/setting/account')
 
       user = User.find_by_username 'user_name'
       expect(user).to be_nil
