@@ -27,7 +27,7 @@ class SettingController < ApplicationController
 
     flash_log('Edit the profile setting', 'Profile was updated correctly')
   rescue => ex
-    flash[:error] = 'Profile update failed'
+    flash.now[:error] = 'Profile update failed'
   end
 
   ##
@@ -41,7 +41,7 @@ class SettingController < ApplicationController
     flash_log('Add new email <b>' + email .email + '</b>',
                         'Added a new email correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -56,7 +56,7 @@ class SettingController < ApplicationController
     flash_log('Delete email <b>' + email.email + '</b>',
               'The email was deleted correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -70,7 +70,7 @@ class SettingController < ApplicationController
     flash_log('Set email <b>' + email.email + '</b> like primary',
               'The email was setted like primary correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -84,7 +84,7 @@ class SettingController < ApplicationController
     flash_log('Send to verify the email <b>' + email.email + '</b>',
               'The email to verify was sended correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -97,7 +97,7 @@ class SettingController < ApplicationController
 
     flash_log('Change password', 'The password was changed correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -111,7 +111,7 @@ class SettingController < ApplicationController
               'The new username was saved correctly')
     redirect_to '/' + @user.username + '/setting/account'
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
     redirect_to '/' + old_username + '/setting/account'
   end
 
@@ -124,7 +124,7 @@ class SettingController < ApplicationController
     cookies.clear
     redirect_to root_url
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
     redirect_to '/' + @user.username + '/setting/account'
   end
 
@@ -139,7 +139,7 @@ class SettingController < ApplicationController
     flash_log('Adding a new member <b>' + email + '</b>',
               'The member was added correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -154,7 +154,7 @@ class SettingController < ApplicationController
     flash_log('Delete a member <b>' + email.email + '</b>',
               'The member was deleted correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -167,7 +167,7 @@ class SettingController < ApplicationController
 
     flash_log('Change api key', 'The api key was changed correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   private
@@ -196,7 +196,7 @@ class SettingController < ApplicationController
   #
   def flash_log(log_description, msg)
     save_log log_description, 'Setting', @user.id
-    flash[:notice] = msg
+    flash.now[:notice] = msg
   end
 
   ##

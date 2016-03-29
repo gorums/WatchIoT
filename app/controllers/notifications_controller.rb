@@ -56,7 +56,7 @@ class NotificationsController < ApplicationController
     cookies[:auth_token] = @user.auth_token
     redirect_to '/' + @user.username
   rescue StandardError => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
     redirect_to '/'
   end
 
@@ -69,7 +69,7 @@ class NotificationsController < ApplicationController
     Email.email_verify @email
     @verifyClient.destroy!
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   ##
@@ -91,7 +91,7 @@ class NotificationsController < ApplicationController
     cookies[:auth_token] = @user.auth_token
     redirect_to '/' + @user.username
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
     render 'users/invited'
   end
 

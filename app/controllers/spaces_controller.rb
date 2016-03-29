@@ -45,7 +45,7 @@ class SpacesController < ApplicationController
 
     redirect_to '/' + @user.username + '/' + space.name
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
     redirect_to '/' + @user.username + '/spaces'
   end
 
@@ -59,7 +59,7 @@ class SpacesController < ApplicationController
     flash_log('Edit the space <b>' + @space.name + '</b>', 'Space was edited correctly')
     redirect_to '/' + @user.username + '/' + @space.name
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
     redirect_to '/' + @user.username + '/' + @space.name
   end
 
@@ -83,7 +83,7 @@ class SpacesController < ApplicationController
 
     redirect_to '/' + @user.username + '/' + new_name + '/setting'
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
     redirect_to '/' + @user.username + '/' + old_name + '/setting'
   end
 
@@ -101,9 +101,9 @@ class SpacesController < ApplicationController
   rescue => ex
     redirect_to '/' + @user.username + '/' + @space.name + '/setting'
     if ex.message == 'Validation failed: Name You have a space with this name'
-      flash[:error] = 'The team member has a space with this name'
+      flash.now[:error] = 'The team member has a space with this name'
     else
-      flash[:error] = clear_exception ex.message
+      flash.now[:error] = clear_exception ex.message
     end
   end
 
@@ -118,7 +118,7 @@ class SpacesController < ApplicationController
     flash_log('Delete space <b>' + space_name_params[:name] + '</b>',
               'The space was deleted correctly')
   rescue => ex
-    flash[:error] = clear_exception ex.message
+    flash.now[:error] = clear_exception ex.message
   end
 
   private
@@ -149,6 +149,6 @@ class SpacesController < ApplicationController
   #
   def flash_log(log_description, msg)
     save_log log_description, 'Space', @user.id
-    flash[:notice] = msg
+    flash.now[:notice] = msg
   end
 end
