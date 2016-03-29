@@ -15,10 +15,12 @@ class HomeController < ApplicationController
   # POST /contactus
   #
   def contact
-    @contactus = ContactUs.create(contact_params)
-
-    flash[:success] = 'Thank you for contact us!'
     redirect_to root_url + '#contactus'
+
+    @contactus = ContactUs.create(contact_params)
+    flash[:success] = 'Thank you for contact us!'
+  rescue => ex
+    flash[:error] = 'Exist a problem!'
   end
 
   private
