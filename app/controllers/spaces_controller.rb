@@ -93,18 +93,15 @@ class SpacesController < ApplicationController
   def transfer
     Space.transfer @space, @user, params[:user_member_id]
 
+    email_member = Email.find_primary_by_user(params[:user_member_id]).take
     flash_log('Change the owner of space <b>' + @space.name +
-                '</b> to <b>' + user_email(params[:user_member_id]) + '</b>',
+                '</b> to <b>' + email_member.email + '</b>',
                 'The space was transferred correctly')
 
     redirect_to '/' + @user.username + '/spaces'
   rescue => ex
+    flash[:error] = clear_exception parser_transfer_error(ex.message)
     redirect_to '/' + @user.username + '/' + @space.name + '/setting'
-    if ex.message == 'Validation failed: Name You have a space with this name'
-      flash[:error] = 'The team member has a space with this name'
-    else
-      flash[:error] = clear_exception ex.message
-    end
   end
 
   ##
@@ -150,5 +147,14 @@ class SpacesController < ApplicationController
   def flash_log(log_description, msg)
     save_log log_description, 'Space', @user.id
     flash[:notice] = msg
+  end
+
+  ##
+  # parse transfer error
+  #
+  def parser_transfer_error(msg)
+    return 'The team member has a space with this name' if
+        msg == 'Validation failed: Name You have a space with this name'
+    msg
   end
 end

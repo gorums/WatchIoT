@@ -6,10 +6,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :me
   helper_method :auth?
-  helper_method :login_user_email
-  helper_method :login_api_key
+  helper_method :me
+  helper_method :me_user_email
+  helper_method :me_api_key
   helper_method :param_user
 
   rescue_from ActionController::RoutingError, with: :render_404
@@ -18,11 +18,10 @@ class ApplicationController < ActionController::Base
   private
 
   ##
-  # This method return the client api key
+  # If exist user authenticate
   #
-  def login_api_key
-    api_key = ApiKey.find(me.api_key_id) unless me.nil?
-    api_key.api_key || ''
+  def auth?
+    me != nil
   end
 
   ##
@@ -33,32 +32,29 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.find_by_auth_token( cookie) if cookie
   end
 
-  def param_user
-    params[:username]
-  end
-
   ##
   # This method return the client primary email
   #
-  def login_user_email
+  def me_user_email
     email = Email.find_primary_by_user(me.id).take
     return '' if email.nil?
     email.email
   end
 
+
   ##
-  # If exist user authenticate
+  # This method return the client api key
   #
-  def auth?
-    me != nil
+  def me_api_key
+    api_key = ApiKey.find(me.api_key_id) unless me.nil?
+    api_key.api_key || ''
   end
 
   ##
-  # This method return the primary email
+  # This method return the query string username
   #
-  def user_email(user_id)
-    email = Email.find_primary_by_user(user_id).take
-    email.email unless email.nil?
+  def param_user
+    params[:username]
   end
 
   ##
