@@ -14,7 +14,6 @@
 #
 class Team < ActiveRecord::Base
   belongs_to :user
-  belongs_to :permission
 
   scope :count_by_user, -> user_id { where('user_id = ?', user_id).count }
   scope :belong_to, -> user_team_id { where('user_team_id = ?', user_team_id) }
