@@ -33,6 +33,59 @@ class Space < ActiveRecord::Base
   scope :find_by_user_and_name, -> user_id, namespace {
         where('user_id = ?', user_id).where('name = ?', namespace.downcase) if namespace.present? }
 
+  ## -------------------- Instance method ----------------------- ##
+
+  ##
+  # edit a space, only can edit the description for now
+  #
+  def edit_space(description)
+    update!(description: description)
+  end
+
+  ##
+  # edit a space, only can edit the namespace for now
+  #
+  def change_space(namespace)
+    update!(name: namespace)
+  end
+
+  ##
+  # delete a space
+  #
+  def delete_space(namespace)
+    raise StandardError, 'The namespace is not valid' if namespace.nil?
+    raise StandardError, 'The namespace is not valid' if
+        namespace.downcase != name
+
+    raise StandardError, 'This space can not be delete because it has'\
+                         ' one or more projects associate' if
+        Project.exists?(space_id: id)
+    destroy!
+  end
+
+  ##
+  # Transfer space and projects to a member team
+  #
+  def transfer(user, user_member_id)
+    raise StandardError, 'The member is not valid' if
+        user.nil? || user_member_id.nil?
+
+    raise StandardError, 'The member is not valid' unless
+        Team.find_member(user.id, user_member_id).exists?
+
+    user = User.find(user_member_id)
+    raise StandardError, 'The team member can not add more spaces,'\
+              ' please contact with us!' unless Space.can_create_space?(user)
+
+    transfer_projects user_member_id
+
+    member_email = Email.find_primary_by_user(user_member_id).take
+    Notifier.send_transfer_space_email(member_email, user, self)
+        .deliver_later unless member_email.nil?
+  end
+
+  ## ------------------------ Class method ------------------------ ##
+
   ##
   # add a new space
   #
@@ -47,64 +100,16 @@ class Space < ActiveRecord::Base
         user_owner_id: user_owner.id)
   end
 
-  ##
-  # edit a space, only can edit the description for now
-  #
-  def self.edit_space(space, description)
-    space.update!(description: description)
-  end
-
-  ##
-  # edit a space, only can edit the namespace for now
-  #
-  def self.change_space(space, namespace)
-    space.update!(name: namespace)
-  end
-
-  ##
-  # delete a space
-  #
-  def self.delete_space(space, namespace)
-    raise StandardError, 'The namespace is not valid' if
-        space.nil? || namespace.nil?
-    raise StandardError, 'The namespace is not valid' if
-        namespace.downcase != space.name
-
-    raise StandardError, 'This space can not be delete because it has'\
-                         ' one or more projects associate' if
-        Project.exists?(space_id: space.id)
-    space.destroy!
-  end
-
-  ##
-  # Transfer space and projects to a member team
-  #
-  def self.transfer(space, user, user_member_id)
-    raise StandardError, 'The member is not valid' if
-        space.nil? || user.nil? || user_member_id.nil?
-
-    raise StandardError, 'The member is not valid' unless
-        Team.find_member(user.id, user_member_id).exists?
-
-    user = User.find(user_member_id)
-    raise StandardError, 'The team member can not add more spaces,'\
-              ' please contact with us!' unless can_create_space?(user)
-
-    transfer_projects space, user_member_id
-
-    member_email = Email.find_primary_by_user(user_member_id).take
-    Notifier.send_transfer_space_email(member_email, user, space)
-        .deliver_later unless member_email.nil?
-  end
-
   private
+
+  ## ------------------ Private Instance method -------------------- ##
 
   ##
   # Transfer all the projects belong space
   #
-  def self.transfer_projects(space, user_member_id)
-    space.update!(user_id: user_member_id)
-    Project.where('space_id = ?', space.id).find_each do |p|
+  def transfer_projects(user_member_id)
+    self.update!(user_id: user_member_id)
+    Project.where('space_id = ?', self.id).find_each do |p|
       p.update!(user_id: user_member_id)
     end
   end
@@ -114,10 +119,12 @@ class Space < ActiveRecord::Base
   # Admitted only alphanumeric characters, - and _
   #
   def name_format
-    name.gsub!(/[^0-9a-z\-_ ]/i, '_') unless name.nil?
-    name.gsub!(/\s+/, '-') unless name.nil?
+    self.name.gsub!(/[^0-9a-z\-_ ]/i, '_') unless self.name.nil?
+    self.name.gsub!(/\s+/, '-') unless self.name.nil?
     self.name = self.name.downcase unless self.name.nil?
   end
+
+  ## -------------------- Private Class method ----------------------- ##
 
   ##
   # If i can added more space, free account such has 3 spaces permitted
@@ -125,7 +132,7 @@ class Space < ActiveRecord::Base
   def self.can_create_space?(user)
     return false if user.nil?
     spaces_count = Space.count_by_user user.id
-    value = Plan.find_plan_value user.plan_id, 'Number of spaces'
+    value = user.plan.find_plan_value('Number of spaces')
     spaces_count < value.to_i
   end
 end

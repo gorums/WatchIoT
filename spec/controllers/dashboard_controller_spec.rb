@@ -8,15 +8,15 @@ RSpec.describe DashboardController, type: :controller do
     Plan.create!(name: 'Free', amount_per_month: 0)
 
     # add one users
-    user = User.new(username: 'user_name',
+    @user = User.new(username: 'user_name',
                     passwd: '12345678',
                     passwd_confirmation: '12345678')
     email = Email.new(email: 'user@watchiot.com')
-    @user = User.register user, email
+    @user.register email
 
     user_new = User.find_by_username 'user_name'
     email_login = user_new.emails.first
-    User.active_account(user_new, email_login)
+    user_new.active_account(email_login)
 
     @user = User.login 'user@watchiot.com', '12345678'
     request.cookies[:auth_token] = @user.auth_token

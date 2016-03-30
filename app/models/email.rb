@@ -36,6 +36,23 @@ class Email < ActiveRecord::Base
   scope :find_by_user_and_by_email, -> user_id, email {
         where('user_id = ?', user_id).where('email = ?', email.downcase) if email.present? }
 
+  ## -------------------- Instance method ----------------------- ##
+
+  ##
+  # Update the email record
+  #
+  def save_email(user_id, checked)
+    self.update!(user_id: user_id, checked: checked, primary: checked)
+  end
+
+  ##
+  # Set the check email field like true
+  #
+  def verify_email()
+    self.update!(checked: true)
+  end
+
+  ## ---------------------- Class method ----------------------- ##
 
   ##
   # Add an email to the account unprimary waiting for verification
@@ -77,13 +94,6 @@ class Email < ActiveRecord::Base
   end
 
   ##
-  # Set the check email field like true
-  #
-  def self.email_verify(email)
-    email.update!(checked: true)
-  end
-
-  ##
   # Send the verification email
   #
   def self.send_verify(user_id, email_id)
@@ -115,13 +125,6 @@ class Email < ActiveRecord::Base
     email = Email.find_by_user_and_by_email(user_id, email_s).take
     raise StandardError, 'The email is not valid' if email.nil?
     email
-  end
-
-  ##
-  # Update the email record
-  #
-  def self.save_email(email, user_id, checked)
-    email.update!(user_id: user_id, checked: checked, primary: checked)
   end
 
   ##

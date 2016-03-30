@@ -34,11 +34,11 @@ RSpec.describe SpacesController, type: :controller do
                     passwd: '12345678',
                     passwd_confirmation: '12345678')
     email = Email.new(email: 'user@watchiot.com')
-    User.register user, email
+    user.register email
 
     user_new = User.find_by_username 'user_name'
     email_login = user_new.emails.first
-    User.active_account(user_new, email_login)
+    user_new.active_account(email_login)
 
     @user = User.login 'user@watchiot.com', '12345678'
     request.cookies[:auth_token] = @user.auth_token
@@ -47,11 +47,11 @@ RSpec.describe SpacesController, type: :controller do
                     passwd: '12345678',
                     passwd_confirmation: '12345678')
     email = Email.new(email: 'user_unauthorized@watchiot.com')
-    User.register user, email
+    user.register email
 
     @user_new = User.find_by_username 'user_name_unauthorized'
     email_login = @user_new.emails.first
-    User.active_account(@user_new, email_login)
+    @user_new.active_account(email_login)
 
     params = { name: 'my_space',
                description: 'space description'}

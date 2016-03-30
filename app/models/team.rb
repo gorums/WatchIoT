@@ -22,6 +22,8 @@ class Team < ActiveRecord::Base
   scope :find_member, -> user_id, user_team_id { where('user_id = ?', user_id)
                                                 .where('user_team_id = ?', user_team_id) }
 
+  ## -------------------- Class method -------------------------- ##
+
   ##
   # added a member for the team
   #
@@ -73,7 +75,7 @@ class Team < ActiveRecord::Base
   def self.can_add_member?(user)
     return false if user.nil?
     members_count = Team.count_by_user user.id
-    value = Plan.find_plan_value user.plan_id, 'Team members'
+    value = user.plan.find_plan_value('Team members')
     members_count < value.to_i
   end
 end

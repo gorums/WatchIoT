@@ -37,7 +37,7 @@ class NotificationsController < ApplicationController
   # Patch /reset/:token
   #
   def do_reset
-    User.reset_passwd @user, user_reset_params
+    @user.reset_passwd user_reset_params
     @verifyClient.destroy!
 
     redirect_to '/login'
@@ -50,7 +50,7 @@ class NotificationsController < ApplicationController
   # Get /active
   #
   def active
-    User.active_account @user, @email
+    @user.active_account @email
     @verifyClient.destroy!
 
     cookies[:auth_token] = @user.auth_token
@@ -64,7 +64,7 @@ class NotificationsController < ApplicationController
   # Get /verify_email
   #
   def verify_email
-    Email.email_verify @email
+    @email.verify_email
     @verifyClient.destroy!
     render 'users/verify_email'
   rescue => ex
@@ -85,7 +85,7 @@ class NotificationsController < ApplicationController
   #
   def do_invite
     email = Email.to_activate_by_invitation(@verifyClient.user_id, @verifyClient.data)
-    User.invite @user, user_params, email
+    @user.invite user_params, email
     @verifyClient.destroy!
 
     cookies[:auth_token] = @user.auth_token

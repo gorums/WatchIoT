@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   has_many :logs
   has_many :verify_clients
   belongs_to :api_key
-  has_one :plan
+  belongs_to :plan
 
   validates :username, uniqueness: true,
             length: { minimum: 1 },
@@ -60,19 +60,105 @@ class User < ActiveRecord::Base
     assign_plan
   end
 
+  ## -------------------------- Instance method ------------------------------ ##
+
   ##
   # Register a new account
   #
-  def self.register(user, email)
+  def register(email)
     raise StandardError, 'The email is not valid' if
         email.email.nil? || email.email.empty?
 
-    save_user_and_email user, email
+    User.save_user_and_email self, email
 
-    token = VerifyClient.create_token(user.id, email.email, 'register')
-    Notifier.send_signup_email(email.email, user, token).deliver_later
-    user
+    token = VerifyClient.create_token(self.id, email.email, 'register')
+    Notifier.send_signup_email(email.email, self, token).deliver_later
   end
+
+  ##
+  # Disable the account
+  #
+  def delete_account(username)
+    raise StandardError, 'The username is not valid' if self.username != username
+    raise StandardError, 'You have to transfer your spaces'\
+                         ' or delete them' if Space.exists?(user_id: self.id)
+
+    self.update!(status: false)
+  end
+
+  ##
+  # change the username
+  #
+  def change_username(new_username)
+    self.update!(username: new_username)
+  end
+
+  ##
+  # Change the password
+  #
+  def change_passwd(params)
+    old_password = BCrypt::Engine.hash_secret(params[:passwd], self.passwd_salt)
+    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
+    same_old_passwd = self.passwd == old_password
+    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
+
+    raise StandardError, 'The old password is not correctly' unless same_old_passwd
+    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
+    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
+
+    self.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], self.passwd_salt))
+  end
+
+  ##
+  # Reset the password
+  #
+  def reset_passwd(params)
+    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
+    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
+
+    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
+    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
+
+    return if self.status.nil? || !self.status
+
+    email = Email.find_primary_by_user(self.id).take || Email.find_by_user(self.id).take
+    raise StandardError, 'You dont have an email' if email.nil?
+
+    # if the email is not primary it never has activated the account
+    self.active_account(email) unless email.primary?
+
+    Notifier.send_reset_passwd_email(email.email, self).deliver_later
+    self.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], self.passwd_salt))
+  end
+
+  ##
+  # Active the account after register and validate the email
+  #
+  def active_account(email)
+    raise StandardError, 'The account can not be activate' if
+        email.nil? || email.user.id != self.id
+
+    email.update!(checked: true, primary: true)
+    self.update!(status: true)
+
+    Notifier.send_signup_verify_email(email.email, self).deliver_later
+  end
+
+  ##
+  # A member was invite, finish register, enter username,
+  # password and confirmation
+  #
+  def invite(user_params, email)
+    raise StandardError, 'The account can not be activate' if email.nil?
+    self.username = user_params[:username] # set the username
+    self.passwd = user_params[:passwd] # set the password
+    self.passwd_confirmation = user_params[:passwd_confirmation]
+
+    # save user and activate
+    User.save_user_and_email(self, email, true)
+  end
+
+  ## ------------------------- Class method ------------------------------ ##
 
   ##
   # Login the account
@@ -98,94 +184,11 @@ class User < ActiveRecord::Base
     user = User.new(username: email_member, passwd: password, passwd_confirmation: password)
     email = Email.new(email: email_member)
 
-    save_user_and_email(user, email)
+    User.save_user_and_email(user, email)
 
     token = VerifyClient.create_token(user.id, email_member, 'invited')
     Notifier.send_create_user_email(email_member, token).deliver_later
     user
-  end
-
-  ##
-  # Disable the account
-  #
-  def self.delete_account(user, username)
-    raise StandardError, 'The username is not valid' if user.username != username
-    raise StandardError, 'You have to transfer your spaces'\
-                         ' or delete them' if Space.exists?(user_id: user.id)
-
-    user.update!(status: false)
-  end
-
-  ##
-  # change the username
-  #
-  def self.change_username(user, new_username)
-    user.update!(username: new_username)
-  end
-
-  ##
-  # Change the password
-  #
-  def self.change_passwd(user, params)
-    old_password = BCrypt::Engine.hash_secret(params[:passwd], user.passwd_salt)
-    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
-    same_old_passwd = user.passwd == old_password
-    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
-
-    raise StandardError, 'The old password is not correctly' unless same_old_passwd
-    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
-    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
-
-    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
-  end
-
-  ##
-  # Reset the password
-  #
-  def self.reset_passwd(user, params)
-    passwd_confirmation = params[:passwd_new] == params[:passwd_confirmation]
-    passwd_is_short = params[:passwd_new].nil? || params[:passwd_new].length < 8
-
-    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
-    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
-
-    return if user.nil? || user.status.nil? || !user.status
-
-    email = Email.find_primary_by_user(user.id).take || Email.find_by_user(user.id).take
-    raise StandardError, 'You dont have an email' if email.nil?
-
-    # if the email is not primary it never has activated the account
-    User.active_account(user, email) unless email.primary?
-
-    Notifier.send_reset_passwd_email(email.email, user).deliver_later
-    user.update!(passwd: BCrypt::Engine.hash_secret(params[:passwd_new], user.passwd_salt))
-  end
-
-  ##
-  # Active the account after register and validate the email
-  #
-  def self.active_account(user, email)
-    raise StandardError, 'The account can not be activate' if
-        email.nil? || user.nil? || email.user.id != user.id
-
-    email.update!(checked: true, primary: true)
-    user.update!(status: true)
-
-    Notifier.send_signup_verify_email(email.email, user).deliver_later
-  end
-
-  ##
-  # A member was invite, finish register, enter username,
-  # password and confirmation
-  #
-  def self.invite(user, user_params, email)
-    raise StandardError, 'The account can not be activate' if user.nil? || email.nil?
-    user.username = user_params[:username] # set the username
-    user.passwd = user_params[:passwd] # set the password
-    user.passwd_confirmation = user_params[:passwd_confirmation]
-
-    # save user and activate
-    save_user_and_email(user, email, true)
   end
 
   ##
@@ -210,7 +213,9 @@ class User < ActiveRecord::Base
     Notifier.send_forget_passwd_email(email, user, token).deliver_later
   end
 
-  protected
+  private
+
+  ## ------------------------- Private Instance method ---------------------------- ##
 
   ##
   # This method generate a token for the client session
@@ -255,48 +260,7 @@ class User < ActiveRecord::Base
     self.username = self.username.byteslice(0, 24) #substring 24
   end
 
-  ##
-  # Generate a randow password
-  #
-  def self.generate_passwd
-    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
-    password = ''
-    10.times { password << chars[rand(chars.size)] }
-    password
-  end
-
-  private
-
-  ##
-  # Save user and email routine
-  #
-  def self.save_user_and_email(user, email, checked = false)
-    passwd_confirmation = user.passwd == user.passwd_confirmation
-    passwd_is_short = user.passwd.nil? || user.passwd.length < 8
-
-    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
-    raise StandardError, 'Password does not match the confirm' unless passwd_confirmation
-    raise StandardError, 'The email is primary in other account' if
-        Email.find_primary_by_email(email.email).exists?
-
-    ActiveRecord::Base.transaction do
-      User.save_user user, checked
-      Email.save_email email, user.id, checked
-    end
-
-    Notifier.send_signup_verify_email(email.email, user).deliver_later if checked
-  end
-
-  ##
-  # Save user
-  #
-  def self.save_user(user, checked)
-    user.passwd_salt = BCrypt::Engine.generate_salt
-    user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
-    user.passwd_confirmation = user.passwd
-    user.status = checked
-    user.save!
-  end
+  ## ------------------------- Private Class method ---------------------------- ##
 
   ##
   # This method try to authenticate the client, other way return nil
@@ -327,8 +291,49 @@ class User < ActiveRecord::Base
     user.passwd_confirmation = user.passwd
 
     email = Email.new(email: auth['info']['email'])
-    save_user_and_email user, email, true
+    User.save_user_and_email user, email, true
     user
+  end
+
+  ##
+  # Save user and email routine
+  #
+  def self.save_user_and_email(user, email, checked = false)
+    passwd_confirm = user.passwd == user.passwd_confirmation
+    passwd_is_short = user.passwd.nil? || user.passwd.length < 8
+
+    raise StandardError, 'Password has less than 8 characters' if passwd_is_short
+    raise StandardError, 'Password does not match the confirm' unless passwd_confirm
+    raise StandardError, 'The email is primary in other account' if
+        Email.find_primary_by_email(email.email).exists?
+
+    ActiveRecord::Base.transaction do
+      save_user user, checked
+      email.save_email user.id, checked
+    end
+
+    Notifier.send_signup_verify_email(email.email, user).deliver_later if checked
+  end
+
+  ##
+  # Save user
+  #
+  def self.save_user(user, checked)
+    user.passwd_salt = BCrypt::Engine.generate_salt
+    user.passwd = BCrypt::Engine.hash_secret(user.passwd, user.passwd_salt)
+    user.passwd_confirmation = user.passwd
+    user.status = checked
+    user.save!
+  end
+
+  ##
+  # Generate a randow password
+  #
+  def self.generate_passwd
+    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
+    password = ''
+    10.times { password << chars[rand(chars.size)] }
+    password
   end
 
   ##

@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @email = Email.new(email: email_params[:email])
 
-    User.register(@user, @email)
+    @user.register(@email)
 
     render 'need_verify_notification'
   rescue => ex

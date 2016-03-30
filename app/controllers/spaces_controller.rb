@@ -53,7 +53,7 @@ class SpacesController < ApplicationController
   # Patch /:username/:namespace
   #
   def edit
-    Space.edit_space(@space, space_edit_params[:description])
+    @space.edit_space(space_edit_params[:description])
     @project = Project.new
 
     flash_log('Edit the space <b>' + @space.name + '</b>', 'Space was edited correctly')
@@ -76,7 +76,7 @@ class SpacesController < ApplicationController
   #
   def change
     old_name = @space.name
-    Space.change_space(@space, space_edit_params[:name])
+    @space.change_space(space_edit_params[:name])
     new_name = @space.name
     flash_log('Change name space <b>' + old_name + '</b> by <b>' + new_name + '</b>',
               'The namespace was changed correctly')
@@ -91,7 +91,7 @@ class SpacesController < ApplicationController
   # Patch /:username/:namespace/setting/transfer
   #
   def transfer
-    Space.transfer @space, @user, params[:user_member_id]
+    @space.transfer @user, params[:user_member_id]
 
     email_member = Email.find_primary_by_user(params[:user_member_id]).take
     flash_log('Change the owner of space <b>' + @space.name +
@@ -110,7 +110,7 @@ class SpacesController < ApplicationController
   def delete
     redirect_to '/' + @user.username + '/spaces'
 
-    Space.delete_space(@space, space_name_params[:name])
+    @space.delete_space(space_name_params[:name])
 
     flash_log('Delete space <b>' + space_name_params[:name] + '</b>',
               'The space was deleted correctly')

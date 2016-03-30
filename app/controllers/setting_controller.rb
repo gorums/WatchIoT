@@ -93,7 +93,7 @@ class SettingController < ApplicationController
   def account_ch_password
     redirect_to '/' + @user.username + '/setting/account'
 
-    User.change_passwd(@user, passwd_params)
+    @user.change_passwd(passwd_params)
 
     flash_log('Change password', 'The password was changed correctly')
   rescue => ex
@@ -105,7 +105,7 @@ class SettingController < ApplicationController
   #
   def account_ch_username
     old_username = @user.username
-    User.change_username @user, username_params[:username]
+    @user.change_username username_params[:username]
 
     flash_log('Change username <b>' + old_username + '</b> by <b>' + username_params[:username] + '</b>',
               'The new username was saved correctly')
@@ -119,7 +119,7 @@ class SettingController < ApplicationController
   # Delete /:username/setting/account/delete
   #
   def account_delete
-    User.delete_account @user, username_params[:username]
+    @user.delete_account username_params[:username]
 
     cookies.clear
     redirect_to root_url

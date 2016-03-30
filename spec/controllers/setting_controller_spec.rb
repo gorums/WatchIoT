@@ -17,11 +17,11 @@ RSpec.describe SettingController, type: :controller do
                     passwd: '12345678',
                     passwd_confirmation: '12345678')
     email = Email.new(email: 'user@watchiot.com')
-    User.register user, email
+    user.register email
 
     user_new = User.find_by_username 'user_name'
     email_login = user_new.emails.first
-    User.active_account(user_new, email_login)
+    user_new.active_account(email_login)
 
     @user = User.login 'user@watchiot.com', '12345678'
     request.cookies[:auth_token] = @user.auth_token
@@ -30,7 +30,7 @@ RSpec.describe SettingController, type: :controller do
                     passwd: '12345678',
                     passwd_confirmation: '12345678')
     email = Email.new(email: 'user_unauthorized@watchiot.com')
-    User.register user, email
+    user.register email
 
   end
 
@@ -164,7 +164,7 @@ RSpec.describe SettingController, type: :controller do
            email: {email: 'my_new_email@watchiot.org'}
 
       email = Email.find_by_email 'my_new_email@watchiot.org'
-      Email.email_verify email
+      email.verify_email
       expect(email.checked).to be(true)
 
       get :account_primary_email, username: 'user_name',

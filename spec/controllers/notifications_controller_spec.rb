@@ -8,11 +8,11 @@ RSpec.describe NotificationsController, type: :controller do
     Plan.create!(name: 'Free', amount_per_month: 0)
 
     # add one users
-    user = User.new(username: 'my_user_name',
+    @user = User.new(username: 'my_user_name',
                passwd: '12345678',
                passwd_confirmation: '12345678')
     email = Email.new(email: 'newemail@watchiot.org')
-    @user = User.register user, email
+    @user.register email
 
     @email = Email.create!(email: 'user@watchiot.com',
                            user_id: @user.id)
