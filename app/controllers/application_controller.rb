@@ -127,10 +127,19 @@ class ApplicationController < ActionController::Base
   end
 
   ##
-  # Get space to transfer
+  # Get acces to space
   #
   def allow_space
     @space = Space.find_by_user_and_name(@user.id, params[:namespace]).take ||
         not_found
   end
+
+  ##
+  # Get acces to project
+  #
+  def allow_project
+    @project = Project.find_by_user_space_and_name(@user.id, @space.id, params[:nameproject]).take ||
+        not_found
+  end
+
 end

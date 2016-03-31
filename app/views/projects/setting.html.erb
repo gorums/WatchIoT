@@ -1,17 +1,19 @@
-<div class="row dashboard-page project-height">
-  <div class="">
+<% @title='Setting ' + me.username + '/' + @space.name + '/' +@project.name %>
+
+<div class="row dashboard-page index-setting">
+	<div class="">
 		<br />
-		<h3>My first project</h3>
+		<h3>Setting <%= @project.name %></h3>
 		<div class="panel panel-success">
 			<div class="panel-body">
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<%= render 'shared/alert_message'%>
 
-					<!-- Tab panes -->
-					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="home">
-							<%= render 'setting_name' %>
-							<%= render 'setting_delete' %>
-							<%= render 'setting_export' %>
-						</div>
+						<%= render 'setting_name' %>
+						<%= render 'setting_delete' %>
+					</div>
 				</div>
 			</div>
 		</div>

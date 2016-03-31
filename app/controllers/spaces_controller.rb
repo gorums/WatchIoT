@@ -76,7 +76,7 @@ class SpacesController < ApplicationController
   #
   def change
     old_name = @space.name
-    @space.change_space(space_edit_params[:name])
+    @space.change_space(space_name_params[:name])
     new_name = @space.name
     flash_log('Change name space <b>' + old_name + '</b> by <b>' + new_name + '</b>',
               'The namespace was changed correctly')
@@ -108,14 +108,14 @@ class SpacesController < ApplicationController
   # Delete /:username/:namespace/setting/delete
   #
   def delete
-    redirect_to '/' + @user.username + '/spaces'
-
     @space.delete_space(space_name_params[:name])
 
     flash_log('Delete space <b>' + space_name_params[:name] + '</b>',
               'The space was deleted correctly')
+    redirect_to '/' + @user.username + '/spaces'
   rescue => ex
     flash[:error] = clear_exception ex.message
+    redirect_to '/' + @user.username + '/' + @space.name + '/setting'
   end
 
   private

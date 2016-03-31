@@ -27,8 +27,8 @@
 								<th scope="row"><%= project.name %></th>
 								<td><%= project.description %></td>
 								<td>
-									<a href="/<%= me.username %>/<%= space.name %>/<%= project.name %>" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-									<a href="/<%= me.username %>/<%= space.name %>/<%= project.name %>/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
+									<a href="/<%= me.username %>/<%= @space.name %>/<%= project.name %>" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+									<a href="/<%= me.username %>/<%= @space.name %>/<%= project.name %>/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
 								</td>
 							</tr>
 							<% end %>

@@ -64,12 +64,13 @@ Rails.application.routes.draw do
   get '/:username/:namespace', controller: 'spaces', action: 'show'
 
   # projects route
-  post '/:username/:namespace/create', controller: 'spaces', action: 'create'
   get '/:username/:namespace/projects', controller: 'projects', action: 'index'
-  patch '/:username/:namespace/:projectname', controller: 'projects', action: 'edit'
-  get '/:username/:namespace/:projectname/setting', controller: 'projects', action: 'setting'
-  get '/:username/:namespace/:projectname/delete', controller:'projects', action: 'delete'
-  get '/:username/:namespace/:projectname', controller: 'projects', action: 'show'
+  post '/:username/:namespace/create', controller: 'projects', action: 'create'
+  patch '/:username/:namespace/:nameproject', controller: 'projects', action: 'edit'
+  get '/:username/:namespace/:nameproject/setting', controller: 'projects', action: 'setting'
+  patch '/:username/:namespace/:nameproject/setting/change', controller: 'projects', action: 'change'
+  delete '/:username/:namespace/:nameproject/setting/delete', controller: 'projects', action: 'delete'
+  get '/:username/:namespace/:nameproject', controller: 'projects', action: 'show'
 
   root 'home#index'
 
