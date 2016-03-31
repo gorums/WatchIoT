@@ -6,6 +6,7 @@ class CreateProjects < ActiveRecord::Migration
     create_table :projects do |t|
       t.string :name, length: 25
       t.text :description
+      t.text :configuration
       t.references :user
       t.references :space
       t.integer :user_owner_id
