@@ -19,6 +19,8 @@
 //= require bootstrap-tagsinput
 //= require gravtastic
 //= require bootstrap-treeview
+//= require ace-rails-ap
+//= require ace/ext-language_tools
 
 (function ($, window){
     function CoreCode() {

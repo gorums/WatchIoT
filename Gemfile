@@ -47,6 +47,9 @@ gem 'bcrypt', '~> 3.1.7'
 # gravatar plugins
 gem 'gravtastic'
 
+# pretty editor
+gem 'ace-rails-ap'
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   # gem 'mysql'

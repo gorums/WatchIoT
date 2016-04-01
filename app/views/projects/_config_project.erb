@@ -1,2 +1,66 @@
 <%= render 'shared/alert_message'%>
 
+<pre id="editor">
+language: ruby
+  rvm:
+    - 2.2.2
+
+  before_script:
+    - cp config/database.yml.travis config/database.yml
+    - psql -c 'create database watchiot_test;' -U postgres
+
+  script:
+    - bin/rake db:migrate RAILS_ENV=test
+    - bin/rake
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: PFTJ2/tmfUEO9GsiwXZ1IQDjkY1tMiU2vqp4B32vx4zapvEb3SCudNogXaXHSI5mZTGKAQTwlXzoF8wqoMf/Ju0MyNtKk6kwzvOfji3fWyDdgP8Ey5IzHlZ7gJ1p1QdZx/M2UoR3AtYrvEyzdCaoFVNvqclj0jTXjI4zBl8W28QzcvHV3qThJsAlOYFL6ouqT6CyI/eVswoczRWM06SSx4Dou4WrwIJmUqDnEB/J1ZsR8UDEZanv0DIQb6MsVil59FUbMScuOL3ZfIVQ8Y0JQtfiy+3WwXraLvMDqi/TWuNGrnXf0ZY2jZkFNwJ+aeHUC+RBYm6exmvqJdRqCE70AVaWi7DVzRIpJTAa9g9i49aK5OSRPqUfKzTIAyIfAzOw/+hCcJmJjCZxC8lePzq5NKZWTpX9qv+9bzxkoIMjl4oqYCqP8QbJT7IBpACMlBGtNsE+voqvdNd9WCrCuhtBbHtInP+oGRgXCiJ2VPC0WWIa6OdXZj6ayjjL5pQxAGiJRBwuY5spiSom+jQLZvMsjYT5mlRYS+1xE44dsQgl30ZfiPkiJRUdAdFZpCXRJBK3UmZ+619/s02SF+PKSNJDnoXv9jAvwgXwuBXZ1EXJlc/zYvD0D0Yx7aw4+6y1o6J9VTuN9caWI4QjTMwmSfgLf+rf5SiZUTAQicTT+GM2oZY=
+  app: watchiot
+  on:
+    repo: gorums/WatchIoT
+
+  run:
+      - "rake db:migrate"
+      - "rake cleanup"
+
+addons:
+    code_climate:
+        repo_token: 3b0d4309de7ce4f9c59194b941fb872dc8acf4896ecc54d92eaba82411bac0b1
+</pre>
+
+<script>
+	var editor = ace.edit("editor");
+
+	editor.setTheme("ace/theme/clouds_midnight");
+	editor.session.setMode("ace/mode/yaml");
+
+	editor.setOptions({
+		enableBasicAutocompletion: true
+	});
+
+	var staticWordCompleter = {
+		getCompletions: function(editor, session, pos, prefix, callback) {
+			var wordList = ["foo", "bar", "baz"];
+			callback(null, wordList.map(function(word) {
+				return {
+					caption: word,
+					value: word,
+					meta: "static"
+				};
+			}));
+
+		}
+	}
+
+	editor.completers = [staticWordCompleter]
+
+	editor.commands.addCommand({
+		name: 'myCommand',
+		bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+		exec: function(editor) {
+			alert('a');
+		}
+	});
+</script>
