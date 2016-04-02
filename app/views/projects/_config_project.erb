@@ -27,3 +27,21 @@ addons:
     code_climate:
         repo_token: 3b0d4309de7ce4f9c59194b941fb872dc8acf4896ecc54d92eaba82411bac0b1
 </pre>
+
+<div class="form-horizontal">
+	<%= form_for @project, url: '/' + param_user + '/' + @space.name + '/' + @project.name + '/evaluate' , remote: true do |f| %>
+		<%= f.hidden_field :configuration, value: 'aaa' %>
+		<div class="col-md-1">
+			<%= submit_tag 'Evaluate', class: 'btn btn-primary' %>
+		</div>
+	<% end %>
+
+	<%= form_for @project, url: '/' + param_user + '/' + @space.name + '/' + @project.name + '/config' , remote: true do |f| %>
+		<%= f.hidden_field :configuration, value: 'aaa' %>
+		<div class="col-md-1">
+			<%= submit_tag 'Deploy', class: 'btn btn-primary' %>
+		</div>
+	<% end %>
+</div>
+
+<div id="result" style="display:none;"></div>

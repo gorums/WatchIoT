@@ -5,6 +5,7 @@
 #  id            :integer          not null, primary key
 #  name          :string
 #  description   :text
+#  configuration :text
 #  user_id       :integer
 #  space_id      :integer
 #  user_owner_id :integer

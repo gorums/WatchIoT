@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 20160129014352) do
   create_table "projects", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
+    t.text     "configuration"
     t.integer  "user_id"
     t.integer  "space_id"
     t.integer  "user_owner_id"

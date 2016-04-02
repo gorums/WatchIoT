@@ -5,6 +5,7 @@
 #  id            :integer          not null, primary key
 #  name          :string
 #  description   :text
+#  configuration :text
 #  user_id       :integer
 #  space_id      :integer
 #  user_owner_id :integer
@@ -61,6 +62,30 @@ class ProjectsController < ApplicationController
   rescue => ex
     flash[:error] = clear_exception ex.message
     redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name
+  end
+
+  ##
+  # Patch /:username/:namespace/:project/deploy
+  #
+  def deploy
+    configuration = config_name_params[:configuration]
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
+  end
+
+  ##
+  # Patch /:username/:namespace/:project/evaluate
+  #
+  def evaluate
+    configuration = config_name_params[:configuration]
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   ##
@@ -121,6 +146,13 @@ class ProjectsController < ApplicationController
   #
   def project_name_params
     params.require(:project).permit(:name)
+  end
+
+  ##
+  # Never trust parameters from the scary internet, only allow the white list through.
+  #
+  def config_name_params
+    params.require(:project).permit(:configuration)
   end
 
   ##

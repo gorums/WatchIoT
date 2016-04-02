@@ -32,3 +32,16 @@ $(document).ready ->
       exec: (editor) ->
         alert 'a'
         return
+
+    editor.getSession().setAnnotations [ {
+      row: 6
+      column: 10
+      text: 'Strange error'
+      type: 'error'
+    },
+    {
+      row: 0
+      column: 1
+      text: 'more Strange error'
+      type: 'error'
+    } ]
