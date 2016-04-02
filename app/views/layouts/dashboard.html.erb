@@ -22,5 +22,35 @@
 
 	<%= render 'layouts/footer_dash' %>
 
+
+	<script>
+			$("#menu-toggle").click(function(e) {
+					e.preventDefault();
+					$("#wrapper").toggleClass("toggled");
+			});
+
+			$(window).resize(function()
+			{
+					$("#wrapper").toggleClass("toggled");
+					$("#wrapper").toggleClass("toggled");
+			});
+
+			$('.img-circle').each(function(index, element){
+				var email = $(element).data("email");
+				$(element).attr("src", Gravtastic(email, {default: 'identicon'}));
+			})
+
+			$('#tree').treeview({
+				data: getTree(),
+				backColor: "#225079",
+				color: "#fff",
+				enableLinks: true,
+				onhoverColor: "#225079",
+				selectedBackColor: "#225079",
+				emptyIcon: "fa fa-laptop",
+				showBorder: false,
+			});
+	</script>
+
 	</body>
 </html>

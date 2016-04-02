@@ -39,7 +39,7 @@
 							</tr>
 							</thead>
 							<tbody>
-							<% space.projects do |project|%>
+							<% space.projects.each do |project|%>
 							<tr>
 								<th scope="row"><%= project.name%></th>
 								<td><%= project.description%></td>
