@@ -107,11 +107,13 @@ ActiveRecord::Schema.define(version: 20160129014352) do
     t.string   "name"
     t.text     "description"
     t.text     "configuration"
+    t.boolean  "has_errors",    default: false
+    t.boolean  "status",        default: true
     t.integer  "user_id"
     t.integer  "space_id"
     t.integer  "user_owner_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   add_index "projects", ["name"], name: "index_projects_on_name", using: :btree

@@ -65,30 +65,17 @@ class ProjectsController < ApplicationController
   end
 
   ##
-  # Patch /:username/:namespace/:project/deploy
-  #
-  def deploy
-    configuration = config_name_params[:configuration]
-
-    respond_to do |format|
-      format.html
-      format.json
-    end
-  end
-
-  ##
   # Patch /:username/:namespace/:project/evaluate
   #
   def evaluate
     @errors = Project.evaluate params[:configuration]
     respond_to do |format|
       if @errors.nil?
-        flash.now[:notice] = 'All your code look fine!!! You can do deploy now!'
+        flash.now[:notice] = 'Your configuration code look great!!! Now you can deploy!'
         format.js
       else
         format.json { render json: @errors  }
       end
-
       format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
     end
   rescue => ex
@@ -96,7 +83,27 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.js
       format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
+    end
+  end
 
+  ##
+  # Patch /:username/:namespace/:project/deploy
+  #
+  def deploy
+    @errors = Project.evaluate params[:deploy]
+    @project.save_project_config params[:deploy], !@errors.nil?
+
+    num_errors = @errors.nil? ? 0 : @errors.length
+    respond_to do |format|
+      flash.now[:notice] = 'Deployed correctly. Total syntactic errors: ' + num_errors.to_s
+      format.js
+      format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
+    end
+  rescue => ex
+    flash.now[:error] = clear_exception ex.message
+    respond_to do |format|
+      format.js
+      format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
     end
   end
 

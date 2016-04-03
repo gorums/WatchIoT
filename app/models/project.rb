@@ -65,6 +65,13 @@ class Project < ActiveRecord::Base
     destroy!
   end
 
+  ##
+  # save the configuration and if it has errors
+  #
+  def save_project_config(config, has_errors)
+    update!(configuration: config, has_errors: has_errors)
+  end
+
   ## ------------------------ Class method ------------------------ ##
 
   ##
@@ -82,7 +89,11 @@ class Project < ActiveRecord::Base
         user_owner_id: user_owner.id)
   end
 
-  def self.evaluate(description)
+  ##
+  # this method evaluate yaml configuration code syntactic
+  # and return an array of errors if there are
+  #
+  def self.evaluate(config)
     errors =
     {
         error1: Errors::ValidateError.new(6, 10, 'Strange error'),

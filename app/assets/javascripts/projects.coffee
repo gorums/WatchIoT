@@ -46,6 +46,21 @@ $(document).ready ->
           newJson.push(value);
 
         alert("You have " + newJson.length + " error(s) in your yaml. Please, fix them!!" )
+        editor.getSession().setAnnotations newJson )
+
+    $("#deploy-form")
+    .on("ajax:before", (e, data, status, xhr) ->
+      $( "#deploy" ).val editor.getValue()
+      $( "#result-evaluator" ).html '')
+    .on("ajax:success", (e, data, status, xhr) ->
+      if xhr.responseText.length != 0
+        json = JSON.parse(xhr.responseText);
+        newJson = []
+
+        for key, value of json
+          newJson.push(value);
+
+        alert("You have " + newJson.length + " error(s) in your yaml. Please, fix them!!" )
         editor.getSession().setAnnotations newJson)
 
 
