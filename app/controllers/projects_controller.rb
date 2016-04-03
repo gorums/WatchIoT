@@ -68,7 +68,7 @@ class ProjectsController < ApplicationController
   # Patch /:username/:namespace/:project/evaluate
   #
   def evaluate
-    @errors = Project.evaluate params[:configuration]
+    @errors = Project.evaluate params[:evaluator]
     respond_to do |format|
       if @errors.nil?
         flash.now[:notice] = 'Your configuration code look great!!! Now you can deploy!'
@@ -94,8 +94,14 @@ class ProjectsController < ApplicationController
     @project.save_project_config params[:deploy], !@errors.nil?
 
     num_errors = @errors.nil? ? 0 : @errors.length
+    notice = 'Deployed correctly.'
+    notice += ' This project will be ignore because it has ' + num_errors.to_s +
+        ' errors. Please click on Evaluate for more details.' unless @errors.nil?
+
     respond_to do |format|
-      flash.now[:notice] = 'Deployed correctly. Total syntactic errors: ' + num_errors.to_s
+      flash.now[:notice] = notice if @errors.nil?
+      flash.now[:error] = notice unless @errors.nil?
+
       format.js
       format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
     end
@@ -165,13 +171,6 @@ class ProjectsController < ApplicationController
   #
   def project_name_params
     params.require(:project).permit(:name)
-  end
-
-  ##
-  # Never trust parameters from the scary internet, only allow the white list through.
-  #
-  def config_name_params
-    params.require(:project).permit(:configuration)
   end
 
   ##

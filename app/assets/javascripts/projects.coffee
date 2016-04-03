@@ -24,18 +24,18 @@ $(document).ready ->
       return
 
     editor.completers = [ staticWordCompleter ]
-    editor.commands.addCommand
-      name: 'myCommand'
-      bindKey:
-        win: 'Ctrl-S'
-        mac: 'Command-S'
-      exec: (editor) ->
-        alert 'a'
-        return
+    #editor.commands.addCommand
+    #  name: 'myCommand'
+    #  bindKey:
+    #    win: 'Ctrl-S'
+    #    mac: 'Command-S'
+    #  exec: (editor) ->
+    #    alert 'a'
+    #    return
 
     $("#evaluator-form")
     .on("ajax:before", (e, data, status, xhr) ->
-      $( "#configuration" ).val editor.getValue()
+      $( "#evaluator" ).val editor.getValue()
       $( "#result-evaluator" ).html '')
     .on("ajax:success", (e, data, status, xhr) ->
       if xhr.responseText.length != 0
@@ -52,15 +52,6 @@ $(document).ready ->
     .on("ajax:before", (e, data, status, xhr) ->
       $( "#deploy" ).val editor.getValue()
       $( "#result-evaluator" ).html '')
-    .on("ajax:success", (e, data, status, xhr) ->
-      if xhr.responseText.length != 0
-        json = JSON.parse(xhr.responseText);
-        newJson = []
 
-        for key, value of json
-          newJson.push(value);
-
-        alert("You have " + newJson.length + " error(s) in your yaml. Please, fix them!!" )
-        editor.getSession().setAnnotations newJson)
-
-
+    $("#deploy-btn").click ->
+      $('#myModal').modal('hide')
