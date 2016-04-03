@@ -29,19 +29,19 @@ addons:
 </pre>
 
 <div class="form-horizontal">
-	<%= form_for @project, url: '/' + param_user + '/' + @space.name + '/' + @project.name + '/evaluate' , remote: true do |f| %>
-		<%= f.hidden_field :configuration, value: 'aaa' %>
+	<%= form_tag '/' + param_user + '/' + @space.name + '/' + @project.name + '/evaluate', remote: true, method: 'patch', id:'evaluator-form' do  %>
+		<%= hidden_field_tag 'configuration', value: 'aaa' %>
 		<div class="col-md-1">
-			<%= submit_tag 'Evaluate', class: 'btn btn-primary' %>
+			<%= submit_tag 'Evaluate', class: 'btn btn-primary', title: 'Syntactic evaluation' %>
 		</div>
 	<% end %>
 
 	<%= form_for @project, url: '/' + param_user + '/' + @space.name + '/' + @project.name + '/config' , remote: true do |f| %>
 		<%= f.hidden_field :configuration, value: 'aaa' %>
 		<div class="col-md-1">
-			<%= submit_tag 'Deploy', class: 'btn btn-primary' %>
+			<%= submit_tag 'Deploy', class: 'btn btn-primary', title: 'Deploy configuration' %>
 		</div>
 	<% end %>
 </div>
 
-<div id="result" style="display:none;"></div>
+<div id="result-evaluator"></div>

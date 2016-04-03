@@ -33,15 +33,19 @@ $(document).ready ->
         alert 'a'
         return
 
-    editor.getSession().setAnnotations [ {
-      row: 6
-      column: 10
-      text: 'Strange error'
-      type: 'error'
-    },
-    {
-      row: 0
-      column: 1
-      text: 'more Strange error'
-      type: 'error'
-    } ]
+    $("#evaluator-form")
+    .on("ajax:before", (e, data, status, xhr) ->
+      $( "#configuration" ).val editor.getValue()
+      $( "#result-evaluator" ).html '')
+    .on("ajax:success", (e, data, status, xhr) ->
+      if xhr.responseText.length != 0
+        json = JSON.parse(xhr.responseText);
+        newJson = []
+
+        for key, value of json
+          newJson.push(value);
+
+        alert("You have " + newJson.length + " error(s) in your yaml. Please, fix them!!" )
+        editor.getSession().setAnnotations newJson)
+
+

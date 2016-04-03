@@ -80,11 +80,23 @@ class ProjectsController < ApplicationController
   # Patch /:username/:namespace/:project/evaluate
   #
   def evaluate
-    configuration = config_name_params[:configuration]
-
+    @errors = Project.evaluate params[:configuration]
     respond_to do |format|
-      format.html
-      format.json
+      if @errors.nil?
+        flash.now[:notice] = 'All your code look fine!!! You can do deploy now!'
+        format.js
+      else
+        format.json { render json: @errors  }
+      end
+
+      format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
+    end
+  rescue => ex
+    flash.now[:error] = clear_exception ex.message
+    respond_to do |format|
+      format.js
+      format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
+
     end
   end
 

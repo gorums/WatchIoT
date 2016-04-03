@@ -82,6 +82,14 @@ class Project < ActiveRecord::Base
         user_owner_id: user_owner.id)
   end
 
+  def self.evaluate(description)
+    errors =
+    {
+        error1: Errors::ValidateError.new(6, 10, 'Strange error'),
+        error2: Errors::ValidateError.new(10, 10, 'Strange error 2')
+    }
+  end
+
   private
 
   ## -------------------- Private Instance method ----------------------- ##
