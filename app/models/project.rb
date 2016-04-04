@@ -94,11 +94,7 @@ class Project < ActiveRecord::Base
   # and return an array of errors if there are
   #
   def self.evaluate(config)
-    errors =
-    {
-        error1: Errors::ValidateError.new(6, 10, 'Strange error'),
-        error2: Errors::ValidateError.new(10, 10, 'Strange error 2')
-    }
+    Wiot::Evaluator.parse config, nil
   end
 
   private
