@@ -6,6 +6,8 @@
 #  name          :string
 #  description   :text
 #  configuration :text
+#  has_errors    :boolean          default(FALSE)
+#  status        :boolean          default(TRUE)
 #  user_id       :integer
 #  space_id      :integer
 #  user_owner_id :integer
@@ -43,8 +45,8 @@ class Project < ActiveRecord::Base
   ##
   # edit a project, only can edit the description for now
   #
-  def edit_project(description)
-    update!(description: description)
+  def edit_project(description, status)
+    update!(description: description, status: status)
   end
 
   ##

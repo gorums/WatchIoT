@@ -6,6 +6,8 @@
 #  name          :string
 #  description   :text
 #  configuration :text
+#  has_errors    :boolean          default(FALSE)
+#  status        :boolean          default(TRUE)
 #  user_id       :integer
 #  space_id      :integer
 #  user_owner_id :integer
@@ -55,7 +57,7 @@ class ProjectsController < ApplicationController
   # Patch /:username/:namespace/:project
   #
   def edit
-    @project.edit_project(project_edit_params[:description])
+    @project.edit_project(project_edit_params[:description], project_edit_params[:status])
 
     flash_log('Edit the project <b>' + @project.name + '</b>', 'Project was edited correctly')
     redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name
@@ -163,7 +165,7 @@ class ProjectsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   #
   def project_edit_params
-    params.require(:project).permit(:name, :description)
+    params.require(:project).permit(:name, :description, :status)
   end
 
   ##

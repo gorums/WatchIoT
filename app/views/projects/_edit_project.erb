@@ -17,6 +17,13 @@
 		<% end %>
 
 		<%= div_for(@project, class: 'form-group') do %>
+			<label class="col-lg-2">Active</label>
+			<div class="col-lg-10">
+				<%= f.check_box :status %>
+			</div>
+		<% end %>
+
+		<%= div_for(@project, class: 'form-group') do %>
 			<div class="col-lg-offset-2 col-lg-9">
 				<%= submit_tag 'Save Project', class: 'btn btn-primary' %>
 			</div>
