@@ -16,7 +16,8 @@ RSpec.describe Notifier, type: :mailer do
     it 'renders the body' do
       expect(mail.body.encoded)
           .to match('Hi my_user_name, thanks for signing up!')
-      expect(mail.body.encoded)
+      body = mail.body.encoded
+      expect(body)
           .to match('/active/123456789<br/><br/>')
     end
   end
@@ -111,8 +112,9 @@ RSpec.describe Notifier, type: :mailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match('Hi my_user_name!')
-      expect(mail.body.encoded).to match('/verify_email/123456789')
+      body = mail.body.encoded
+      expect(body).to match('Hi my_user_name!')
+      expect(body).to match('/verify_email/123456789')
     end
   end
 

@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-</head>
-<body>
-
 <h1>Hi <%= @user.username %>!</h1>
 
 Click here to verify your email <%= url_for(controller: 'notifications', action: 'verify_email', token: @token, only_path: false)  %><br/><br/>
 
 WatchIoT Support
-</body>
-</html>
