@@ -21,7 +21,7 @@ RSpec.describe ApiKey, type: :model do
 
       ApiKey.generate @user
 
-      new_api_key = ApiKey.find(@user.api_key_id)
+      new_api_key = @user.api_key
       expect(new_api_key.api_key).to_not eq(api_key.api_key)
     end
   end

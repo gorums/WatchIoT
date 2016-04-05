@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   has_many :projects
   has_many :logs
   has_many :verify_clients
-  belongs_to :api_key
+  belongs_to  :api_key
   belongs_to :plan
 
   validates :username, uniqueness: true,
@@ -238,7 +238,7 @@ class User < ActiveRecord::Base
     api.api_key = api_key
     api.save
 
-    self.api_key_id = api.id
+    self.api_key = api
   end
 
   ##
