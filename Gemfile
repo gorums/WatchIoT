@@ -56,6 +56,8 @@ gem 'wiot-evaluator'
 # pretty email
 gem 'roadie-rails', '~> 1.0'
 
+gem 'rails_serve_static_assets', group: :production
+
 gem 'rails_12factor', group: :production
 
 group :development, :test do
