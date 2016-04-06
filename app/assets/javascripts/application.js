@@ -20,5 +20,7 @@
 //= require gravtastic
 //= require bootstrap-treeview
 //= require ace-rails-ap
+//= require ace/mode-yaml
 //= require ace/ext-language_tools
+//= require ace/theme-clouds_midnight
 
