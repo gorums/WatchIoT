@@ -1,11 +1,11 @@
 <h1>Hi <%= @user_member.username %></h1>
 
-You have been invited by <%= @user.username %>(<%= user_email(@user.id) %>) to join a new team on Watchiot.
+You have been invited by <strong><%= @user.username %>(<%= user_email(@user.id) %>)</strong> to join a new team on <b>WatchIoT</b>.
 
-Login here <%= url_for(controller: 'users', action: 'login', only_path: false)  %><br/><br/>
+<a href="<%= url_for(controller: 'users', action: 'login', only_path: false)  %>">Login here</a> <br/><br/>
 
-and then you have access to <%= url_for(controller: 'dashboard', action: 'show', username: @user.username, only_path: false)  %>
+and then you have access to the <a href="<%= url_for(controller: 'dashboard', action: 'show', username: @user.username, only_path: false)  %>">new team</a>
 
-like a new member of the team.<br/><br/>
+like a new member.<br/><br/>
 
 WatchIoT Support

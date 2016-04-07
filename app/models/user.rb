@@ -210,7 +210,7 @@ class User < ActiveRecord::Base
     return if user.nil? || !user.status? || email.nil?
 
     token = VerifyClient.create_token(user.id, email, 'reset')
-    Notifier.send_forget_passwd_email(email, user, token).deliver_later
+    Notifier.send_forget_passwd_email(email.email, user, token).deliver_later
   end
 
   private

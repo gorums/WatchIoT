@@ -1,8 +1,8 @@
-<h1>Hi <%= @user.username %>, thanks for signing up!</h1>
+<h1>Hi <%= @user.username %></h1>, thanks for signing up!
 
-Welcome to WatchIoT!<br/><br/>
+Welcome to <b>WatchIoT!</b><br/><br/>
 
-Click here to activate your WatchIoT account <%= url_for(controller: 'notifications',	 action: 'active', token: @token, only_path: false)  %><br/><br/>
+<a href="<%= url_for(controller: 'notifications',	 action: 'active', token: @token, only_path: false)  %>">Click here to activate</a> your <b>WatchIoT</b> account <br/><br/>
 
 Regards<br/><br/>
 

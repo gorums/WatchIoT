@@ -40,6 +40,7 @@ class NotificationsController < ApplicationController
     @user.reset_passwd user_reset_params
     @verifyClient.destroy!
 
+    cookies.clear
     redirect_to '/login'
   rescue StandardError => ex
     flash.now[:error] = clear_exception ex.message

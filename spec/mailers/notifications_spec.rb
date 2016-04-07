@@ -14,11 +14,8 @@ RSpec.describe Notifier, type: :mailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded)
-          .to match('Hi my_user_name, thanks for signing up!')
       body = mail.body.encoded
-      expect(body)
-          .to match('/active/123456789<br/><br/>')
+      expect(body).to match('/active/123456789')
     end
   end
 
@@ -34,8 +31,7 @@ RSpec.describe Notifier, type: :mailer do
       expect(mail.body.encoded)
           .to match('Hi my_user_name!')
       expect(mail.body.encoded)
-          .to match('Congratulations on your new WatchIoT account!'\
-           ' Getting set up with WatchIoT is quick and easy.<br/><br/>')
+          .to match('Congratulations on your new <b>WatchIoT</b> account!')
     end
   end
 
@@ -49,11 +45,10 @@ RSpec.describe Notifier, type: :mailer do
 
     it 'renders the body' do
       expect(mail.body.encoded)
-          .to match('Hi my_user_name1,</h1><br/><br/> the space my_space'\
-           ' was transferred for you!')
+          .to match('<br/><br/> the space <b>my_space</b> was transferred for you!')
+
       expect(mail.body.encoded)
-          .to match('by <strong>my_user_name\(user@watchiot.com\)'\
-          '</strong><br/><br/>')
+          .to match('by <strong>my_user_name\(user@watchiot.com\)</strong>')
     end
   end
 
@@ -68,9 +63,7 @@ RSpec.describe Notifier, type: :mailer do
     it 'renders the body' do
       expect(mail.body.encoded).to match('<h1>Hi my_user_name1</h1>')
       expect(mail.body.encoded)
-          .to match('You have been invited by my_user_name\(user@watchiot.com\)'\
-          ' to join a new team on Watchiot.')
-      expect(mail.body.encoded).to match('/my_user_name')
+          .to match('You have been invited by <strong>my_user_name\(user@watchiot.com\)</strong> to join a new team on <b>WatchIoT</b>.')
     end
   end
 
@@ -84,7 +77,7 @@ RSpec.describe Notifier, type: :mailer do
 
     it 'renders the body' do
       expect(mail.body.encoded)
-          .to match('You have been invited to join Watchiot.')
+          .to match('You have been invited to join <b>WatchIoT</b>.')
       expect(mail.body.encoded).to match('/invite/123456789')
     end
   end
@@ -129,7 +122,7 @@ RSpec.describe Notifier, type: :mailer do
     it 'renders the body' do
       expect(mail.body.encoded).to match('Hi my_user_name!')
       expect(mail.body.encoded)
-          .to match('<p>The password was restarted correctly.</p></br>')
+          .to match('<p>The password was restarted correctly.</p>')
     end
   end
 end
