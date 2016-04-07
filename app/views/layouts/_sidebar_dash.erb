@@ -40,13 +40,13 @@
 		var tree = [
 			{
 				text: "My Spaces",
-				href: "/<%= me.username %>/spaces",
+				href: "/<%= param_user %>/spaces",
 				<%if !@spaces.nil? && @spaces.size > 0 %>
 				nodes: [
 				<% @spaces.each do |space| %>
 					{
 						text: "<%= truncate(space.name, length: 15) %>",
-						href: "/<%= me.username %>/<%= space.name %>",
+						href: "/<%= param_user %>/<%= space.name %>",
 						<%if !@space.nil? && @space.name == space.name %>
 						state: { selected: true, expanded: true },
 						<% end %>
@@ -55,7 +55,7 @@
 							<% space.projects.each do |project| %>
 							{
 								text: "<%= truncate(project.name, length: 12) %>",
-								href: "/<%= me.username %>/<%= space.name %>/<%= project.name %>",
+								href: "/<%= param_user %>/<%= space.name %>/<%= project.name %>",
 								<%if !@space.nil? && @space.name == space.name && !@project.nil? && @project.name == project.name%>
 								state: { selected: true },
 								<% end %>
