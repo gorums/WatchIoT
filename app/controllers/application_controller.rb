@@ -138,8 +138,11 @@ class ApplicationController < ActionController::Base
   # Get acces to project
   #
   def allow_project
-    @project = Project.find_by_user_space_and_name(@user.id, @space.id, params[:nameproject]).take ||
-        not_found
+    @project = Project.find_by_user_space_and_name(
+        @user.id, @space.id,
+        params[:nameproject]).take || not_found
+
+    @tokens = Project.token
   end
 
 end

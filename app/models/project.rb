@@ -100,6 +100,13 @@ class Project < ActiveRecord::Base
     Wiot::Evaluator.parse config, nil
   end
 
+  ##
+  # this method return all the token defined
+  #
+  def self.token
+    Wiot::Evaluator.token
+  end
+
   private
 
   ## -------------------- Private Instance method ----------------------- ##

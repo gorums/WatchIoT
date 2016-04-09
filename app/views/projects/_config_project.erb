@@ -40,3 +40,9 @@
 </div>
 
 <div id="result-evaluator"></div>
+
+<%= javascript_tag do %>
+	window.tokens = <%=raw @tokens.to_json %>;
+<% end %>
+
+

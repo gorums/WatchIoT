@@ -9,11 +9,7 @@ $(document).ready ->
     editor.session.setMode 'ace/mode/yaml'
     editor.setOptions enableBasicAutocompletion: true
     staticWordCompleter = getCompletions: (editor, session, pos, prefix, callback) ->
-      wordList = [
-        'foo'
-        'bar'
-        'baz'
-      ]
+      wordList = tokens
       callback null, wordList.map((word) ->
         {
         caption: word
