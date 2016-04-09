@@ -16,9 +16,7 @@
 	</div>
 </div>
 
-<pre id="editor">
-	<%= @project.configuration %>
-</pre>
+<pre id="editor"><%= @project.configuration %></pre>
 
 <div class="form-horizontal">
 	<%= form_tag '/' + param_user + '/' + @space.name + '/' + @project.name + '/evaluate', remote: true, method: 'patch', id:'evaluator-form' do  %>
