@@ -61,4 +61,22 @@ RSpec.describe 'routes for projects', type: :routing do
                     namespace: 'my_space',
                     nameproject: 'my_project')
   end
+
+  it 'routes setting evaluate project' do
+    expect(patch: '/gorums/my_space/my_project/evaluate').
+        to route_to(controller: 'projects',
+                    action: 'evaluate',
+                    username: 'gorums',
+                    namespace: 'my_space',
+                    nameproject: 'my_project')
+  end
+
+  it 'routes setting deploy project' do
+    expect(patch: '/gorums/my_space/my_project/deploy').
+        to route_to(controller: 'projects',
+                    action: 'deploy',
+                    username: 'gorums',
+                    namespace: 'my_space',
+                    nameproject: 'my_project')
+  end
 end
