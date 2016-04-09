@@ -15,6 +15,7 @@
 						Home
 					<%end%>
 				</li>
+
 				<li><%= link_to "/" + param_user + "/spaces" do%>
 						<i class="fa fa-laptop"></i>
 						Spaces
@@ -32,6 +33,13 @@
 					<%end%>
 				</li>
 				<%end%>
+				<%if me.username != param_user %>
+					<li><%= link_to "/" + me.username  do%>
+							<i class="fa fa-th"></i>
+							My Dashboard
+						<%end%>
+					</li>
+				<% end %>
 				<li role="separator" class="divider"></li>
 				<li><%= link_to logout_path do%>
 						Logout

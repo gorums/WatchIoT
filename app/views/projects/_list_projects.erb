@@ -27,8 +27,13 @@
 								<th scope="row"><%= project.name %></th>
 								<td><%= project.description %></td>
 								<td>
-									<a href="/<%= param_user %>/<%= @space.name %>/<%= project.name %>" class="list-action clear-background" title="Edit project"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-									<a href="/<%= param_user %>/<%= @space.name %>/<%= project.name %>/setting" class="list-action clear-background" title="Setting project"><i class="fa fa-cog fa-2x"></i></a>
+									<%= link_to '/' + param_user + '/' + @space.name + '/' + project.name, class: 'list-action clear-background', title: 'Edit project', method: :get  do %>
+										<i class="fa fa-pencil-square-o fa-2x"></i>
+									<%end%>
+
+									<%= link_to '/' + param_user + '/' + @space.name + '/' + project.name + '/setting', class: 'list-action clear-background', title: 'Setting project'  do %>
+										<i class="fa fa-cog fa-2x"></i>
+									<%end%>
 								</td>
 							</tr>
 							<% end %>

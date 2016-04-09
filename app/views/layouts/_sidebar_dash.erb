@@ -13,6 +13,12 @@
 				Dashboard
 			<%end%>
 		</li>
+		<li class="dashboard-menu">
+			<%= link_to "/" + param_user + "/chart" do%>
+				<i class="fa fa-bar-chart"></i>
+				Chart
+			<%end%>
+		</li>
 		<%if me.username == param_user%>
 			<li class="dashboard-menu">
 				<%= link_to "/" + me.username + "/setting" do%>
@@ -21,12 +27,6 @@
 				<%end%>
 			</li>
 		<%end%>
-		<li class="dashboard-menu">
-			<%= link_to "/" + param_user + "/chart" do%>
-				<i class="fa fa-bar-chart"></i>
-				Chart
-			<%end%>
-		</li>
 	</ul>
 
 	<div class="spaces">
