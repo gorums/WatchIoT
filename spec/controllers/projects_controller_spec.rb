@@ -66,6 +66,7 @@ RSpec.describe ProjectsController, type: :controller do
     it 'using get all projects has a 200 status code' do
       get :index, username: 'user_name', namespace: 'my_space'
       expect(assigns[:space]).to_not be_nil
+      expect(assigns[:space].projects.length).to eq(1)
       expect(response.status).to eq(200)
       expect(response).to render_template('index')
     end
@@ -113,6 +114,7 @@ RSpec.describe ProjectsController, type: :controller do
       # access to 'user_name_unauthorized' spaces
       get :index, username: 'user_name_unauthorized', namespace: 'my_space_unauthorized'
       expect(assigns[:space]).to_not be_nil
+      expect(assigns[:space].projects.length).to eq(1)
       expect(response.status).to eq(200)
       expect(response).to render_template('index')
     end
