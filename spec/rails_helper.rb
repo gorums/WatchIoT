@@ -76,10 +76,10 @@ def before_each(type_test)
                        feature_id: fSpace.id, value: '3')
     # Number of projects by space for free account
     PlanFeature.create(plan_id: plan.id,
-                       feature_id: fProject.id, value: '5')
-    # Request per minutes for free account
+                       feature_id: fProject.id, value: '3')
+    # Request per hour for each project for free account
     PlanFeature.create(plan_id: plan.id,
-                       feature_id: fPerMin.id, value: '1')
+                       feature_id: fPerMin.id, value: '60')
     # Notification by email for free account
     PlanFeature.create(plan_id: plan.id,
                        feature_id: fNotif.id, value: 'true')
@@ -103,6 +103,7 @@ def before_each(type_test)
 
     if 'emailModel'  == type_test ||
         'spaceModel' == type_test ||
+        'projectModel' == type_test ||
         'teamModel'  == type_test ||
         'userModel'  == type_test ||
         'notif'      == type_test
@@ -114,10 +115,14 @@ def before_each(type_test)
                                  checked: true, primary: true)
     end
 
-  if 'notif'  == type_test
-    @email.update(checked: true, primary: true)
-    @space = Space.create!(name: 'my_space', user_id: @user_two.id)
-  end
+    if 'projectModel' == type_test
+      @space = Space.create!(name: 'my_space', user_id: @user.id)
+    end
+
+    if 'notif'  == type_test
+      @email.update(checked: true, primary: true)
+      @space = Space.create!(name: 'my_space', user_id: @user_two.id)
+    end
 
 end
 

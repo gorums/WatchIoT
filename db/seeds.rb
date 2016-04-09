@@ -8,34 +8,34 @@
 
 # Create plans static values
 Plan.create(name: 'Free', amount_per_month: 0)
-Plan.create(name: 'Small', amount_per_month: 9)
-Plan.create(name: 'Medium', amount_per_month: 19)
+Plan.create(name: 'Small', amount_per_month: 7)
+Plan.create(name: 'Medium', amount_per_month: 15)
 Plan.create(name: 'Large', amount_per_month: 29)
 
 Feature.create(name: 'Number of spaces')
 Feature.create(name: 'Number of projects by space')
-Feature.create(name: 'Request per minutes')
+Feature.create(name: 'Request per hours for each project')
 Feature.create(name: 'Notification by email')
 Feature.create(name: 'Webhook support')
 Feature.create(name: 'Team members')
 
 # Number of spaces
-PlanFeature.create(plan_id: 1, feature_id: 1, value: '3')
-PlanFeature.create(plan_id: 2, feature_id: 1, value: '5')
+PlanFeature.create(plan_id: 1, feature_id: 1, value: '1')
+PlanFeature.create(plan_id: 2, feature_id: 1, value: '4')
 PlanFeature.create(plan_id: 3, feature_id: 1, value: '10')
 PlanFeature.create(plan_id: 4, feature_id: 1, value: '30')
 
 # Number of projects by space
-PlanFeature.create(plan_id: 1, feature_id: 2, value: '5')
-PlanFeature.create(plan_id: 2, feature_id: 2, value: '10')
-PlanFeature.create(plan_id: 3, feature_id: 2, value: '15')
+PlanFeature.create(plan_id: 1, feature_id: 2, value: '3')
+PlanFeature.create(plan_id: 2, feature_id: 2, value: '5')
+PlanFeature.create(plan_id: 3, feature_id: 2, value: '12')
 PlanFeature.create(plan_id: 4, feature_id: 2, value: '30')
 
-# Request per minutes
-PlanFeature.create(plan_id: 1, feature_id: 3, value: '1')
-PlanFeature.create(plan_id: 2, feature_id: 3, value: '15')
-PlanFeature.create(plan_id: 3, feature_id: 3, value: '30')
-PlanFeature.create(plan_id: 4, feature_id: 3, value: '60')
+# Request per hours per project
+PlanFeature.create(plan_id: 1, feature_id: 3, value: '60')
+PlanFeature.create(plan_id: 2, feature_id: 3, value: '360')
+PlanFeature.create(plan_id: 3, feature_id: 3, value: '900')
+PlanFeature.create(plan_id: 4, feature_id: 3, value: '3600')
 
 # Notification by email
 PlanFeature.create(plan_id: 1, feature_id: 4, value: 'true')
@@ -50,9 +50,9 @@ PlanFeature.create(plan_id: 3, feature_id: 5, value: 'true')
 PlanFeature.create(plan_id: 4, feature_id: 5, value: 'true')
 
 # Team members
-PlanFeature.create(plan_id: 1, feature_id: 6, value: '3')
+PlanFeature.create(plan_id: 1, feature_id: 6, value: '2')
 PlanFeature.create(plan_id: 2, feature_id: 6, value: '5')
-PlanFeature.create(plan_id: 3, feature_id: 6, value: '10')
+PlanFeature.create(plan_id: 3, feature_id: 6, value: 'unlimited')
 PlanFeature.create(plan_id: 4, feature_id: 6, value: 'unlimited')
 
 # Faq static values

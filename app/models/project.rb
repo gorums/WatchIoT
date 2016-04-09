@@ -23,13 +23,14 @@ class Project < ActiveRecord::Base
   belongs_to :space
 
   validates_presence_of :name, on: :create
-  validates_uniqueness_of :name, scope: [:space_id, :user_id]
+  validates_uniqueness_of :name, scope: [:space_id, :user_id],
+                          message: 'You have a project with this name'
 
   validates :name, presence: true, length: { maximum: 25 }
   validates :name, exclusion: { in: %w(create setting projects),
                                 message: '%{value} is reserved.' }
 
-  before_save :name_format
+  before_validation :name_format
 
   scope :count_by_user_and_space, -> user_id, space_id {
         where('user_id = ?', user_id).
@@ -61,7 +62,7 @@ class Project < ActiveRecord::Base
   #
   def delete_project(name)
     raise StandardError, 'The project name is not valid' if name.nil?
-    raise StandardError, 'The project name  is not valid' if
+    raise StandardError, 'The project name is not valid' if
         name.downcase != self.name
 
     destroy!
@@ -79,13 +80,13 @@ class Project < ActiveRecord::Base
   ##
   # add a new space
   #
-  def self.create_new_project(space_params, user, space, user_owner)
+  def self.create_new_project(project_params, user, space, user_owner)
     raise StandardError, 'You can not add more projects,'\
               ' please contact with us!' unless can_create_project?(user, space)
 
     Project.create!(
-        name: space_params[:name],
-        description: space_params[:description],
+        name: project_params[:name],
+        description: project_params[:description],
         user_id: user.id,
         space_id: space.id,
         user_owner_id: user_owner.id)
