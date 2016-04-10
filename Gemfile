@@ -50,8 +50,9 @@ gem 'gravtastic'
 # pretty editor
 gem 'ace-rails-ap'
 
-# watchiot evaluator
-gem 'wiot-evaluator'
+# watchiot parser
+gem 'wiot-parser', '~> 0.1'
+gem 'antlr3', '~> 1.10'
 
 # pretty email
 gem 'roadie'

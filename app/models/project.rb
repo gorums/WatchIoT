@@ -97,16 +97,28 @@ class Project < ActiveRecord::Base
   # and return an array of errors if there are
   #
   def self.evaluate(config)
-    Wiot::Evaluator.parse config, nil
+    fix_error_line(Wiot::Parser.parse config, nil)
   end
 
   ##
   # this method return all the token defined
   #
   def self.token
-    Wiot::Evaluator.token
+    Wiot::Parser.token
   end
 
+  ##
+  # The ace editor count the line begin in zero, then
+  # we have to fix it
+  #
+  def self.fix_error_line(errors)
+    return if errors.nil? || errors.empty?
+    errors.each do |key, value|
+      row = value.row
+      row_i = row.to_i - 1
+      value.row = row_i.to_s
+    end
+  end
   private
 
   ## -------------------- Private Instance method ----------------------- ##
