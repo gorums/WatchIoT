@@ -41,7 +41,6 @@ GEM
     annotate (2.7.0)
       activerecord (>= 3.2, < 6.0)
       rake (~> 10.4)
-    antlr3 (1.10.0)
     arel (6.0.3)
     autoprefixer-rails (6.3.4)
       execjs
@@ -203,7 +202,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
-    wiot-parser (0.1.3)
+    wiot-parser (0.1.4)
 
 PLATFORMS
   ruby
@@ -212,7 +211,6 @@ PLATFORMS
 DEPENDENCIES
   ace-rails-ap
   annotate (~> 2.7.0)
-  antlr3 (~> 1.10)
   autoprefixer-rails
   bcrypt (~> 3.1.7)
   bootstrap-sass (~> 3.2.0)

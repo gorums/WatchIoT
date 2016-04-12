@@ -52,7 +52,6 @@ gem 'ace-rails-ap'
 
 # watchiot parser
 gem 'wiot-parser', '~> 0.1'
-gem 'antlr3', '~> 1.10'
 
 # pretty email
 gem 'roadie'
