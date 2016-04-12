@@ -24,4 +24,4 @@ deploy:
 
 addons:
     code_climate:
-        repo_token: 3b0d4309de7ce4f9c59194b941fb872dc8acf4896ecc54d92eaba82411bac0b1
+        repo_token: 35597e7e616491fde70dca956dbfe3757ea9e7add657e71fbb3b9aa5d896af7d
