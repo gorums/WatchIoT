@@ -18,6 +18,50 @@
 .project-svg{
     display: block;
     fill: #225079;
-    width: 5em;
-    height: 5em;
+    width: 2em;
+    height: 2em;
+}
+
+.glyphicon {
+  display: inline-block;
+  font-family: "Glyphicons Halflings";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  position: relative;
+  top: 1px;
+}
+
+.bs-glyphicons .glyphicon-class {
+  margin-left: 0;
+  margin-right: 0;
+  display: block;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.bs-glyphicons-list {
+  list-style: outside none none;
+  padding-left: 0;
+  margin-bottom: 1px;
+  margin-top: 0;
+}
+
+.bs-glyphicons li {
+  background-color: #f9f9f9;
+  border: 1px solid #fff;
+  float: left;
+  font-size: 14px;
+  height: 115px;
+  line-height: 1.4;
+  padding: 10px;
+  text-align: center;
+  width: 15%;
+}
+
+
+.bs-glyphicons .glyphicon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  margin-top: 5px;
 }

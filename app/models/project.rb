@@ -15,6 +15,8 @@
 #  updated_at    :datetime         not null
 #
 
+require 'net/http'
+
 ##
 # Project model
 #
@@ -119,6 +121,16 @@ class Project < ActiveRecord::Base
       value.row = row_i.to_s
     end
   end
+
+  ##
+  # Get the repos configurations predefine info
+  #
+  def self.repos_config(repo_url)
+    uri = URI(repo_url +'repos')
+    req = Net::HTTP.get(uri)
+    JSON.parse req
+  end
+
   private
 
   ## -------------------- Private Instance method ----------------------- ##

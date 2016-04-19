@@ -18,6 +18,9 @@
 ##
 # Project controller
 #
+
+
+
 class ProjectsController < ApplicationController
   layout 'dashboard'
 
@@ -36,6 +39,8 @@ class ProjectsController < ApplicationController
   # Get /:username/:space/:project
   #
   def show
+    @repo_url = ENV['REPO_URL']
+    @repos = Project.repos_config(@repo_url)
   end
 
   ##
