@@ -73,8 +73,9 @@ class Project < ActiveRecord::Base
   ##
   # save the configuration and if it has errors
   #
-  def save_project_config(config, has_errors)
-    update!(configuration: config, has_errors: has_errors)
+  def save_project_config(yaml, repo_name, has_errors)
+    update!(configuration: yaml, has_errors: has_errors)
+    update!(repo_name: repo_name) unless repo_name.blank?
   end
 
   ## ------------------------ Class method ------------------------ ##
@@ -130,6 +131,19 @@ class Project < ActiveRecord::Base
     req = Net::HTTP.get(uri)
     JSON.parse req
   end
+
+  def self.config_yaml(repo_url, config_name)
+    uri = URI(repo_url +'repos/' + config_name + '/config.yaml')
+    req = Net::HTTP.get(uri)
+    JSON.parse req
+  end
+
+  def self.config_readme(repo_url, config_name)
+    uri = URI(repo_url +'repos/' + config_name + '/readme.md')
+    req = Net::HTTP.get(uri)
+    JSON.parse req
+  end
+
 
   private
 

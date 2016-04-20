@@ -14,12 +14,14 @@
           <ul class="bs-glyphicons-list">
           <% @repos.each do |name, value| %>
             <li>
-              <span class="glyphicon" aria-hidden="true">
-                <%= image_tag @repo_url + 'repos/' + name + '/' + value['image'], {class: 'project-svg', title: value['abstract']} %>
-              </span>
-              <span class="glyphicon-class">
-                <%= value['title'] %>
-              </span>
+              <%= link_to '/' + param_user + '/' + @space.name + '/' + @project.name + '/repo/' + name, method: :get do %>
+                <span class="glyphicon" aria-hidden="true">
+                  <%= image_tag @repo_url + 'repos/' + name + '/' + value['image'], {class: 'project-svg', title: value['abstract']} %>
+                </span>
+                <span class="glyphicon-class">
+                  <%= value['title'] %>
+                </span>
+              <% end %>
             </li>
           <% end %>
           </ul>
@@ -28,6 +30,13 @@
 		</div>
 	</div>
 </div>
+
+<% unless @project.repo_name.nil? %>
+<div>
+    <p>You are using the <strong><%= @repos[@project.repo_name]['title'] %></strong> configuration.
+    Please see the <a href="#">readme!</a></p>
+</div>
+<% end%>
 
 <pre id="editor"><%= @project.configuration %></pre>
 
@@ -41,6 +50,7 @@
 
 	<%= form_tag '/' + param_user + '/' + @space.name + '/' + @project.name + '/deploy', remote: true, method: 'patch', id:'deploy-form' do  %>
 		<%= hidden_field_tag 'deploy' %>
+    <%= hidden_field_tag 'repo_name', @project.repo_name || '' %>
 
 		<div class="col-md-1">
 			<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">

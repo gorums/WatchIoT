@@ -56,6 +56,9 @@ gem 'wiot-parser', '~> 0.1'
 # pretty email
 gem 'roadie'
 
+# markdown parser
+gem 'redcarpet', '~> 3.3'
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   # gem 'mysql'

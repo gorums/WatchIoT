@@ -19,14 +19,13 @@
 # Project controller
 #
 
-
-
 class ProjectsController < ApplicationController
   layout 'dashboard'
 
   before_filter :allow
   before_filter :allow_space
   before_filter :allow_project, :except => [:index, :create]
+  before_filter :add_repo, :except => [:index, :create]
 
   ##
   # Get /:username/:space/projects
@@ -39,8 +38,6 @@ class ProjectsController < ApplicationController
   # Get /:username/:space/:project
   #
   def show
-    @repo_url = ENV['REPO_URL']
-    @repos = Project.repos_config(@repo_url)
   end
 
   ##
@@ -87,7 +84,7 @@ class ProjectsController < ApplicationController
   #
   def deploy
     errors = Project.evaluate params[:deploy]
-    @project.save_project_config params[:deploy], !@errors.nil?
+    @project.save_project_config params[:deploy], params[:repo_name], !(errors.nil? || errors.empty?)
 
     num_errors = errors.nil? ? 0 : errors.length
     notice = 'Deployed correctly.'
@@ -101,6 +98,32 @@ class ProjectsController < ApplicationController
   rescue => ex
     flash.now[:error] = clear_exception ex.message
     respond_js
+  end
+
+  ##
+  # GET /:username/:namespace/:nameproject/repo/:reponame
+  #
+  def repo
+    config_yaml = Project.config_yaml(@repo_url, params[:reponame])
+
+    @project.configuration = config_yaml['yaml']
+    @project.repo_name = params[:reponame]
+
+    render 'show'
+  rescue => ex
+    flash[:error] = clear_exception ex.message
+    redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name
+  end
+
+  ##
+  # GET /:username/:namespace/:nameproject/readme/:reponame
+  #
+  def readme
+    readme = Project.config_readme(@repo_url, params[:reponame])
+
+  rescue => ex
+    flash[:error] = clear_exception ex.message
+    redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name
   end
 
   ##
@@ -196,4 +219,11 @@ class ProjectsController < ApplicationController
     flash[:notice] = msg
   end
 
+  ##
+  # Add the repo
+  #
+  def add_repo
+    @repo_url = ENV['REPO_URL']
+    @repos = Project.repos_config(@repo_url)
+  end
 end

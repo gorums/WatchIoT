@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 20160129014352) do
     t.integer  "user_id"
     t.integer  "space_id"
     t.integer  "user_owner_id"
+    t.string   "repo_name"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
   end

@@ -66,12 +66,19 @@ Rails.application.routes.draw do
   # projects route
   get '/:username/:namespace/projects', controller: 'projects', action: 'index'
   post '/:username/:namespace/create', controller: 'projects', action: 'create'
-  patch '/:username/:namespace/:nameproject', controller: 'projects', action: 'edit'
+
   patch '/:username/:namespace/:nameproject/deploy', controller: 'projects', action: 'deploy'
   patch '/:username/:namespace/:nameproject/evaluate', controller: 'projects', action: 'evaluate'
+  get '/:username/:namespace/:nameproject/repo/:reponame', controller: 'projects', action: 'repo'
+  get '/:username/:namespace/:nameproject/readme/:reponame', controller: 'projects', action: 'readme'
+
+  # projects setting route
+
   get '/:username/:namespace/:nameproject/setting', controller: 'projects', action: 'setting'
   patch '/:username/:namespace/:nameproject/setting/change', controller: 'projects', action: 'change'
   delete '/:username/:namespace/:nameproject/setting/delete', controller: 'projects', action: 'delete'
+
+  patch '/:username/:namespace/:nameproject', controller: 'projects', action: 'edit'
   get '/:username/:namespace/:nameproject', controller: 'projects', action: 'show'
 
   root 'home#index'

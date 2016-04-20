@@ -12,6 +12,7 @@ class CreateProjects < ActiveRecord::Migration
       t.references :user
       t.references :space
       t.integer :user_owner_id
+      t.string :repo_name
 
       t.timestamps null: false
     end
