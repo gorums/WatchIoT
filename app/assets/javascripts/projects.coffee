@@ -50,4 +50,9 @@ $(document).ready ->
       $( "#result-evaluator" ).html '')
 
     $("#deploy-btn").click ->
-      $('#myModal').modal('hide')
+      $("#myModal").modal('hide')
+
+    $("#readme-form")    
+    .on("ajax:success", (e, data, status, xhr) ->
+      $("#readmeModal").modal('show')
+    )

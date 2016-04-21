@@ -141,9 +141,11 @@ class Project < ActiveRecord::Base
   def self.config_readme(repo_url, config_name)
     uri = URI(repo_url +'repos/' + config_name + '/readme.md')
     req = Net::HTTP.get(uri)
-    JSON.parse req
+    json_readme = JSON.parse req
+    # convert markdown to html
+    readme = Markdown.new(json_readme['readme']).to_html
+    readme.gsub("\n","<br />")
   end
-
 
   private
 

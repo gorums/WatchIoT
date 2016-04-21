@@ -119,11 +119,12 @@ class ProjectsController < ApplicationController
   # GET /:username/:namespace/:nameproject/readme/:reponame
   #
   def readme
-    readme = Project.config_readme(@repo_url, params[:reponame])
+    @readme = Project.config_readme(@repo_url, params[:reponame])
 
+    respond_js
   rescue => ex
     flash[:error] = clear_exception ex.message
-    redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name
+    respond_js
   end
 
   ##
