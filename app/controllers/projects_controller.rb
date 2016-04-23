@@ -44,7 +44,8 @@ class ProjectsController < ApplicationController
   # Post /:username/:namespace/create
   #
   def create
-    project = Project.create_new_project(project_create_params, @user, @space, me)
+    project = Project.create_new_project(project_create_params,
+                                         @user, @space, me)
 
     flash_log('Create the project <b>' + project.name + '</b>',
               'Project was created correctly')
@@ -59,9 +60,12 @@ class ProjectsController < ApplicationController
   # Patch /:username/:namespace/:project
   #
   def edit
-    @project.edit_project(project_edit_params[:description], project_edit_params[:status])
+    @project.edit_project(project_edit_params[:description],
+                          project_edit_params[:status])
 
-    flash_log('Edit the project <b>' + @project.name + '</b>', 'Project was edited correctly')
+    flash_log('Edit the project <b>' + @project.name + '</b>',
+              'Project was edited correctly')
+
     redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name
   rescue => ex
     flash[:error] = clear_exception ex.message
@@ -73,10 +77,10 @@ class ProjectsController < ApplicationController
   #
   def evaluate
     errors = Project.evaluate params[:evaluator]
-    respond_evaluate errors
+    response_eval errors
   rescue => ex
     flash.now[:error] = clear_exception ex.message
-    respond_js
+    response_js
   end
 
   ##
@@ -84,20 +88,18 @@ class ProjectsController < ApplicationController
   #
   def deploy
     errors = Project.evaluate params[:deploy]
-    @project.save_project_config params[:deploy], params[:repo_name], !(errors.nil? || errors.empty?)
+    num_errors = errors.nil? || errors.empty? ? 0 : errors.length
+    @project.save_project_config params[:deploy], params[:repo_name],
+                                 num_errors != 0
 
-    num_errors = errors.nil? ? 0 : errors.length
-    notice = 'Deployed correctly.'
-    notice += ' This project will be ignore because it has ' + num_errors.to_s +
-        ' errors. Please click on Evaluate for more details.' unless errors.nil?
+    notice = notice num_errors
+    flash.now[:notice] = notice if num_errors == 0
+    flash.now[:error]  = notice if num_errors != 0
 
-    flash.now[:notice] = notice if errors.nil?
-    flash.now[:error] = notice unless errors.nil?
-
-    respond_js
+    response_js
   rescue => ex
     flash.now[:error] = clear_exception ex.message
-    respond_js
+    response_js
   end
 
   ##
@@ -121,10 +123,10 @@ class ProjectsController < ApplicationController
   def readme
     @readme = Project.config_readme(@repo_url, params[:reponame])
 
-    respond_js
+    response_js
   rescue => ex
     flash[:error] = clear_exception ex.message
-    respond_js
+    response_js
   end
 
   ##
@@ -167,9 +169,9 @@ class ProjectsController < ApplicationController
   private
 
   ##
+  # response evaluator
   #
-  #
-  def respond_evaluate(errors)
+  def response_eval(errors)
     respond_to do |format|
       if errors.nil?
         flash.now[:notice] = 'Your configuration code look great!!! Now you can deploy!'
@@ -182,9 +184,9 @@ class ProjectsController < ApplicationController
   end
 
   ##
+  # response js
   #
-  #
-  def respond_js
+  def response_js
     respond_to do |format|
       format.js
       format.html { redirect_to '/' + @user.username + '/' + @space.name + '/' + @project.name }
@@ -226,5 +228,15 @@ class ProjectsController < ApplicationController
   def add_repo
     @repo_url = ENV['REPO_URL']
     @repos = Project.repos_config(@repo_url)
+  end
+
+  ##
+  # get notice
+  #
+  def notice(num_errors)
+    notice = 'Deployed correctly.'
+    notice += ' This project will be ignore because it has ' + num_errors.to_s +
+        ' errors. Please click on Evaluate for more details.' if num_errors != 0
+    notice
   end
 end

@@ -132,19 +132,26 @@ class Project < ActiveRecord::Base
     JSON.parse req
   end
 
+  ##
+  # Get the yaml config
+  #
   def self.config_yaml(repo_url, config_name)
-    uri = URI(repo_url +'repos/' + config_name + '/config.yaml')
+    uri = URI(repo_url + 'repos/' + config_name + '/config.yaml')
     req = Net::HTTP.get(uri)
     JSON.parse req
   end
 
+  ##
+  # Get the readme.md config
+  #
   def self.config_readme(repo_url, config_name)
-    uri = URI(repo_url +'repos/' + config_name + '/readme.md')
+    uri = URI(repo_url + 'repos/' + config_name + '/readme.md')
     req = Net::HTTP.get(uri)
     json_readme = JSON.parse req
     # convert markdown to html
     readme = Markdown.new(json_readme['readme']).to_html
-    readme.gsub("\n","<br />")
+    # replace all the \n for <br />
+    readme.gsub("\n", "<br />")
   end
 
   private
