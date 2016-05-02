@@ -203,7 +203,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
-    wiot_parser (0.1.6)
+    wiot_parser (0.1.7)
 
 PLATFORMS
   ruby

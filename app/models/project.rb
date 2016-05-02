@@ -100,14 +100,14 @@ class Project < ActiveRecord::Base
   # and return an array of errors if there are
   #
   def self.evaluate(config)
-    fix_error_line(Wiot::Parser.parse config, nil)
+    fix_error_line(WiotParser.parse config, nil)
   end
 
   ##
   # this method return all the token defined
   #
   def self.token
-    Wiot::Parser.token
+    WiotParser.token
   end
 
   ##
