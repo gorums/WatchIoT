@@ -51,7 +51,7 @@ gem 'gravtastic'
 gem 'ace-rails-ap'
 
 # watchiot parser
-gem 'wiot-parser', '~> 0.1'
+gem 'wiot_parser', '~> 0.1'
 
 # pretty email
 gem 'roadie'
