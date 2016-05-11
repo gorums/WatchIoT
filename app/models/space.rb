@@ -20,7 +20,7 @@ class Space < ActiveRecord::Base
 
   validates_uniqueness_of :name, scope: [:user_id], message: 'You have a space with this name'
   validates :name, presence: true, length: { maximum: 25 }
-  validates :name, exclusion: { in: %w(create setting spaces chart),
+  validates :name, exclusion: { in: %w(create setting spaces chart docs download blog),
                                 message: '%{value} is reserved.' }
 
   before_validation :name_format
