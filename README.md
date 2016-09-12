@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/watchiot/watchiot-web.png?label=ready&title=Ready)](https://waffle.io/watchiot/watchiot-web)
 WatchIoT [![Build Status](https://travis-ci.org/watchiot/watchiot-web.svg)](https://travis-ci.org/watchiot/watchiot-web) [![Code Climate](https://codeclimate.com/github/watchiot/watchiot-web/badges/gpa.svg)](https://codeclimate.com/github/watchiot/watchiot-web) [![Test Coverage](https://codeclimate.com/github/watchiot/watchiot-web/badges/coverage.svg)](https://codeclimate.com/github/watchiot/watchiot-web/coverage) [![Inline docs](http://inch-ci.org/github/gorums/watchiot.svg?branch=master)](http://inch-ci.org/github/gorums/watchiot) 
 ==
 
