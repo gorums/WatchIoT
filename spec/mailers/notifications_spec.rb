@@ -130,5 +130,5 @@ end
 def expect_sub_to_from(subject)
   expect(mail.subject).to eq(subject)
   expect(mail.to).to eq(['email@watchiot.com'])
-  expect(mail.from).to eq(['info@watchiot.org'])
+  expect(mail.from).to eq(['info@watchiot.com'])
 end
