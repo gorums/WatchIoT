@@ -108,7 +108,7 @@ class ProjectsController < ApplicationController
   def repo
     config_yaml = Project.config_yaml(@repo_url, params[:reponame])
 
-    @project.configuration = config_yaml['yaml']
+    @project.configuration = config_yaml['yml']
     @project.repo_name = params[:reponame]
 
     render 'show'
