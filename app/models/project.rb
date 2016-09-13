@@ -136,7 +136,7 @@ class Project < ActiveRecord::Base
   # Get the yaml config
   #
   def self.config_yaml(repo_url, config_name)
-    uri = URI(repo_url + 'repos/' + config_name + '/config.yaml')
+    uri = URI(repo_url + 'repos/' + config_name + '/config.yml')
     req = Net::HTTP.get(uri)
     JSON.parse req
   end
