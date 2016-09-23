@@ -6,7 +6,7 @@
 #  name          :string
 #  description   :text
 #  configuration :text
-#  has_errors    :boolean          default(FALSE)
+#  ready    :boolean          default(FALSE)
 #  status        :boolean          default(TRUE)
 #  user_id       :integer
 #  space_id      :integer
@@ -76,7 +76,8 @@ class ProjectsController < ApplicationController
   # Patch /:username/:namespace/:project/evaluate
   #
   def evaluate
-    errors = Project.evaluate params[:evaluator]
+    yaml = params[:evaluator]
+    errors = Project.evaluate yaml
     response_eval errors
   rescue => ex
     flash.now[:error] = clear_exception ex.message
@@ -87,10 +88,12 @@ class ProjectsController < ApplicationController
   # Patch /:username/:namespace/:project/deploy
   #
   def deploy
-    errors = Project.evaluate params[:deploy]
+    yaml = params[:deploy]
+    errors = Project.evaluate yaml
+
     num_errors = errors.nil? || errors.empty? ? 0 : errors.length
-    @project.save_project_config params[:deploy], params[:repo_name],
-                                 num_errors != 0
+    @project.save_project_config yaml, params[:repo_name],
+                                 !yaml.blank? && num_errors == 0
 
     notice = notice num_errors
     flash.now[:notice] = notice if num_errors == 0

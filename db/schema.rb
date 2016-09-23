@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 20160129014352) do
     t.string   "name"
     t.text     "description"
     t.text     "configuration"
-    t.boolean  "has_errors",    default: false
+    t.boolean  "ready",         default: false
     t.boolean  "status",        default: true
     t.integer  "user_id"
     t.integer  "space_id"

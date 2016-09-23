@@ -7,7 +7,7 @@ class CreateProjects < ActiveRecord::Migration
       t.string :name, length: 25
       t.text :description
       t.text :configuration
-      t.boolean :has_errors, default: false
+      t.boolean :ready, default: false
       t.boolean :status, default: true
       t.references :user
       t.references :space

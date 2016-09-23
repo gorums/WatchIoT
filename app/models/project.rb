@@ -6,7 +6,7 @@
 #  name          :string
 #  description   :text
 #  configuration :text
-#  has_errors    :boolean          default(FALSE)
+#  ready    :boolean          default(FALSE)
 #  status        :boolean          default(TRUE)
 #  user_id       :integer
 #  space_id      :integer
@@ -73,8 +73,8 @@ class Project < ActiveRecord::Base
   ##
   # save the configuration and if it has errors
   #
-  def save_project_config(yaml, repo_name, has_errors)
-    update!(configuration: yaml, has_errors: has_errors)
+  def save_project_config(yaml, repo_name, ready)
+    update!(configuration: yaml, ready: ready)
     update!(repo_name: repo_name) unless repo_name.blank?
   end
 
@@ -100,7 +100,8 @@ class Project < ActiveRecord::Base
   # and return an array of errors if there are
   #
   def self.evaluate(config)
-    fix_error_line(WiotParser.parse config, nil)
+    errors = WiotParser.parse(config, nil)
+    fix_error_line(errors)
   end
 
   ##
