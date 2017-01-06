@@ -69,7 +69,7 @@ RSpec.describe UsersController, type: :controller do
           user: {username: 'my_user',
                  passwd: '12345678',
                  passwd_confirmation: '12345678'},
-          email: {email: 'myemail@watchiot.org'}
+          email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('need_verify_notification')
     end
@@ -79,7 +79,7 @@ RSpec.describe UsersController, type: :controller do
            user: {username: 'my_user',
                   passwd: '12345678',
                   passwd_confirmation: '1234567823'},
-           email: {email: 'myemail@watchiot.org'}
+           email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
@@ -91,7 +91,7 @@ RSpec.describe UsersController, type: :controller do
            user: {username: 'my_user',
                   passwd: '123',
                   passwd_confirmation: '123'},
-           email: {email: 'myemail@watchiot.org'}
+           email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
@@ -103,7 +103,7 @@ RSpec.describe UsersController, type: :controller do
            user: {username: '',
                   passwd: '123123123',
                   passwd_confirmation: '123123123'},
-           email: {email: 'myemail@watchiot.org'}
+           email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
@@ -115,7 +115,7 @@ RSpec.describe UsersController, type: :controller do
            user: {username: nil,
                   passwd: '123123123',
                   passwd_confirmation: '123123123'},
-           email: {email: 'myemail@watchiot.org'}
+           email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
@@ -127,7 +127,7 @@ RSpec.describe UsersController, type: :controller do
            user: {username: 'user_name',
                   passwd: '123123123',
                   passwd_confirmation: '123123123'},
-           email: {email: 'myemail@watchiot.org'}
+           email: {email: 'myemail@watchiot.com'}
       expect(response.status).to eq(200)
       expect(response).to render_template('register')
       expect(flash[:error])
@@ -177,7 +177,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     it 'using post bad email has a 200 status code' do
-      get :do_login, user: { username: 'my_user_name_new@watchiot.org',
+      get :do_login, user: { username: 'my_user_name_new@watchiot.com',
                              passwd: '12345678' }
 
       expect(response.status).to eq(200)

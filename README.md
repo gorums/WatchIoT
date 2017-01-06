@@ -42,7 +42,7 @@ All the tests were complete
 
 *30 november 2015*
 
-Link heruko with new domain www.watchiot.org
+Link heruko with new domain www.watchiot.com
 
 *4 october 2015*
 

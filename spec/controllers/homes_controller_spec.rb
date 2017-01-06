@@ -39,13 +39,13 @@ RSpec.describe HomeController, type: :controller do
 
   describe 'add contact index' do
     it 'post contact us has a 302 status code' do
-      post :contact, contact_us: {email: 'myemail@watchiot.org', subject: 'what sapp man', body: 'gooddd!!'}
+      post :contact, contact_us: {email: 'myemail@watchiot.com', subject: 'what sapp man', body: 'gooddd!!'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/#contactus')
     end
 
     it 'post contact us whit bad email has a 302 status code' do
-      post :contact, contact_us: {email: 'myemailwatchiot.org', subject: 'what sapp man', body: 'gooddd!!'}
+      post :contact, contact_us: {email: 'myemailwatchiot.com', subject: 'what sapp man', body: 'gooddd!!'}
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/#contactus')
     end

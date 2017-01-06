@@ -82,7 +82,7 @@ RSpec.describe SettingController, type: :controller do
   describe 'workin with email setting' do
     it 'using post to add a new email has a 302 status code' do
       post :account_add_email, username: 'user_name',
-            email: {email: 'my_new_email@watchiot.org'}
+            email: {email: 'my_new_email@watchiot.com'}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -93,7 +93,7 @@ RSpec.describe SettingController, type: :controller do
 
     it 'using post to add a bad email has a 302 status code' do
       post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email^&%watchiot.org'}
+           email: {email: 'my_new_email^&%watchiot.com'}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/setting/account')
@@ -129,9 +129,9 @@ RSpec.describe SettingController, type: :controller do
 
     it 'Delete an email setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email@watchiot.org'}
+           email: {email: 'my_new_email@watchiot.com'}
 
-      email = Email.find_by_email 'my_new_email@watchiot.org'
+      email = Email.find_by_email 'my_new_email@watchiot.com'
 
       user = User.find_by_username 'user_name'
       expect(user.emails.length).to eq(2)
@@ -161,9 +161,9 @@ RSpec.describe SettingController, type: :controller do
 
     it 'add email like primary setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email@watchiot.org'}
+           email: {email: 'my_new_email@watchiot.com'}
 
-      email = Email.find_by_email 'my_new_email@watchiot.org'
+      email = Email.find_by_email 'my_new_email@watchiot.com'
       email.verify_email
       expect(email.checked).to be(true)
 
@@ -179,15 +179,15 @@ RSpec.describe SettingController, type: :controller do
       email = Email.find_by_email 'user@watchiot.com'
       expect(email.primary).to be(false)
 
-      email = Email.find_by_email 'my_new_email@watchiot.org'
+      email = Email.find_by_email 'my_new_email@watchiot.com'
       expect(email.primary).to be(true)
     end
 
     it 'send email verify setting has a 302 status code' do
       post :account_add_email, username: 'user_name',
-           email: {email: 'my_new_email@watchiot.org'}
+           email: {email: 'my_new_email@watchiot.com'}
 
-      email = Email.find_by_email 'my_new_email@watchiot.org'
+      email = Email.find_by_email 'my_new_email@watchiot.com'
 
       post :account_verify_email, username: 'user_name',
            id: email.id

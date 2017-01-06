@@ -78,7 +78,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = {
-      host: 'www.watchiot.org'
+      host: 'www.watchiot.com'
   }
 
   ActionMailer::Base.smtp_settings = {

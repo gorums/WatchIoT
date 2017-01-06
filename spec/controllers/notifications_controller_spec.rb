@@ -11,7 +11,7 @@ RSpec.describe NotificationsController, type: :controller do
     @user = User.new(username: 'my_user_name',
                passwd: '12345678',
                passwd_confirmation: '12345678')
-    email = Email.new(email: 'newemail@watchiot.org')
+    email = Email.new(email: 'newemail@watchiot.com')
     @user.register email
 
     @email = Email.create!(email: 'user@watchiot.com',
