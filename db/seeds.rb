@@ -33,8 +33,8 @@ PlanFeature.create(plan_id: 3, feature_id: 2, value: '12')
 PlanFeature.create(plan_id: 4, feature_id: 2, value: '30')
 
 # Amount of metrics by project
-PlanFeature.create(plan_id: 1, feature_id: 3, value: '3')
-PlanFeature.create(plan_id: 2, feature_id: 3, value: '5')
+PlanFeature.create(plan_id: 1, feature_id: 3, value: '5')
+PlanFeature.create(plan_id: 2, feature_id: 3, value: '10')
 PlanFeature.create(plan_id: 3, feature_id: 3, value: 'unlimited')
 PlanFeature.create(plan_id: 4, feature_id: 3, value: 'unlimited')
 
