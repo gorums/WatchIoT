@@ -177,7 +177,7 @@ class Project < ActiveRecord::Base
   def self.can_create_project?(user, space)
     return false if user.nil? || space.nil?
     projects_count = Project.count_by_user_and_space user.id, space.id
-    value = user.plan.find_plan_value('Number of projects by space')
+    value = user.plan.find_plan_value('Amount of projects by space')
     projects_count < value.to_i
   end
 end

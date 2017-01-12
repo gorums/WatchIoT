@@ -24,7 +24,7 @@ RSpec.describe Plan, type: :model do
 
     it 'is valid find plan value team members' do
       value = plan.find_plan_value('Team members')
-      expect(value.to_i).to eq(3)
+      expect(value.to_i).to eq(2)
     end
 
     it 'is valid find plan value notifications by email' do

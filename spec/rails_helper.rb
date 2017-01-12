@@ -63,32 +63,35 @@ def before_each(type_test)
     plan = Plan.create!(name: 'Free', amount_per_month: 0)
 
     # add features
-    fHook = Feature.create!(name: 'Webhook support')
-    fTeam = Feature.create!(name: 'Team members')
-    fSpace = Feature.create!(name: 'Number of spaces')
-    fNotif = Feature.create!(name: 'Notification by email')
-    fPerMin = Feature.create!(name: 'Request per minutes')
-    fProject = Feature.create!(name: 'Number of projects by space')
+    fSpace        = Feature.create!(name: 'Amount of spaces')
+    fProject      = Feature.create!(name: 'Amount of projects by space')
+    fMetric       = Feature.create!(name: 'Amount of metrics by project')
+    fPerMin       = Feature.create!(name: 'Request per minutes')
+    fTeam         = Feature.create!(name: 'Team members')
+    fNotifEmail   = Feature.create!(name: 'Notification by email')
+    fNotifHook    = Feature.create!(name: 'Webhook support')
 
-
-    # Number of spaces for free account
+    # Amount of spaces for free account
     PlanFeature.create(plan_id: plan.id,
-                       feature_id: fSpace.id, value: '3')
-    # Number of projects by space for free account
+                       feature_id: fSpace.id, value: '2')
+    # Amount of projects by space for free account
     PlanFeature.create(plan_id: plan.id,
                        feature_id: fProject.id, value: '3')
+    # Amount of metrics by project for free account
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fMetric.id, value: '3')
     # Request per hour for each project for free account
     PlanFeature.create(plan_id: plan.id,
                        feature_id: fPerMin.id, value: '60')
-    # Notification by email for free account
-    PlanFeature.create(plan_id: plan.id,
-                       feature_id: fNotif.id, value: 'true')
-    # Webhook support for free account
-    PlanFeature.create(plan_id: plan.id,
-                       feature_id: fHook.id, value: 'false')
     # Team members for free account
     PlanFeature.create(plan_id: plan.id,
-                       feature_id: fTeam.id, value: '3')
+                       feature_id: fTeam.id, value: '2')
+    # Notification by email for free account
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fNotifEmail.id, value: 'true')
+    # Webhook support for free account
+    PlanFeature.create(plan_id: plan.id,
+                       feature_id: fNotifHook.id, value: 'false')
 
     # add two users
     @user = User.create!(username: 'my_user_name',
@@ -101,15 +104,17 @@ def before_each(type_test)
     @token = VerifyClient.create_token(
         @user.id, @email.email, 'verify_client') if 'verifyClientModel' == type_test
 
-    if 'emailModel'  == type_test ||
-        'spaceModel' == type_test ||
-        'projectModel' == type_test ||
-        'teamModel'  == type_test ||
-        'userModel'  == type_test ||
-        'notif'      == type_test
+    if 'emailModel'    == type_test ||
+       'spaceModel'    == type_test ||
+       'projectModel'  == type_test ||
+       'teamModel'     == type_test ||
+       'userModel'     == type_test ||
+       'notif'         == type_test
+
       @user_two = User.create!(username: 'my_user_name1',
                                passwd: '12345678',
                                passwd_confirmation: '12345678')
+
       @email_two = Email.create!(email: 'user1@watchiot.com',
                                  user_id: @user_two.id,
                                  checked: true, primary: true)

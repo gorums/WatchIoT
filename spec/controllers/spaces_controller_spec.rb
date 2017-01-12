@@ -20,7 +20,7 @@ RSpec.describe SpacesController, type: :controller do
     # add plan
     plan = Plan.create!(name: 'Free', amount_per_month: 0)
 
-    fSpace = Feature.create!(name: 'Number of spaces')
+    fSpace = Feature.create!(name: 'Amount of spaces')
     fTeam = Feature.create!(name: 'Team members')
 
     # Number of spaces for free account
@@ -28,7 +28,7 @@ RSpec.describe SpacesController, type: :controller do
 
     # Team members for free account
     PlanFeature.create(plan_id: plan.id,
-                       feature_id: fTeam.id, value: '3')
+                       feature_id: fTeam.id, value: '2')
 
     user = User.new(username: 'user_name',
                     passwd: '12345678',
@@ -57,9 +57,6 @@ RSpec.describe SpacesController, type: :controller do
                description: 'space description'}
     Space.create_new_space params, @user, @user
 
-    params = { name: 'my_space_unauthorized',
-               description: 'space description'}
-    Space.create_new_space params, @user_new, @user_new
   end
 
   describe 'all spaces' do
@@ -106,7 +103,7 @@ RSpec.describe SpacesController, type: :controller do
 
       # access to 'user_name_unauthorized' spaces
       get :index, username: 'user_name_unauthorized'
-      expect(assigns[:spaces].length).to eq(1)
+      expect(assigns[:spaces].length).to eq(0)
       expect(response.status).to eq(200)
       expect(response).to render_template('index')
     end
@@ -268,7 +265,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(spaces.length).to eq(1)
 
       spaces = Space.where(user_id: @user_new.id).all
-      expect(spaces.length).to eq(1)
+      expect(spaces.length).to eq(0)
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/my_space/setting')
@@ -285,7 +282,7 @@ RSpec.describe SpacesController, type: :controller do
       expect(spaces.length).to eq(0)
 
       spaces = Space.where(user_id: @user_new.id).all
-      expect(spaces.length).to eq(2)
+      expect(spaces.length).to eq(1)
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to('/user_name/spaces')

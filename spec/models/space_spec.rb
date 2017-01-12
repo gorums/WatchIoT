@@ -65,8 +65,8 @@ RSpec.describe Space, type: :model do
     end
   end
 
-  describe 'valid with more than 3 spaces' do
-    it 'is valid with more than 3 spaces with a free plan' do
+  describe 'valid with more than 2 spaces' do
+    it 'is valid with more than 2 spaces with a free plan' do
       params = { name: 'my-space',
                  description: 'space description'}
       params1 = { name: 'space1',
@@ -90,8 +90,6 @@ RSpec.describe Space, type: :model do
 
       space1 = Space.create_new_space(params1, @user, @user)
       expect(space1).to be_valid
-      space2 = Space.create_new_space(params2, @user, @user)
-      expect(space2).to be_valid
       expect { Space.create_new_space(params3, @user, @user) }
           .to raise_error('You can not add more spaces, '\
           'please contact with us!')
@@ -201,9 +199,6 @@ RSpec.describe Space, type: :model do
       Space.create_new_space(params, @user_two, @user_two)
 
       params = { name: 'space2', description: 'space description'}
-      Space.create_new_space(params, @user_two, @user_two)
-
-      params = { name: 'space3', description: 'space description'}
       Space.create_new_space(params, @user_two, @user_two)
 
       params = { name: 'space', description: 'space description'}

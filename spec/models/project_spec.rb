@@ -67,9 +67,9 @@ RSpec.describe Project, type: :model do
       params1 = { name: 'my project1',
                   description: 'project1 description'}
 
-      project = Project.create_new_project(params, @user, @space, @user)
+      project = Project.create_new_project(params, @user_two, @space, @user_two)
       expect(project).to be_valid
-      project1 = Project.create_new_project(params1, @user, @space, @user)
+      project1 = Project.create_new_project(params1, @user_two, @space, @user_two)
       expect(project1).to be_valid
 
       expect { project1.change_project 'my-project' }

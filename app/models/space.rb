@@ -132,7 +132,7 @@ class Space < ActiveRecord::Base
   def self.can_create_space?(user)
     return false if user.nil?
     spaces_count = Space.count_by_user user.id
-    value = user.plan.find_plan_value('Number of spaces')
+    value = user.plan.find_plan_value('Amount of spaces')
     spaces_count < value.to_i
   end
 end

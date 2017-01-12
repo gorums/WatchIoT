@@ -7,9 +7,9 @@ RSpec.describe ProjectsController, type: :controller do
     # add plan
     plan = Plan.create!(name: 'Free', amount_per_month: 0)
 
-    fSpace = Feature.create!(name: 'Number of spaces')
+    fSpace = Feature.create!(name: 'Amount of spaces')
     fTeam = Feature.create!(name: 'Team members')
-    fProject = Feature.create!(name: 'Number of projects by space')
+    fProject = Feature.create!(name: 'Amount of projects by space')
 
     # Number of spaces for free account
     PlanFeature.create(plan_id: plan.id, feature_id: fSpace.id, value: '3')

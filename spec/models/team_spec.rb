@@ -119,18 +119,12 @@ RSpec.describe Team, type: :model do
   end
 
   describe 'valid add members with overflow the plan' do
-    it 'is valid add more that 3 members for the free plan' do
+    it 'is valid add more that 2 members for the free plan' do
       user_tree = User.create!(username: 'my_user_name2',
                                passwd: '12345678',
                                passwd_confirmation: '12345678')
       email_tree = Email.create!(email: 'user2@watchiot.com',
                                  user_id: user_tree.id)
-
-      user_four = User.create!(username: 'my_user_name3',
-                               passwd: '12345678',
-                               passwd_confirmation: '12345678')
-      email_four = Email.create!(email: 'user3@watchiot.com',
-                                 user_id: user_four.id)
 
       user_five = User.create!(username: 'my_user_name4',
                                passwd: '12345678',
@@ -140,7 +134,6 @@ RSpec.describe Team, type: :model do
 
       Team.add_member(@user, @email_two.email)
       Team.add_member(@user, email_tree.email)
-      Team.add_member(@user, email_four.email)
 
       # only 3 member of the team in the free plan
       expect {  Team.add_member(@user, email_five.email) }

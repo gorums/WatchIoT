@@ -12,46 +12,53 @@ Plan.create(name: 'Small', amount_per_month: 7)
 Plan.create(name: 'Medium', amount_per_month: 15)
 Plan.create(name: 'Large', amount_per_month: 29)
 
-Feature.create(name: 'Number of spaces')
-Feature.create(name: 'Number of projects by space')
+Feature.create(name: 'Amount of spaces')
+Feature.create(name: 'Amount of projects by space')
+Feature.create(name: 'Amount of metrics by project')
 Feature.create(name: 'Request per hours for each project')
 Feature.create(name: 'Notification by email')
 Feature.create(name: 'Webhook support')
 Feature.create(name: 'Team members')
 
-# Number of spaces
-PlanFeature.create(plan_id: 1, feature_id: 1, value: '1')
+# Amount of spaces
+PlanFeature.create(plan_id: 1, feature_id: 1, value: '2')
 PlanFeature.create(plan_id: 2, feature_id: 1, value: '4')
 PlanFeature.create(plan_id: 3, feature_id: 1, value: '10')
 PlanFeature.create(plan_id: 4, feature_id: 1, value: '30')
 
-# Number of projects by space
+# Amount of projects by space
 PlanFeature.create(plan_id: 1, feature_id: 2, value: '3')
 PlanFeature.create(plan_id: 2, feature_id: 2, value: '5')
 PlanFeature.create(plan_id: 3, feature_id: 2, value: '12')
 PlanFeature.create(plan_id: 4, feature_id: 2, value: '30')
 
+# Amount of metrics by project
+PlanFeature.create(plan_id: 1, feature_id: 3, value: '3')
+PlanFeature.create(plan_id: 2, feature_id: 3, value: '5')
+PlanFeature.create(plan_id: 3, feature_id: 3, value: 'unlimited')
+PlanFeature.create(plan_id: 4, feature_id: 3, value: 'unlimited')
+
 # Request per hours per project
-PlanFeature.create(plan_id: 1, feature_id: 3, value: '60')
-PlanFeature.create(plan_id: 2, feature_id: 3, value: '360')
-PlanFeature.create(plan_id: 3, feature_id: 3, value: '900')
-PlanFeature.create(plan_id: 4, feature_id: 3, value: '3600')
+PlanFeature.create(plan_id: 1, feature_id: 4, value: '60')
+PlanFeature.create(plan_id: 2, feature_id: 4, value: '360')
+PlanFeature.create(plan_id: 3, feature_id: 4, value: '900')
+PlanFeature.create(plan_id: 4, feature_id: 4, value: '3600')
 
 # Notification by email
-PlanFeature.create(plan_id: 1, feature_id: 4, value: 'true')
-PlanFeature.create(plan_id: 2, feature_id: 4, value: 'true')
-PlanFeature.create(plan_id: 3, feature_id: 4, value: 'true')
-PlanFeature.create(plan_id: 4, feature_id: 4, value: 'true')
-
-# Webhook support'
-PlanFeature.create(plan_id: 1, feature_id: 5, value: 'false')
+PlanFeature.create(plan_id: 1, feature_id: 5, value: 'true')
 PlanFeature.create(plan_id: 2, feature_id: 5, value: 'true')
 PlanFeature.create(plan_id: 3, feature_id: 5, value: 'true')
 PlanFeature.create(plan_id: 4, feature_id: 5, value: 'true')
 
+# Webhook support'
+PlanFeature.create(plan_id: 1, feature_id: 6, value: 'false')
+PlanFeature.create(plan_id: 2, feature_id: 6, value: 'true')
+PlanFeature.create(plan_id: 3, feature_id: 6, value: 'true')
+PlanFeature.create(plan_id: 4, feature_id: 6, value: 'true')
+
 # Team members
 PlanFeature.create(plan_id: 1, feature_id: 6, value: '2')
-PlanFeature.create(plan_id: 2, feature_id: 6, value: '5')
+PlanFeature.create(plan_id: 2, feature_id: 6, value: '3')
 PlanFeature.create(plan_id: 3, feature_id: 6, value: 'unlimited')
 PlanFeature.create(plan_id: 4, feature_id: 6, value: 'unlimited')
 
@@ -98,22 +105,22 @@ Faq.create(
 
 Faq.create(
     question: 'Cuantos espacios puedo tener realcionado a mi cuenta?',
-    answer: 'Usted puede crear un m&aacute;ximo de 3 espacios. Si usted requiere m&aacute;s espacios por favor p&oacute;ngase en contacto con nosotros.',
+    answer: 'Usted puede crear un m&aacute;ximo de 2 espacios. Si usted requiere m&aacute;s espacios por favor p&oacute;ngase en contacto con nosotros.',
     lang: 'es')
 
 Faq.create(
     question: 'How many spaces can be related to my account?',
-    answer: 'You can create a maximum of 3 spaces. If you require more space please contact us.',
+    answer: 'You can create a maximum of 2 spaces. If you require more space please contact us.',
     lang: 'en')
 
 Faq.create(
     question: 'Cuantos proyectos puedo tener por espacio?',
-    answer: 'Usted puede tener un m&aacute;ximo de 5 proyectos por espacio. Si usted requiere m&aacute;s proyectos por espacio por favor p&oacute;ngase en contacto con nosotros.',
+    answer: 'Usted puede tener un m&aacute;ximo de 3 proyectos por espacio. Si usted requiere m&aacute;s proyectos por espacio por favor p&oacute;ngase en contacto con nosotros.',
     lang: 'es')
 
 Faq.create(
     question: 'How many projects for space?',
-    answer: 'You can have a maximum of 5 projects for space. If you require more space projects please contact us.',
+    answer: 'You can have a maximum of 3 projects for space. If you require more space projects please contact us.',
     lang: 'en')
 
 Faq.create(
