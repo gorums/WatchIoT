@@ -15,9 +15,8 @@ Plan.create(name: 'Large', amount_per_month: 29)
 Feature.create(name: 'Amount of spaces')
 Feature.create(name: 'Amount of projects by space')
 Feature.create(name: 'Amount of metrics by project')
+Feature.create(name: 'Data retention')
 Feature.create(name: 'Request per hours for each project')
-Feature.create(name: 'Notification by email')
-Feature.create(name: 'Webhook support')
 Feature.create(name: 'Team members')
 
 # Amount of spaces
@@ -33,49 +32,39 @@ PlanFeature.create(plan_id: 3, feature_id: 2, value: '12')
 PlanFeature.create(plan_id: 4, feature_id: 2, value: '30')
 
 # Amount of metrics by project
-PlanFeature.create(plan_id: 1, feature_id: 3, value: '5')
-PlanFeature.create(plan_id: 2, feature_id: 3, value: '10')
+PlanFeature.create(plan_id: 1, feature_id: 3, value: '3')
+PlanFeature.create(plan_id: 2, feature_id: 3, value: '6')
 PlanFeature.create(plan_id: 3, feature_id: 3, value: 'unlimited')
 PlanFeature.create(plan_id: 4, feature_id: 3, value: 'unlimited')
 
+# Data retention
+PlanFeature.create(plan_id: 1, feature_id: 4, value: '7')
+PlanFeature.create(plan_id: 2, feature_id: 4, value: '60')
+PlanFeature.create(plan_id: 3, feature_id: 4, value: '365')
+PlanFeature.create(plan_id: 4, feature_id: 4, value: 'unlimited')
+
 # Request per hours per project
-PlanFeature.create(plan_id: 1, feature_id: 4, value: '60')
-PlanFeature.create(plan_id: 2, feature_id: 4, value: '360')
-PlanFeature.create(plan_id: 3, feature_id: 4, value: '900')
-PlanFeature.create(plan_id: 4, feature_id: 4, value: '3600')
-
-# Notification by email
-PlanFeature.create(plan_id: 1, feature_id: 5, value: 'true')
-PlanFeature.create(plan_id: 2, feature_id: 5, value: 'true')
-PlanFeature.create(plan_id: 3, feature_id: 5, value: 'true')
-PlanFeature.create(plan_id: 4, feature_id: 5, value: 'true')
-
-# Webhook support'
-PlanFeature.create(plan_id: 1, feature_id: 6, value: 'false')
-PlanFeature.create(plan_id: 2, feature_id: 6, value: 'true')
-PlanFeature.create(plan_id: 3, feature_id: 6, value: 'true')
-PlanFeature.create(plan_id: 4, feature_id: 6, value: 'true')
+PlanFeature.create(plan_id: 1, feature_id: 5, value: '60')
+PlanFeature.create(plan_id: 2, feature_id: 5, value: '360')
+PlanFeature.create(plan_id: 3, feature_id: 5, value: '900')
+PlanFeature.create(plan_id: 4, feature_id: 5, value: '3600')
 
 # Team members
 PlanFeature.create(plan_id: 1, feature_id: 6, value: '2')
-PlanFeature.create(plan_id: 2, feature_id: 6, value: '3')
+PlanFeature.create(plan_id: 2, feature_id: 6, value: '5')
 PlanFeature.create(plan_id: 3, feature_id: 6, value: 'unlimited')
 PlanFeature.create(plan_id: 4, feature_id: 6, value: 'unlimited')
 
 # Faq static values
-Faq.create(
-    question: 'Que nos trae WatchIoT',
-    answer: '<mark>WatchIot</mark> es un servicio de monitoreo, que nos permite tener conocimiento en tiempo real si nuestros servicios presentan alg&uacute;n  comportamiento an&oacute;malo  o no deseado.',
-    lang: 'es')
-
 Faq.create(
     question: 'What services provided WatchIoT?',
     answer: '<mark>WatchIot</mark> is a monitoring service that allows us to know in real time and throw alert to us if our services, resources or devices (IoT) have some behavior that we want to pay attention.',
     lang: 'en')
 
 Faq.create(
-    question: 'Es WatchIoT gratis?',
-    answer: '<mark>WatchIot</mark> es absolutamente gratis.',
+    question: 'Que nos trae WatchIoT',
+    answer: '<mark>WatchIot</mark> es un servicio de monitoreo y envio de alertas, que nos permite tener conocimiento en '\
+            'tiempo real si nuestros servicios o recursos presentan alg&uacute;n  comportamiento an&oacute;malo  o no deseado.',
     lang: 'es')
 
 Faq.create(
@@ -84,8 +73,8 @@ Faq.create(
     lang: 'en')
 
 Faq.create(
-    question: 'Que es un espacio?',
-    answer: 'Un espacio es una forma de organizar los servicios que usted est&aacute; monitoreando. Por ejemplo, usted puede estar monitoreando los servicios de varias empresas y puede separar cada empresa como un espacio.',
+    question: 'Es WatchIoT gratis?',
+    answer: '<mark>WatchIot</mark> es absolutamente gratis.',
     lang: 'es')
 
 Faq.create(
@@ -94,8 +83,9 @@ Faq.create(
     lang: 'en')
 
 Faq.create(
-    question: 'Que es un proyecto?',
-    answer: 'Cada servicio que usted monitorea se configura como un proyecto. Por ejemplo, tipo de notificaciones, que servicio voy a monitorear, cada que tiempo voy a enviar una petici&oacute;n HTTP o recibirla, a quien voy a notificar, etc.',
+    question: 'Que es un espacio?',
+    answer: 'Un espacio es una forma de organizar los servicios que usted est&aacute; monitoreando. Por ejemplo, '\
+            'usted puede estar monitoreando los servicios de varias empresas y puede separar cada empresa como un espacio.',
     lang: 'es')
 
 Faq.create(
@@ -104,8 +94,10 @@ Faq.create(
     lang: 'en')
 
 Faq.create(
-    question: 'Cuantos espacios puedo tener realcionado a mi cuenta?',
-    answer: 'Usted puede crear un m&aacute;ximo de 2 espacios. Si usted requiere m&aacute;s espacios por favor p&oacute;ngase en contacto con nosotros.',
+    question: 'Que es un proyecto?',
+    answer: 'Cada servicio o recurso que usted monitorea se configura como un proyecto. Por ejemplo, que metricas voy a recolectar, '\
+            'cada que tiempo voy a enviar una petici&oacute;n de recoleccion de metricas o recibirla, '\
+            'como voy a evaluar la metricas obtenidas para conocer que accion tomar, a quien voy a notificar, etc.',
     lang: 'es')
 
 Faq.create(
@@ -114,8 +106,9 @@ Faq.create(
     lang: 'en')
 
 Faq.create(
-    question: 'Cuantos proyectos puedo tener por espacio?',
-    answer: 'Usted puede tener un m&aacute;ximo de 3 proyectos por espacio. Si usted requiere m&aacute;s proyectos por espacio por favor p&oacute;ngase en contacto con nosotros.',
+    question: 'Cuantos espacios puedo tener relacionado a mi cuenta?',
+    answer: 'Usted puede crear un m&aacute;ximo de 2 espacios. Si usted requiere m&aacute;s espacios por favor p&oacute;ngase '\
+            'en contacto con nosotros.',
     lang: 'es')
 
 Faq.create(
@@ -124,8 +117,9 @@ Faq.create(
     lang: 'en')
 
 Faq.create(
-    question: 'Puedo agregar amigos para que administren mis espacios y proyectos',
-    answer: 'Usted tiene la posibilidad de invitar amigos a que le ayuden a administrar los espacios y proyectos, adem&aacute;s de recibir alertas.',
+    question: 'Cuantos proyectos puedo tener por espacio?',
+    answer: 'Usted puede tener un m&aacute;ximo de 3 proyectos por espacio. Si usted requiere m&aacute;s proyectos '\
+            'por espacio por favor p&oacute;ngase en contacto con nosotros.',
     lang: 'es')
 
 Faq.create(
@@ -134,8 +128,9 @@ Faq.create(
     lang: 'en')
 
 Faq.create(
-    question: 'Que tipo de notificaciones recibo?',
-    answer: 'Usted recibir&aacute; notificaciones en tiempo real v&iacute;a email, adem&aacute;s de poder configurar <mark>WebHooks</mark> como forma de notificaci&oacute;n.',
+    question: 'Puedo agregar amigos para que administren mis espacios y proyectos',
+    answer: 'Usted tiene la posibilidad de invitar amigos a que le ayuden a administrar los espacios y proyectos, adem&aacute;s '\
+            'de recibir alertas.',
     lang: 'es')
 
 Faq.create(
@@ -143,13 +138,12 @@ Faq.create(
     answer: 'You will receive notifications in real time via email, plus you can set <mark>WebHooks</mark> as a form of notification. In the future you will receive sms too.',
     lang: 'en')
 
+Faq.create(
+    question: 'Que tipo de notificaciones recibo?',
+    answer: 'Usted recibir&aacute; notificaciones en tiempo real v&iacute;a email, adem&aacute;s de poder configurar <mark>WebHooks</mark> como forma de notificaci&oacute;n.',
+    lang: 'es')
+
 # Project descriptions static values
-Descrip.create(
-    title: 'Multiplataforma',
-    description: 'Usted puede monitorear diferentes plataformas, como <mark>Linux, Mac o Windows</mark> e incluso puede monitorear sus servicios en la nube, adem&aacute;s de dispositivos IoT (Internet de las cosas).',
-    icon: 'cubes',
-    lang: 'es'
-)
 
 Descrip.create(
     title: 'Multiplatform',
@@ -159,9 +153,9 @@ Descrip.create(
 )
 
 Descrip.create(
-    title: 'Configurable',
-    description: 'El poder de <mark>WatchIoT</mark> radica en que todo es configurable e incre&iacute;blemente simple. Usted configura que servidor, terminal, recurso o servicio desea monitorear.',
-    icon: 'cog',
+    title: 'Multiplataforma',
+    description: 'Usted puede monitorear diferentes plataformas, como <mark>Linux, Mac o Windows</mark> e incluso puede monitorear sus servicios en la nube, adem&aacute;s de dispositivos IoT (Internet de las cosas).',
+    icon: 'cubes',
     lang: 'es'
 )
 
@@ -173,9 +167,9 @@ Descrip.create(
 )
 
 Descrip.create(
-    title: 'Notificacion',
-    description: 'Las notificaciones son v&iacute;a email y <mark>WebHooks</mark> en tiempo real. Quedese tranquilo, usted tiene todo bajo control ya puede dormir relajado, nosotros vamos a estar alerta por usted.',
-    icon: 'envelope',
+    title: 'Configurable',
+    description: 'El poder de <mark>WatchIoT</mark> radica en que todo es configurable e incre&iacute;blemente simple. Usted configura que servidor, terminal, recurso o servicio desea monitorear.',
+    icon: 'cog',
     lang: 'es'
 )
 
@@ -187,9 +181,9 @@ Descrip.create(
 )
 
 Descrip.create(
-    title: 'Bidireccional',
-    description: '<mark>WatchIoT</mark> puede realizar las peticiones <mark>HTTP</mark> a sus servicios o sus servicios pueden enviarnos peticiones <mark>HTTP</mark> a nosotros, en dependencia de sus necesidades.',
-    icon: 'arrows-h',
+    title: 'Notificacion',
+    description: 'Las notificaciones son v&iacute;a email y <mark>WebHooks</mark> en tiempo real. Quedese tranquilo, usted tiene todo bajo control ya puede dormir relajado, nosotros vamos a estar alerta por usted.',
+    icon: 'envelope',
     lang: 'es'
 )
 
@@ -201,9 +195,9 @@ Descrip.create(
 )
 
 Descrip.create(
-    title: 'Scripting',
-    description: 'Usted tiene dos formas de procesar los datos recopilados de sus servicios y tomar decisiones de notificar o no. Configur&aacute;ndolo por formulario o utilizando un lenguaje de scripting.',
-    icon: 'code',
+    title: 'Bidireccional',
+    description: '<mark>WatchIoT</mark> puede realizar las peticiones <mark>HTTP</mark> a sus servicios o sus servicios pueden enviarnos peticiones <mark>HTTP</mark> a nosotros, en dependencia de sus necesidades.',
+    icon: 'arrows-h',
     lang: 'es'
 )
 
@@ -215,9 +209,9 @@ Descrip.create(
 )
 
 Descrip.create(
-    title: 'Charting',
-    description: 'Cada vez que nosotros recopilamos los datos de sus servicios, los guardamos en forma de historial y brindamos la posibilidad de mostrarlo de forma gr&aacute;fica el comportamiento en el tiempo de sus servicios monitoreados.',
-    icon: 'area-chart',
+    title: 'Scripting',
+    description: 'Usted tiene dos formas de procesar los datos recopilados de sus servicios y tomar decisiones de notificar o no. Configur&aacute;ndolo por formulario o utilizando un lenguaje de scripting.',
+    icon: 'code',
     lang: 'es'
 )
 
@@ -226,4 +220,11 @@ Descrip.create(
     description: 'Every time we recover data from your services, keep in shape history and offer the possibility of graphically the behavior in time of your monitored services, resources or devices (IoT).',
     icon: 'area-chart',
     lang: 'en'
+)
+
+Descrip.create(
+    title: 'Charting',
+    description: 'Cada vez que nosotros recopilamos los datos de sus servicios, los guardamos en forma de historial y brindamos la posibilidad de mostrarlo de forma gr&aacute;fica el comportamiento en el tiempo de sus servicios monitoreados.',
+    icon: 'area-chart',
+    lang: 'es'
 )
