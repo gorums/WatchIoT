@@ -58,7 +58,8 @@ PlanFeature.create(plan_id: 4, feature_id: 6, value: 'unlimited')
 # Faq static values
 Faq.create(
     question: 'What services provided WatchIoT?',
-    answer: '<mark>WatchIot</mark> is a monitoring service that allows us to know in real time and throw alert to us if our services, resources or devices (IoT) have some behavior that we want to pay attention.',
+    answer: '<mark>WatchIot</mark> is a monitoring service and throw alert that allows us to know in real time '\
+            'if our services, resources or devices (IoT) have some behavior that we want to pay attention.',
     lang: 'en')
 
 Faq.create(
@@ -79,7 +80,8 @@ Faq.create(
 
 Faq.create(
     question: 'I have to create spaces. What is a space?',
-    answer: 'Space is a way of organizing the services, resources and devices (IoT) that you are monitoring. For example, maybe you are monitoring services of several companies. Then you can separate each company as a space.',
+    answer: 'Space is a way of organizing the services, resources and devices (IoT) that you are monitoring. '\
+            'For example, maybe you are monitoring services of several companies. Then you can separate each company as a space.',
     lang: 'en')
 
 Faq.create(
@@ -90,7 +92,9 @@ Faq.create(
 
 Faq.create(
     question: 'I can create several projects into a space. What is a project?',
-    answer: 'Each service, resource or device (IoT) that you are monitoring can be seen as a project. You can configure whole respect your service. Example: url to send a request, ip for wait the request, when throw the alert (notification), email that must receive the notification, etc.',
+    answer: 'Each service, resource or device (IoT) that you are monitoring can be seen as a project. You can configure '\
+            'whole respect your service. Example: what metrics do you want to collect, the url to send a request, '\
+            'ip for wait the request, when throw the alert(notification), email that must receive the notification, etc. ',
     lang: 'en')
 
 Faq.create(
@@ -124,7 +128,8 @@ Faq.create(
 
 Faq.create(
     question: 'Can I add friends to manage the spaces and projects?',
-    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts too. In <mark>WatchIoT</mark> it is very easy',
+    answer: 'You have the ability to invite friends to help you manage spaces and projects, and receive alerts too. '\
+            'In <mark>WatchIoT</mark> it is very easy',
     lang: 'en')
 
 Faq.create(
@@ -133,7 +138,12 @@ Faq.create(
             'de recibir alertas.',
     lang: 'es')
 
-# new
+Faq.create(
+    question: 'How many metrics can I submit for each request?',
+    answer: 'You can send a maximum of 3 metrics per request that are previously configured in the project. '\
+            'If you need to collect more metrics by request please contact us.',
+    lang: 'en')
+
 Faq.create(
     question: 'Que cantidad de metricas puedo enviar por cada petici&oacute;n?',
     answer: 'Usted puede enviar un m&aacute;ximo de 3 metricas por peticion que esten previamente configuradas en el proyecto. '\
@@ -141,10 +151,22 @@ Faq.create(
     lang: 'es')
 
 Faq.create(
+    question: 'How many times per hour can I send the metrics collected?',
+    answer: 'You can send 60 times the collected metrics for each hour or once per minute to our servers '\
+            'If you need to increase the frequency of submission of the metrics collect please get in touch with us.',
+    lang: 'en')
+
+Faq.create(
     question: 'Cuantas veces por hora puedo enviar las metricas recolectadas?',
     answer: 'Usted puede enviar 60 veces las metricas recolectadas por cada hora o una vez por minuto a nuestro servidores '\
             'Si usted necesita aumentar la frecuencia de envio de las metricas recolectar por favor p&oacute;ngase en contacto con nosotros.',
     lang: 'es')
+
+Faq.create(
+    question: 'How long do the metrics collected data persist?',
+    answer: 'The metric data collected is stored in our databases for a period of 7 days'\
+            'If you want to store the metrics collect for a longer period of time please contact us.',
+    lang: 'en')
 
 Faq.create(
     question: 'Que tiempo persisten los datos de las metricas recolectadas?',
