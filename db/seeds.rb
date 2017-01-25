@@ -179,84 +179,98 @@ Faq.create(
 
 Descrip.create(
     title: 'Multiplatform',
-    description: 'You can monitor several platforms, like <mark>IOS, Windows, Linux, Android, etc</mark> and can even monitor your cloud services or web applications, in addition to devices (Internet of Things) too.',
+    description: 'You can monitor several platforms, like <mark>IOS, Windows, Linux, Android, etc</mark> and can even '\
+                 'monitor your cloud services or web applications, in addition to devices (Internet of Things) too.',
     icon: 'cubes',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Multiplataforma',
-    description: 'Usted puede monitorear diferentes plataformas, como <mark>Linux, Mac o Windows</mark> e incluso puede monitorear sus servicios en la nube, adem&aacute;s de dispositivos IoT (Internet de las cosas).',
+    description: 'Usted puede monitorear diferentes plataformas, como <mark>Linux, Mac o Windows</mark> e incluso puede '\
+                 'monitorear sus servicios en la nube, adem&aacute;s de dispositivos IoT (Internet de las cosas).',
     icon: 'cubes',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Configurable',
-    description: 'The power of <mark>WatchIoT</mark> is that everything is configurable and incredibly simple. You can configure all about how you want to handle your services, resources and devices (IoT) and send alert for many way.',
+    description: 'The power of <mark>WatchIoT</mark> is that everything is configurable and incredibly simple. '\
+                 'You can configure all about how you want to handle your services, resources and devices (IoT) and '\
+                 'send alert for many way.',
     icon: 'cog',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Configurable',
-    description: 'El poder de <mark>WatchIoT</mark> radica en que todo es configurable e incre&iacute;blemente simple. Usted configura que servidor, terminal, recurso o servicio desea monitorear.',
+    description: 'El poder de <mark>WatchIoT</mark> radica en que todo es configurable e incre&iacute;blemente simple. '\
+                 'Usted configura que servidor, terminal, recurso o servicio desea monitorear.',
     icon: 'cog',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Notification',
-    description: 'Notifications are in real time via email and <mark>WebHooks</mark> for now. Feel safe, you have everything under control and can sleep relaxed we will be alert for you.',
+    description: 'Notifications are in real time via email for now. Feel safe, you have everything under control and '\
+                 'can sleep relaxed we will be alert for you.',
     icon: 'envelope',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Notificacion',
-    description: 'Las notificaciones son v&iacute;a email y <mark>WebHooks</mark> en tiempo real. Quedese tranquilo, usted tiene todo bajo control ya puede dormir relajado, nosotros vamos a estar alerta por usted.',
+    description: 'Las notificaciones son v&iacute;a email en tiempo real. Quedese tranquilo, usted tiene todo bajo '\
+                 'control ya puede dormir relajado, nosotros vamos a estar alerta por usted.',
     icon: 'envelope',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Bidirectional',
-    description: '<mark>WatchIoT</mark> can make <mark>HTTPS</mark> requests your services or your services may send <mark>HTTPS</mark> requests to us, depending on your needs.',
+    description: '<mark>WatchIoT</mark> can make requests to your services or your services may send requests to us '\
+                 'with the metrics, depending on your needs.',
     icon: 'arrows-h',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Bidireccional',
-    description: '<mark>WatchIoT</mark> puede realizar las peticiones <mark>HTTP</mark> a sus servicios o sus servicios pueden enviarnos peticiones <mark>HTTP</mark> a nosotros, en dependencia de sus necesidades.',
+    description: '<mark>WatchIoT</mark> puede realizar las peticiones a sus servicios o sus servicios pueden enviarnos '\
+                 'peticiones a nosotros, en dependencia de sus necesidades.',
     icon: 'arrows-h',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Scripting',
-    description: 'You have two ways of processing the data collected by your services and decide whether or not to notify. Using <mark>WebForm</mark> or more powerful configuration language.',
+    description: '<mark>WatchIoT</mark> configure a projects with markdown syntax and used predicates to '\
+                 'specify how to proceed with each metric collected.',
     icon: 'code',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Scripting',
-    description: 'Usted tiene dos formas de procesar los datos recopilados de sus servicios y tomar decisiones de notificar o no. Configur&aacute;ndolo por formulario o utilizando un lenguaje de scripting.',
+    description: '<mark>WatchIoT</mark> configura un proyecto con sintaxis de markdown y usó predicados para '\
+                 'especificar cómo proceder con cada métrica recopilada.',
     icon: 'code',
     lang: 'es'
 )
 
 Descrip.create(
     title: 'Charting',
-    description: 'Every time we recover data from your services, keep in shape history and offer the possibility of graphically the behavior in time of your monitored services, resources or devices (IoT).',
+    description: 'Every time we collect metrics from your services, keep in shape history and offer the possibility of '\
+                 'graphically the behavior in time of your monitored services, resources or devices (IoT).',
     icon: 'area-chart',
     lang: 'en'
 )
 
 Descrip.create(
     title: 'Charting',
-    description: 'Cada vez que nosotros recopilamos los datos de sus servicios, los guardamos en forma de historial y brindamos la posibilidad de mostrarlo de forma gr&aacute;fica el comportamiento en el tiempo de sus servicios monitoreados.',
+    description: 'Cada vez que nosotros recopilamos los datos de sus servicios, los guardamos en forma de historial y '\
+                 'brindamos la posibilidad de mostrarlo de forma gr&aacute;fica el comportamiento en el tiempo de sus '\
+                 'servicios monitoreados.',
     icon: 'area-chart',
     lang: 'es'
 )
