@@ -133,14 +133,24 @@ Faq.create(
             'de recibir alertas.',
     lang: 'es')
 
+# new
 Faq.create(
-    question: 'What type of reports I can receive?',
-    answer: 'You will receive notifications in real time via email, plus you can set <mark>WebHooks</mark> as a form of notification. In the future you will receive sms too.',
-    lang: 'en')
+    question: 'Que cantidad de metricas puedo enviar por cada petici&oacute;n?',
+    answer: 'Usted puede enviar un m&aacute;ximo de 3 metricas por peticion que esten previamente configuradas en el proyecto. '\
+            'Si usted requiere recolectar m&aacute;s  metricas por petici&oacute;n por favor p&oacute;ngase en contacto con nosotros.',
+    lang: 'es')
 
 Faq.create(
-    question: 'Que tipo de notificaciones recibo?',
-    answer: 'Usted recibir&aacute; notificaciones en tiempo real v&iacute;a email, adem&aacute;s de poder configurar <mark>WebHooks</mark> como forma de notificaci&oacute;n.',
+    question: 'Cuantas veces por hora puedo enviar las metricas recolectadas?',
+    answer: 'Usted puede enviar 60 veces las metricas recolectadas por cada hora o una vez por minuto a nuestro servidores '\
+            'Si usted necesita aumentar la frecuencia de envio de las metricas recolectar por favor p&oacute;ngase en contacto con nosotros.',
+    lang: 'es')
+
+Faq.create(
+    question: 'Que tiempo persisten los datos de las metricas recolectadas?',
+    answer: 'Los datos de las metricas recolectadas se almacena en nuestras bases de datos por un periodo de 7 dias '\
+            'Si usted desea almacenar las metricas recolectar por un periodo de tiempo m&aacute;s largo por favor '\
+            'p&oacute;ngase en contacto con nosotros.',
     lang: 'es')
 
 # Project descriptions static values
