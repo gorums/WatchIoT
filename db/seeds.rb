@@ -18,6 +18,7 @@ Feature.create(name: 'Amount of metrics by project')
 Feature.create(name: 'Data retention')
 Feature.create(name: 'Request per hours for each project')
 Feature.create(name: 'Team members')
+Feature.create(name: 'Amount of states')
 
 # Amount of spaces
 PlanFeature.create(plan_id: 1, feature_id: 1, value: '2')
@@ -54,6 +55,12 @@ PlanFeature.create(plan_id: 1, feature_id: 6, value: '2')
 PlanFeature.create(plan_id: 2, feature_id: 6, value: '5')
 PlanFeature.create(plan_id: 3, feature_id: 6, value: 'unlimited')
 PlanFeature.create(plan_id: 4, feature_id: 6, value: 'unlimited')
+
+# Amount of states
+PlanFeature.create(plan_id: 1, feature_id: 7, value: '3')
+PlanFeature.create(plan_id: 2, feature_id: 7, value: '5')
+PlanFeature.create(plan_id: 3, feature_id: 7, value: '10')
+PlanFeature.create(plan_id: 4, feature_id: 7, value: 'unlimited')
 
 # Faq static values
 Faq.create(
